@@ -3,30 +3,26 @@
         fullWindowMixin
     } from './responsiveness'
     import Shutter from './components/Shutter.vue'
+    import Home from './Home.vue'
 
     export default {
         name: 'App',
         mixins: [fullWindowMixin],
         components: {
-            Shutter
+            Shutter,
+            Home,
         },
     }
-    document.addEventListener('scroll', function(e) {
-        e;
-        let all = document.querySelectorAll('.hello');
-        for (let h in all) {
-            all[h].textContent = window.scrollY
-        }
-    })
 </script>
 <!-- TODO Remember to use position: sticky -->
 <template>
     <div>
         <img id="mugshot" src="./assets/mugshot.jpg" />
         <div id="about" :style="fullWindowStyle">About</div>
-        <Shutter></Shutter>
-        <div id="home" :style="fullWindowStyle">
-        </div>
+        <div id="about" :style="fullWindowStyle">About</div>
+        <div id="about" :style="fullWindowStyle">About</div>
+        <Shutter id="shutter"></Shutter>
+        <Home></Home>
     </div>
 </template>
 
@@ -40,21 +36,8 @@
         padding: 0;
     }
 
-    #home {
-        position: relative;
-        display: flex;
-        text-align: center;
-        justify-content: center;
-        align-content: center;
-        flex-direction: column;
-        color: white;
-        background-color: #202020;
-        z-index: 0;
-    }
-
     #about {
-        background-color: #202020;
-        height: 3000px;
+        background-color: #e1d8d1;
     }
 
     #mugshot {
@@ -64,8 +47,8 @@
         right: 0;
         bottom: 0;
         margin: auto;
-        width: 18em;
+        width: 15%;
         z-index: 5;
-        transform: translateY(2em);
+        transform: translate(1%, 2%);
     }
 </style>

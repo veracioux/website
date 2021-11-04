@@ -1,28 +1,29 @@
 <script>
+ import {fullWindowMixin} from '../responsiveness'
     export default {
         name: 'Shutter',
+        mixins: [fullWindowMixin],
         data() {
             return {
                 configKonva: {
                     width: 0,
                     height: 0
                 },
+                // TODO How can I make triangles globally available
                 triangles: [],
-                scrollY: 0,
+                rotation: 0,
             }
         },
         mounted() {
-            window.addEventListener('scroll', this.onScroll)
-            window.addEventListener('resize', this.onWindowResize)
-            this.onWindowResize()
+            window.addEventListener('resize', this._onWindowResize)
+            this._onWindowResize()
         },
         methods: {
             updateShutter() {
                 let radius = Math.max(window.innerWidth, window.innerHeight)
-                /* let radius = 200 */
                 let centerX = window.innerWidth / 2,
                     centerY = window.innerHeight / 2
-                const numComponents = 8
+                const numComponents = 10
                 const angleChunkSize = 2 * Math.PI / numComponents
                 this.triangles = []
                 for (let i = 0; i < numComponents; ++i) {
@@ -47,34 +48,32 @@
                     this.triangles.push(triangle)
                 }
             },
-            onScroll() {
-                this. scrollY = window.scrollY
-                this.updateShutter()
-            },
-            onWindowResize() {
+            _onWindowResize() {
                 this.configKonva.width = window.innerWidth
                 this.configKonva.height = window.innerHeight
                 this.updateShutter()
-            }
+            },
         }
     }
 </script>
 
 <template>
-    <v-stage class="shutter" :config="configKonva">
-        <v-layer>
-            <v-line v-for="t in triangles" :key="t" :config="{
-                                                    x: t.pivotX,
-                                                    y: t.pivotY,
-                                                    points: t.points,
-                                                    rotation: scrollY / 100,
-                                                    closed: true,
-                                                    stroke: '#131313',
-                                                    strokeWidth: 1,
-                                                    fill: 'black',
-                                                    }" />
-        </v-layer>
-    </v-stage>
+    <div>
+        <v-stage class="shutter" :config="configKonva">
+            <v-layer>
+                <v-line ref="shutter" v-for="t in triangles" :key="t" :config="{
+                                                        x: t.pivotX,
+                                                        y: t.pivotY,
+                                                        points: t.points,
+                                                        rotation: Math.min(15 * relativeScrollY, 5),
+                                                        closed: true,
+                                                        stroke: '#131313',
+                                                        strokeWidth: 1,
+                                                        fill: 'black',
+                                                        }" />
+            </v-layer>
+        </v-stage>
+    </div>
 </template>
 
 <style>
@@ -86,6 +85,5 @@
         bottom: 0;
         z-index: 100;
         pointer-events: none;
-        /* background-color: #0000ff66; */
     }
 </style>
