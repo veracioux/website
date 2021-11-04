@@ -1,26 +1,10 @@
-import { createApp } from 'vue'
+import Vue from 'vue'
 import App from './App.vue'
 
-// A mixin for all elements that should be full-window sized
-const fullWindowMixin = {
-    data() {
-        return {
-            fullWindowStyle: {
-                height: window.innerHeight
-            }
-        }
-    },
-    mounted() {
-        window.addEventListener('resize', this.onResize)
-        this.onResize()
-    },
-    methods: {
-        onResize() {
-            this.fullWindowStyle.height = window.innerHeight;
-        }
-    }
-}
-fullWindowMixin;
+import VueKonva from 'vue-konva'
+Vue.use(VueKonva)
 
-let app = createApp(App)
-app.mount('#app')
+Vue.config.productionTip = false
+
+let app = new Vue({render: h => h(App)})
+app.$mount('#app')
