@@ -7,8 +7,14 @@
         mixins: [fullWindowMixin],
         data() {
             return {
-                fullHelloMessage: "Hi, I'm veracioux.",
+                texts: [
+                    "Hi, I'm veracioux.",
+                    "Programmer",
+                    "Engineer",
+                    "Tinkerer",
+                ],
                 typedOutLength: 0,
+                state: 0,
                 intervalId: 0,
                 fadeableStyle: {
                     opacity: 1,
@@ -21,23 +27,30 @@
         },
         methods: {
             _onScroll() {
-                this.fadeableStyle.opacity = 1 - Math.min(this.relativeScrollY * 4, 1)
+                this.fadeableStyle.opacity = 1 - Math.min(this.relativeScrollY * 3, 1)
 
                 let mainText = this.$refs.mainText
-                mainText.style.top = - 1.5 * window.scrollY + 'px';
+                let traits = this.$refs.traits
                 if (window.scrollY >= 0.25 * window.innerHeight - mainText.offsetHeight / 2) {
                     mainText.style.position = "fixed"
+                    traits.style.position = "fixed"
                     mainText.style.top = "0"
+                    traits.style.bottom = "0"
                 } else {
                     mainText.style.position = "relative"
+                    traits.style.position = "relative"
+                    mainText.style.top = -1.5 * window.scrollY + 'px';
+                    traits.style.bottom = -1.5 * window.scrollY + 'px';
                 }
             },
             startTyping() {
                 this.intervalId = setInterval(this.typeOut, 120)
+                this.typeOut()
             },
             typeOut() {
                 ++this.typedOutLength;
-                if (this.typedOutLength == this.fullHelloMessage.length) {
+                // Adjust this value heuristically
+                if (this.typedOutLength === 30) {
                     clearInterval(this.intervalId)
                 }
             },
@@ -48,41 +61,83 @@
 <template>
     <div class="home" :style="fullWindowStyle">
         <div id="hello" ref="mainText" style="white-space-collapse: discard;">
-            <span class="text" :style="fadeableStyle">{{fullHelloMessage.slice(0, typedOutLength).slice(0,8)}}</span>
-            <span class="text" :style="veraciouxStyle">{{fullHelloMessage.slice(8, typedOutLength).slice(0,9)}}</span>
-            <span class="text" :style="fadeableStyle">{{fullHelloMessage.slice(-1, typedOutLength)}}</span>
+            <span :style="fadeableStyle">{{texts[0].slice(0, typedOutLength).slice(0,8)}}</span>
+            <span :style="veraciouxStyle">{{texts[0].slice(8, typedOutLength).slice(0,9)}}</span>
+            <span :style="fadeableStyle">{{texts[0].slice(-1, typedOutLength)}}</span>
+        </div>
+        <div id="traits" ref="traits">
+            <div class="trait" id="programmer" style="align-items: flex-start;">
+                <div class="dummy">Programmer</div>
+                <div>{{texts[1].slice(0, Math.max(typedOutLength - texts[0].length, 0))}}</div>
+            </div>
+            <div class="trait" id="engineer" style="align-items: flex-end;">
+                <div class="dummy">Engineer</div>
+                <div>{{texts[2].slice(0, Math.max(typedOutLength - texts[0].length, 0))}}</div>
+            </div>
+            <div class="trait" id="tinkerer" style="align-items: flex-start;">
+                <div class="dummy">Tinkerer</div>
+                <div>{{texts[3].slice(0, Math.max(typedOutLength - texts[0].length, 0))}}</div>
+            </div>
         </div>
     </div>
 </template>
 
 <style>
- #hello {
-     position: relative;
-     top: 0;
-     align-self: center;
-     padding: 0.2em;
+    #hello {
+        position: relative;
+        top: 0;
+        justify-self: end;
+        padding: 0.2em;
+    }
+
+    #traits {
+        position: relative;
+        bottom: 0;
+        padding-top: 4em;
+        padding-bottom: 1em;
+        justify-self: end;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1em;
+
+
+        font-size: 0.8em;
+        opacity: 0.5;
+    }
+
+    .trait {
+        display: flex;
+        flex-direction: column;
+        min-height: 1em;
+        max-height: 1em;
+    }
+ .dummy {
+     opacity: 0;
+     height: 0;
  }
 
     .home {
         position: fixed;
         top: 0;
         left: 0;
-        right: 0;
-        bottom: 0;
+
         display: flex;
-        text-align: center;
-        justify-content: center;
-        align-content: center;
         flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
         color: #7c4dff;
         font-family: monospace;
         font-size: 2.5em;
         z-index: 100;
     }
 
- .social {
-     position: fixed;
-     top: 200px;
-     left: 100px;
- }
+    /* TODO dummy */
+    .social {
+        position: fixed;
+        top: 200px;
+        left: 100px;
+    }
 </style>>

@@ -2,7 +2,8 @@ export const fullWindowMixin = {
     data() {
         return {
             fullWindowStyle: {
-                height: window.innerHeight + "px"
+                height: window.innerHeight + "px",
+                width: "100%",
             },
             scrollY: 0,
             // Vertical scroll expressed as number of window heights

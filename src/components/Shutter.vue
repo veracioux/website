@@ -21,8 +21,8 @@
         methods: {
             updateShutter() {
                 let radius = Math.max(window.innerWidth, window.innerHeight)
-                let centerX = window.innerWidth / 2,
-                    centerY = window.innerHeight / 2
+                let centerX = document.documentElement.clientWidth / 2,
+                    centerY = document.documentElement.clientHeight / 2
                 const numComponents = 10
                 const angleChunkSize = 2 * Math.PI / numComponents
                 this.triangles = []
@@ -49,8 +49,8 @@
                 }
             },
             _onWindowResize() {
-                this.configKonva.width = window.innerWidth
-                this.configKonva.height = window.innerHeight
+                this.configKonva.width = document.documentElement.clientWidth
+                this.configKonva.height = document.documentElement.clientHeight
                 this.updateShutter()
             },
         }

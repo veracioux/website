@@ -31,13 +31,9 @@
     body {
         height: 100%;
         width: 100%;
-        background-color: black;
+        background-color: #e1d8d1;
         margin: 0;
         padding: 0;
-    }
-
-    #about {
-        background-color: #e1d8d1;
     }
 
     #mugshot {
@@ -49,6 +45,6 @@
         margin: auto;
         width: 15%;
         z-index: 5;
-        transform: translate(1%, 2%);
+        transform: translate(1.5%, 3%);
     }
 </style>
