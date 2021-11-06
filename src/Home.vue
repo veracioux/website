@@ -27,19 +27,26 @@
         },
         methods: {
             _onScroll() {
-                this.fadeableStyle.opacity = 1 - Math.min(this.relativeScrollY * 3, 1)
-
-                let mainText = this.$refs.mainText
+                let hello = this.$refs.hello
                 let traits = this.$refs.traits
-                if (window.scrollY >= 0.25 * window.innerHeight - mainText.offsetHeight / 2) {
-                    mainText.style.position = "fixed"
+
+                this.fadeableStyle.opacity = 1 - Math.min(this.relativeScrollY * 5, 1)
+
+                if (this.fadeableStyle.opacity == 0) {
+                    hello.style.opacity = 0;
+                } else {
+                    hello.style.opacity = 1;
+                }
+
+                if (window.scrollY >= 0.25 * window.innerHeight - hello.offsetHeight / 2) {
+                    hello.style.position = "fixed"
                     traits.style.position = "fixed"
-                    mainText.style.top = "0"
+                    hello.style.top = "0"
                     traits.style.bottom = "0"
                 } else {
-                    mainText.style.position = "relative"
+                    hello.style.position = "relative"
                     traits.style.position = "relative"
-                    mainText.style.top = -1.5 * window.scrollY + 'px';
+                    hello.style.top = -1.5 * window.scrollY + 'px';
                     traits.style.bottom = -1.5 * window.scrollY + 'px';
                 }
             },
@@ -60,9 +67,9 @@
 
 <template>
     <div class="home" :style="fullWindowStyle">
-        <div id="hello" ref="mainText" style="white-space-collapse: discard;">
+        <div id="hello" ref="hello" style="white-space-collapse: discard;">
             <span :style="fadeableStyle">{{texts[0].slice(0, typedOutLength).slice(0,8)}}</span>
-            <span :style="veraciouxStyle">{{texts[0].slice(8, typedOutLength).slice(0,9)}}</span>
+            <span ref="veracioux" :style="veraciouxStyle">{{texts[0].slice(8, typedOutLength).slice(0,9)}}</span>
             <span :style="fadeableStyle">{{texts[0].slice(-1, typedOutLength)}}</span>
         </div>
         <div id="traits" ref="traits">
@@ -113,10 +120,11 @@
         min-height: 1em;
         max-height: 1em;
     }
- .dummy {
-     opacity: 0;
-     height: 0;
- }
+
+    .dummy {
+        opacity: 0;
+        height: 0;
+    }
 
     .home {
         position: fixed;

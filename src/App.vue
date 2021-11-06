@@ -14,7 +14,6 @@
         },
     }
 </script>
-<!-- TODO Remember to use position: sticky -->
 <template>
     <div>
         <img id="mugshot" src="./assets/mugshot.jpg" />
