@@ -11,11 +11,14 @@
                 },
                 // TODO How can I make triangles globally available
                 triangles: [],
+                edgeColor: "#000",
                 rotation: 0,
+                mugshotOverlayColor: "#000",
             }
         },
         mounted() {
             window.addEventListener('resize', this._onWindowResize)
+            window.addEventListener('scroll', this._onScroll)
             this._onWindowResize()
         },
         methods: {
@@ -53,21 +56,27 @@
                 this.configKonva.height = document.documentElement.clientHeight
                 this.updateShutter()
             },
+            _onScroll() {
+                let lightness = Math.round(Math.min(this.relativeScrollY / 0.1, 1) * 30)
+                this.edgeColor = Number(lightness).toString(16).padStart(2, "0")
+                this.edgeColor = "#" + this.edgeColor + this.edgeColor + this.edgeColor
+            },
         }
     }
 </script>
 
 <template>
-    <div>
-        <v-stage class="shutter" :config="configKonva">
+    <div class="shutter">
+        <div position="fixed"></div>
+        <v-stage :config="configKonva">
             <v-layer>
-                <v-line ref="shutter" v-for="t in triangles" :key="t" :config="{
+                <v-line v-for="t in triangles" :key="t" :config="{
                                                         x: t.pivotX,
                                                         y: t.pivotY,
                                                         points: t.points,
                                                         rotation: Math.min(15 * relativeScrollY, 5),
                                                         closed: true,
-                                                        stroke: '#131313',
+                                                        stroke: edgeColor,
                                                         strokeWidth: 1,
                                                         fill: 'black',
                                                         }" />
@@ -76,14 +85,12 @@
     </div>
 </template>
 
-<style>
+<style scoped>
     .shutter {
         position: fixed;
         top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 100;
+        width: 100vw;
+        height: 100vh;
         pointer-events: none;
     }
 </style>

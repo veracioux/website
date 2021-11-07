@@ -2,6 +2,7 @@
     import {
         fullWindowMixin
     } from './responsiveness'
+    import Navbar from './components/Navbar.vue'
     import Shutter from './components/Shutter.vue'
     import Home from './Home.vue'
 
@@ -9,6 +10,7 @@
         name: 'App',
         mixins: [fullWindowMixin],
         components: {
+            Navbar,
             Shutter,
             Home,
         },
@@ -16,12 +18,13 @@
 </script>
 <template>
     <div>
+        <navbar id="navbar"></navbar>
         <img id="mugshot" src="./assets/mugshot.jpg" />
+        <div id="home-page" :style="fullWindowStyle"></div>
         <div id="about" :style="fullWindowStyle">About</div>
         <div id="about" :style="fullWindowStyle">About</div>
-        <div id="about" :style="fullWindowStyle">About</div>
-        <Shutter id="shutter"></Shutter>
-        <Home></Home>
+        <shutter id="shutter"></shutter>
+        <home id="home"></home>
     </div>
 </template>
 
@@ -30,9 +33,19 @@
     body {
         height: 100%;
         width: 100%;
-        background-color: #e1d8d1;
+        background-color: #e1d8d1 !important;
         margin: 0;
         padding: 0;
+    }
+
+    #navbar {
+        z-index: 100;
+    }
+    #shutter {
+        z-index: 50;
+    }
+    #home {
+        z-index: 60;
     }
 
     #mugshot {

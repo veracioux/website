@@ -139,7 +139,6 @@
         color: #7c4dff;
         font-family: monospace;
         font-size: 2.5em;
-        z-index: 100;
     }
 
     /* TODO dummy */
