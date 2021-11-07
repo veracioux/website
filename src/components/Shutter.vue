@@ -1,5 +1,7 @@
 <script>
- import {fullWindowMixin} from '../responsiveness'
+    import {
+        fullWindowMixin
+    } from '../responsiveness'
     export default {
         name: 'Shutter',
         mixins: [fullWindowMixin],
@@ -14,6 +16,8 @@
                 edgeColor: "#000",
                 rotation: 0,
                 mugshotOverlayColor: "#000",
+                // Aperture size relative to its maximum opened state
+                relativeApertureSize: 0,
             }
         },
         mounted() {
@@ -41,7 +45,8 @@
                         y4 = radius * Math.sin(angle - angleChunkSize / 2)
 
                     let points = [pivotX, pivotY, x2 - pivotX, y2 - pivotY, x3 - pivotX,
-                    y3 - pivotY, x4 - pivotX, y4 - pivotY]
+                        y3 - pivotY, x4 - pivotX, y4 - pivotY
+                    ]
 
                     let triangle = {
                         pivotX: centerX + pivotX,
@@ -57,6 +62,8 @@
                 this.updateShutter()
             },
             _onScroll() {
+                this.relativeApertureSize = Math.min(3 * this.relativeScrollY, 1)
+
                 let lightness = Math.round(Math.min(this.relativeScrollY / 0.1, 1) * 30)
                 this.edgeColor = Number(lightness).toString(16).padStart(2, "0")
                 this.edgeColor = "#" + this.edgeColor + this.edgeColor + this.edgeColor
@@ -67,14 +74,13 @@
 
 <template>
     <div class="shutter">
-        <div position="fixed"></div>
         <v-stage :config="configKonva">
             <v-layer>
                 <v-line v-for="t in triangles" :key="t" :config="{
                                                         x: t.pivotX,
                                                         y: t.pivotY,
                                                         points: t.points,
-                                                        rotation: Math.min(15 * relativeScrollY, 5),
+                                                        rotation: relativeApertureSize * 5,
                                                         closed: true,
                                                         stroke: edgeColor,
                                                         strokeWidth: 1,
@@ -92,5 +98,15 @@
         width: 100vw;
         height: 100vh;
         pointer-events: none;
+    }
+
+    .image-overlay {
+        position: fixed;
+        top: 0;
+        width: 80%;
+        height: 80%;
+
+        background: #f50057;
+        opacity: 0.3;
     }
 </style>
