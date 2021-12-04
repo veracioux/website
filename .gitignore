@@ -1,14 +1,17 @@
 # Python
 __pycache__
 
-.DS_Store
+# JavaScript
 node_modules
+npm-debug.log*
+pnpm-debug.log*
+
+# Server
+.DS_Store
 dist
+/var
 
 # local env files
 .env.local
 .env.*.local
 
-# Log files
-npm-debug.log*
-pnpm-debug.log*
