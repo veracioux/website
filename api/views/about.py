@@ -27,22 +27,29 @@ def text_response(data_getter):
     return view
 
 
-def _info():
-    return {
-        "realname": _realname(),
-        "age": _age(),
-    }
+class Data:
+    """Raw data before being wrapped into a response."""
 
+    @staticmethod
+    def realname():
+        """Real name."""
+        return "Haris Gušić"
 
-def _realname():
-    return "Haris Gušić"
+    @staticmethod
+    def age():
+        """My current age."""
+        return int((datetime.now() - datetime(1999, 2, 18)).days / 365.25)
 
-
-def _age():
-    return int((datetime.now() - datetime(1999, 2, 18)).days / 365.25)
+    @staticmethod
+    def info():
+        """All info combined."""
+        return {
+            "realname": Data.realname(),
+            "age": Data.age(),
+        }
 
 
 # Views
-info = json_response(_info)
-realname = text_response(_realname)
-age = text_response(_age)
+info = json_response(Data.info)
+realname = text_response(Data.realname)
+age = text_response(Data.age)
