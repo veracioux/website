@@ -1,0 +1,10 @@
+.git
+Dockerfile
+Dockerfile.heroku
+pyproject.toml
+Pipfile
+.pylintrc
+frontend/node_modules
+frontend/dist
+var
+*.sqlite3

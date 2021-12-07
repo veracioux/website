@@ -12,8 +12,11 @@ SECRET_KEY = os.environ.get("VERACIOUX_SECRET_KEY")
 if not SECRET_KEY:
     SECRET_KEY = "1234"
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.environ.get("VERACIOUX_PRODUCTION") == "true":
+    DEBUG = False
+else:
+    # SECURITY WARNING: don't run with debug turned on in production!
+    DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
