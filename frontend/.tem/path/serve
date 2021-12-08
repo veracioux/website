@@ -1,5 +1,0 @@
-#!/usr/bin/env sh
-
-while :; do
-    npm run serve "$@"
-done
