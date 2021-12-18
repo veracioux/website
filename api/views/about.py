@@ -6,14 +6,16 @@ generate the response data.
 """
 from datetime import datetime
 
-from django.http import HttpResponse, JsonResponse
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 
 def json_response(data_getter):
     """Decorator that turns a dict result into a JsonResponse."""
 
+    @api_view(["GET"])
     def view(_):
-        return JsonResponse(data_getter())
+        return Response(data_getter())
 
     return view
 
@@ -21,8 +23,9 @@ def json_response(data_getter):
 def text_response(data_getter):
     """Decorator that turns an arbitrary result into a textual HttpResponse."""
 
+    @api_view(["GET"])
     def view(_):
-        return HttpResponse(str(data_getter()))
+        return Response(str(data_getter()))
 
     return view
 

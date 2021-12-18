@@ -1,11 +1,13 @@
 """API to generate content for shields.io badges."""
-from django.http import JsonResponse
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from .about import Data
 
 
+@api_view(["GET"])
 def age(_):
     """My current age."""
-    return JsonResponse({
+    return Response({
         "schemaVersion": 1,
         "message": str(Data.age()),
         "label": "version",
