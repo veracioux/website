@@ -2,8 +2,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.serializers import ModelSerializer
-from api.models import Project
-from api.util import InlineSerializer
+from backend.api.models import Project
+from backend.api.util import InlineSerializer
 
 
 class ProjectSerializer(ModelSerializer):

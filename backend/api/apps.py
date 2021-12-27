@@ -2,6 +2,6 @@
 from django.apps import AppConfig
 
 
-class PortfolioConfig(AppConfig):
+class ApiConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "portfolio"
+    name = "backend.api"
