@@ -1,8 +1,10 @@
-FROM alpine:3.14.3
+FROM alpine:3.15.0
 
 # Install global python dependencies
-RUN apk add --no-cache python3 py3-pip npm
+RUN apk add --no-cache python3 python3-dev py3-pip npm
 RUN apk add --no-cache nginx
+# Dependencies for psycopg2
+RUN apk add --no-cache postgresql-dev libpq gcc musl-dev
 RUN pip install --no-cache-dir pipenv
 
 # Required by 'heroku ps:exec'
@@ -32,12 +34,10 @@ RUN python3 manage.py collectstatic
 
 # Run migrations
 RUN python3 manage.py makemigrations
-RUN python3 manage.py migrate
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
-ENV VERACIOUX_PRODUCTION=true
 # Port to serve nginx
 ENV PORT 8001
 
-CMD sed -i 's/$PORT'/"$PORT"'/g' /etc/nginx/nginx.conf && ./production.sh
+CMD sed -i 's/$PORT'/"$PORT"'/g' /etc/nginx/nginx.conf && ./runserver.sh

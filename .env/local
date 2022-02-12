@@ -1,0 +1,12 @@
+# This env file is used only for local testing.
+DB_NAME=postgres
+DB_USER=postgres
+DB_PASSWORD=1234
+DB_HOST=db
+DB_PORT=5432
+
+# For Dockerfile.db
+POSTGRES_PASSWORD=1234
+
+SECRET_KEY=1234
+DEBUG=True

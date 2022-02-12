@@ -1,3 +1,0 @@
-#!/usr/bin/env sh
-
-pipenv run heroku local web "$@"

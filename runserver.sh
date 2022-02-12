@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 
-# Run this script to deploy the server in production mode
+# Run this script to deploy the server
+
+python3 manage.py migrate
 
 uvicorn backend.asgi:application --host 0.0.0.0 --port 8000 &
 

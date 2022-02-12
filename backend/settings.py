@@ -2,21 +2,24 @@
 
 import os
 from pathlib import Path
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env()
+environ.Env.read_env(BASE_DIR / ".env/env")
+if env("VERACIOUX_PRODUCTION"):
+    environ.Env.read_env(BASE_DIR / ".env/production")
+    environ.Env.read_env(BASE_DIR / ".env/production.secret")
+else:
+    environ.Env.read_env(BASE_DIR / ".env/local")
+    environ.Env.read_env(BASE_DIR / ".env/local.secret")
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("VERACIOUX_SECRET_KEY")
-if not SECRET_KEY:
-    SECRET_KEY = "1234"
+SECRET_KEY = env("SECRET_KEY")
 
-if os.environ.get("VERACIOUX_PRODUCTION") == "true":
-    DEBUG = False
-else:
-    # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = True
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = ["*"]
 
@@ -63,18 +66,18 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "backend.wsgi.application"
-
-
 # Database
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": env("DB_NAME"),
+        "USER": env("DB_USER"),
+        "PASSWORD": env("DB_PASSWORD"),
+        "HOST": env("DB_HOST"),
+        "PORT": env("DB_PORT")
+    },
 }
-
 
 # Password validation
 
@@ -113,7 +116,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = "/static/"
-STATIC_ROOT = "var/static_root/"
+STATIC_ROOT = os.path.join(BASE_DIR, "var/static_root/")
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "frontend/dist/static")]
 
 # Default primary key field type

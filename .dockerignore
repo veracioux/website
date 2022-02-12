@@ -1,10 +1,11 @@
 .git
-Dockerfile
-Dockerfile.heroku
+Dockerfile*
 pyproject.toml
 Pipfile
-.pylintrc
 frontend/node_modules
 frontend/dist
 var
 *.sqlite3
+
+.pylintrc
+docker-compose.yaml

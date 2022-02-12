@@ -12,6 +12,5 @@ dist
 /var
 db.sqlite3
 
-# local env files
-.env.local
-.env.*.local
+# secret env file
+.env/local.secret

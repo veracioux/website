@@ -1,0 +1,30 @@
+version: '3.4'
+
+services:
+  db:
+    # Image
+    image: veracioux/db
+    build:
+      context: .
+      dockerfile: Dockerfile.db
+
+    # Container
+    container_name: veracioux-db
+    ports: ["5432:5432"]
+    env_file:
+      - ./.env/env
+      - ./.env/local
+  web:
+    # Image
+    image: veracioux/website
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    # Container
+    container_name: veracioux-web
+    depends_on: [db]
+    ports: ["8000:8000"]
+    env_file:
+      - ./.env/env
+      - ./.env/local
