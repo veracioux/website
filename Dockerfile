@@ -14,8 +14,9 @@ RUN ln -sf /bin/bash /bin/sh
 WORKDIR /app/frontend
 
 # Install npm dependencies
-COPY frontend .
-RUN npm ci --only=prod
+RUN mkdir -p frontend/
+COPY package.json package-lock.json frontend/
+RUN npm install --only=prod
 
 # Bundle frontend
 RUN npm run build
