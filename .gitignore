@@ -14,3 +14,5 @@ db.sqlite3
 
 # secret env file
 .env/local.secret
+
+_build

@@ -1,0 +1,54 @@
+# NOTE: You can run 'dgen' to generate the production Dockerfile and the
+# Dockerfile used by docker-compose
+
+FROM alpine:3.15.0
+
+## Install global python dependencies
+RUN apk add --no-cache python3 python3-dev py3-pip npm
+RUN apk add --no-cache nginx
+## Dependencies for psycopg2
+RUN apk add --no-cache postgresql-dev libpq gcc musl-dev
+RUN pip install --no-cache-dir pipenv
+
+## Required by 'heroku ps:exec' and wait-for-it.sh
+RUN apk add --no-cache bash
+RUN ln -sf /bin/bash /bin/sh
+
+WORKDIR /app/frontend
+
+## Install npm dependencies
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm install --only=prod
+
+if [ "$ENVIRONMENT" = "production" ]; then
+    ## Bundle frontend
+    COPY frontend .
+    RUN npm run build
+fi
+
+WORKDIR /app
+COPY Pipfile.lock ./
+
+## Set up virtual env
+RUN LANG=en_US.UTF-8 pipenv sync
+## Install the virtual env globally, so it persists in the heroku filesystem
+RUN pipenv run pip freeze '>' /requirements.txt
+RUN pip install --no-cache-dir -r /requirements.txt
+
+## Collect static files
+COPY . .
+# TODO RUN python3 manage.py collectstatic
+
+## Run migrations
+RUN python3 manage.py makemigrations
+
+if [ "$ENVIRONMENT" = "production" ]; then
+    COPY nginx.conf /etc/nginx/nginx.conf
+    ## Port to serve nginx
+    ENV PORT 8001
+    CMD ./production.sh
+else
+    CMD ./local.sh
+fi
+
+# vim: filetype=dockerfile

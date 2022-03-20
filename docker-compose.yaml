@@ -3,10 +3,7 @@ version: '3.4'
 services:
   db:
     # Image
-    image: veracioux/db
-    build:
-      context: .
-      dockerfile: Dockerfile.db
+    image: postgres:14.1-alpine
 
     # Container
     container_name: veracioux-db
@@ -19,12 +16,14 @@ services:
     image: veracioux/website
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: _build/Dockerfile.compose
 
     # Container
     container_name: veracioux-web
     depends_on: [db]
-    ports: ["8000:8000"]
+    ports: ["8000:8000", "8080:8080"]
     env_file:
       - ./.env/env
       - ./.env/local
+    volumes:
+      - .:/app

@@ -47,8 +47,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-SECURE_SSL_REDIRECT = True
 
 ROOT_URLCONF = "backend.urls"
 
@@ -118,7 +116,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "var/static_root/")
+STATIC_ROOT = os.path.join("/var/static_root/")
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "frontend/dist/static")]
 
 # Default primary key field type
