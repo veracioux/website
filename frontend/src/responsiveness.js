@@ -12,7 +12,7 @@ export const fullWindowMixin = {
     },
     mounted() {
         window.addEventListener('scroll', this.onScroll)
-        this.onWindowResize()
+        this.onWindowResize();
     },
     methods: {
         onScroll() {

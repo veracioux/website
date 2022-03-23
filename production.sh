@@ -13,6 +13,7 @@ sed -i s/'$PORT'/"$PORT"/g /etc/nginx/nginx.conf
 export VERACIOUX_PRODUCTION=true
 
 python3 manage.py collectstatic
+python3 loaddata projects.json
 python3 manage.py migrate
 
 uvicorn backend.asgi:application --host 0.0.0.0 --port 8000 &

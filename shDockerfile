@@ -37,10 +37,6 @@ RUN pip install --no-cache-dir -r /requirements.txt
 
 ## Collect static files
 COPY . .
-# TODO RUN python3 manage.py collectstatic
-
-## Run migrations
-RUN python3 manage.py makemigrations
 
 if [ "$ENVIRONMENT" = "production" ]; then
     COPY nginx.conf /etc/nginx/nginx.conf
