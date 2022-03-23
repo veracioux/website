@@ -11,9 +11,8 @@
                     width: 0,
                     height: 0
                 },
-                // TODO How can I make triangles globally available
                 triangles: [],
-                edgeColor: "#000",
+                shutterEdgeColor: "#000",
                 rotation: 0,
                 mugshotOverlayColor: "#000",
                 // Aperture size relative to its maximum opened state
@@ -21,52 +20,65 @@
             }
         },
         mounted() {
-            window.addEventListener('resize', this._onWindowResize)
+            window.addEventListener('resize', this.onWindowResize)
             window.addEventListener('scroll', this._onScroll)
-            this._onWindowResize()
+            this.onWindowResize()
         },
         methods: {
-            updateShutter() {
-                let radius = Math.max(window.innerWidth, window.innerHeight)
+            getShutterRadius() {
+                return Math.max(window.innerWidth, window.innerHeight);
+            },
+            updateShutterGeometry() {
+                let radius = this.getShutterRadius();
                 let centerX = document.documentElement.clientWidth / 2,
                     centerY = document.documentElement.clientHeight / 2
-                const numComponents = 10
-                const angleChunkSize = 2 * Math.PI / numComponents
+                const numSlices = 10
+                const sliceAngle = 2 * Math.PI / numSlices
                 this.triangles = []
-                for (let i = 0; i < numComponents; ++i) {
-                    let angle = i * angleChunkSize + Math.PI / numComponents
+                for (let i = 0; i < numSlices; ++i) {
+                    let angle = i * sliceAngle + Math.PI / numSlices
                     let pivotX = radius * Math.cos(angle),
                         pivotY = radius * Math.sin(angle),
-                        x2 = radius * Math.cos(angle + angleChunkSize / 2),
-                        y2 = radius * Math.sin(angle + angleChunkSize / 2),
+                        x2 = radius * Math.cos(angle + sliceAngle / 2),
+                        y2 = radius * Math.sin(angle + sliceAngle / 2),
                         x3 = 0,
                         y3 = 0,
-                        x4 = radius * Math.cos(angle - angleChunkSize / 2),
-                        y4 = radius * Math.sin(angle - angleChunkSize / 2)
+                        x4 = radius * Math.cos(angle - sliceAngle / 2),
+                        y4 = radius * Math.sin(angle - sliceAngle / 2)
 
-                    let points = [pivotX, pivotY, x2 - pivotX, y2 - pivotY, x3 - pivotX,
-                        y3 - pivotY, x4 - pivotX, y4 - pivotY
+                    let vertices = [
+                        pivotX, pivotY,
+                        x2 - pivotX, y2 - pivotY,
+                        x3 - pivotX, y3 - pivotY,
+                        x4 - pivotX, y4 - pivotY
                     ]
 
                     let triangle = {
                         pivotX: centerX + pivotX,
                         pivotY: centerY + pivotY,
-                        points: points,
+                        points: vertices,
                     }
                     this.triangles.push(triangle)
                 }
             },
-            _onWindowResize() {
+            onWindowResize() {
                 this.configKonva.width = document.documentElement.clientWidth
                 this.configKonva.height = document.documentElement.clientHeight
-                this.updateShutter()
+                this.updateShutterGeometry()
+                this._onScroll();
             },
             _onScroll() {
-                this.relativeApertureSize = Math.min(3 * this.relativeScrollY, 1)
+                this.relativeApertureSize = Math.min(3.5 * this.relativeScrollY, 1)
 
                 let lightness = Math.round(Math.min(this.relativeScrollY / 0.1, 1) * 30)
-                this.edgeColor = Number(lightness).toString(16).padStart(2, "0")
-                this.edgeColor = "#" + this.edgeColor + this.edgeColor + this.edgeColor
+                let colorComponent = Number(lightness).toString(16).padStart(2, "0")
+                this.shutterEdgeColor = "#" + colorComponent + colorComponent + colorComponent
+                let radius = this.getShutterRadius();
+                if (Math.min(window.innerWidth, window.innerHeight) < 640) {
+                    this.rotation = this.relativeApertureSize * 7200 / radius;
+                } else {
+                    this.rotation = this.relativeApertureSize * 10200 / radius;
+                }
             },
         }
     }
@@ -80,9 +92,9 @@
                                                         x: t.pivotX,
                                                         y: t.pivotY,
                                                         points: t.points,
-                                                        rotation: relativeApertureSize * 5,
+                                                        rotation,
                                                         closed: true,
-                                                        stroke: edgeColor,
+                                                        stroke: shutterEdgeColor,
                                                         strokeWidth: 1,
                                                         fill: 'black',
                                                         }" />
@@ -98,15 +110,5 @@
         width: 100vw;
         height: 100vh;
         pointer-events: none;
-    }
-
-    .image-overlay {
-        position: fixed;
-        top: 0;
-        width: 80%;
-        height: 80%;
-
-        background: #f50057;
-        opacity: 0.3;
     }
 </style>

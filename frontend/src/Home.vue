@@ -109,7 +109,6 @@
         align-items: center;
         gap: 1em;
 
-
         font-size: 0.8em;
         opacity: 0.5;
     }

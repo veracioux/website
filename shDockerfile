@@ -4,7 +4,8 @@
 FROM alpine:3.15.0
 
 ## Install global python dependencies
-RUN apk add --no-cache python3 python3-dev py3-pip npm
+RUN apk add --no-cache python3 python3-dev py3-pip nodejs curl
+RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
 RUN apk add --no-cache nginx
 ## Dependencies for psycopg2
 RUN apk add --no-cache postgresql-dev libpq gcc musl-dev
@@ -17,13 +18,13 @@ RUN ln -sf /bin/bash /bin/sh
 WORKDIR /app/frontend
 
 ## Install npm dependencies
-COPY frontend/package.json frontend/package-lock.json ./
-RUN npm install --only=prod
+COPY frontend/package.json frontend/pnpm-lock.yaml ./
+RUN pnpm install --only=prod
 
 if [ "$ENVIRONMENT" = "production" ]; then
     ## Bundle frontend
     COPY frontend .
-    RUN npm run build
+    RUN pnpm run build
 fi
 
 WORKDIR /app
@@ -32,7 +33,7 @@ COPY Pipfile.lock ./
 ## Set up virtual env
 RUN LANG=en_US.UTF-8 pipenv sync
 ## Install the virtual env globally, so it persists in the heroku filesystem
-RUN pipenv run pip freeze '>' /requirements.txt
+RUN pipenv run pip freeze '|' tail -n +2 '>' /requirements.txt
 RUN pip install --no-cache-dir -r /requirements.txt
 
 ## Collect static files
