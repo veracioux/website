@@ -7,4 +7,4 @@ Vue.use(VueKonva)
 Vue.config.productionTip = false
 
 let app = new Vue({render: h => h(App)})
-app.$mount('#app')
+app.$mount("#app")

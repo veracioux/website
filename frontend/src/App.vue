@@ -73,8 +73,8 @@
     }
     #projects {
         z-index: 70;
-        background: orange;
         position: relative;
+        background: #12131D;
     }
     #navbar {
         z-index: 100;
