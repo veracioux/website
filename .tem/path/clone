@@ -3,5 +3,6 @@
 # Clone the project into /tmp/veracioux-website to test the committed changes
 
 cd "$(tem find -b veracioux-website)"
+rm -rf /tmp/veracioux-website
 git clone file://"$(pwd)" /tmp/veracioux-website
 
