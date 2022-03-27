@@ -7,7 +7,7 @@ name = "pypi"
 django = "~=3.2"
 djangorestframework = "~=3.12"
 uvicorn = "~=0.15.0"
-django-storages = "~=1.12.3"
+django-storages = {extras = ["dropbox"], version = "1.12.2"}
 django-environ = "~=0.8.1"
 psycopg2-binary = "~=2.9.3"
 

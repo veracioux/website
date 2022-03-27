@@ -1,4 +1,7 @@
-# This env file is used only for local testing.
+# This env file is used only for development testing.
+
+ENVIRONMENT=production
+
 DB_NAME=postgres
 DB_USER=postgres
 DB_PASSWORD=1234

@@ -9,11 +9,11 @@ services:
     container_name: veracioux-db
     ports: ["5432:5432"]
     env_file:
-      - ./.env/env
-      - ./.env/local
+      - ./.env/common
+      - ./.env/dev
   web:
     # Image
-    image: veracioux/website
+    image: veracioux/website:dev
     build:
       context: .
       dockerfile: _build/Dockerfile.compose
@@ -23,7 +23,7 @@ services:
     depends_on: [db]
     ports: ["8000:8000", "8080:8080"]
     env_file:
-      - ./.env/env
-      - ./.env/local
+      - ./.env/common
+      - ./.env/dev
     volumes:
       - .:/app:rw

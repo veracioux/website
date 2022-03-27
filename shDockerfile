@@ -21,7 +21,7 @@ WORKDIR /app/frontend
 COPY frontend/package.json frontend/pnpm-lock.yaml ./
 RUN pnpm install --only=prod
 
-if [ "$ENVIRONMENT" = "production" ]; then
+if [ "$ENVIRONMENT" != "dev" ]; then
     ## Bundle frontend
     COPY frontend .
     RUN pnpm run build
@@ -44,8 +44,10 @@ if [ "$ENVIRONMENT" = "production" ]; then
     ## Port to serve nginx
     ENV PORT 8001
     CMD ./production.sh
+elif [ "$ENVIRONMENT" = "dev" ]; then
+    CMD ./dev.sh
 else
-    CMD ./local.sh
+    : # TODO
 fi
 
 # vim: filetype=dockerfile

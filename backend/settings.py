@@ -2,24 +2,27 @@
 
 import os
 from pathlib import Path
+
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env()
-environ.Env.read_env(BASE_DIR / ".env/env")
-if env("VERACIOUX_PRODUCTION"):
+os.environ["ENVIRONMENT"] = "dev"
+environ.Env.read_env(BASE_DIR / ".env/common")
+if env("ENVIRONMENT") == "production":
     environ.Env.read_env(BASE_DIR / ".env/production")
-    environ.Env.read_env(BASE_DIR / ".env/production.secret")
-else:
+elif env("ENVIRONMENT") == "local":
     environ.Env.read_env(BASE_DIR / ".env/local")
     environ.Env.read_env(BASE_DIR / ".env/local.secret")
+else:
+    environ.Env.read_env(BASE_DIR / ".env/dev")
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")
 
-DEBUG = env("DEBUG")
+DEBUG = env("ENVIRONMENT") == "dev"
 
 ALLOWED_HOSTS = ["*"]
 
@@ -75,7 +78,7 @@ DATABASES = {
         "USER": env("DB_USER"),
         "PASSWORD": env("DB_PASSWORD"),
         "HOST": env("DB_HOST"),
-        "PORT": env("DB_PORT")
+        "PORT": env("DB_PORT"),
     },
 }
 
@@ -118,6 +121,12 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join("/var/static_root/")
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "frontend/dist/static")]
+
+# File storage
+#if env("ENVIRONMENT") != "dev":
+#    DEFAULT_FILE_STORAGE = "storages.backends.dropbox.DropBoxStorage"
+#    DROPBOX_ROOT_PATH = "/website"
+#MEDIA_ROOT = "/var/media"
 
 # Default primary key field type
 

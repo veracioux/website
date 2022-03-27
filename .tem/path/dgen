@@ -13,5 +13,6 @@ ENVIRONMENT=production \
 
 echo "Generating _build/Dockerfile.compose ..."
 
-shdocker -s "$project_root/shDockerfile" -d "$project_root/_build/Dockerfile.compose"
+ENVIRONMENT=dev \
+    shdocker -s "$project_root/shDockerfile" -d "$project_root/_build/Dockerfile.compose"
 
