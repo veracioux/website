@@ -1,0 +1,35 @@
+[
+    {
+        "model": "api.Project",
+        "pk": 1,
+        "fields": {
+            "slug": "flameshot",
+            "title": "Flameshot",
+            "desc": "Powerful yet simple to use screenshot software.",
+            "url": "https://flameshot.org",
+            "repo_url": "https://github.com/flameshot-org/flameshot",
+            "organization": "Flameshot org",
+            "organization_url": "https://github.com/flameshot-org",
+            "my_contributions_url": "https://github.com/search?q=repo%3Aflameshot-org%2Fflameshot+author%3Averacioux",
+            "roles": [
+                "Developer", "Co-maintainer"
+            ],
+            "languages": [
+                "CPP", "QT"
+            ]
+        }
+    },
+    {
+        "model": "api.Project",
+        "pk": 2,
+        "fields": {
+            "slug": "tuterm",
+            "title": "Tuterm",
+            "desc": "A better way to learn CLI programs.",
+            "url": "https://github.com/veracioux/tuterm",
+            "roles": [
+                "Original creator"
+            ]
+        }
+    }
+]
