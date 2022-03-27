@@ -123,10 +123,10 @@ STATIC_ROOT = os.path.join("/var/static_root/")
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "frontend/dist/static")]
 
 # File storage
-#if env("ENVIRONMENT") != "dev":
-#    DEFAULT_FILE_STORAGE = "storages.backends.dropbox.DropBoxStorage"
-#    DROPBOX_ROOT_PATH = "/website"
-#MEDIA_ROOT = "/var/media"
+if env("ENVIRONMENT") != "dev":
+    DEFAULT_FILE_STORAGE = "storages.backends.dropbox.DropBoxStorage"
+    DROPBOX_ROOT_PATH = "/website"
+MEDIA_ROOT = "/var/media"
 
 # Default primary key field type
 
