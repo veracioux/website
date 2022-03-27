@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+# Verify that the website URLs work
+
+set -e
+
+{
+    curl veracioux.me
+    curl www.veracioux.me
+    curl http://veracioux.me
+    curl http://www.veracioux.me
+} 2>&1 >/dev/null

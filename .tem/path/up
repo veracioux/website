@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+# Start the development containers
+
+docker-compose up --build "$@"
+

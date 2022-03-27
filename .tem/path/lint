@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+cd "$(tem find --root veracioux-website)"
+status=0
+
+pipenv run pylint $(_py_packages)
+((status += $?))
+
+# npx eslint static/
+# ((status += $?))
+
+# npx stylelint static/css
+# ((status += $?))
+
+exit $status

@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+# Push docker image to heroku
+
+cd "$(tem find -b veracioux-website)"
+
+dgen
+
+heroku container:push web --app veracioux "$@"

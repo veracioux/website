@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+set -e
+
+# Deploy to heroku as a docker container
+
+cd "$(tem find -b veracioux-website)"
+dgen
+heroku container:push    --app veracioux web
+heroku container:release --app veracioux web

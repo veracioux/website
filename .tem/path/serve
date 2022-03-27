@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+
+# Serve the website locally
+
+set -e
+
+root="$(tem find -b veracioux-website)"
+cd "$root"
+
+docker-compose up -d --build db
+./wait-for-it.sh -h localhost -p 5432 -t 10
+
+cd frontend && npm run serve &
+mg runserver "$@"

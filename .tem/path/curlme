@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+# curl the deployed site with proper Host header set
+# I use this because I use 'me' as an alias, which heroku doesn't accept
+
+/bin/curl --header 'Host: veracioux.me' "$@"

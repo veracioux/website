@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+dgen
+
+# TODO use universal solution
+/usr/bin/docker-compose "$@"
+

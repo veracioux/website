@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+
+# Generate dockerfiles from shDockerfile
+
+project_root="$(tem find -b veracioux-website)"
+
+mkdir -p "$project_root/_build"
+
+echo "Generating _build/Dockerfile ..."
+
+ENVIRONMENT=production \
+    shdocker -s "$project_root/shDockerfile" -d "$project_root/_build/Dockerfile"
+
+echo "Generating _build/Dockerfile.compose ..."
+
+shdocker -s "$project_root/shDockerfile" -d "$project_root/_build/Dockerfile.compose"
+
