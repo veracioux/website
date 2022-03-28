@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ["*"]
 INSTALLED_APPS = [
     "backend.portfolio",
     "backend.api",
+    "backend.api.testimonial",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -126,6 +127,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "frontend/dist/static")]
 if env("ENVIRONMENT") != "dev":
     DEFAULT_FILE_STORAGE = "storages.backends.dropbox.DropBoxStorage"
     DROPBOX_ROOT_PATH = "/website"
+    DROPBOX_OAUTH2_TOKEN = env("DROPBOX_OAUTH2_TOKEN")
 MEDIA_ROOT = "/var/media"
 
 # Default primary key field type

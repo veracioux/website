@@ -3,12 +3,18 @@
 
 FROM alpine:3.15.0
 
-## Install global python dependencies
-RUN apk add --no-cache python3 python3-dev py3-pip nodejs curl
+## Install global dependencies
+RUN apk add --no-cache python3 py3-pip nodejs curl
+# Install pnpm
 RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
 RUN apk add --no-cache nginx
 ## Dependencies for psycopg2
-RUN apk add --no-cache postgresql-dev libpq gcc musl-dev
+RUN apk add --no-cache libpq-dev
+## Dependencies for pillow
+RUN apk add --no-cache --virtual build-deps \
+            python3-dev gcc musl-dev zlib-dev jpeg-dev
+RUN apk add --no-cache zlib jpeg linux-headers
+## Install pipenv
 RUN pip install --no-cache-dir pipenv
 
 ## Required by 'heroku ps:exec' and wait-for-it.sh
@@ -36,7 +42,9 @@ RUN LANG=en_US.UTF-8 pipenv sync
 RUN pipenv run pip freeze '|' tail -n +2 '>' /requirements.txt
 RUN pip install --no-cache-dir -r /requirements.txt
 
-## Collect static files
+## Remove build dependencies
+RUN apk del build-deps
+
 COPY . .
 
 if [ "$ENVIRONMENT" = "production" ]; then
