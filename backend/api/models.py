@@ -2,7 +2,6 @@ from django.db import models
 
 
 class Project(models.Model):
-    id = models.IntegerField(primary_key=True)
     slug = models.CharField(max_length=50)
     title = models.CharField(max_length=50)
     desc = models.TextField()
@@ -14,3 +13,13 @@ class Project(models.Model):
     my_contributions_url = models.URLField(null=True)
     roles = models.JSONField(max_length=200, null=True)
     languages = models.JSONField(null=True)
+
+
+class PublicKey(models.Model):
+    name = models.CharField(max_length=100)
+    address = models.TextField()
+    desc = models.TextField()
+
+
+class GPGPublicKey(PublicKey):
+    public_key = models.TextField()
