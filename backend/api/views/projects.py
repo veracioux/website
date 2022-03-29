@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+
 from backend.api.models import Project
 from backend.api.util import InlineSerializer
 

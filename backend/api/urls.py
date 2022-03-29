@@ -2,8 +2,9 @@
 from django.urls import include, path, re_path
 from rest_framework.routers import DefaultRouter
 
-from .views import about, shields, projects
 from backend.api.testimonial.views import TestimonialViewSet
+
+from .views import about, projects, shields
 
 router = DefaultRouter()
 router.register("projects", projects.ProjectViewSet)
@@ -14,5 +15,5 @@ urlpatterns = [
     re_path(r"^about/realname/?$", about.realname),
     re_path(r"^about/age/?$", about.age),
     re_path(r"^shields/age/?$", shields.age),
-    path('', include(router.urls)),
+    path("", include(router.urls)),
 ]
