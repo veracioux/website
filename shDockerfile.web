@@ -7,9 +7,10 @@ FROM alpine:3.15.0
 RUN apk add --no-cache python3 py3-pip nodejs curl
 # Install pnpm
 RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
-RUN apk add --no-cache nginx
+RUN apk add --no-cache nginx gettext
 ## Dependencies for psycopg2
-RUN apk add --no-cache libpq-dev
+RUN apk add --no-cache libpq
+RUN apk add --no-cache --virtual build-deps-postgres libpq-dev
 ## Dependencies for pillow
 RUN apk add --no-cache --virtual build-deps \
             python3-dev gcc musl-dev zlib-dev jpeg-dev
@@ -43,19 +44,15 @@ RUN pipenv run pip freeze '|' tail -n +2 '>' /requirements.txt
 RUN pip install --no-cache-dir -r /requirements.txt
 
 ## Remove build dependencies
-RUN apk del build-deps
+RUN apk del build-deps build-deps-postgres
 
 COPY . .
 
-if [ "$ENVIRONMENT" = "production" ]; then
-    COPY nginx.conf /etc/nginx/nginx.conf
-    ## Port to serve nginx
-    ENV PORT 8001
-    CMD scripts/production.sh
-elif [ "$ENVIRONMENT" = "dev" ]; then
+if [ "$ENVIRONMENT" = "dev" ]; then
     CMD scripts/dev.sh
 else
-    : # TODO
+    COPY nginx.conf ./
+    CMD scripts/production.sh
 fi
 
 # vim: filetype=dockerfile

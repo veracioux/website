@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+
+export VIRTUAL_ENV="" PIPENV_ACTIVE=""
+
+"$@"

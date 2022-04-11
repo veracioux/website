@@ -1,0 +1,38 @@
+# Dockerfile for generating the dotfiles using emacs org-babel-tangle
+
+if [ "$ENVIRONMENT" = "dev" ]; then
+    tag="dev"
+else
+    tag="latest"
+fi
+
+# ------------------------------------------------------------------------------
+# Stage: js-build
+
+FROM veracioux/worker_server:"$tag" AS js-build
+RUN pnpm run build_worker
+
+# ------------------------------------------------------------------------------
+
+FROM alpine:3.15.0
+
+RUN apk add --no-cache emacs git nodejs bash curl
+RUN adduser -D user
+
+WORKDIR /home/user
+RUN chown -R user .
+
+COPY --from=js-build /worker /worker
+RUN chmod o+x /worker/scripts/*
+
+# Create work executable that can be called by /worker/worker.js
+RUN ln -s /worker/scripts/worker_dotfiles.sh /usr/bin/work
+
+USER user
+
+# Set message queue name
+ENV WORKER_QUEUE=dotfiles
+
+CMD cd /worker '&&' node ./worker.js
+
+# vim: filetype=dockerfile

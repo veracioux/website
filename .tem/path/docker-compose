@@ -1,7 +1,24 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+
+cd "$(tem find -b veracioux-website)"
+
+for arg in "$@"; do
+    if [ "$arg" = "--help" ] || [ "$arg" = "-h" ]; then
+        /usr/bin/docker-compose -f compose-dev.yaml "$@"
+        exit
+    fi
+done
+
+# Obtain args with options removed
+args=()
+for arg in "$@"; do
+    if ! [[ "$arg" =~ ^- ]]; then
+        args=("${args[@]}" "$arg")
+    fi
+done
 
 dgen
 
 # TODO use universal solution
-/usr/bin/docker-compose "$@"
+/usr/bin/docker-compose -f "$(_get_compose_file)" "$@"
 

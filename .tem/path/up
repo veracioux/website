@@ -2,6 +2,6 @@
 
 # Start the development containers
 
-drm
+drm "$@"
 docker-compose up --build "$@"
 

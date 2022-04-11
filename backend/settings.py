@@ -11,8 +11,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 os.environ["ENVIRONMENT"] = "dev"
 environ.Env.read_env(BASE_DIR / ".env/common")
-if env("ENVIRONMENT") == "production":
-    environ.Env.read_env(BASE_DIR / ".env/production")
+if env("ENVIRONMENT") == "prod":
+    environ.Env.read_env(BASE_DIR / ".env/prod")
 elif env("ENVIRONMENT") == "local":
     environ.Env.read_env(BASE_DIR / ".env/local")
     environ.Env.read_env(BASE_DIR / ".env/local.secret")
@@ -127,7 +127,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "frontend/dist/static")]
 if env("ENVIRONMENT") != "dev":
     DEFAULT_FILE_STORAGE = "storages.backends.dropbox.DropBoxStorage"
     DROPBOX_ROOT_PATH = "/website"
-    DROPBOX_OAUTH2_TOKEN = env("DROPBOX_OAUTH2_TOKEN")
+    DROPBOX_OAUTH2_TOKEN = env("DROPBOX_WEB_OAUTH2_TOKEN")
 MEDIA_ROOT = "/var/media"
 
 # Default primary key field type

@@ -1,0 +1,58 @@
+version: '3.4'
+
+services:
+  db:
+    # Image
+    image: postgres:14.1-alpine
+
+    # Container
+    container_name: veracioux-db
+    ports: ["5432:5432"]
+    env_file: &env
+      - ./.env/common
+      - ./.env/dev
+      - ./.env/compose
+
+  web:
+    # Image
+    image: veracioux/website:dev
+    build:
+      context: .
+      dockerfile: Dockerfile.web.dev
+
+    # Container
+    container_name: veracioux-web
+    depends_on: [db]
+    ports: ["8000:8000", "8080:8080"]
+    env_file: *env
+    volumes:
+      - .:/app:rw
+
+  worker_server:
+    # Image
+    image: veracioux/worker_server:dev
+    build:
+      context: .
+      dockerfile: Dockerfile.worker_server.dev
+
+    # Container
+    container_name: veracioux-worker_server
+    ports: ["8001:8001"]
+    env_file: &worker_env
+      - ./.env/common
+      - worker/.env/common
+      - worker/.env/local.secret
+
+  worker_dotfiles:
+    # Image
+    image: veracioux/worker_dotfiles:dev
+    build:
+      context: .
+      dockerfile: Dockerfile.worker_dotfiles.dev
+
+    # Container
+    container_name: veracioux-worker_dotfiles
+    env_file: *worker_env
+    environment:
+      - RABBITMQ_HOST=worker_server
+    depends_on: [worker_server]

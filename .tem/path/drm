@@ -2,5 +2,4 @@
 
 # Force-remove all docker containers related to veracioux-website
 
-docker rm -f veracioux-db veracioux-web
-
+/usr/bin/docker-compose -f "$(_get_compose_file)" rm -sf "$@"

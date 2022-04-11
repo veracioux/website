@@ -4,13 +4,13 @@ from tem.var import *
 #db_user = Variant(default="veracioux", from_env="DB_USER")
 #db_user = Variant(default="veracioux", from_env="DB_USER")
 
-target = Variable(["production", "local"], default="local")
+target = Variable(["dev", "local", "prod"], default="dev")
 target.doc = (
-    "The environment that is the target of ad-hoc tests.\n"
-    "For example use this"
-    "variable to set whether the $url shell variable points to the local or"
-    "production server."
+    "The server that is the target of ad-hoc tests.\n"
+    "For example use this variable to set whether the $url shell variable "
+    "points to the dev, local or production server."
 )
 
-target.doc["production"] = "Use production server"
-target.doc["local"] = "Use local development server"
+target.doc["dev"] = "Use development server"
+target.doc["local"] = "Use local server with production config"
+target.doc["prod"] = "Use production server"

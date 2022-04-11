@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+VIRTUAL_ENV="" /usr/bin/pipenv "$@"
+

@@ -1,0 +1,29 @@
+{
+  "name": "veracioux-worker",
+  "version": "0.1.0",
+  "description": "Worker for my website",
+  "main": "index.js",
+  "scripts": {
+    "build_server": "esbuild server.ts --bundle --platform=node --outfile=server.js",
+    "build_worker": "esbuild worker.ts --bundle --platform=node --outfile=worker.js",
+    "server": "pnpm build_server && node server.js @",
+    "worker": "pnpm build_worker && node worker.js @"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/veracioux/website.git"
+  },
+  "author": "Haris Gušić",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/veracioux/website/issues"
+  },
+  "homepage": "https://github.com/veracioux/website#readme",
+  "dependencies": {
+    "@types/amqplib": "^0.8.2",
+    "@types/node": "^17.0.23",
+    "amqplib": "^0.8.0",
+    "esbuild": "^0.14.30",
+    "typescript": "^4.6.3"
+  }
+}

@@ -1,18 +1,27 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # Generate dockerfiles from shDockerfile
 
 project_root="$(tem find -b veracioux-website)"
 
-mkdir -p "$project_root/_build"
+process_types=("$@")
 
-echo "Generating _build/Dockerfile ..."
+if [ -z "$process_types" ]; then
+    process_types=(web worker_server worker_dotfiles)
+fi
 
-ENVIRONMENT=production \
-    shdocker -s "$project_root/shDockerfile" -d "$project_root/_build/Dockerfile"
-
-echo "Generating _build/Dockerfile.compose ..."
-
-ENVIRONMENT=dev \
-    shdocker -s "$project_root/shDockerfile" -d "$project_root/_build/Dockerfile.compose"
-
+for process_type in "${process_types[@]}"; do
+    if tem var -q target:dev; then
+        echo "Generating Dockerfile.$process_type.dev ..."
+        export ENVIRONMENT=dev
+        shdocker \
+            -s "$project_root/shDockerfile.$process_type" \
+            -d "$project_root/Dockerfile.$process_type.dev"
+    else
+        export ENVIRONMENT=prod
+        echo "Generating Dockerfile.$process_type ..."
+        shdocker \
+            -s "$project_root/shDockerfile.$process_type" \
+            -d "$project_root/Dockerfile.$process_type"
+    fi
+done
