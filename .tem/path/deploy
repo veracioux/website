@@ -6,8 +6,5 @@ set -e
 
 cd "$(tem find -b veracioux-website)"
 
-heroku container:push    --app veracioux -R web worker_server worker_dotfiles
-sleep 60
-for x in 0 1; do
-    heroku container:release --app veracioux -R web worker_server worker_dotfiles
-done
+hpush
+hrelease

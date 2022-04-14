@@ -14,5 +14,5 @@ dist
 # secret env file
 .env/local.secret
 
-# Docker and build process
+# Docker and build process (I use shdocker to generate Dockerfiles)
 Dockerfile*

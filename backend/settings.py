@@ -32,7 +32,6 @@ ALLOWED_HOSTS = ["*"]
 INSTALLED_APPS = [
     "backend.portfolio",
     "backend.api",
-    "backend.api.testimonial",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

@@ -1,9 +1,12 @@
 # NOTE: You can run 'dgen' to generate the production Dockerfile and the
 # Dockerfile used by docker-compose
 
-FROM alpine:3.15.0
+FROM alpine:3.15
 
+#  ---------------------------
 ## Install global dependencies
+#  ---------------------------
+
 RUN apk add --no-cache python3 py3-pip nodejs curl
 # Install pnpm
 RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
@@ -22,11 +25,15 @@ RUN pip install --no-cache-dir pipenv
 RUN apk add --no-cache bash
 RUN ln -sf /bin/bash /bin/sh
 
-WORKDIR /app/frontend
+#  --------------------------
+## Install local dependencies
+#  --------------------------
 
-## Install npm dependencies
+## Frontend
+
+WORKDIR /app/frontend
 COPY frontend/package.json frontend/pnpm-lock.yaml ./
-RUN pnpm install --only=prod
+RUN pnpm install --prod
 
 if [ "$ENVIRONMENT" != "dev" ]; then
     ## Bundle frontend
@@ -34,19 +41,28 @@ if [ "$ENVIRONMENT" != "dev" ]; then
     RUN pnpm run build
 fi
 
+## Backend
+
 WORKDIR /app
 COPY Pipfile.lock ./
 
-## Set up virtual env
+# Set up virtual env
 RUN LANG=en_US.UTF-8 pipenv sync
-## Install the virtual env globally, so it persists in the heroku filesystem
+# Install the virtual env globally, so it persists in the heroku filesystem
 RUN pipenv run pip freeze '|' tail -n +2 '>' /requirements.txt
 RUN pip install --no-cache-dir -r /requirements.txt
 
+## Worker server
+
+WORKDIR /app/worker
+COPY worker/pnpm-lock.yaml ./
+RUN pnpm install --prod
+
+WORKDIR /app
+COPY . /app
+
 ## Remove build dependencies
 RUN apk del build-deps build-deps-postgres
-
-COPY . .
 
 if [ "$ENVIRONMENT" = "dev" ]; then
     CMD scripts/dev.sh

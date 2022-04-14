@@ -4,4 +4,4 @@
 
 cd "$(tem find -b veracioux-website)"
 
-heroku container:release --app veracioux web worker_server worker_dotfiles "$@"
+heroku container:release --app veracioux web worker_dotfiles "$@"

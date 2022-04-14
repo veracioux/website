@@ -1,14 +1,18 @@
 import * as amqp from "amqplib";
 import {execFileSync} from "child_process";
 
-const host = process.env.RABBITMQ_HOST;
-const user = process.env.RABBITMQ_DEFAULT_USER;
-const pass = process.env.RABBITMQ_DEFAULT_PASS;
-
 export async function createMQChannel(): Promise<amqp.Channel> {
-    execFileSync("scripts/wait-for-it.sh", ["-h", host, "-p", "5672"], {
-        stdio: ["inherit", "inherit", "inherit"],
-    });
+    const host = process.env.RABBITMQ_HOST;
+    const port = process.env.RABBITMQ_PORT;
+    const user = process.env.RABBITMQ_USER;
+    const pass = process.env.RABBITMQ_PASS;
+
+    if (host && port) {
+        execFileSync("scripts/wait-for-it.sh", ["-h", host, "-p", port], {
+            stdio: ["inherit", "inherit", "inherit"],
+        });
+    }
+
     let url = `amqp://${user}:${pass}@${host}`;
     const connection = await amqp.connect(url).catch(err => {
         console.error(err);

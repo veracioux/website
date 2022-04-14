@@ -1,5 +1,10 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+
+shopt -s globstar
+
+# If this repo had a makefile, this would perform 'make clean'
 
 cd "$(tem find -b veracioux-website)"
 rm Dockerfile.*
+rm -rf **/__pycache__
 

@@ -13,6 +13,14 @@ services:
       - ./.env/local
       - ./.env/local.secret
       - ./.env/compose
+      - worker/.env/common
+
+  rabbitmq:
+    image: rabbitmq:3.7
+    container_name: rabbitmq
+    ports: ["5672:5672"]
+    env_file:
+      - worker/.env/common
 
   web:
     # Image
@@ -26,23 +34,11 @@ services:
     depends_on: [db]
     ports: ["5000:5000", "8000:8000", "8080:8080"]
     env_file: *env
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - PYTHONDONTWRITEBYTECODE=true
     volumes:
       - .:/app:rw
-
-  worker_server:
-    # Image
-    image: veracioux/worker_server:latest
-    build:
-      context: .
-      dockerfile: Dockerfile.worker_server
-
-    # Container
-    container_name: veracioux-worker_server
-    ports: ["8001:8001"]
-    env_file: &worker_env
-      - ./.env/common
-      - worker/.env/common
-      - worker/.env/local.secret
 
   worker_dotfiles:
     # Image
@@ -53,7 +49,9 @@ services:
 
     # Container
     container_name: veracioux-worker_dotfiles
-    env_file: *worker_env
+    env_file:
+      - ./.env/common
+      - worker/.env/common
+      - worker/.env/local.secret
     environment:
-      - RABBITMQ_HOST=worker_server
-    depends_on: [worker_server]
+      - RABBITMQ_HOST=rabbitmq

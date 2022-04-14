@@ -2,13 +2,11 @@
 from django.urls import include, path, re_path
 from rest_framework.routers import DefaultRouter
 
-from backend.api.testimonial.views import TestimonialViewSet
-
-from .views import about, projects, scripts, shields
+from .views import about, projects, scripts, shields, testimonials
 
 router = DefaultRouter()
 router.register("projects", projects.ProjectViewSet)
-router.register("testimonials", TestimonialViewSet)
+router.register("testimonials", testimonials.TestimonialViewSet)
 
 urlpatterns = [
     re_path(r"^about/?$", about.info),

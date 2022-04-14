@@ -1,0 +1,16 @@
+# Common stage for all workers. Source this file from another shDockerfile.
+
+FROM alpine:3.15
+
+RUN apk add --no-cache nodejs curl
+# Install pnpm
+RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
+
+WORKDIR /worker
+
+COPY worker/package.json worker/pnpm-lock.yaml /worker/
+RUN pnpm install
+
+COPY worker /worker
+
+# vim: filetype=dockerfile
