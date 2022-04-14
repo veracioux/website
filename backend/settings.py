@@ -9,15 +9,14 @@ import environ
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env()
-os.environ["ENVIRONMENT"] = "dev"
+if "ENVIRONMENT" not in os.environ:
+    os.environ["ENVIRONMENT"] = "dev"
 environ.Env.read_env(BASE_DIR / ".env/common")
-if env("ENVIRONMENT") == "prod":
-    environ.Env.read_env(BASE_DIR / ".env/prod")
-elif env("ENVIRONMENT") == "local":
+if env("ENVIRONMENT") == "dev":
+    environ.Env.read_env(BASE_DIR / ".env/dev")
+else:
     environ.Env.read_env(BASE_DIR / ".env/local")
     environ.Env.read_env(BASE_DIR / ".env/local.secret")
-else:
-    environ.Env.read_env(BASE_DIR / ".env/dev")
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")
@@ -26,6 +25,7 @@ DEBUG = env("ENVIRONMENT") == "dev"
 
 ALLOWED_HOSTS = ["*"]
 
+print("DEBUGSON adfasfasdfasdfadsfsaf", DEBUG, env("ENVIRONMENT"))
 
 # Application definition
 

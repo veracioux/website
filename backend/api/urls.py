@@ -13,6 +13,6 @@ urlpatterns = [
     re_path(r"^about/realname/?$", about.realname),
     re_path(r"^about/age/?$", about.age),
     re_path(r"^shields/age/?$", shields.age),
-    re_path(r"^s(cripts)?(/(?P<script>.*))?", scripts),
+    re_path(r"^s(cripts)?(/(?P<script>.*))?/?$", scripts),
     path("", include(router.urls)),
 ]

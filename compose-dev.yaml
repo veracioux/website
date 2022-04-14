@@ -26,7 +26,7 @@ services:
     image: veracioux/website:dev
     build:
       context: .
-      dockerfile: Dockerfile.web.dev
+      dockerfile: docker/Dockerfile.web.dev
 
     # Container
     container_name: veracioux-web
@@ -44,7 +44,7 @@ services:
     image: veracioux/worker_dotfiles:dev
     build:
       context: .
-      dockerfile: Dockerfile.worker_dotfiles.dev
+      dockerfile: docker/Dockerfile.worker_dotfiles.dev
 
     # Container
     container_name: veracioux-worker_dotfiles
