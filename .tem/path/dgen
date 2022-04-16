@@ -12,16 +12,16 @@ fi
 
 for process_type in "${process_types[@]}"; do
     if tem var -q target:dev; then
-        echo "Generating docker/Dockerfile.$process_type.dev ..."
+        echo "Generating Dockerfile.$process_type.dev ..."
         export ENVIRONMENT=dev
         shdocker \
             -s "$project_root/docker/shDockerfile.$process_type" \
-            -d "$project_root/docker/Dockerfile.$process_type.dev"
+            -d "$project_root/Dockerfile.$process_type.dev"
     else
         export ENVIRONMENT=prod
-        echo "Generating docker/Dockerfile.$process_type ..."
+        echo "Generating Dockerfile.$process_type ..."
         shdocker \
             -s "$project_root/docker/shDockerfile.$process_type" \
-            -d "$project_root/docker/Dockerfile.$process_type"
+            -d "$project_root/Dockerfile.$process_type"
     fi
 done

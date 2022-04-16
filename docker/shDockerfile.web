@@ -33,7 +33,7 @@ RUN ln -sf /bin/bash /bin/sh
 
 WORKDIR /app/frontend
 COPY frontend/package.json frontend/pnpm-lock.yaml ./
-RUN pnpm install --prod
+RUN pnpm install --frozen-lockfile --prod
 
 if [ "$ENVIRONMENT" != "dev" ]; then
     ## Bundle frontend
@@ -55,8 +55,10 @@ RUN pip install --no-cache-dir -r /requirements.txt
 ## Worker server
 
 WORKDIR /app/worker
-COPY worker/pnpm-lock.yaml ./
-RUN pnpm install --prod
+COPY worker/package.json worker/pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+RUN apk add --no-cache tree
+RUN tree node_modules
 
 WORKDIR /app
 COPY . /app

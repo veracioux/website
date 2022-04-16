@@ -25,8 +25,6 @@ DEBUG = env("ENVIRONMENT") == "dev"
 
 ALLOWED_HOSTS = ["*"]
 
-print("DEBUGSON adfasfasdfasdfadsfsaf", DEBUG, env("ENVIRONMENT"))
-
 # Application definition
 
 INSTALLED_APPS = [

@@ -44,7 +44,7 @@ gitsha="$(conf rev-parse HEAD)"
 conf clean -dfx
 
 ./.haris-bin/tangle
-cd /tmp/.tangle-home
+cd /tmp/tangle-"$(whoami)"
 
 readarray -t files < <(find -type f)
 

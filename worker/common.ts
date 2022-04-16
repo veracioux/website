@@ -13,8 +13,9 @@ export async function createMQChannel(): Promise<amqp.Channel> {
         });
     }
 
-    let url = `amqp://${user}:${pass}@${host}`;
+    let url = process.env.RABBITMQ_URL || `amqp://${user}:${pass}@${host}`;
     const connection = await amqp.connect(url).catch(err => {
+        console.error("Failed to connect to message broker at", url);
         console.error(err);
         throw err;
     });

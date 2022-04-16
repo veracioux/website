@@ -7,7 +7,9 @@ set +e
 
 echo "Running production server on port $PORT"
 
-pnpm run --dir worker/ server &
+cd worker/
+pnpm run server &
+cd ..
 
 python3 manage.py collectstatic --noinput
 python3 manage.py migrate

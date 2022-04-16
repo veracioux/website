@@ -5,6 +5,6 @@ shopt -s globstar
 # If this repo had a makefile, this would perform 'make clean'
 
 cd "$(tem find -b veracioux-website)"
-rm docker/Dockerfile.*
+rm Dockerfile.*
 rm -rf **/__pycache__
 
