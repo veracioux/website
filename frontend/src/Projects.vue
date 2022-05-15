@@ -1,4 +1,5 @@
 <script>
+import {SLinkedIn} from "vue-socials";
 import ProjectCard from "@/components/ProjectCard";
 import useSWRV from "swrv";
 import "@/assets/shared.css";
@@ -6,6 +7,7 @@ import "@/assets/shared.css";
 export default {
     components: {
         ProjectCard,
+        SLinkedIn,
     },
     setup() {
         const {data: projects} = useSWRV("/api/projects/", (key) => fetch(key).then(resp => resp.json()))
@@ -19,6 +21,7 @@ export default {
 
 <template>
     <div class="section main">
+        <s-linked-in :window-features="{}" :share-options="{url: 'https://linkedin.com/in/veracioux'}" />
         <div class="section-title">Projects</div>
         <div class="card-container">
             <ProjectCard v-for="project in projects" :key="project.id" v-bind="project" />

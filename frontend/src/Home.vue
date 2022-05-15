@@ -66,7 +66,7 @@
 </script>
 
 <template>
-    <div class="home" :style="fullWindowStyle">
+    <div class="home section">
         <div id="hello" ref="hello" style="white-space-collapse: discard;">
             <span :style="fadeableStyle">{{texts[0].slice(0, typedOutLength).slice(0,8)}}</span>
             <span ref="veracioux" :style="veraciouxStyle">{{texts[0].slice(8, typedOutLength).slice(0,9)}}</span>

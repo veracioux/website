@@ -1,7 +1,7 @@
 <script>
     import {
         fullWindowMixin
-    } from '../responsiveness'
+    } from '@/responsiveness'
     export default {
         name: 'Shutter',
         mixins: [fullWindowMixin],

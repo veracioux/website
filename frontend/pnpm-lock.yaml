@@ -13,6 +13,7 @@ specifiers:
   swrv: ^0.9.6
   vue: ^2.6.11
   vue-konva: ^2.1.7
+  vue-socials: ^1.1.0
   vue-template-compiler: ^2.6.11
 
 dependencies:
@@ -28,6 +29,7 @@ dependencies:
   swrv: 0.9.6_56f4c8ef45bd21a4065070383eea8fef
   vue: 2.6.14
   vue-konva: 2.1.7_konva@8.3.5
+  vue-socials: 1.1.0_vue@2.6.14
   vue-template-compiler: 2.6.14
 
 packages:
@@ -8381,6 +8383,15 @@ packages:
       webpack: 4.46.0
     dev: false
     optional: true
+
+  /vue-socials/1.1.0_vue@2.6.14:
+    resolution: {integrity: sha512-/PV6p0jLxi0rKWgFU2HVqgYLishorexwSzvlik7gOniONfL84pbBZ1w0+aCK4yfRDOtVDm9xbkQfmkLvi7HnKw==}
+    engines: {node: '>= 14.15.4', npm: '>= 6.14.7'}
+    peerDependencies:
+      vue: ^2.6.12
+    dependencies:
+      vue: 2.6.14
+    dev: false
 
   /vue-style-loader/4.1.3:
     resolution: {integrity: sha512-sFuh0xfbtpRlKfm39ss/ikqs9AbKCoXZBpHeVZ8Tx650o0k0q/YCM7FRvigtxpACezfq6af+a7JeqVTWvncqDg==}

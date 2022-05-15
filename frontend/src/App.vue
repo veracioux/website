@@ -1,11 +1,12 @@
 <script>
     import {
         fullWindowMixin
-    } from './responsiveness'
-    import Navbar from './components/Navbar.vue'
-    import Shutter from './components/Shutter.vue'
-    import Home from './Home.vue'
-    import Projects from './Projects.vue'
+    } from "@/responsiveness"
+    import Navbar from "@/components/Navbar.vue"
+    import Shutter from "@/components/Shutter.vue"
+    import Home from "@/Home.vue"
+    import Projects from "@/Projects.vue";
+    import "@/assets/shared.css";
 
     export default {
         name: 'App',
@@ -22,10 +23,10 @@
     <div>
         <navbar id="navbar"></navbar>
         <!-- TODO: Use events for this. -->
-        <img id="mugshot" :style="{filter: 'blur(' + 15 * Math.max(1 - 4 * relativeScrollY, 0) + 'px)'}" src="./assets/mugshot.jpg" />
-        <div id="background" :style="fullWindowStyle" />
-        <div class="home-page-space-occupant" :style="fullWindowStyle"></div>
-        <div class="home-page-space-occupant" :style="fullWindowStyle"></div>
+        <img id="mugshot" :style="{filter: 'blur(' + 15 * Math.max(1 - 4 * relativeScrollY, 0) + 'px)'}" src="@/assets/mugshot.jpg" />
+        <div id="background" class="full-window" />
+        <div class="home-page-space-occupant full-window"></div>
+        <div class="home-page-space-occupant full-window"></div>
         <Shutter id="shutter"></Shutter>
         <Home id="home"></Home>
         <Projects id="projects"/>

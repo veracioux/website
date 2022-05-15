@@ -20,6 +20,7 @@
     "swrv": "^0.9.6",
     "vue": "^2.6.11",
     "vue-konva": "^2.1.7",
+    "vue-socials": "^1.1.0",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
