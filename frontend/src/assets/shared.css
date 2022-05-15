@@ -1,8 +1,13 @@
 
+.section {
+    height: 100vh;
+    width: 100%;
+}
+
 .section-title {
     width: 100%;
     padding-top: 128px;
-    padding-bottom: 32px;
+    padding-bottom: 96px;
     font-size: 48px;
     color: #d2dcf9;
     text-align: center;

@@ -1,8 +1,11 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from "vue";
+import App from "./App.vue";
 
-import VueKonva from 'vue-konva'
+import VueKonva from "vue-konva";
+import VueCompositionAPI from "@vue/composition-api";
+
 Vue.use(VueKonva)
+Vue.use(VueCompositionAPI)
 
 Vue.config.productionTip = false
 

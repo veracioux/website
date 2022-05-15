@@ -1,41 +1,42 @@
 <script>
-import "@/assets/shared.css";
-import {fullWindowMixin} from "@/responsiveness";
 import ProjectCard from "@/components/ProjectCard";
+import useSWRV from "swrv";
+import "@/assets/shared.css";
 
 export default {
-    name: "Projects",
-    components: {ProjectCard},
-    mixins: [fullWindowMixin],
-    data() {
+    components: {
+        ProjectCard,
+    },
+    setup() {
+        const {data: projects} = useSWRV("/api/projects/", (key) => fetch(key).then(resp => resp.json()))
+
         return {
-            sampleProject: {
-                title: "Flameshot"
-            }
+            projects,
         }
     }
-}
+};
 </script>
 
 <template>
-    <div id="main" :style="fullWindowStyle">
+    <div class="section main">
         <div class="section-title">Projects</div>
-        <div id="card-container">
-            <ProjectCard v-bind="sampleProject">
-            </ProjectCard>
+        <div class="card-container">
+            <ProjectCard v-for="project in projects" :key="project.id" v-bind="project" />
         </div>
     </div>
 </template>
 
 <style scoped>
-    #main {
-        background: #212336;
-        position: relative;
-    }
-    #card-container {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-    }
+.main {
+    background: #0e0f17;
+    position: relative;
+}
+
+.card-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
 </style>

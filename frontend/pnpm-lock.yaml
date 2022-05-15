@@ -4,11 +4,13 @@ specifiers:
   '@vue/cli-plugin-babel': ~4.5.0
   '@vue/cli-plugin-eslint': ~4.5.0
   '@vue/cli-service': ~4.5.0
+  '@vue/composition-api': ^1.6.1
   babel-eslint: ^10.1.0
   core-js: ^3.6.5
   eslint: ^6.7.2
   eslint-plugin-vue: ^6.2.2
   konva: ^8.2.3
+  swrv: ^0.9.6
   vue: ^2.6.11
   vue-konva: ^2.1.7
   vue-template-compiler: ^2.6.11
@@ -17,11 +19,13 @@ dependencies:
   '@vue/cli-plugin-babel': 4.5.17_35f0b1f30f9cd58cccd59daefb36f3da
   '@vue/cli-plugin-eslint': 4.5.17_66e28910525a36c0b6c9f5a4d333c57c
   '@vue/cli-service': 4.5.17_vue-template-compiler@2.6.14
+  '@vue/composition-api': 1.6.1_vue@2.6.14
   babel-eslint: 10.1.0_eslint@6.8.0
   core-js: 3.21.1
   eslint: 6.8.0
   eslint-plugin-vue: 6.2.2_eslint@6.8.0
   konva: 8.3.5
+  swrv: 0.9.6_56f4c8ef45bd21a4065070383eea8fef
   vue: 2.6.14
   vue-konva: 2.1.7_konva@8.3.5
   vue-template-compiler: 2.6.14
@@ -1786,6 +1790,14 @@ packages:
       vue-template-es2015-compiler: 1.9.1
     optionalDependencies:
       prettier: 2.6.0
+    dev: false
+
+  /@vue/composition-api/1.6.1_vue@2.6.14:
+    resolution: {integrity: sha512-QNeduwRllSRzo9ZOzZjtzCeGUx0sEfrEDHmQlf+goLw4calBPBbpYWf8ueh6VSBrWJGQRJPsRPmTVEeTKRKBMg==}
+    peerDependencies:
+      vue: '>= 2.5 < 3'
+    dependencies:
+      vue: 2.6.14
     dev: false
 
   /@vue/preload-webpack-plugin/1.1.2_502c618fc8a7d35df07e93275324a2d0:
@@ -7818,6 +7830,25 @@ packages:
       stable: 0.1.8
       unquote: 1.1.1
       util.promisify: 1.0.1
+    dev: false
+
+  /swrv/0.9.6_56f4c8ef45bd21a4065070383eea8fef:
+    resolution: {integrity: sha512-5C5f4BhzLzfDWt/XM9XS1W3yBuv5wbrrrgynkF7oXSugw2fk6K73jKpnUVYN3e/fmKccAt52Pab02OdQZjUxSA==}
+    peerDependencies:
+      '@vue/composition-api': ^0.5.0 || ^1.0.0-beta.17 || ^1.0.0-rc.5
+    dependencies:
+      '@vue/composition-api': 1.6.1_vue@2.6.14
+      swrv: 1.0.0-beta.8_vue@2.6.14
+    transitivePeerDependencies:
+      - vue
+    dev: false
+
+  /swrv/1.0.0-beta.8_vue@2.6.14:
+    resolution: {integrity: sha512-MsjaMOvZODfM0cess/HhbSrNbAotYinv4vzipLckKYBo/QmrvjNUPGZSRSqByXy/9AjrMRFWo0YanaVPbqADPQ==}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      vue: 2.6.14
     dev: false
 
   /table/5.4.6:
