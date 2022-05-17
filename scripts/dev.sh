@@ -1,8 +1,6 @@
 #!/usr/bin/env sh
 
-cd frontend
-pnpm run serve &
-cd ..
+pnpm run --dir frontend dev --host &
 
 # Wait for database
 scripts/wait-for-it.sh -h db -p "$DB_PORT" -t 15

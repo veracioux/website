@@ -1,18 +1,16 @@
 <script>
     export default {
-        name: "Navbar",
         data() {
             return {
-
+                veraciouxButton: HTMLElement
             }
-        }
+        },
     }
 </script>>
 
 <template>
     <div class="navbar">
-        <!-- Make the scroll smooth -->
-        <a href="#home-page" style="color: #7c4dff;">
+        <a href="/#home" style="color: var(--color-primary);" ref="veraciouxButton">
             veracioux
         </a>
     </div>
@@ -22,13 +20,12 @@
     .navbar {
         position: fixed;
         top: 0;
-        height: 32dp;
         max-height: 20vh;
         width: 100%;
-        padding: 0.2em;
+        padding: 8px;
 
         font-family: monospace;
-        font-size: 2.5em;
+        font-size: 28px;
         text-align: center;
 
         background: black;
@@ -37,7 +34,7 @@
         pointer-events: all;
     }
 
-    .navbar>a {
+    .navbar > a {
         text-decoration: none;
     }
 </style>

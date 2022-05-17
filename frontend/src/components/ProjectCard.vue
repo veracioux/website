@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 export default {
     name: "ProjectCard",
     props: {
@@ -6,14 +6,14 @@ export default {
         video: String,
         title: String,
         desc: String,
-    }
-}
+    },
+};
 </script>
 
 <template>
     <div class="container">
         <div class="title">{{ title }}</div>
-        <img v-if="icon" :src="icon" alt="Project image"/>
+        <img v-if="icon" :src="icon" alt="Project image" />
         <div class="description">{{ desc }}</div>
     </div>
 </template>

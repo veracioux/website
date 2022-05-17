@@ -2,6 +2,8 @@
 
 # Start the development containers
 
+cd "$(tem find -b veracioux-website)"
+
 drm "$@"
 docker-compose up --build "$@"
 

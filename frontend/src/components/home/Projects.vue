@@ -1,27 +1,24 @@
-<script>
-import {SLinkedIn} from "vue-socials";
-import ProjectCard from "@/components/ProjectCard";
+<script setup lang="ts">
+import ProjectCard from "@/components/ProjectCard.vue";
 import useSWRV from "swrv";
 import "@/assets/shared.css";
+import type {Project} from "@/models";
 
-export default {
-    components: {
-        ProjectCard,
-        SLinkedIn,
-    },
-    setup() {
-        const {data: projects} = useSWRV("/api/projects/", (key) => fetch(key).then(resp => resp.json()))
-
-        return {
-            projects,
+const projects = useSWRV<Array<Partial<Project>>>("/api/projects/", (key) => fetch(key).then(resp => resp.json())).data;
+if (!projects.value) {
+    projects.value = [
+        {
+            id: 0,
+            title: "Dummy",
+            desc: "Dummy project",
         }
-    }
-};
+    ]
+}
+
 </script>
 
 <template>
     <div class="section main">
-        <s-linked-in :window-features="{}" :share-options="{url: 'https://linkedin.com/in/veracioux'}" />
         <div class="section-title">Projects</div>
         <div class="card-container">
             <ProjectCard v-for="project in projects" :key="project.id" v-bind="project" />
