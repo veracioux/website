@@ -29,36 +29,36 @@ RUN ln -sf /bin/bash /bin/sh
 ## Install local dependencies
 #  --------------------------
 
+## Worker server
+
+WORKDIR /app/worker
+COPY worker/package.json worker/pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+## Backend
+
+WORKDIR /app
+COPY Pipfile.lock ./
+RUN LANG=en_US.UTF-8 pipenv sync
+# Install the virtual env globally, so it persists in the heroku filesystem
+RUN pipenv run pip freeze '|' tail -n +2 '>' /requirements.txt
+RUN pip install --no-cache-dir -r /requirements.txt
+
 ## Frontend
 
 WORKDIR /app/frontend
 COPY frontend/package.json frontend/pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --prod
+RUN pnpm install --frozen-lockfile
+
+#  ------------
+## The rest...
+#  ------------
 
 if [ "$ENVIRONMENT" != "dev" ]; then
     ## Bundle frontend
     COPY frontend .
     RUN pnpm run build
 fi
-
-## Backend
-
-WORKDIR /app
-COPY Pipfile.lock ./
-
-# Set up virtual env
-RUN LANG=en_US.UTF-8 pipenv sync
-# Install the virtual env globally, so it persists in the heroku filesystem
-RUN pipenv run pip freeze '|' tail -n +2 '>' /requirements.txt
-RUN pip install --no-cache-dir -r /requirements.txt
-
-## Worker server
-
-WORKDIR /app/worker
-COPY worker/package.json worker/pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
-RUN apk add --no-cache tree
-RUN tree node_modules
 
 WORKDIR /app
 COPY . /app
