@@ -13,14 +13,15 @@ export default defineConfig({
     },
     server: {
         port: 3000,
+        proxy: {
+            "/api": {
+                target: "http://0.0.0.0:8000",
+                changeOrigin: true,
+            },
+   }
     },
     build: {
         write: true,
+        assetsDir: "static",
     },
-    proxy: {
-        "/api": {
-            target: "http://0.0.0.0:8000",
-            rewrite: (path) => path.replace(/^\/api/, "")
-        },
-   }
 });

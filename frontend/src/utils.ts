@@ -1,6 +1,5 @@
-
 /**
- * Wrapper around window.addEventLitener("scroll", ...).
+ * Wrapper around window.addEventListener("scroll", ...).
  */
 export function onScroll(callback: (event?: Event) => void) {
     let residualScrollTimerId = 0;

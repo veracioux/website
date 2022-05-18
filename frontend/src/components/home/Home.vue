@@ -4,7 +4,7 @@ import {ScrollData} from "@/inject";
 import "@/assets/global.css";
 import * as utils from "@/utils";
 
-const texts  = ["Hi, I'm veracioux.", "Programmer", "Engineer", "Tinkerer"]
+const texts = ["Hi, I'm veracioux.", "Programmer", "Engineer", "Tinkerer"]
 
 let intervalId = ref(0)
 let typedOutLength = ref(0);
@@ -13,6 +13,10 @@ let fadeableStyle = ref({
 });
 let hello = ref<HTMLElement>();
 let traits = ref<HTMLElement>();
+let root = ref<HTMLElement>();
+const shutterFullyOpenedScrollThreshold = 0.25;
+let helloInitialTop = 0;
+let traitsInitialBottom = 0;
 
 const {relativeScrollY} = ScrollData.inject();
 
@@ -33,57 +37,60 @@ function onScroll() {
     fadeableStyle.value.opacity =
         1 - Math.min(relativeScrollY.value * 5, 1);
 
-    if (!hello.value || !traits.value) return;
+    if (!hello.value) return;
 
+    const helloStyle = hello.value!.style;
+    const traitsStyle = traits.value!.style;
 
     if (fadeableStyle.value.opacity == 0) {
-        hello.value.style.opacity = "0";
+        helloStyle.opacity = "0";
     } else {
-        hello.value.style.opacity = "1";
+        helloStyle.opacity = "1";
     }
 
-    if (
-        window.scrollY >=
-        0.25 * window.innerHeight - hello.value!.offsetHeight / 2
-    ) {
-        hello.value.style.position = "fixed";
-        traits.value.style.position = "fixed";
-        hello.value.style.top = "0";
-        traits.value.style.bottom = "0";
+    const sectionRelativeScroll = ScrollData.sectionRelativeScrollY(root.value!, relativeScrollY.value);
+
+    if (sectionRelativeScroll >= shutterFullyOpenedScrollThreshold - 0.5 * hello.value!.offsetHeight / window.innerHeight) {
+        helloStyle.position = "fixed";
+        traitsStyle.position = "fixed";
+        helloStyle.top = "0";
+        traitsStyle.bottom = "0";
     } else {
-        hello.value.style.position = "relative";
-        traits.value.style.position = "relative";
-        hello.value.style.top = -1.5 * window.scrollY + "px";
-        traits.value.style.bottom = -1.5 * window.scrollY + "px";
+        helloStyle.position = "relative";
+        traitsStyle.position = "relative";
+        helloStyle.top = -1.5 * window.scrollY + "px";
+        traitsStyle.bottom = -1.45 * window.scrollY + "px";
     }
 }
 
 onMounted(() => {
     utils.onScroll(onScroll);
     setTimeout(startTyping, 500);
+    helloInitialTop = hello.value.offsetTop!;
+    traitsInitialBottom = window.innerHeight - traits.value!.offsetTop - traits.value!.offsetHeight;
 });
 
 </script>
 
 <template>
-    <div class="home section">
+    <div class="home section" ref="root">
         <div class="hello" ref="hello" style="white-space-collapse: discard;">
-            <span :style="fadeableStyle">{{texts[0].slice(0, typedOutLength).slice(0,8)}}</span>
-            <span ref="veracioux">{{texts[0].slice(8, typedOutLength).slice(0,9)}}</span>
-            <span :style="fadeableStyle">{{texts[0].slice(-1, typedOutLength)}}</span>
+            <span :style="fadeableStyle">{{ texts[0].slice(0, typedOutLength).slice(0, 8) }}</span>
+            <span ref="veracioux">{{ texts[0].slice(8, typedOutLength).slice(0, 9) }}</span>
+            <span :style="fadeableStyle">{{ texts[0].slice(-1, typedOutLength) }}</span>
         </div>
         <div class="traits" ref="traits">
             <div class="trait" style="align-items: flex-start;">
                 <div class="dummy">Programmer</div>
-                <div>{{texts[1].slice(0, Math.max(typedOutLength - texts[0].length, 0))}}</div>
+                <div>{{ texts[1].slice(0, Math.max(typedOutLength - texts[0].length, 0)) }}</div>
             </div>
             <div class="trait" style="align-items: flex-end;">
                 <div class="dummy">Engineer</div>
-                <div>{{texts[2].slice(0, Math.max(typedOutLength - texts[0].length, 0))}}</div>
+                <div>{{ texts[2].slice(0, Math.max(typedOutLength - texts[0].length, 0)) }}</div>
             </div>
             <div class="trait" style="align-items: flex-start;">
                 <div class="dummy">Tinkerer</div>
-                <div>{{texts[3].slice(0, Math.max(typedOutLength - texts[0].length, 0))}}</div>
+                <div>{{ texts[3].slice(0, Math.max(typedOutLength - texts[0].length, 0)) }}</div>
             </div>
         </div>
     </div>

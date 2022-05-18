@@ -17,7 +17,7 @@ export class ScrollData {
         return relativeScrollY - element.offsetTop / window.innerHeight;
     }
 
-    static inject() {
+    static inject(): ScrollData {
         return _inject<ScrollData>("scrollData")!;
     }
 

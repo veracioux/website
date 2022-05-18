@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, defineProps, reactive, ref} from "vue";
 import {ScrollData} from "@/inject";
 import * as utils from "@/utils";
+
+const props: { shutterStyle: Partial<CSSStyleDeclaration> } = defineProps({
+    shutterStyle: Object
+});
 
 interface Triangle {
     pivotX: number,
@@ -103,13 +107,23 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="shutter" ref="root">
-        <v-stage :config="configKonva">
-            <v-layer>
-                <v-line
-                    v-for="t in triangles"
-                    :key="t"
-                    :config="{
+    <div>
+        <div class="full-window container" :style="props.shutterStyle">
+            <div class="background full-window"/>
+            <img alt="mugshot"
+                 class="mugshot"
+                 :style="{
+                filter: 'blur(' + 15 * Math.max(1 - 4 * relativeScrollY, 0) + 'px)',
+             }"
+                 src="@/assets/mugshot.jpg"
+            />
+            <div class="shutter" ref="root">
+                <v-stage :config="configKonva">
+                    <v-layer>
+                        <v-line
+                            v-for="t in triangles"
+                            :key="t"
+                            :config="{
                         x: t.pivotX,
                         y: t.pivotY,
                         points: t.points,
@@ -119,18 +133,56 @@ onMounted(() => {
                         strokeWidth: 1,
                         fill: 'black',
                     }"
-                />
-            </v-layer>
-        </v-stage>
+                        />
+                    </v-layer>
+                </v-stage>
+            </div>
+        </div>
     </div>
 </template>
 
 <style scoped>
-.shutter {
+
+.container {
     position: fixed;
     top: 0;
-    width: 100vw;
-    height: 100vh;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.background {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: #e1d8d1;
+}
+
+.mugshot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+
+    width: 280px;
+    transform: translate(1.5%, 3%);
+}
+
+@media screen and (max-width: 640px), screen and (max-height: 640px) {
+    .mugshot {
+        width: 200px;
+    }
+}
+
+.shutter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     pointer-events: none;
 }
+
 </style>
