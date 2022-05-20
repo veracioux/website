@@ -1,42 +1,42 @@
 {
-    "name": "veracioux-website",
-    "version": "0.1.0",
-    "scripts": {
-        "dev": "vite",
-        "build": "vue-tsc --noEmit && vite build",
-        "preview": "vite preview --port 5050",
-        "test:unit": "vitest --environment jsdom",
-        "typecheck": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false"
-    },
-    "dependencies": {
-        "@growthbunker/vuesocial": "^0.1.2",
-        "konva": "^8.3.8",
-        "swrv": "^1.0.0-beta.8",
-        "vue": "^3.2.33",
-        "vue-konva": "^3.0.0",
-        "vue-router": "^4.0.14",
-        "vue-template-compiler": "^2.6.14",
-        "typescript": "~4.6.3",
-        "vue-tsc": "^0.34.7",
-        "@vue/tsconfig": "^0.1.3",
-        "@types/jsdom": "^16.2.14",
-        "@types/node": "^16.11.27"
-    },
-    "devDependencies": {
-        "@rushstack/eslint-patch": "^1.1.0",
-        "@vitejs/plugin-vue": "^2.3.1",
-        "@vue/eslint-config-prettier": "^7.0.0",
-        "@vue/eslint-config-typescript": "^10.0.0",
-        "@vue/test-utils": "^2.0.0-rc.20",
-        "eslint": "^8.15.0",
-        "eslint-plugin-vue": "^8.2.0",
-        "jsdom": "^19.0.0",
-        "prettier": "^2.6.2",
-        "prettier-eslint-cli": "^6.0.1",
-        "stylelint": "^14.8.2",
-        "stylelint-config-prettier": "^9.0.3",
-        "stylelint-config-standard": "^25.0.0",
-        "vite": "^2.9.5",
-        "vitest": "^0.9.3"
-    }
+  "name": "veracioux-website",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview --port 5050",
+    "test:unit": "vitest --environment jsdom",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false"
+  },
+  "dependencies": {
+    "@growthbunker/vuesocial": "^0.1.2",
+    "konva": "^8.3.8",
+    "swrv": "^1.0.0-beta.8",
+    "vue": "^3.2.33",
+    "vue-konva": "^3.0.0",
+    "vue-router": "^4.0.14",
+    "vue-template-compiler": "^2.6.14",
+    "typescript": "~4.6.3",
+    "vue-tsc": "^0.34.7",
+    "@vue/tsconfig": "^0.1.3",
+    "@types/jsdom": "^16.2.14",
+    "@types/node": "^16.11.27"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "^1.1.0",
+    "@vitejs/plugin-vue": "^2.3.1",
+    "@vue/eslint-config-prettier": "^7.0.0",
+    "@vue/eslint-config-typescript": "^10.0.0",
+    "@vue/test-utils": "^2.0.0-rc.20",
+    "eslint": "^8.15.0",
+    "eslint-plugin-vue": "^8.2.0",
+    "jsdom": "^19.0.0",
+    "prettier": "^2.6.2",
+    "prettier-eslint-cli": "^6.0.1",
+    "stylelint": "^14.8.2",
+    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-config-standard": "^25.0.0",
+    "vite": "^2.9.5",
+    "vitest": "^0.9.3"
+  }
 }

@@ -17,9 +17,9 @@ const relativeScrollY: Ref<number> = ref(0);
  */
 function styleStickyUntilThreshold(relativeScrollThreshold: number) {
     if (relativeScrollY.value >= relativeScrollThreshold) {
-        return {position: "absolute"}
+        return {position: "absolute"};
     }
-    return {position: "fixed"}
+    return {position: "fixed"};
 }
 
 onMounted(() => {
@@ -31,23 +31,21 @@ onMounted(() => {
 ScrollData.provide({
     relativeScrollY,
 });
-
 </script>
 <template>
-    <div style="position: relative; top: 0;">
-        <Navbar class="navbar"/>
-        <div id="home" class="-home-section-space-occupant fullWindow"/>
+    <div style="position: relative; top: 0">
+        <Navbar class="navbar" />
+        <div id="home" class="-home-section-space-occupant fullWindow" />
         <div style="position: relative">
-            <Home class="home" :style="styleStickyUntilThreshold(1)"/>
-            <Shutter class="shutter" :style="styleStickyUntilThreshold(1)"/>
+            <Home class="home" :style="styleStickyUntilThreshold(1)" />
+            <Shutter class="shutter" :style="styleStickyUntilThreshold(1)" />
         </div>
-        <div id="home" class="-home-section-space-occupant fullWindow"/>
-        <Projects id="projects" class="projects"/>
+        <div id="home" class="-home-section-space-occupant fullWindow" />
+        <Projects id="projects" class="projects" />
     </div>
 </template>
 
 <style>
-
 html,
 body {
     background: var(--color-background);
@@ -55,7 +53,9 @@ body {
     padding: 0;
     scroll-behavior: smooth;
 }
+</style>
 
+<style scoped>
 .shutter {
     position: absolute;
     inset: 0;

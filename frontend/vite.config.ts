@@ -18,7 +18,7 @@ export default defineConfig({
                 target: "http://0.0.0.0:8000",
                 changeOrigin: true,
             },
-        }
+        },
     },
     build: {
         write: true,
@@ -27,6 +27,6 @@ export default defineConfig({
     css: {
         modules: {
             localsConvention: "camelCaseOnly",
-        }
-    }
+        },
+    },
 });

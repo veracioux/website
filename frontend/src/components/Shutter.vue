@@ -4,9 +4,9 @@ import {ScrollData} from "@/inject";
 import * as utils from "@/utils";
 
 interface Triangle {
-    pivotX: number,
-    pivotY: number,
-    points: number[],
+    pivotX: number;
+    pivotY: number;
+    points: number[];
 }
 
 const root = ref<HTMLElement>();
@@ -67,10 +67,9 @@ function updateShutterGeometry() {
 function updateShutterOutline() {
     // Compute the lightness of the triangle outlines based on the aperture size
     let lightness = Math.round(Math.min(relativeApertureSize * 60, 30));
-    let colorComponent = Number(lightness)
-        .toString(16)
-        .padStart(2, "0");
-    shutterEdgeColor.value = "#" + colorComponent + colorComponent + colorComponent;
+    let colorComponent = Number(lightness).toString(16).padStart(2, "0");
+    shutterEdgeColor.value =
+        "#" + colorComponent + colorComponent + colorComponent;
 }
 
 function updateRotation() {
@@ -84,7 +83,7 @@ function updateRotation() {
 
 function onScroll() {
     relativeApertureSize = Math.min(3.5 * relativeScrollY.value, 1);
-    updateShutterOutline()
+    updateShutterOutline();
     updateRotation();
 }
 
@@ -99,18 +98,20 @@ onMounted(() => {
     window.addEventListener("resize", onWindowResize);
     utils.onScroll(onScroll);
     onWindowResize();
-})
+});
 </script>
 
 <template>
     <div class="fullWindow container">
-        <div class="background fullWindow"/>
-        <img alt="mugshot"
-             class="mugshot"
-             :style="{
-                filter: 'blur(' + 15 * Math.max(1 - 4 * relativeScrollY, 0) + 'px)',
-             }"
-             src="@/assets/mugshot.jpg"
+        <div class="background fullWindow" />
+        <img
+            alt="mugshot"
+            class="mugshot"
+            :style="{
+                filter:
+                    'blur(' + 15 * Math.max(1 - 4 * relativeScrollY, 0) + 'px)',
+            }"
+            src="@/assets/mugshot.jpg"
         />
         <div class="shutter" ref="root">
             <v-stage :config="configKonva">
@@ -119,15 +120,15 @@ onMounted(() => {
                         v-for="t in triangles"
                         :key="t"
                         :config="{
-                        x: t.pivotX,
-                        y: t.pivotY,
-                        points: t.points,
-                        rotation,
-                        closed: true,
-                        stroke: shutterEdgeColor,
-                        strokeWidth: 1,
-                        fill: 'black',
-                    }"
+                            x: t.pivotX,
+                            y: t.pivotY,
+                            points: t.points,
+                            rotation,
+                            closed: true,
+                            stroke: shutterEdgeColor,
+                            strokeWidth: 1,
+                            fill: 'black',
+                        }"
                     />
                 </v-layer>
             </v-stage>
@@ -136,7 +137,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-
 .background {
     position: absolute;
     background: #e1d8d1;
@@ -156,5 +156,4 @@ onMounted(() => {
         width: 200px;
     }
 }
-
 </style>

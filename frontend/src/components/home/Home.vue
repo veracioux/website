@@ -4,9 +4,9 @@ import {ScrollData} from "@/inject";
 import "@/assets/global.css";
 import * as utils from "@/utils";
 
-const texts = ["Hi, I'm veracioux.", "Programmer", "Engineer", "Tinkerer"]
+const texts = ["Hi, I'm veracioux.", "Programmer", "Engineer", "Tinkerer"];
 
-let intervalId = ref(0)
+let intervalId = ref(0);
 let typedOutLength = ref(0);
 let fadeableStyle = ref({
     opacity: 1,
@@ -34,8 +34,7 @@ function typeOut() {
 }
 
 function onScroll() {
-    fadeableStyle.value.opacity =
-        1 - Math.min(relativeScrollY.value * 5, 1);
+    fadeableStyle.value.opacity = 1 - Math.min(relativeScrollY.value * 5, 1);
 
     if (!hello.value) return;
 
@@ -48,9 +47,16 @@ function onScroll() {
         helloStyle.opacity = "1";
     }
 
-    const sectionRelativeScroll = ScrollData.sectionRelativeScrollY(root.value!, relativeScrollY.value);
+    const sectionRelativeScroll = ScrollData.sectionRelativeScrollY(
+        root.value!,
+        relativeScrollY.value
+    );
 
-    if (sectionRelativeScroll >= shutterFullyOpenedScrollThreshold - 0.5 * hello.value!.offsetHeight / window.innerHeight) {
+    if (
+        sectionRelativeScroll >=
+        shutterFullyOpenedScrollThreshold -
+            (0.5 * hello.value!.offsetHeight) / window.innerHeight
+    ) {
         helloStyle.position = "absolute";
         traitsStyle.position = "absolute";
         helloStyle.top = "0";
@@ -67,37 +73,65 @@ onMounted(() => {
     utils.onScroll(onScroll);
     setTimeout(startTyping, 500);
     helloInitialTop = hello.value!.offsetTop;
-    traitsInitialBottom = window.innerHeight - traits.value!.offsetTop - traits.value!.offsetHeight;
+    traitsInitialBottom =
+        window.innerHeight -
+        traits.value!.offsetTop -
+        traits.value!.offsetHeight;
 });
-
 </script>
 
 <template>
     <div class="home section" ref="root">
-        <div class="hello" ref="hello" style="white-space-collapse: discard;">
-            <span :style="fadeableStyle">{{ texts[0].slice(0, typedOutLength).slice(0, 8) }}</span>
-            <span ref="veracioux">{{ texts[0].slice(8, typedOutLength).slice(0, 9) }}</span>
-            <span :style="fadeableStyle">{{ texts[0].slice(-1, typedOutLength) }}</span>
+        <div class="hello" ref="hello" style="white-space-collapse: discard">
+            <span :style="fadeableStyle">{{
+                texts[0].slice(0, typedOutLength).slice(0, 8)
+            }}</span>
+            <span ref="veracioux">{{
+                texts[0].slice(8, typedOutLength).slice(0, 9)
+            }}</span>
+            <span :style="fadeableStyle">{{
+                texts[0].slice(-1, typedOutLength)
+            }}</span>
         </div>
         <div class="traits" ref="traits">
-            <div class="trait" style="align-items: flex-start;">
+            <div class="trait" style="align-items: flex-start">
                 <div class="dummy">Programmer</div>
-                <div>{{ texts[1].slice(0, Math.max(typedOutLength - texts[0].length, 0)) }}</div>
+                <div>
+                    {{
+                        texts[1].slice(
+                            0,
+                            Math.max(typedOutLength - texts[0].length, 0)
+                        )
+                    }}
+                </div>
             </div>
-            <div class="trait" style="align-items: flex-end;">
+            <div class="trait" style="align-items: flex-end">
                 <div class="dummy">Engineer</div>
-                <div>{{ texts[2].slice(0, Math.max(typedOutLength - texts[0].length, 0)) }}</div>
+                <div>
+                    {{
+                        texts[2].slice(
+                            0,
+                            Math.max(typedOutLength - texts[0].length, 0)
+                        )
+                    }}
+                </div>
             </div>
-            <div class="trait" style="align-items: flex-start;">
+            <div class="trait" style="align-items: flex-start">
                 <div class="dummy">Tinkerer</div>
-                <div>{{ texts[3].slice(0, Math.max(typedOutLength - texts[0].length, 0)) }}</div>
+                <div>
+                    {{
+                        texts[3].slice(
+                            0,
+                            Math.max(typedOutLength - texts[0].length, 0)
+                        )
+                    }}
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
-
 .hello {
     position: relative;
     top: 0;
@@ -106,7 +140,7 @@ onMounted(() => {
 }
 
 .traits {
-    position: absolute;
+    position: relative;
     bottom: 0;
     padding-top: 4em;
     padding-bottom: 1em;
@@ -143,5 +177,4 @@ onMounted(() => {
     font-family: monospace;
     font-size: 2.5em;
 }
-
 </style>

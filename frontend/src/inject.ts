@@ -13,7 +13,10 @@ export class ScrollData {
      *
      * This is basically the amount of a section that the user has covered so far.
      */
-    static sectionRelativeScrollY(element: HTMLElement, relativeScrollY: number): number {
+    static sectionRelativeScrollY(
+        element: HTMLElement,
+        relativeScrollY: number
+    ): number {
         return relativeScrollY - element.offsetTop / window.innerHeight;
     }
 
