@@ -18,10 +18,15 @@ export default defineConfig({
                 target: "http://0.0.0.0:8000",
                 changeOrigin: true,
             },
-   }
+        }
     },
     build: {
         write: true,
         assetsDir: "static",
     },
+    css: {
+        modules: {
+            localsConvention: "camelCaseOnly",
+        }
+    }
 });

@@ -108,8 +108,8 @@ onMounted(() => {
 
 <template>
     <div>
-        <div class="full-window container" :style="props.shutterStyle">
-            <div class="background full-window"/>
+        <div class="fullWindow container" :style="props.shutterStyle">
+            <div class="background fullWindow"/>
             <img alt="mugshot"
                  class="mugshot"
                  :style="{
