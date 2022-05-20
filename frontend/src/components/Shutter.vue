@@ -3,10 +3,6 @@ import {onMounted, defineProps, reactive, ref} from "vue";
 import {ScrollData} from "@/inject";
 import * as utils from "@/utils";
 
-const props: { shutterStyle: Partial<CSSStyleDeclaration> } = defineProps({
-    shutterStyle: Object
-});
-
 interface Triangle {
     pivotX: number,
     pivotY: number,
@@ -107,23 +103,22 @@ onMounted(() => {
 </script>
 
 <template>
-    <div>
-        <div class="fullWindow container" :style="props.shutterStyle">
-            <div class="background fullWindow"/>
-            <img alt="mugshot"
-                 class="mugshot"
-                 :style="{
+    <div class="fullWindow container">
+        <div class="background fullWindow"/>
+        <img alt="mugshot"
+             class="mugshot"
+             :style="{
                 filter: 'blur(' + 15 * Math.max(1 - 4 * relativeScrollY, 0) + 'px)',
              }"
-                 src="@/assets/mugshot.jpg"
-            />
-            <div class="shutter" ref="root">
-                <v-stage :config="configKonva">
-                    <v-layer>
-                        <v-line
-                            v-for="t in triangles"
-                            :key="t"
-                            :config="{
+             src="@/assets/mugshot.jpg"
+        />
+        <div class="shutter" ref="root">
+            <v-stage :config="configKonva">
+                <v-layer>
+                    <v-line
+                        v-for="t in triangles"
+                        :key="t"
+                        :config="{
                         x: t.pivotX,
                         y: t.pivotY,
                         points: t.points,
@@ -133,25 +128,17 @@ onMounted(() => {
                         strokeWidth: 1,
                         fill: 'black',
                     }"
-                        />
-                    </v-layer>
-                </v-stage>
-            </div>
+                    />
+                </v-layer>
+            </v-stage>
         </div>
     </div>
 </template>
 
 <style scoped>
 
-.container {
-    position: fixed;
-    inset: 0;
-}
-
 .background {
-    width: 100%;
-    height: 100%;
-    position: fixed;
+    position: absolute;
     background: #e1d8d1;
 }
 
@@ -168,12 +155,6 @@ onMounted(() => {
     .mugshot {
         width: 200px;
     }
-}
-
-.shutter {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
 }
 
 </style>

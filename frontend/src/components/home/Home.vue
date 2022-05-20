@@ -51,8 +51,8 @@ function onScroll() {
     const sectionRelativeScroll = ScrollData.sectionRelativeScrollY(root.value!, relativeScrollY.value);
 
     if (sectionRelativeScroll >= shutterFullyOpenedScrollThreshold - 0.5 * hello.value!.offsetHeight / window.innerHeight) {
-        helloStyle.position = "fixed";
-        traitsStyle.position = "fixed";
+        helloStyle.position = "absolute";
+        traitsStyle.position = "absolute";
         helloStyle.top = "0";
         traitsStyle.bottom = "0";
     } else {
@@ -66,7 +66,7 @@ function onScroll() {
 onMounted(() => {
     utils.onScroll(onScroll);
     setTimeout(startTyping, 500);
-    helloInitialTop = hello.value.offsetTop!;
+    helloInitialTop = hello.value!.offsetTop;
     traitsInitialBottom = window.innerHeight - traits.value!.offsetTop - traits.value!.offsetHeight;
 });
 
@@ -96,7 +96,7 @@ onMounted(() => {
     </div>
 </template>
 
-<style>
+<style scoped>
 
 .hello {
     position: relative;
@@ -106,7 +106,7 @@ onMounted(() => {
 }
 
 .traits {
-    position: relative;
+    position: absolute;
     bottom: 0;
     padding-top: 4em;
     padding-bottom: 1em;
@@ -134,10 +134,6 @@ onMounted(() => {
 }
 
 .home {
-    position: fixed;
-    top: 0;
-    left: 0;
-
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -4,7 +4,8 @@ import Shutter from "@/components/Shutter.vue";
 import Projects from "@/components/home/Projects.vue";
 import Home from "@/components/home/Home.vue";
 import "@/assets/home.css";
-import {onMounted, reactive, Ref, ref} from "vue";
+import {onMounted, ref} from "vue";
+import type {Ref} from "vue";
 import {ScrollData} from "@/inject";
 import * as utils from "@/utils";
 
@@ -16,13 +17,9 @@ const relativeScrollY: Ref<number> = ref(0);
  */
 function styleStickyUntilThreshold(relativeScrollThreshold: number) {
     if (relativeScrollY.value >= relativeScrollThreshold) {
-        return {
-            transform: `translateY(${-(relativeScrollY.value - relativeScrollThreshold) * window.innerHeight}px)`,
-        }
+        return {position: "absolute"}
     }
-    return {
-        transform: "none",
-    }
+    return {position: "fixed"}
 }
 
 onMounted(() => {
@@ -37,12 +34,14 @@ ScrollData.provide({
 
 </script>
 <template>
-    <div>
+    <div style="position: relative; top: 0;">
         <Navbar class="navbar"/>
-        <div class="-home-section-space-occupant fullWindow"/>
         <div id="home" class="-home-section-space-occupant fullWindow"/>
-        <Home class="home" :style="styleStickyUntilThreshold(1)"/>
-        <Shutter class="shutter" :shutter-style="styleStickyUntilThreshold(1)"/>
+        <div style="position: relative">
+            <Home class="home" :style="styleStickyUntilThreshold(1)"/>
+            <Shutter class="shutter" :style="styleStickyUntilThreshold(1)"/>
+        </div>
+        <div id="home" class="-home-section-space-occupant fullWindow"/>
         <Projects id="projects" class="projects"/>
     </div>
 </template>
@@ -58,11 +57,14 @@ body {
 }
 
 .shutter {
+    position: absolute;
+    inset: 0;
     z-index: 50;
-
 }
 
 .home {
+    position: absolute;
+    inset: 0;
     z-index: 60;
 }
 
