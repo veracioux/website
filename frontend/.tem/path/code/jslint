@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+cd "$(tem find -r veracioux-website)/frontend"
+
+pnpx eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts \
+    --ignore-path .gitignore

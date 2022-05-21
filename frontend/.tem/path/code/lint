@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+# Convenience script that lints everything that should be linted in the project
+
+cd "$(tem find -r veracioux-website)/frontend"
+
+jslint "$@"
+stylelint "$@"

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+shopt -s globstar
+
+cd "$(tem find -b veracioux-website)/frontend"
+pnpx prettier . --ignore-path .gitignore --write

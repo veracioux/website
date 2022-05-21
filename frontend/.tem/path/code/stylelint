@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+cd "$(tem find -b veracioux-website)/frontend"
+echo "Running 'stylelint $*' on *.css files..."
+
+pnpx stylelint "**/*.{css,scss}" --ignore-path .gitignore "$@"
