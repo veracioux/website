@@ -13,9 +13,10 @@ def dotfiles(request: HttpRequest) -> HttpResponseBase:
     ref = request.GET.get("ref") or "master"
 
     resp = requests.get(
-        f"http://{os.environ.get('WORKER_HOST')}/dotfiles?ref={ref}",
+        f"http://0.0.0.0:{os.environ.get('WORKER_SERVER_PORT')}/dotfiles?ref={ref}",
         stream=True
     )
+    print(resp)
 
     return StreamingHttpResponse(
         resp.raw,

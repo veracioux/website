@@ -1,4 +1,5 @@
 from uuid import uuid4
+
 from django.db import models
 
 
@@ -8,6 +9,8 @@ class Project(models.Model):
     desc = models.TextField()
     url = models.URLField()
     repo_url = models.URLField(null=True)
+    image_url = models.URLField(null=True)
+    extra_image_url = models.URLField(null=True)
     start_date = models.DateField(null=True)
     organization = models.CharField(max_length=50, null=True)
     organization_url = models.CharField(max_length=100, null=True)

@@ -1,3 +1,4 @@
 /server.js
 /worker.js
 .env/local.secret
+/node_modules

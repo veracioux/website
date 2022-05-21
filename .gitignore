@@ -1,11 +1,6 @@
 # Python
 __pycache__
 
-# JavaScript
-node_modules
-npm-debug.log*
-pnpm-debug.log*
-
 # Server
 .DS_Store
 dist

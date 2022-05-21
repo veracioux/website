@@ -8,6 +8,7 @@
             "desc": "Powerful yet simple to use screenshot software.",
             "url": "https://flameshot.org",
             "repo_url": "https://github.com/flameshot-org/flameshot",
+            "image_url": "https://github.com/flameshot-org/flameshot/raw/master/data/img/app/org.flameshot.Flameshot.svg",
             "organization": "Flameshot org",
             "organization_url": "https://github.com/flameshot-org",
             "my_contributions_url": "https://github.com/search?q=repo%3Aflameshot-org%2Fflameshot+author%3Averacioux",
@@ -15,7 +16,7 @@
                 "Developer", "Co-maintainer"
             ],
             "languages": [
-                "CPP", "QT"
+                "C++", "Qt"
             ]
         }
     },
