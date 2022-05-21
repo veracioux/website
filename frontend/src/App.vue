@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import Navbar from "@/components/Navbar.vue";
 import Shutter from "@/components/Shutter.vue";
 import Projects from "@/components/home/Projects.vue";
 import Home from "@/components/home/Home.vue";
-import "@/assets/home.css";
 import {onMounted, ref} from "vue";
 import type {Ref} from "vue";
 import {ScrollData} from "@/inject";

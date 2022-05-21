@@ -7,7 +7,6 @@ export default {
     },
 };
 </script>
->
 
 <template>
     <div class="navbar">
@@ -35,7 +34,7 @@ export default {
     text-align: center;
 
     background: black;
-    filter: drop-shadow(0 0 3px #7c4dff55);
+    filter: drop-shadow(0 0 3px rgba(var(--color-primary-rgb), 0.5));
 
     pointer-events: all;
 }

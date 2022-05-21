@@ -1,4 +1,8 @@
 :root {
   --color-primary: #7c4dff;
+  --color-primary-rgb: 124, 77, 255;
+  --color-secondary: #99a3ff;
+  --color-secondary-rgb: 153, 163, 255;
   --color-background: black;
+  --color-background-rgb: 0, 0, 0;
 }

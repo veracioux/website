@@ -5,6 +5,8 @@ export interface Project {
     desc: string;
     url: string;
     repo_url: string;
+    image_url: string;
+    extra_image_url: string;
     start_date: Date;
     organization: string;
     organization_url: string;

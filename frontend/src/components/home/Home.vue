@@ -6,7 +6,7 @@ import * as utils from "@/utils";
 
 const texts = ["Hi, I'm veracioux.", "Programmer", "Engineer", "Tinkerer"];
 
-let intervalId = ref(0);
+let intervalId = ref<any>(undefined);
 let typedOutLength = ref(0);
 let fadeableStyle = ref({
     opacity: 1,

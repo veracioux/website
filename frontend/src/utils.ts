@@ -2,7 +2,7 @@
  * Wrapper around window.addEventListener("scroll", ...).
  */
 export function onScroll(callback: (event?: Event) => void) {
-    let residualScrollTimerId = 0;
+    let residualScrollTimerId: any;
     window.addEventListener("scroll", (ev) => {
         // If the user scrolls too fast, we might not get a scroll event fired at the final position.
         // For example, this can leave a tiny opening in the shutter when the user scrolls to the top.

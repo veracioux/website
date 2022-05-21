@@ -39,9 +39,10 @@ if (!projects.value) {
 
 .cardContainer {
     display: flex;
-    flex-direction: row;
+    flex-flow: row wrap;
     justify-content: center;
     align-items: center;
     gap: 40px;
+    padding: 40px;
 }
 </style>

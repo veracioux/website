@@ -17,4 +17,6 @@
   font-size: 48px;
   color: #d2dcf9;
   text-align: center;
+
+  user-select: none;
 }

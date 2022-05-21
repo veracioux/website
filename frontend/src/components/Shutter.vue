@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, defineProps, reactive, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {ScrollData} from "@/inject";
 import * as utils from "@/utils";
 
@@ -102,8 +102,8 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="fullWindow container">
-        <div class="background fullWindow" />
+    <div class="fullWindow">
+        <div class="background" />
         <img
             alt="mugshot"
             class="mugshot"
@@ -139,6 +139,7 @@ onMounted(() => {
 <style scoped>
 .background {
     position: absolute;
+    inset: 25%;
     background: #e1d8d1;
 }
 
