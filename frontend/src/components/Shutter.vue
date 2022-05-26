@@ -2,6 +2,7 @@
 import {onMounted, reactive, ref} from "vue";
 import {ScrollData} from "@/inject";
 import * as utils from "@/utils";
+import SocialIcon from "@/components/generic/SocialIcon.vue";
 
 interface Triangle {
     pivotX: number;

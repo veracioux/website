@@ -32,7 +32,7 @@ ScrollData.provide({
 </script>
 <template>
     <div style="position: relative; top: 0">
-        <Navbar class="navbar" />
+<!--        <Navbar class="navbar" />-->
         <div id="home" class="-home-section-space-occupant fullWindow" />
         <div style="position: relative">
             <Home class="home" :style="styleStickyUntilThreshold(1)" />
