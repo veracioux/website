@@ -139,7 +139,7 @@ onMounted(() => {
 <style scoped>
 .background {
     position: absolute;
-    inset: 25%;
+    inset: 25% 0;
     background: #e1d8d1;
 }
 

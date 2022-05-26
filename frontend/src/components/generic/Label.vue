@@ -20,8 +20,6 @@ export default defineComponent({
 
     background: rgba(var(--color-primary-rgb), 0.2);
     color: white;
-    white-space: nowrap;
-    text-overflow: ellipsis;
 
     user-select: none;
 }

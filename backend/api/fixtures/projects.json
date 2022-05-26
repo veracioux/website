@@ -29,7 +29,26 @@
             "desc": "A better way to learn CLI programs.",
             "url": "https://github.com/veracioux/tuterm",
             "roles": [
-                "Original creator"
+                "Original creator", "Maintainer"
+            ],
+            "languages": [
+                "Shell", "Python"
+            ]
+        }
+    },
+    {
+        "model": "api.Project",
+        "pk": 3,
+        "fields": {
+            "slug": "shdocker",
+            "title": "Shdocker",
+            "desc": "Dockerfiles with shell superpowers",
+            "url": "https://github.com/veracioux/shdocker",
+            "roles": [
+                "Original creator", "Maintainer"
+            ],
+            "languages": [
+                "Shell"
             ]
         }
     }

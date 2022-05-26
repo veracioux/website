@@ -17,7 +17,7 @@ export default defineComponent({
 
 <template>
     <div :class="$style.container">
-        <a :href="url" target="_blank" :class="$style.externalLink">
+        <a v-if="url" :href="url" target="_blank" :class="$style.externalLink">
             <FontAwesomeIcon
                 icon="arrow-up-right-from-square"
                 :class="$style.externalLinkIcon"
