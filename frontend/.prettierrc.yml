@@ -3,6 +3,6 @@ tabWidth: 4
 bracketSpacing: false
 
 overrides:
-  - files: ["**/*.*css", "**/*.json", "**/*.yml"]
+  - files: ["**/*.*css", "**/*.json", "**/*.yml", "**/*.yaml"]
     options:
       tabWidth: 2

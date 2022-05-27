@@ -1,5 +1,4 @@
 import {createApp} from "vue";
-import App from "./App.vue";
 import router from "./router";
 
 import VueKonva from "vue-konva";
@@ -9,13 +8,19 @@ import SocialIcon from "@/components/generic/SocialIcon.vue";
 
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {faArrowUpRightFromSquare} from "@fortawesome/free-solid-svg-icons";
-import {faGithub, faLinkedin, faMonero} from "@fortawesome/free-brands-svg-icons";
+import {
+    faGithub,
+    faLinkedin,
+    faMonero,
+} from "@fortawesome/free-brands-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 library.add(faArrowUpRightFromSquare);
 library.add(faLinkedin, faGithub, faMonero);
 
-const app = createApp(App);
+const app = createApp({
+    template: "<router-view/>",
+});
 
 app.use(router);
 app.use(VueKonva);
