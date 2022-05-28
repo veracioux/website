@@ -1,33 +1,28 @@
-<script lang="ts">
-import {defineComponent} from "vue";
+<script setup lang="ts">
+import Label from "@/components/generic/Label.vue";
+import Icon from "@/components/generic/Icon.vue";
 
-export default defineComponent({
-    name: "ProjectCard",
-    props: {
-        title: String,
-        desc: String,
-        url: String,
-        image_url: String,
-        extra_image_url: String,
-        languages: Array,
-        roles: Array,
-    },
+defineProps({
+    title: String,
+    desc: String,
+    url: String,
+    image_url: String,
+    extra_image_url: String,
+    languages: Array,
+    roles: Array,
 });
 </script>
 
 <template>
     <div :class="$style.container">
         <a v-if="url" :href="url" target="_blank" :class="$style.externalLink">
-            <FontAwesomeIcon
-                icon="arrow-up-right-from-square"
-                :class="$style.externalLinkIcon"
-            />
+            <Icon name="externalLink" :class="$style.externalLinkIcon" />
         </a>
         <img
             v-if="image_url"
             :src="image_url"
             alt="Project image"
-            :class="$style.icon"
+            :class="$style.name"
         />
         <div :class="$style.title">{{ title }}</div>
         <div :class="$style.description">{{ desc }}</div>
@@ -94,7 +89,7 @@ export default defineComponent({
         drop-shadow(0 0 4px var(--color-drop-shadow));
 }
 
-.icon {
+.name {
     height: 54px;
 }
 

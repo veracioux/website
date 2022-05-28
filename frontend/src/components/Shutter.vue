@@ -13,7 +13,7 @@ interface Triangle {
 const root = ref<HTMLElement>();
 const rotation = ref(0);
 const shutterEdgeColor = ref("#000");
-// Aperture size relative to its maximum opened state
+// Aperture size relative to its fully opened state
 const triangles = ref(new Array<Triangle>());
 const configKonva = reactive({
     width: 0,
@@ -31,19 +31,22 @@ function updateShutterGeometry() {
     let radius = getShutterRadius();
     let centerX = document.documentElement.clientWidth / 2,
         centerY = document.documentElement.clientHeight / 2;
+    // Think of the shutter as a sliced pizza
     const numSlices = 10;
-    const sliceAngle = (2 * Math.PI) / numSlices;
+    // The arc that one slice occupies (radians)
+    const sliceArc = (2 * Math.PI) / numSlices;
     triangles.value = [];
     for (let i = 0; i < numSlices; ++i) {
-        let angle = i * sliceAngle + Math.PI / numSlices;
+        let angle = i * sliceArc + Math.PI / numSlices;
+        // The pivot coordinates are relative to the window center
         let pivotX = radius * Math.cos(angle),
             pivotY = radius * Math.sin(angle),
-            x2 = radius * Math.cos(angle + sliceAngle / 2),
-            y2 = radius * Math.sin(angle + sliceAngle / 2),
+            x2 = radius * Math.cos(angle + sliceArc / 2),
+            y2 = radius * Math.sin(angle + sliceArc / 2),
             x3 = 0,
             y3 = 0,
-            x4 = radius * Math.cos(angle - sliceAngle / 2),
-            y4 = radius * Math.sin(angle - sliceAngle / 2);
+            x4 = radius * Math.cos(angle - sliceArc / 2),
+            y4 = radius * Math.sin(angle - sliceArc / 2);
 
         let vertices = [
             pivotX,
@@ -118,8 +121,8 @@ onMounted(() => {
             <v-stage :config="configKonva">
                 <v-layer>
                     <v-line
-                        v-for="t in triangles"
-                        :key="t"
+                        v-for="(t, i) in triangles"
+                        :key="i"
                         :config="{
                             x: t.pivotX,
                             y: t.pivotY,

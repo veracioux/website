@@ -3,6 +3,7 @@ import Shutter from "@/components/Shutter.vue";
 import Projects from "@/components/home/Projects.vue";
 import Home from "@/components/home/Home.vue";
 import Experience from "@/components/home/Experience.vue";
+import Navbar from "@/components/Navbar.vue";
 import {onMounted, ref} from "vue";
 import type {Ref} from "vue";
 import {ScrollData} from "@/inject";

@@ -1,11 +1,7 @@
-<script>
-export default {
-    data() {
-        return {
-            veraciouxButton: HTMLElement,
-        };
-    },
-};
+<script setup lang="ts">
+import {ref} from "vue";
+
+const veraciouxButton = ref<HTMLElement>();
 </script>
 
 <template>

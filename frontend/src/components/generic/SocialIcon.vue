@@ -1,45 +1,39 @@
 <script setup lang="ts">
-export type IconName = "linkedin" | "github" | "monero";
+import Icon from "@/components/generic/Icon.vue";
 
-defineProps({
-    iconName: String as () => IconName,
-    href: String,
-});
+type IconData = {
+    spec?: string | string[];
+    style: Partial<CSSStyleDeclaration>;
+};
 
-type Icon =
-    | string
-    | string[]
-    | {
-          spec: string | string[];
-          style: Partial<CSSStyleDeclaration>;
-      };
-
-const nameMap: Record<IconName, Icon> = {
+const nameMap: Record<string, IconData> = {
     linkedin: {
-        spec: ["fab", "linkedin"],
         style: {
             color: "#0a66c2",
         },
     },
     github: {
-        spec: ["fab", "github"],
         style: {
             color: "white",
         },
     },
     monero: {
-        spec: ["fab", "monero"],
         style: {
             color: "#e66320",
         },
     },
 };
+
+defineProps({
+    iconName: String as () => keyof typeof nameMap,
+    href: String,
+});
 </script>
 
 <template>
     <a :href="href">
-        <FontAwesomeIcon
-            :icon="nameMap[iconName].spec"
+        <Icon
+            :icon="nameMap[iconName].spec ?? iconName"
             :style="nameMap[iconName].style"
             class="icon"
         />
