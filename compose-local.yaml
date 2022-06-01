@@ -37,8 +37,6 @@ services:
     environment:
       - RABBITMQ_HOST=rabbitmq
       - PYTHONDONTWRITEBYTECODE=true
-    volumes:
-      - .:/app:rw
 
   worker_dotfiles:
     # Image

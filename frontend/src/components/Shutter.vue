@@ -78,6 +78,7 @@ function updateShutterOutline() {
 
 function updateRotation() {
     let radius = getShutterRadius();
+    // These values were obtained empirically
     if (Math.min(window.innerWidth, window.innerHeight) < 640) {
         rotation.value = (relativeApertureSize * 7200) / radius;
     } else {
@@ -117,7 +118,7 @@ onMounted(() => {
             }"
             src="@/assets/mugshot.jpg"
         />
-        <div class="shutter" ref="root">
+        <div ref="root">
             <v-stage :config="configKonva">
                 <v-layer>
                     <v-line
@@ -144,7 +145,7 @@ onMounted(() => {
 .background {
     position: absolute;
     inset: 25% 0;
-    background: #e1d8d1;
+    background-color: #e1d8d1;
 }
 
 .mugshot {

@@ -19,6 +19,5 @@ done
 
 dgen
 
-# TODO use universal solution
-/usr/bin/docker-compose -f "$(_get_compose_file)" "$@"
+tem run --no-tem docker-compose -f "$(_get_compose_file)" "$@"
 

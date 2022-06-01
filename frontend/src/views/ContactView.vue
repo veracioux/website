@@ -23,10 +23,7 @@ onMounted(() => {
 
 <template>
     <div>
-        <SocialIcon icon-name="monero" />
-        <div>0xDEADBEEF</div>
-        <Icon name="website" />
-        <div>Donate</div>
+        ContactView
     </div>
 </template>
 
