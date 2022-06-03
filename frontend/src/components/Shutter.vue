@@ -4,17 +4,20 @@ import {ScrollData} from "@/inject";
 import * as utils from "@/utils";
 import SocialIcon from "@/components/generic/SocialIcon.vue";
 
-interface Triangle {
+interface Slice {
     pivotX: number;
     pivotY: number;
-    points: number[];
+    vertices: number[];
 }
+
+// Think of the shutter as a sliced pizza
+const numSlices = 10;
 
 const root = ref<HTMLElement>();
 const rotation = ref(0);
 const shutterEdgeColor = ref("#000");
 // Aperture size relative to its fully opened state
-const triangles = ref(new Array<Triangle>());
+const slices = reactive(new Array<Slice | null>(numSlices))
 const configKonva = reactive({
     width: 0,
     height: 0,
@@ -31,11 +34,8 @@ function updateShutterGeometry() {
     let radius = getShutterRadius();
     let centerX = document.documentElement.clientWidth / 2,
         centerY = document.documentElement.clientHeight / 2;
-    // Think of the shutter as a sliced pizza
-    const numSlices = 10;
     // The arc that one slice occupies (radians)
     const sliceArc = (2 * Math.PI) / numSlices;
-    triangles.value = [];
     for (let i = 0; i < numSlices; ++i) {
         let angle = i * sliceArc + Math.PI / numSlices;
         // The pivot coordinates are relative to the window center
@@ -48,29 +48,27 @@ function updateShutterGeometry() {
             x4 = radius * Math.cos(angle - sliceArc / 2),
             y4 = radius * Math.sin(angle - sliceArc / 2);
 
-        let vertices = [
-            pivotX,
-            pivotY,
-            x2 - pivotX,
-            y2 - pivotY,
-            x3 - pivotX,
-            y3 - pivotY,
-            x4 - pivotX,
-            y4 - pivotY,
-        ];
-
-        let triangle = {
+        let slice: Slice = {
             pivotX: centerX + pivotX,
             pivotY: centerY + pivotY,
-            points: vertices,
+            vertices: [
+                pivotX,
+                pivotY,
+                x2 - pivotX,
+                y2 - pivotY,
+                x3 - pivotX,
+                y3 - pivotY,
+                x4 - pivotX,
+                y4 - pivotY,
+            ],
         };
-        triangles.value.push(triangle);
+        slices[i] = slice;
     }
 }
 
 function updateShutterOutline() {
-    // Compute the lightness of the triangle outlines based on the aperture size
-    let lightness = Math.round(Math.min(relativeApertureSize * 60, 30));
+    // Compute the lightness of the slice outlines based on the aperture size
+    let lightness = Math.round(Math.min(relativeApertureSize * 100, 30));
     let colorComponent = Number(lightness).toString(16).padStart(2, "0");
     shutterEdgeColor.value =
         "#" + colorComponent + colorComponent + colorComponent;
@@ -122,12 +120,12 @@ onMounted(() => {
             <v-stage :config="configKonva">
                 <v-layer>
                     <v-line
-                        v-for="(t, i) in triangles"
+                        v-for="(s, i) in slices"
                         :key="i"
                         :config="{
-                            x: t.pivotX,
-                            y: t.pivotY,
-                            points: t.points,
+                            x: s?.pivotX,
+                            y: s?.pivotY,
+                            points: s?.vertices,
                             rotation,
                             closed: true,
                             stroke: shutterEdgeColor,
