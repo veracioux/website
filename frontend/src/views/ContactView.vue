@@ -1,7 +1,14 @@
-<script setup lang="ts">
-import {onMounted} from "vue";
+<script setup lang="tsx">
+import {defineComponent, onMounted} from "vue";
 import SocialIcon from "@/components/generic/SocialIcon.vue";
 import Icon from "@/components/generic/Icon.vue";
+
+const addresses = {};
+
+const AddressComponent = defineComponent({
+    functional: true,
+    render: () => <div></div>,
+});
 
 onMounted(() => {
     /*
@@ -22,13 +29,18 @@ onMounted(() => {
 </script>
 
 <template>
-    <div>
-        ContactView
+    <div class="fullWindow">
+        <AddressComponent>
+            <div>0xDEADBEEF</div>
+        </AddressComponent>
+        <AddressComponent />
+        <AddressComponent />
+        <AddressComponent />
+        <AddressComponent />
+        <AddressComponent />
+        <AddressComponent />
+        <AddressComponent />
     </div>
 </template>
 
-<style scoped>
-* {
-    color: red;
-}
-</style>
+<style scoped></style>

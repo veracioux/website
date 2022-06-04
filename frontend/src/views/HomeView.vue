@@ -3,7 +3,6 @@ import Shutter from "@/components/Shutter.vue";
 import Projects from "@/components/home/Projects.vue";
 import Home from "@/components/home/Home.vue";
 import Experience from "@/components/home/Experience.vue";
-import Navbar from "@/components/Navbar.vue";
 import {onMounted, ref} from "vue";
 import type {Ref} from "vue";
 import {ScrollData} from "@/inject";
@@ -34,7 +33,6 @@ ScrollData.provide({
 </script>
 <template>
     <div style="position: relative; top: 0">
-        <Navbar class="navbar" />
         <div id="home" class="-home-section-space-occupant fullWindow" />
         <div style="position: relative">
             <Home class="home" :style="styleStickyUntilThreshold(1)" />
@@ -73,9 +71,5 @@ body {
     z-index: 70;
     position: relative;
     background: #12131d;
-}
-
-.navbar {
-    z-index: 100;
 }
 </style>

@@ -17,7 +17,7 @@ const root = ref<HTMLElement>();
 const rotation = ref(0);
 const shutterEdgeColor = ref("#000");
 // Aperture size relative to its fully opened state
-const slices = reactive(new Array<Slice | null>(numSlices))
+const slices = reactive(new Array<Slice | null>(numSlices));
 const configKonva = reactive({
     width: 0,
     height: 0,
