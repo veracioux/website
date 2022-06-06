@@ -25,17 +25,17 @@ import iconCSharp from "@/assets/icons/csharp.svg";
 
 import {onMounted, ref} from "vue";
 
-const root = ref<HTMLElement>()
+const root = ref<HTMLElement>();
 
 onMounted(() => {
     // Set target="_blank" on all anchor tags
     const anchors = root.value?.getElementsByTagName("a");
-    if (!anchors) return
+    if (!anchors) return;
     for (let i = 0; i < anchors.length; ++i) {
-        const item = anchors.item(i)!
-        item.setAttribute('target', '_blank')
+        const item = anchors.item(i)!;
+        item.setAttribute("target", "_blank");
     }
-})
+});
 </script>
 
 <template>
@@ -43,7 +43,11 @@ onMounted(() => {
         <h1 class="sectionTitle">Curriculum Vitae</h1>
         <div class="content">
             <table class="timeline">
-                <TimelineEntry start-date="2022-01" display-date="Jan 2022 - present" first>
+                <TimelineEntry
+                    start-date="2022-01"
+                    display-date="Jan 2022 - present"
+                    first
+                >
                     <b>Evolt</b>, Software Engineer
                     <div class="labelContainer">
                         <Label title="Backend" />
@@ -58,14 +62,16 @@ onMounted(() => {
                     </div>
                 </TimelineEntry>
                 <TimelineEntry start-date="2017" end-date="2020">
-                    <b>Bachelor of Electrical Engineering</b>, Department of Automation and Electronics,
-                    Faculty of Electrical Engineering, University of Sarajevo
+                    <b>Bachelor of Electrical Engineering</b>, Department of
+                    Automation and Electronics, Faculty of Electrical
+                    Engineering, University of Sarajevo
                     <br />
                     <pre>- GPA 9.19/10.00</pre>
                 </TimelineEntry>
                 <TimelineEntry start-date="2021" end-date="present">
-                    <a href="https://flameshot.org" target="_blank"><b>Flameshot</b></a>,
-                    A Free & Open Source Screenshot Program <br />
+                    <a href="https://flameshot.org" target="_blank"
+                        ><b>Flameshot</b></a
+                    >, A Free & Open Source Screenshot Program <br />
                     <div class="labelContainer">
                         <Label title="Co-maintainer" />
                         <Label title="Developer" />
@@ -74,9 +80,12 @@ onMounted(() => {
                     </div>
                 </TimelineEntry>
                 <TimelineEntry start-date="2017" display-date="Spring 2017">
-                    <a href="https://github.com/veracioux/rotating-led-display" target="_blank"><b>Rotating LED
-                        Display</b></a>,
-                    High School Project Festival, Hadžići, Bosnia and Herzegovina
+                    <a
+                        href="https://github.com/veracioux/rotating-led-display"
+                        target="_blank"
+                        ><b>Rotating LED Display</b></a
+                    >, High School Project Festival, Hadžići, Bosnia and
+                    Herzegovina
                     <br />
                     <div class="labelContainer">
                         <Label title="Lead Engineer" />
@@ -85,8 +94,11 @@ onMounted(() => {
                     </div>
                 </TimelineEntry>
                 <TimelineEntry start-date="2016" end-date="2017">
-                    <a href="https://github.com/veracioux/wood-fall" target="_blank"><b>Wood Fall</b></a>,
-                    video game, solo project
+                    <a
+                        href="https://github.com/veracioux/wood-fall"
+                        target="_blank"
+                        ><b>Wood Fall</b></a
+                    >, video game, solo project
                     <br />
                     <div class="labelContainer">
                         <Label title="Programmer" />
@@ -95,8 +107,13 @@ onMounted(() => {
                         <Label title="Publisher" />
                     </div>
                 </TimelineEntry>
-                <TimelineEntry start-date="2016-03" end-date="2016-11" display-date="Mar - Nov 2016">
-                    <b>Renovation of sports grounds</b>, Kamberovića polje Zenica
+                <TimelineEntry
+                    start-date="2016-03"
+                    end-date="2016-11"
+                    display-date="Mar - Nov 2016"
+                >
+                    <b>Renovation of sports grounds</b>, Kamberovića polje
+                    Zenica
                     <div class="labelContainer">
                         <Label title="Participant" />
                         <Label title="Youth Leadership Program 2016" />
@@ -108,12 +125,20 @@ onMounted(() => {
                     display-date="Mar - Jun 2021"
                 >
                     <b>Undergraduate Teaching Assistant</b>, Faculty of
-                    Electrical Engineering University of Sarajevo,
-                    Course: <i>Design of Microprocessor Systems</i>
+                    Electrical Engineering University of Sarajevo, Course:
+                    <i>Design of Microprocessor Systems</i>
                 </TimelineEntry>
-                <TimelineEntry start-date="2019" end-date="2020" display-date="Summer 2019, Summer 2020">
-                    Internship, <a href="https://search.bisnode.ba/ba/367191/elektromatik-d-o-o-zenica/"
-                                   target="_blank">Elektromatik d.o.o. Zenica</a>
+                <TimelineEntry
+                    start-date="2019"
+                    end-date="2020"
+                    display-date="Summer 2019, Summer 2020"
+                >
+                    Internship,
+                    <a
+                        href="https://search.bisnode.ba/ba/367191/elektromatik-d-o-o-zenica/"
+                        target="_blank"
+                        >Elektromatik d.o.o. Zenica</a
+                    >
                     <br />
                     <div class="labelContainer">
                         <Label title="PLC programming" />
@@ -122,18 +147,29 @@ onMounted(() => {
                         <Label title="Industrial schematic design" />
                     </div>
                 </TimelineEntry>
-                <TimelineEntry start-date="2019-03" end-date="2019-06" display-date="Mar - Jun 2019">
-                    <b>Undergraduate Teaching Assistant</b>, Faculty of Electrical Engineering,
-                    University of Sarajevo, Course: <i>Programming Techniques</i>
+                <TimelineEntry
+                    start-date="2019-03"
+                    end-date="2019-06"
+                    display-date="Mar - Jun 2019"
+                >
+                    <b>Undergraduate Teaching Assistant</b>, Faculty of
+                    Electrical Engineering, University of Sarajevo, Course:
+                    <i>Programming Techniques</i>
                 </TimelineEntry>
                 <TimelineEntry start-date="2018" end-date="present">
-                    <b>Answering community questions</b>, <a href="https://math.stackexchange.com/users/450231"
-                                                             target="_blank">Mathematics
-                    StackExchange</a>
+                    <b>Answering community questions</b>,
+                    <a
+                        href="https://math.stackexchange.com/users/450231"
+                        target="_blank"
+                        >Mathematics StackExchange</a
+                    >
                 </TimelineEntry>
                 <TimelineEntry start-date="2018" end-date="present" last>
-                    <b>Various personal projects on <a href="https://github.com/veracioux">GitHub</a></b>
-                    <br>
+                    <b
+                        >Various personal projects on
+                        <a href="https://github.com/veracioux">GitHub</a></b
+                    >
+                    <br />
                 </TimelineEntry>
             </table>
             <aside class="sidePane">
@@ -148,23 +184,57 @@ onMounted(() => {
                         <Icon :src="iconPython" alt="Python" class="icon" />
                         <Icon :src="iconC" alt="C" class="icon" />
                         <Icon :src="iconCpp" alt="C++" class="icon" />
-                        <Icon :src="iconBash" alt="Bash" class="icon iconBash" />
+                        <Icon
+                            :src="iconBash"
+                            alt="Bash"
+                            class="icon iconBash"
+                        />
                     </div>
-                    <h3 class="subsubsectionTitle">Frameworks & Technologies</h3>
+                    <h3 class="subsubsectionTitle">
+                        Frameworks & Technologies
+                    </h3>
                     <div class="labelContainer">
-                        <Icon :src="iconQt" alt="Qt framework" class="icon iconQt" />
+                        <Icon
+                            :src="iconQt"
+                            alt="Qt framework"
+                            class="icon iconQt"
+                        />
                         <Icon :src="iconReact" alt="ReactJS" class="icon" />
                         <Icon :src="iconVue" alt="Vue.js" class="icon" />
-                        <Icon :src="iconDjango" alt="Django" class="icon iconDjango" />
-                        <Icon :src="iconEthereum" alt="Ethereum" class="icon iconEthereum" />
-                        <Icon :src="iconSolana" alt="Solana" class="icon iconSolana" />
+                        <Icon
+                            :src="iconDjango"
+                            alt="Django"
+                            class="icon iconDjango"
+                        />
+                        <Icon
+                            :src="iconEthereum"
+                            alt="Ethereum"
+                            class="icon iconEthereum"
+                        />
+                        <Icon
+                            :src="iconSolana"
+                            alt="Solana"
+                            class="icon iconSolana"
+                        />
                     </div>
                     <h3 class="subsubsectionTitle">Other tools</h3>
                     <div class="labelContainer">
-                        <Icon :src="iconDocker" alt="Docker" class="icon iconDocker" />
+                        <Icon
+                            :src="iconDocker"
+                            alt="Docker"
+                            class="icon iconDocker"
+                        />
                         <Icon :src="iconGit" alt="Git" class="icon iconGit" />
-                        <Icon :src="iconJetBrains" alt="JetBrains" class="icon iconJetBrains" />
-                        <Icon :src="iconLinux" alt="Linux" class="icon iconLinux" />
+                        <Icon
+                            :src="iconJetBrains"
+                            alt="JetBrains"
+                            class="icon iconJetBrains"
+                        />
+                        <Icon
+                            :src="iconLinux"
+                            alt="Linux"
+                            class="icon iconLinux"
+                        />
                         <Icon :src="iconEmacs" alt="Emacs" class="icon" />
                     </div>
                     <h3 class="subsubsectionTitle">Automation</h3>
@@ -179,7 +249,8 @@ onMounted(() => {
                         <Label title="Teaching" />
                         <Label title="Technical writing" />
                     </div>
-                    <h3 class="subsubsectionTitle">Stale
+                    <h3 class="subsubsectionTitle">
+                        Stale
                         <Icon src=""></Icon>
                     </h3>
                     <div class="labelContainer">
@@ -193,11 +264,17 @@ onMounted(() => {
                         <tr>
                             <td>English</td>
                             <td rowspan="0" class="columnDelimiter"></td>
-                            <td><b>Advanced</b> (TOEFL<sup></sup> iBT score: 109/120)</td>
+                            <td>
+                                <b>Advanced</b> (TOEFL<sup></sup> iBT score:
+                                109/120)
+                            </td>
                         </tr>
                         <tr>
                             <td>German</td>
-                            <td><b>Reading and Writing</b> (intermediate), <b>Speaking</b> (basic)</td>
+                            <td>
+                                <b>Reading and Writing</b> (intermediate),
+                                <b>Speaking</b> (basic)
+                            </td>
                         </tr>
                         <tr>
                             <td>Bosnian</td>
@@ -236,7 +313,6 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
             }
 
             .labelContainer {
-
             }
         }
 
@@ -337,7 +413,8 @@ number, not as a percentage)
     margin-right: calc((#{$scale} - 1 - 0.25 * #{$scale}) * #{$iconSize});
 }
 
-.iconEthereum, .iconSolana {
+.iconEthereum,
+.iconSolana {
     @include scaledIcon(0.8);
 }
 </style>

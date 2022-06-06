@@ -28,25 +28,27 @@ type IconName = keyof typeof iconNames;
 
 const props = defineProps<{
     /** Name of a FontAwesome icon. */
-    name?: IconName,
+    name?: IconName;
     /** Explicit URL to the image file. */
-    src?: string,
-    alt?: string,
-}>()
+    src?: string;
+    alt?: string;
+}>();
 
 const root = ref<HTMLElement>();
 onMounted(() => {
     if ((props.name !== undefined) == (props.src !== undefined)) {
-        console.error("Please specify either 'name' or 'src' prop, but not both. The element in question:");
+        console.error(
+            "Please specify either 'name' or 'src' prop, but not both. The element in question:"
+        );
         console.error(root.value);
     }
-})
+});
 </script>
 
 <template>
     <div ref="root">
-        <FontAwesomeIcon v-if="name" :icon="iconNames[name]" class="icon"/>
-        <img v-if="src" :src="src" :alt="alt" v-bind="$attrs" class="icon"/>
+        <FontAwesomeIcon v-if="name" :icon="iconNames[name]" class="icon" />
+        <img v-if="src" :src="src" :alt="alt" v-bind="$attrs" class="icon" />
     </div>
 </template>
 
