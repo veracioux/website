@@ -139,7 +139,7 @@ onMounted(() => {
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .background {
     position: absolute;
     inset: 25% 0;

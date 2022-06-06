@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import ProjectCard from "@/components/ProjectCard.vue";
 import useSWRV from "swrv";
-import "@/assets/home.css";
+import "@/assets/home.scss";
 import type {Project} from "@/models";
 
-const projects = useSWRV<Array<Partial<Project>>>("/api/projects/", (key) =>
-    fetch(key).then((resp) => resp.json())
-).data;
+const {data: projects} = useSWRV<Array<Partial<Project>>>(
+    "/api/projects/",
+    (key) => fetch(key).then((resp) => resp.json())
+);
 if (!projects.value) {
     projects.value = [
         {
@@ -20,7 +21,7 @@ if (!projects.value) {
 
 <template>
     <div class="section main">
-        <div class="sectionTitle">Projects</div>
+        <h1 class="sectionTitle">Projects</h1>
         <div class="cardContainer">
             <ProjectCard
                 v-for="project in projects"
@@ -31,7 +32,9 @@ if (!projects.value) {
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/assets/home.scss";
+
 .main {
     background: #0e0f17;
     position: relative;

@@ -1,0 +1,48 @@
+:global(:root) {
+  --color-primary: #7c4dff;
+  --color-primary-rgb: 124, 77, 255;
+  --color-secondary: #99a3ff;
+  --color-secondary-rgb: 153, 163, 255;
+  --color-background: black;
+  --color-background-rgb: 0, 0, 0;
+  --color-background-1: #12131d;
+  --color-background-2: #0a0b12;
+  --color-background-2-rgb: 10, 11, 18;
+  --color-text: #d2dcf9;
+  --color-text-rgb: 210, 220, 249;
+
+  color: var(--color-text);
+  /*
+  font-family: monospace;
+  font-size: 15px;
+  */
+}
+
+:global(a) {
+  color: rgba(var(--color-secondary-rgb), 0.9);
+  text-decoration: none;
+}
+
+:global(h1),
+:global(h2),
+:global(h3),
+:global(h4),
+:global(h5),
+:global(h6) {
+  text-align: center;
+  user-select: none;
+  margin: 0;
+}
+
+:global(h1) {
+  font-size: 48px;
+}
+:global(h2) {
+  font-size: 32px;
+}
+:global(h3) {
+  font-size: 26px;
+}
+:global(h3) {
+  font-size: 20px;
+}

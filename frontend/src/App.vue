@@ -9,7 +9,9 @@ import Navbar from "@/components/Navbar.vue";
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/assets/global.scss";
+
 .navbar {
     z-index: 100;
 }

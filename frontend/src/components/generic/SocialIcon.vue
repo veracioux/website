@@ -40,7 +40,7 @@ defineProps({
     </a>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .icon {
     height: 28px;
 }

@@ -2,7 +2,7 @@
 import Shutter from "@/components/Shutter.vue";
 import Projects from "@/components/home/Projects.vue";
 import Home from "@/components/home/Home.vue";
-import Experience from "@/components/home/Experience.vue";
+import CV from "@/components/home/CV.vue";
 import {onMounted, ref} from "vue";
 import type {Ref} from "vue";
 import {ScrollData} from "@/inject";
@@ -40,7 +40,7 @@ ScrollData.provide({
         </div>
         <div id="home" class="-home-section-space-occupant fullWindow" />
         <Projects id="projects" class="projects" />
-        <Experience id="projects" class="projects" />
+        <CV id="cv" class="cv" />
     </div>
 </template>
 
@@ -54,7 +54,7 @@ body {
 }
 </style>
 
-<style scoped>
+<style scoped lang="scss">
 .shutter {
     position: absolute;
     inset: 0;
@@ -67,9 +67,10 @@ body {
     z-index: 60;
 }
 
-.projects {
+.projects,
+.cv {
     z-index: 70;
     position: relative;
-    background: #12131d;
+    background: var(--color-background-2);
 }
 </style>

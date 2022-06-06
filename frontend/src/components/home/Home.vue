@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import {ScrollData} from "@/inject";
-import "@/assets/global.css";
 import * as utils from "@/utils";
 
 const texts = ["Hi, I'm veracioux.", "Programmer", "Engineer", "Tinkerer"];
@@ -131,7 +130,7 @@ onMounted(() => {
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .hello {
     position: relative;
     top: 0;

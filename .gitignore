@@ -11,3 +11,6 @@ dist
 
 # Docker and build process (I use shdocker to generate Dockerfiles)
 Dockerfile*
+
+# Miscellaneous
+_*/

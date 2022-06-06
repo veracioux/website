@@ -17,7 +17,7 @@ const veraciouxButton = ref<HTMLElement>();
 </template>
 >
 
-<style>
+<style scoped lang="scss">
 .navbar {
     position: fixed;
     top: 0;

@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+cd "$(tem find -b frontend)"
+pnpm install --lockfile-only

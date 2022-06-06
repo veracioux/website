@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Label from "@/components/generic/Label.vue";
 import Icon from "@/components/generic/Icon.vue";
+import commonStyle from "@/assets/common.module.scss";
 
 defineProps({
     title: String,
@@ -26,16 +27,13 @@ defineProps({
         />
         <div :class="$style.title">{{ title }}</div>
         <div :class="$style.description">{{ desc }}</div>
-        <!--div :class="$style.labelContainer">
-            <Label v-for="lang in languages" :title="lang" />
-        </div-->
-        <div :class="$style.labelContainer">
+        <div :class="commonStyle.labelContainer">
             <Label v-for="role in roles" :title="role" />
         </div>
     </div>
 </template>
 
-<style module>
+<style module lang="scss">
 .container {
     position: relative;
     display: flex;
@@ -102,10 +100,5 @@ defineProps({
 .description {
     text-align: center;
     color: rgba(var(--color-secondary-rgb), 0.5);
-}
-
-.labelContainer {
-    display: flex;
-    gap: 8px;
 }
 </style>
