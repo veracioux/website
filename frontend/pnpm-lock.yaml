@@ -29,6 +29,7 @@ specifiers:
   vite: ^2.9.5
   vitest: ^0.9.3
   vue: ^3.2.33
+  vue-glitched-writer: ^1.2.2
   vue-konva: ^3.0.0
   vue-router: ^4.0.14
   vue-template-compiler: ^2.6.14
@@ -47,6 +48,7 @@ dependencies:
   swrv: 1.0.0-beta.8_vue@3.2.33
   typescript: 4.6.4
   vue: 3.2.33
+  vue-glitched-writer: 1.2.2_vue@3.2.33
   vue-konva: 3.0.0_konva@8.3.8
   vue-router: 4.0.15_vue@3.2.33
   vue-template-compiler: 2.6.14
@@ -1948,6 +1950,10 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
+  /glitched-writer/2.0.29:
+    resolution: {integrity: sha512-ItmmiFTSKVIbs/ngTLAszsu2czKYXYar54GgJcST5U6BH7sAaivG3fgDJFDIgNaau7rGadV5bLu3QThd5iAC8w==}
+    dev: false
+
   /glob-parent/5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
     engines: {node: '>= 6'}
@@ -3407,6 +3413,21 @@ packages:
       - stylus
     dev: true
 
+  /vue-demi/0.11.4_vue@3.2.33:
+    resolution: {integrity: sha512-/3xFwzSykLW2HiiLie43a+FFgNOcokbBJ+fzvFXd0r2T8MYohqvphUyDQ8lbAwzQ3Dlcrb1c9ykifGkhSIAk6A==}
+    engines: {node: '>=12'}
+    hasBin: true
+    requiresBuild: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^3.0.0-0 || ^2.6.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dependencies:
+      vue: 3.2.33
+    dev: false
+
   /vue-eslint-parser/8.3.0_eslint@8.15.0:
     resolution: {integrity: sha512-dzHGG3+sYwSf6zFBa0Gi9ZDshD7+ad14DGOdTLjruRVgZXe2J+DcZ9iUhyR48z5g1PqRa20yt3Njna/veLJL/g==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -3424,6 +3445,21 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /vue-glitched-writer/1.2.2_vue@3.2.33:
+    resolution: {integrity: sha512-gZkJadoABPqAf2WI5EBvf8HQhDMdGD4DX7KzRHx/J/lDqhLcuxt0Xi8BRv0MEgk7f+vOyz6NOCHSw3pVTgkRpA==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^2.0.0 || >=3.0.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dependencies:
+      glitched-writer: 2.0.29
+      vue: 3.2.33
+      vue-demi: 0.11.4_vue@3.2.33
+    dev: false
 
   /vue-konva/3.0.0_konva@8.3.8:
     resolution: {integrity: sha512-3psMFPEyT9f9GjQFLd8BuSA8/DDYeWUHiV7Rd4iZMIIbNsI7esF0E27H9918Ukfz7XygRbV0SLIDS/ebTMJD0g==}

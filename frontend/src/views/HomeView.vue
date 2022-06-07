@@ -44,16 +44,6 @@ ScrollData.provide({
     </div>
 </template>
 
-<style>
-html,
-body {
-    background: var(--color-background);
-    margin: 0;
-    padding: 0;
-    scroll-behavior: smooth;
-}
-</style>
-
 <style scoped lang="scss">
 .shutter {
     position: absolute;

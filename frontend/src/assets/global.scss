@@ -46,3 +46,11 @@
 :global(h3) {
   font-size: 20px;
 }
+
+/*
+@mixin mediaQuery($widthBreakpoint, $heightBreakpoint) {
+  @media only screen and (max-width: $widthBreakpoint) and (max-height: $) {
+    @content;
+  }
+}
+ */

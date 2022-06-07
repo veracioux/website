@@ -9,6 +9,16 @@ import Navbar from "@/components/Navbar.vue";
     </div>
 </template>
 
+<style>
+html,
+body {
+    background: var(--color-background);
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+}
+</style>
+
 <style scoped lang="scss">
 @import "@/assets/global.scss";
 
