@@ -47,29 +47,6 @@
   font-size: 20px;
 }
 
-/*
-@mixin onTablet {
-  @media only screen and (min-width: 480px) {
-    @content;
-  }
-}
-@mixin onSmallScreen {
-  @media only screen and (min-width: 768px) {
-    @content;
-  }
-}
-@mixin onLargeScreen {
-  @media only screen and (min-width: 1024px) {
-    @content;
-  }
-}
-@mixin onXLargeScreen {
-  @media only screen and (min-width: 1200px) {
-    @content;
-  }
-}
-*/
-
 @mixin screenWidthAbove($width) {
   @media only screen and (min-width: $width) {
     @content;

@@ -21,13 +21,10 @@ import iconEthereum from "@/assets/icons/ethereum.svg";
 import iconSolana from "@/assets/icons/solana.svg";
 import iconJava from "@/assets/icons/java.svg";
 import iconCSharp from "@/assets/icons/csharp.svg";
-
 </script>
 <template>
     <div class="container">
-        <h2 class="subsectionTitle" style="margin-top: 0">
-            Skills
-        </h2>
+        <h2 class="subsectionTitle" style="margin-top: 0">Skills</h2>
         <h3 class="subsubsectionTitle">Programming Languages</h3>
         <div class="labelContainer">
             <Icon :src="iconJS" alt="JavaScript" class="icon" />
@@ -35,57 +32,31 @@ import iconCSharp from "@/assets/icons/csharp.svg";
             <Icon :src="iconPython" alt="Python" class="icon" />
             <Icon :src="iconC" alt="C" class="icon" />
             <Icon :src="iconCpp" alt="C++" class="icon" />
-            <Icon
-                :src="iconBash"
-                alt="Bash"
-                class="icon iconBash"
-            />
+            <Icon :src="iconBash" alt="Bash" class="icon iconBash" />
         </div>
-        <h3 class="subsubsectionTitle">
-            Frameworks & Technologies
-        </h3>
+        <h3 class="subsubsectionTitle">Frameworks & Technologies</h3>
         <div class="labelContainer">
-            <Icon
-                :src="iconQt"
-                alt="Qt framework"
-                class="icon iconQt"
-            />
+            <Icon :src="iconQt" alt="Qt framework" class="icon iconQt" />
             <Icon :src="iconReact" alt="ReactJS" class="icon" />
             <Icon :src="iconVue" alt="Vue.js" class="icon" />
-            <Icon
-                :src="iconDjango"
-                alt="Django"
-                class="icon iconDjango"
-            />
+            <Icon :src="iconDjango" alt="Django" class="icon iconDjango" />
             <Icon
                 :src="iconEthereum"
                 alt="Ethereum"
                 class="icon iconEthereum"
             />
-            <Icon
-                :src="iconSolana"
-                alt="Solana"
-                class="icon iconSolana"
-            />
+            <Icon :src="iconSolana" alt="Solana" class="icon iconSolana" />
         </div>
         <h3 class="subsubsectionTitle">Other tools</h3>
         <div class="labelContainer">
-            <Icon
-                :src="iconDocker"
-                alt="Docker"
-                class="icon iconDocker"
-            />
+            <Icon :src="iconDocker" alt="Docker" class="icon iconDocker" />
             <Icon :src="iconGit" alt="Git" class="icon iconGit" />
             <Icon
                 :src="iconJetBrains"
                 alt="JetBrains"
                 class="icon iconJetBrains"
             />
-            <Icon
-                :src="iconLinux"
-                alt="Linux"
-                class="icon iconLinux"
-            />
+            <Icon :src="iconLinux" alt="Linux" class="icon iconLinux" />
             <Icon :src="iconEmacs" alt="Emacs" class="icon" />
         </div>
         <h3 class="subsubsectionTitle">Automation</h3>

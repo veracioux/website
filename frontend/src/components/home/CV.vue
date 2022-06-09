@@ -50,7 +50,7 @@ onMounted(() => {
                 </TimelineEntry>
                 <TimelineEntry start-date="2021" end-date="present">
                     <a href="https://flameshot.org" target="_blank"
-                    ><b>Flameshot</b></a
+                        ><b>Flameshot</b></a
                     >, A Free & Open Source Screenshot Program <br />
                     <div class="labelContainer">
                         <Label title="Co-maintainer" />
@@ -63,7 +63,7 @@ onMounted(() => {
                     <a
                         href="https://github.com/veracioux/rotating-led-display"
                         target="_blank"
-                    ><b>Rotating LED Display</b></a
+                        ><b>Rotating LED Display</b></a
                     >, High School Project Festival, Hadžići, Bosnia and
                     Herzegovina
                     <br />
@@ -77,7 +77,7 @@ onMounted(() => {
                     <a
                         href="https://github.com/veracioux/wood-fall"
                         target="_blank"
-                    ><b>Wood Fall</b></a
+                        ><b>Wood Fall</b></a
                     >, video game, solo project
                     <br />
                     <div class="labelContainer">
@@ -117,7 +117,7 @@ onMounted(() => {
                     <a
                         href="https://search.bisnode.ba/ba/367191/elektromatik-d-o-o-zenica/"
                         target="_blank"
-                    >Elektromatik d.o.o. Zenica</a
+                        >Elektromatik d.o.o. Zenica</a
                     >
                     <br />
                     <div class="labelContainer">
@@ -141,12 +141,12 @@ onMounted(() => {
                     <a
                         href="https://math.stackexchange.com/users/450231"
                         target="_blank"
-                    >Mathematics StackExchange</a
+                        >Mathematics StackExchange</a
                     >
                 </TimelineEntry>
                 <TimelineEntry start-date="2018" end-date="present" last>
                     <b
-                    >Various personal projects on
+                        >Various personal projects on
                         <a href="https://github.com/veracioux">GitHub</a></b
                     >
                     <br />

@@ -1,0 +1,189 @@
+<script setup lang="ts">
+import type {SelfPraiseProps} from "@/components/home/SelfPraiseCard.vue";
+import SelfPraiseCard from "@/components/home/SelfPraiseCard.vue";
+import {ScrollData} from "@/inject";
+import {computed, reactive, ref, watch} from "vue";
+import type {Ref} from "vue";
+
+const {selfPraiseItems, appearRelativeScrollY} = defineProps<{
+    selfPraiseItems: SelfPraiseProps[];
+    /* The relativeScrollY value at which the self praise should appear. */
+    appearRelativeScrollY: number;
+}>();
+
+console.info(appearRelativeScrollY);
+
+const scrollMaxValue = 0.5;
+
+// The SelfPraiseCards exchange as you scroll down. There are always two cards displayed.
+// Each card's visibility changes based on the ratio of the current scroll level relative
+// to the top of the scrollPivot.
+//
+// Let's call each scroll level at which a card is exchanged a step. The stepSize is the
+// scroll amount between two consecutive steps.
+
+const {relativeScrollY} = ScrollData.inject();
+
+const progress = computed(() => {
+    return relativeScrollY.value - appearRelativeScrollY;
+    // TODO return scrollPivot ? ScrollData.sectionRelativeScrollY(scrollPivot, relativeScrollY.value) : 0
+});
+
+const numSteps = Math.ceil(selfPraiseItems.length / 2);
+const currentStep = ref(-1);
+const cardInSlot1 = ref(0);
+const cardInSlot2 = ref(1);
+
+watch(progress, () => {
+    currentStep.value = Math.floor(
+        (progress.value / scrollMaxValue) * numSteps
+    );
+});
+
+watch(currentStep, (value, oldValue) => {
+    // After numSteps have passed, keep the cards as they are
+    if (oldValue > numSteps) return;
+    if (value > numSteps) value = numSteps;
+
+    cardInSlot1.value = Math.floor((value + 1) / 2) * 2;
+    cardInSlot2.value = Math.floor(value / 2) * 2 + 1;
+    console.info(currentStep.value, cardInSlot1.value, cardInSlot2.value);
+});
+</script>
+<template>
+    <div class="container">
+        <div :class="s.wrapper">
+            <div :class="[s.slot, s.slot1]">
+                <SelfPraiseCard
+                    v-if="currentStep >= 0"
+                    v-bind="selfPraiseItems[cardInSlot1]"
+                />
+                <SelfPraiseCard
+                    v-if="currentStep >= 0"
+                    v-bind="selfPraiseItems[cardInSlot1]"
+                    style="position: absolute"
+                />
+            </div>
+            <!--
+                Item that occupies approximately the same space as the mugshot,
+                thereby making sure that the slots do not overlap with the mugshot
+                and can be centered between the mugshot and the window boundary.
+            -->
+            <div :class="s.spacer" />
+            <div :class="[s.slot, s.slot2]">
+                <SelfPraiseCard
+                    v-if="currentStep >= 0"
+                    v-bind="selfPraiseItems[cardInSlot2]"
+                />
+                <SelfPraiseCard
+                    v-if="currentStep >= 0"
+                    v-bind="selfPraiseItems[cardInSlot2]"
+                    style="position: absolute"
+                />
+            </div>
+        </div>
+    </div>
+</template>
+
+<style module="s" lang="scss">
+@import "@/assets/global.scss";
+
+$animationDuration: 0.4s;
+
+@keyframes incomingAnimation {
+    from {
+        transform: translateY(3em);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes outgoingAnimation {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-3em);
+    }
+}
+
+.incoming {
+    animation: incomingAnimation $animationDuration forwards;
+}
+
+.outgoing {
+    animation: outgoingAnimation $animationDuration forwards;
+}
+
+.wrapper {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    @include screenWidthAbove($large) {
+        flex-direction: row;
+    }
+}
+
+.slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: auto;
+    height: 100%;
+
+    @include screenWidthAbove($large) {
+        width: 100%;
+        height: auto;
+    }
+
+    &.slot1 {
+        align-items: end;
+        padding-bottom: 50px;
+
+        @include screenWidthAbove($large) {
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+        @include screenWidthAbove($xlarge) {
+            justify-content: end;
+            padding: 0 50px 0 0;
+        }
+    }
+
+    &.slot2 {
+        align-items: start;
+        padding-top: 50px;
+
+        @include screenWidthAbove($large) {
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+        @include screenWidthAbove($xlarge) {
+            justify-content: start;
+            padding: 0 0 0 50px;
+        }
+    }
+}
+
+/* Occupies approximately the same size as the mugshot exposed by the shutter. */
+.spacer {
+    --size: 240px;
+
+    @include screenWidthAbove(640px) {
+        --size: 350px;
+    }
+
+    max-width: var(--size);
+    min-width: var(--size);
+    max-height: var(--size);
+    min-height: var(--size);
+}
+</style>

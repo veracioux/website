@@ -2,8 +2,28 @@
 import {onMounted, ref} from "vue";
 import {ScrollData} from "@/inject";
 import * as utils from "@/utils";
+import SelfPraiseManager from "@/components/home/SelfPraiseManager.vue";
+import type {SelfPraiseProps} from "@/components/home/SelfPraiseCard.vue";
 
 const texts = ["Hi, I'm veracioux.", "Programmer", "Engineer", "Tinkerer"];
+const selfPraiseItems: SelfPraiseProps[] = [
+    {
+        title: "Test 0",
+        content: "todo todo todo todo todo todo todo todo todo ",
+    },
+    {
+        title: "Test 1",
+        content: "test1 test1 test1 test1 test1 test1 test1 test1 ",
+    },
+    {
+        title: "Test 2",
+        content: "test2 test2 test2 test2 test2 test2 test2 test2 ",
+    },
+    {
+        title: "Test 3",
+        content: "test3 test3 test3 test3 test3 test3 test3 test3 ",
+    },
+];
 
 let intervalId = ref<any>(undefined);
 let typedOutLength = ref(0);
@@ -127,6 +147,10 @@ onMounted(() => {
                 </div>
             </div>
         </div>
+        <SelfPraiseManager
+            :appear-relative-scroll-y="0.25"
+            :self-praise-items="selfPraiseItems"
+        />
     </div>
 </template>
 
@@ -136,6 +160,7 @@ onMounted(() => {
     top: 0;
     justify-self: end;
     padding: 0.2em;
+    text-align: center;
 }
 
 .traits {
