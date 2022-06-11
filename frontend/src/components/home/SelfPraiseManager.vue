@@ -13,6 +13,7 @@ const {selfPraiseItems, appearRelativeScrollY} = defineProps<{
 
 const scrollMaxValue = 1.3;
 
+// TODO update description
 // The SelfPraiseCards exchange as you scroll down. There are always two cards displayed.
 // Each card's visibility changes based on the ratio of the current scroll level relative
 // to the top of the scrollPivot.
@@ -21,17 +22,18 @@ const scrollMaxValue = 1.3;
 // scroll amount between two consecutive steps.
 
 const {relativeScrollY} = ScrollData.inject();
+const progress = ref(-1);
 
-const progress = computed(() => {
-    return relativeScrollY.value - appearRelativeScrollY;
-    // TODO return scrollPivot ? ScrollData.sectionRelativeScrollY(scrollPivot, relativeScrollY.value) : 0
+watch(relativeScrollY, (value) => {
+    if (progress.value < 0 && value < appearRelativeScrollY) return;
+    progress.value = relativeScrollY.value - appearRelativeScrollY;
 });
 
 const numSteps = Math.ceil(selfPraiseItems.length / 2);
 const currentStep = ref(-1);
 const cardInSlot1 = ref(0);
 const cardInSlot2 = ref(1);
-const {scrollingFast} = useFastScrollingDetector(0.03)
+const {scrollingFast} = useFastScrollingDetector(0.03);
 
 watch(progress, () => {
     currentStep.value = Math.floor(
@@ -47,11 +49,17 @@ watch(currentStep, (value, oldValue) => {
     cardInSlot1.value = Math.floor((value + 1) / 2) * 2;
     cardInSlot2.value = Math.floor(value / 2) * 2 + 1;
 });
-
 </script>
 <template>
     <div class="container">
-        <div :class="{[s.wrapper]: true, fastTransition: scrollingFast || relativeScrollY < 0.9 * appearRelativeScrollY}">
+        <div
+            :class="{
+                [s.wrapper]: true,
+                fastTransition:
+                    scrollingFast ||
+                    relativeScrollY < 0.9 * appearRelativeScrollY,
+            }"
+        >
             <div :class="[s.slot, s.slot1]">
                 <Transition name="slide-fade-1">
                     <SelfPraiseCard
@@ -198,12 +206,15 @@ watch(currentStep, (value, oldValue) => {
     @include translateLeftOrUp;
 }
 
-.slide-fade-1-leave-active, .slide-fade-2-leave-active {
+.slide-fade-1-leave-active,
+.slide-fade-2-leave-active {
     position: absolute;
 }
 
-.slide-fade-1-enter-active, .slide-fade-1-leave-active,
-.slide-fade-2-enter-active, .slide-fade-2-leave-active {
+.slide-fade-1-enter-active,
+.slide-fade-1-leave-active,
+.slide-fade-2-enter-active,
+.slide-fade-2-leave-active {
     $transition-duration: var(--transition-duration, 0.6s);
     transition: all $transition-duration ease-in-out;
 }

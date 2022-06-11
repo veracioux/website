@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {ScrollData} from "@/inject";
-import * as utils from "@/utils";
 import SocialIcon from "@/components/generic/SocialIcon.vue";
 
 interface Slice {
@@ -21,8 +20,10 @@ const slices = reactive(new Array<Slice | null>(numSlices));
 const configKonva = reactive({
     width: 0,
     height: 0,
+    listening: false,
 });
 let relativeApertureSize = 0;
+const relativeScrollAtMaxAperture = 1 / 3.5;
 
 const {relativeScrollY} = ScrollData.inject();
 
@@ -68,7 +69,7 @@ function updateShutterGeometry() {
 
 function updateShutterOutline() {
     // Compute the lightness of the slice outlines based on the aperture size
-    let lightness = Math.round(Math.min(relativeApertureSize * 100, 30));
+    let lightness = Math.floor(Math.min(relativeApertureSize * 100, 30));
     let colorComponent = Number(lightness).toString(16).padStart(2, "0");
     shutterEdgeColor.value =
         "#" + colorComponent + colorComponent + colorComponent;
@@ -84,29 +85,42 @@ function updateRotation() {
     }
 }
 
-function onScroll() {
-    relativeApertureSize = Math.min(3.5 * relativeScrollY.value, 1);
+function onScroll(forceUpdate = false) {
+    if (
+        !forceUpdate &&
+        relativeApertureSize == 1 &&
+        relativeScrollY.value > relativeScrollAtMaxAperture
+    )
+        return;
+    relativeApertureSize = Math.min(
+        relativeScrollY.value / relativeScrollAtMaxAperture,
+        1
+    );
     updateShutterOutline();
     updateRotation();
 }
 
+const resizeEvent = ref(0);
 function onWindowResize() {
-    configKonva.width = document.documentElement.clientWidth;
-    configKonva.height = document.documentElement.clientHeight;
+    resizeEvent.value = resizeEvent.value + 1;
+    configKonva.width = window.innerWidth;
+    configKonva.height = window.innerHeight;
     updateShutterGeometry();
-    onScroll();
+    onScroll(true);
 }
+
+watch(relativeScrollY, () => onScroll());
 
 onMounted(() => {
     window.addEventListener("resize", onWindowResize);
-    utils.onScroll(onScroll);
+    onScroll();
     onWindowResize();
 });
 </script>
 
 <template>
     <div class="fullWindow">
-        <div class="background" />
+        <div class="mugshotBackground" />
         <img
             alt="mugshot"
             class="mugshot"
@@ -116,6 +130,17 @@ onMounted(() => {
             }"
             src="@/assets/mugshot.jpg"
         />
+        <!-- TODO debugging helper
+        <Transition name="indicator">
+            <div :style="{
+            position: 'fixed',
+            padding: '200px 0 0 200px',
+            inset: 0,
+            zIndex: 200,
+            background: '#ff00ff55',
+        }" class="indicator" :key="resizeEvent">Height: {{configKonva.height}}</div>
+        </Transition>
+        -->
         <div ref="root">
             <v-stage :config="configKonva">
                 <v-layer>
@@ -139,8 +164,27 @@ onMounted(() => {
     </div>
 </template>
 
+<!--
+Classes used temporarily for debugging.
+-->
 <style scoped lang="scss">
-.background {
+.indicator {
+    color: transparent;
+}
+
+.indicator-enter-from {
+    color: black;
+}
+.indicator-enter-to {
+    color: transparent;
+}
+.indicator-enter-active {
+    transition: all 1s ease;
+}
+</style>
+
+<style scoped lang="scss">
+.mugshotBackground {
     position: absolute;
     inset: 25% 0;
     background-color: #e1d8d1;
@@ -152,11 +196,9 @@ onMounted(() => {
     margin: auto;
 
     width: 280px;
-    transform: translate(1.5%, 3%);
-}
+    transform: translate(0, 3%);
 
-@media screen and (max-width: 640px), screen and (max-height: 640px) {
-    .mugshot {
+    @media screen and (max-width: 640px), screen and (max-height: 640px) {
         width: 200px;
     }
 }
