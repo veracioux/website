@@ -2,8 +2,8 @@
 import type {SelfPraiseProps} from "@/components/home/SelfPraiseCard.vue";
 import SelfPraiseCard from "@/components/home/SelfPraiseCard.vue";
 import {ScrollData} from "@/inject";
-import {computed, reactive, ref, watch} from "vue";
-import type {Ref} from "vue";
+import {computed, ref, watch} from "vue";
+import {useFastScrollingDetector} from "@/utils";
 
 const {selfPraiseItems, appearRelativeScrollY} = defineProps<{
     selfPraiseItems: SelfPraiseProps[];
@@ -11,9 +11,7 @@ const {selfPraiseItems, appearRelativeScrollY} = defineProps<{
     appearRelativeScrollY: number;
 }>();
 
-console.info(appearRelativeScrollY);
-
-const scrollMaxValue = 0.5;
+const scrollMaxValue = 1.3;
 
 // The SelfPraiseCards exchange as you scroll down. There are always two cards displayed.
 // Each card's visibility changes based on the ratio of the current scroll level relative
@@ -33,6 +31,7 @@ const numSteps = Math.ceil(selfPraiseItems.length / 2);
 const currentStep = ref(-1);
 const cardInSlot1 = ref(0);
 const cardInSlot2 = ref(1);
+const {scrollingFast} = useFastScrollingDetector(0.03)
 
 watch(progress, () => {
     currentStep.value = Math.floor(
@@ -47,39 +46,36 @@ watch(currentStep, (value, oldValue) => {
 
     cardInSlot1.value = Math.floor((value + 1) / 2) * 2;
     cardInSlot2.value = Math.floor(value / 2) * 2 + 1;
-    console.info(currentStep.value, cardInSlot1.value, cardInSlot2.value);
 });
+
 </script>
 <template>
     <div class="container">
-        <div :class="s.wrapper">
+        <div :class="{[s.wrapper]: true, fastTransition: scrollingFast || relativeScrollY < 0.9 * appearRelativeScrollY}">
             <div :class="[s.slot, s.slot1]">
-                <SelfPraiseCard
-                    v-if="currentStep >= 0"
-                    v-bind="selfPraiseItems[cardInSlot1]"
-                />
-                <SelfPraiseCard
-                    v-if="currentStep >= 0"
-                    v-bind="selfPraiseItems[cardInSlot1]"
-                    style="position: absolute"
-                />
+                <Transition name="slide-fade-1">
+                    <SelfPraiseCard
+                        v-if="currentStep >= 0"
+                        v-bind="selfPraiseItems[cardInSlot1]"
+                        :key="cardInSlot1"
+                    />
+                </Transition>
             </div>
-            <!--
-                Item that occupies approximately the same space as the mugshot,
-                thereby making sure that the slots do not overlap with the mugshot
-                and can be centered between the mugshot and the window boundary.
-            -->
-            <div :class="s.spacer" />
+            <div :class="s.spacer">
+                <!--
+                    Item that occupies approximately the same space as the mugshot,
+                    thereby making sure that the slots do not overlap with the mugshot
+                    and can be centered between the mugshot and the window boundary.
+                -->
+            </div>
             <div :class="[s.slot, s.slot2]">
-                <SelfPraiseCard
-                    v-if="currentStep >= 0"
-                    v-bind="selfPraiseItems[cardInSlot2]"
-                />
-                <SelfPraiseCard
-                    v-if="currentStep >= 0"
-                    v-bind="selfPraiseItems[cardInSlot2]"
-                    style="position: absolute"
-                />
+                <Transition name="slide-fade-2">
+                    <SelfPraiseCard
+                        v-if="currentStep >= 0"
+                        v-bind="selfPraiseItems[cardInSlot2]"
+                        :key="cardInSlot2"
+                    />
+                </Transition>
             </div>
         </div>
     </div>
@@ -87,34 +83,6 @@ watch(currentStep, (value, oldValue) => {
 
 <style module="s" lang="scss">
 @import "@/assets/global.scss";
-
-$animationDuration: 0.4s;
-
-@keyframes incomingAnimation {
-    from {
-        transform: translateY(3em);
-    }
-    to {
-        transform: translateY(0);
-    }
-}
-
-@keyframes outgoingAnimation {
-    from {
-        transform: translateY(0);
-    }
-    to {
-        transform: translateY(-3em);
-    }
-}
-
-.incoming {
-    animation: incomingAnimation $animationDuration forwards;
-}
-
-.outgoing {
-    animation: outgoingAnimation $animationDuration forwards;
-}
 
 .wrapper {
     position: absolute;
@@ -185,5 +153,58 @@ $animationDuration: 0.4s;
     min-width: var(--size);
     max-height: var(--size);
     min-height: var(--size);
+}
+</style>
+
+<style scoped lang="scss">
+@import "@/assets/global.scss";
+
+.fastTransition {
+    --transition-duration: 0.1s;
+    color: red;
+}
+
+@mixin translateLeftOrUp {
+    transform: translateX(-0.5em);
+    @include screenWidthAbove($large) {
+        transform: translateY(-0.5em);
+    }
+}
+
+@mixin translateRightOrDown {
+    transform: translateX(0.5em);
+    @include screenWidthAbove($large) {
+        transform: translateY(0.5em);
+    }
+}
+
+.slide-fade-1-enter-from {
+    opacity: 0;
+    @include translateLeftOrUp;
+}
+
+.slide-fade-1-leave-to {
+    opacity: 0;
+    @include translateRightOrDown;
+}
+
+.slide-fade-2-enter-from {
+    opacity: 0;
+    @include translateRightOrDown;
+}
+
+.slide-fade-2-leave-to {
+    opacity: 0;
+    @include translateLeftOrUp;
+}
+
+.slide-fade-1-leave-active, .slide-fade-2-leave-active {
+    position: absolute;
+}
+
+.slide-fade-1-enter-active, .slide-fade-1-leave-active,
+.slide-fade-2-enter-active, .slide-fade-2-leave-active {
+    $transition-duration: var(--transition-duration, 0.6s);
+    transition: all $transition-duration ease-in-out;
 }
 </style>

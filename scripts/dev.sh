@@ -1,6 +1,12 @@
 #!/usr/bin/env sh
 
-pnpm run --dir frontend dev --host &
+# Because the frontend directory on the host is being shared with the container
+# as a volume, we have to re-populate the node_modules directory at runtime.
+# This is a cheap operation since the modules have already been installed during
+# docker build.
+pnpm install --frozen-lockfile --no-verify-store-integrity --dir frontend
+
+pnpm --dir frontend run dev --host &
 
 # Wait for database
 scripts/wait-for-it.sh -h db -p "$DB_PORT" -t 15

@@ -8,22 +8,26 @@ import type {SelfPraiseProps} from "@/components/home/SelfPraiseCard.vue";
 const texts = ["Hi, I'm veracioux.", "Programmer", "Engineer", "Tinkerer"];
 const selfPraiseItems: SelfPraiseProps[] = [
     {
-        title: "Test 0",
-        content: "todo todo todo todo todo todo todo todo todo ",
+        title: "A principled programmer",
+        content: "I don't just code. I respect the art. I write quality documentation. I study best practices, and create my own.",
     },
     {
-        title: "Test 1",
-        content: "test1 test1 test1 test1 test1 test1 test1 test1 ",
+        title: "On-demand perfectionist",
+        content: "I have a tendency towards precision and diligence, but I can work under pressure too.",
     },
     {
-        title: "Test 2",
-        content: "test2 test2 test2 test2 test2 test2 test2 test2 ",
+        title: "Constantly evolving",
+        content: "I have touched a lot of technologies during my lifetime. I improve my workflow with new tools all the time."
     },
     {
-        title: "Test 3",
-        content: "test3 test3 test3 test3 test3 test3 test3 test3 ",
+        title: "Problem solver by nature and nurture",
+        content: "I have been programming since age 12. It's my profession, hobby, way of life."
     },
 ];
+
+const shutterFullyOpenedScrollThreshold = 0.25;
+// The relativeScrollY value at which the self praise appears.
+const selfPraiseAppearRelativeScrollY = 0.5;
 
 let intervalId = ref<any>(undefined);
 let typedOutLength = ref(0);
@@ -33,7 +37,6 @@ let fadeableStyle = ref({
 let hello = ref<HTMLElement>();
 let traits = ref<HTMLElement>();
 let root = ref<HTMLElement>();
-const shutterFullyOpenedScrollThreshold = 0.25;
 let helloInitialTop = 0;
 let traitsInitialBottom = 0;
 
@@ -71,6 +74,8 @@ function onScroll() {
         relativeScrollY.value
     );
 
+    // Make the traits snap to the bottom once section relative scroll
+    // reaches a threshold.
     if (
         sectionRelativeScroll >=
         shutterFullyOpenedScrollThreshold -
@@ -112,7 +117,7 @@ onMounted(() => {
                 texts[0].slice(-1, typedOutLength)
             }}</span>
         </div>
-        <div class="traits" ref="traits">
+        <div ref="traits" :class="{traits, makeRoomForSelfPraise: relativeScrollY > selfPraiseAppearRelativeScrollY}">
             <div class="trait" style="align-items: flex-start">
                 <div class="dummy">Programmer</div>
                 <div>
@@ -148,13 +153,14 @@ onMounted(() => {
             </div>
         </div>
         <SelfPraiseManager
-            :appear-relative-scroll-y="0.25"
+            :appear-relative-scroll-y="selfPraiseAppearRelativeScrollY"
             :self-praise-items="selfPraiseItems"
         />
     </div>
 </template>
 
 <style scoped lang="scss">
+@import "@/assets/global.scss";
 .hello {
     position: relative;
     top: 0;
@@ -166,8 +172,7 @@ onMounted(() => {
 .traits {
     position: relative;
     bottom: 0;
-    padding-top: 4em;
-    padding-bottom: 1em;
+    padding: 4em 0 1em 0;
     justify-self: end;
 
     display: flex;
@@ -177,6 +182,14 @@ onMounted(() => {
 
     font-size: 0.8em;
     opacity: 0.5;
+
+    &.makeRoomForSelfPraise {
+        @include screenWidthBelow($large) {
+            opacity: 0;
+        }
+    }
+
+    transition: opacity 0.2s ease-in-out;
 }
 
 .trait {
