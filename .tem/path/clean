@@ -8,3 +8,7 @@ cd "$(tem find -b veracioux-website)"
 rm Dockerfile.*
 rm -rf **/__pycache__
 
+# Remove node_modules/ created in the host by the containers because frontend/
+# was shared as a volume in dev mode.
+docker run --volume "$PWD:/host:rw" \
+    alpine rm -rf /host/{frontend,worker}/node_modules
