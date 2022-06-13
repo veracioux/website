@@ -11,7 +11,7 @@ const {selfPraiseItems, appearRelativeScrollY} = defineProps<{
     appearRelativeScrollY: number;
 }>();
 
-const scrollMaxValue = 1.3;
+const scrollMaxValue = 0.5;
 
 // TODO update description
 // The SelfPraiseCards exchange as you scroll down. There are always two cards displayed.
@@ -24,21 +24,20 @@ const scrollMaxValue = 1.3;
 const {relativeScrollY} = ScrollData.inject();
 const progress = ref(-1);
 
-watch(relativeScrollY, (value) => {
-    if (progress.value < 0 && value < appearRelativeScrollY) return;
-    progress.value = relativeScrollY.value - appearRelativeScrollY;
-});
-
 const numSteps = Math.ceil(selfPraiseItems.length / 2);
 const currentStep = ref(-1);
 const cardInSlot1 = ref(0);
 const cardInSlot2 = ref(1);
 const {scrollingFast} = useFastScrollingDetector(0.03);
 
+watch(relativeScrollY, (value) => {
+    if (progress.value < 0 && value < appearRelativeScrollY) return;
+    progress.value =
+        (relativeScrollY.value - appearRelativeScrollY) / scrollMaxValue;
+});
+
 watch(progress, () => {
-    currentStep.value = Math.floor(
-        (progress.value / scrollMaxValue) * numSteps
-    );
+    currentStep.value = Math.floor(progress.value * numSteps);
 });
 
 watch(currentStep, (value, oldValue) => {
@@ -55,9 +54,7 @@ watch(currentStep, (value, oldValue) => {
         <div
             :class="{
                 [s.wrapper]: true,
-                fastTransition:
-                    scrollingFast ||
-                    relativeScrollY < 0.9 * appearRelativeScrollY,
+                fastTransition: scrollingFast || progress < 0,
             }"
         >
             <div :class="[s.slot, s.slot1]">
@@ -215,7 +212,8 @@ watch(currentStep, (value, oldValue) => {
 .slide-fade-1-leave-active,
 .slide-fade-2-enter-active,
 .slide-fade-2-leave-active {
-    $transition-duration: var(--transition-duration, 0.6s);
+    // If I don't use a Sass variable here, I get an error.
+    $transition-duration: var(--transition-duration, 0.7s);
     transition: all $transition-duration ease-in-out;
 }
 </style>

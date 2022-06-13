@@ -21,6 +21,12 @@ function styleStickyUntilThreshold(relativeScrollThreshold: number) {
     return {position: "fixed"};
 }
 
+function styleWithRelativeHeight(relativeHeight: number) {
+    return {
+        minHeight: `${relativeHeight * 100}vh`,
+    };
+}
+
 function onScroll() {
     relativeScrollY.value = window.scrollY / window.innerHeight;
 }
@@ -36,11 +42,18 @@ ScrollData.provide({
 </script>
 <template>
     <div style="position: relative; top: 0">
-        <div class="-home-section-space-occupant fullWindow" />
-        <div id="home" class="-home-section-space-occupant fullWindow" />
-        <div style="position: relative" v-if="relativeScrollY <= 3">
-            <Shutter class="shutter" :style="styleStickyUntilThreshold(2)" />
-            <Home class="home" :style="styleStickyUntilThreshold(2)" />
+        <div
+            class="%home-section-space-occupant"
+            :style="styleWithRelativeHeight(0.4)"
+        />
+        <div
+            id="home"
+            class="%home-section-space-occupant fullWindow"
+            :style="styleWithRelativeHeight(0.6)"
+        />
+        <div style="position: relative" v-if="relativeScrollY <= 2">
+            <Shutter class="shutter" :style="styleStickyUntilThreshold(1)" />
+            <Home class="home" :style="styleStickyUntilThreshold(1)" />
         </div>
         <div class="-home-section-space-occupant fullWindow" />
         <Projects id="projects" class="projects" />

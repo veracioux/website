@@ -203,13 +203,14 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/common.module.scss" as common;
 @import "@/assets/global.scss";
 
 .hello {
+    @include common.veracioux;
     position: relative;
     top: 0;
     justify-self: end;
-    padding: 0.2em;
     text-align: center;
 }
 

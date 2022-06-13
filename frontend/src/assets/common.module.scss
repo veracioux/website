@@ -5,6 +5,14 @@
   gap: 8px;
 }
 
+/**
+  * Style of the 'veracioux' text found in the navbar and a few other places.
+ */
+@mixin veracioux {
+  font-size: 1em;
+  color: var(--color-primary);
+}
+
 .labelContainer {
   @include labelContainer;
 }

@@ -6,18 +6,16 @@ const veraciouxButton = ref<HTMLElement>();
 
 <template>
     <div class="navbar">
-        <a
-            href="/#home"
-            style="color: var(--color-primary)"
-            ref="veraciouxButton"
-        >
-            veracioux
-        </a>
+        <a href="/#home" class="veracioux" ref="veraciouxButton"> veracioux </a>
     </div>
 </template>
 >
 
 <style scoped lang="scss">
+@use "@/assets/common.module.scss" as common;
+.veracioux {
+    @include common.veracioux;
+}
 .navbar {
     position: fixed;
     top: 0;
@@ -29,10 +27,8 @@ const veraciouxButton = ref<HTMLElement>();
     font-size: 28px;
     text-align: center;
 
-    background: black;
-    filter: drop-shadow(0 0 3px rgba(var(--color-primary-rgb), 0.5));
-
-    pointer-events: all;
+    background: var(--color-background);
+    filter: drop-shadow(0 0 3px rgba(var(--color-primary-rgb), 0.8));
 }
 
 .navbar > a {

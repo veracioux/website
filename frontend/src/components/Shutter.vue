@@ -141,6 +141,19 @@ onMounted(() => {
         }" class="indicator" :key="resizeEvent">Height: {{configKonva.height}}</div>
         </Transition>
         -->
+        <div
+            style="
+                position: fixed;
+                height: 100%;
+                width: 100vw;
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            "
+        >
+            <div style="background: red; width: 30px; height: 30px" />
+        </div>
         <div ref="root">
             <v-stage :config="configKonva">
                 <v-layer>
