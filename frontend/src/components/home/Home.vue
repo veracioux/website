@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import {onMounted, ref, watch} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {ScrollData} from "@/inject";
-import * as utils from "@/utils";
 import SelfPraiseManager from "@/components/home/SelfPraiseManager.vue";
 import type {SelfPraiseProps} from "@/components/home/SelfPraiseCard.vue";
 
-const hi = "Hi, I'm veracioux.";
+const emit = defineEmits<{
+    (e: "veracioux-mounted", element: HTMLElement): void
+}>();
 
+const hi = "Hi, I'm veracioux.";
 const selfPraiseItems: SelfPraiseProps[] = [
     {
         title: "A principled programmer",
@@ -38,7 +40,7 @@ const shutterFullyOpenedScrollThreshold = 0.25;
 const selfPraiseAppearRelativeScrollY = 0.26;
 // Interval (ms) between subsequent characters being typed out.
 const defaultTypingInterval = 90;
-const minTypingInterval = 20;
+const minTypingInterval = 15;
 
 // Refs
 const typedOutLength = ref(0);
@@ -46,8 +48,12 @@ const fadeableStyle = ref({
     opacity: 1,
 });
 const hello = ref<HTMLElement>();
+const veracioux = ref<HTMLElement>();
 const traits = ref<HTMLElement>();
 const root = ref<HTMLElement>();
+
+const helloStyle = reactive<Partial<CSSStyleDeclaration>>({});
+const traitsStyle = reactive<Partial<CSSStyleDeclaration>>({});
 
 const {relativeScrollY} = ScrollData.inject();
 
@@ -61,6 +67,25 @@ function typeOut() {
         clearInterval(intervalId);
         intervalId = undefined;
     }
+}
+
+/**
+ * Calculate the interval with which the hello message and trait texts
+ * are typed out, based on the current scroll value.
+ *
+ * The typing interval reduces the more you scroll down the page. This is for
+ * purely aesthetic reasons.
+ */
+function calculateTypingInterval() {
+    return Math.min(
+        Math.max(
+            defaultTypingInterval -
+            (defaultTypingInterval - minTypingInterval) /
+            shutterFullyOpenedScrollThreshold * relativeScrollY.value,
+            minTypingInterval
+        ),
+        defaultTypingInterval
+    );
 }
 
 /**
@@ -81,24 +106,32 @@ function snapTraitsToBottomIfNeeded() {
 
     if (
         sectionRelativeScroll >=
-        shutterFullyOpenedScrollThreshold -
-            (0.5 * hello.value!.offsetHeight) / window.innerHeight
+        shutterFullyOpenedScrollThreshold
     ) {
-        helloStyle.position = "absolute";
-        traitsStyle.position = "absolute";
-        helloStyle.top = "0";
-        traitsStyle.bottom = "0";
+        Object.assign(helloStyle, {
+            position: "absolute",
+            top: "0px",
+        });
+        Object.assign(traitsStyle, {
+            position: "absolute",
+            bottom: "0px",
+        });
     } else {
-        helloStyle.position = "relative";
-        traitsStyle.position = "relative";
-        helloStyle.top = -1.5 * window.scrollY + "px";
-        traitsStyle.bottom = -1.45 * window.scrollY + "px";
+        Object.assign(helloStyle, {
+            position: "relative",
+            top: -1.5 * window.scrollY + "px",
+        });
+        Object.assign(traitsStyle, {
+            position: "relative",
+            bottom: -1.45 * window.scrollY + "px",
+        });
     }
 }
 
+let relativeScrollYAtLastIntervalUpdate = 0;
 function onScroll(value: number) {
     // Update opacity of fade-able part of the greeting text
-    fadeableStyle.value.opacity = 1 - Math.min(value * 5, 1);
+    fadeableStyle.value.opacity = 1 - Math.min(value * 4, 1);
 
     // As the user scrolls down, the typing interval must reduce proportionally.
     if (
@@ -106,32 +139,21 @@ function onScroll(value: number) {
         intervalId
     ) {
         clearInterval(intervalId);
-        intervalId = setInterval(
-            typeOut,
-            Math.min(
-                Math.max(
-                    defaultTypingInterval -
-                        (defaultTypingInterval - minTypingInterval) /
-                            shutterFullyOpenedScrollThreshold,
-                    minTypingInterval
-                ),
-                defaultTypingInterval
-            )
-        );
+        intervalId = setInterval(typeOut, calculateTypingInterval());
         relativeScrollYAtLastIntervalUpdate = value;
     }
 
     snapTraitsToBottomIfNeeded();
 }
 
-let relativeScrollYAtLastIntervalUpdate = 0;
 watch(relativeScrollY, onScroll);
 
 onMounted(() => {
     setTimeout(() => {
-        intervalId = setInterval(typeOut, defaultTypingInterval);
+        intervalId = setInterval(typeOut, calculateTypingInterval());
         typeOut();
     }, 300);
+    emit("veracioux-mounted", veracioux.value!);
 });
 </script>
 
@@ -142,7 +164,7 @@ onMounted(() => {
             <div style="width: 20px; height: 20px; background: red; border-radius: 50%;"></div>
         </div>
         -->
-        <div class="hello" ref="hello" style="white-space-collapse: discard">
+        <div class="hello" :style="helloStyle" ref="hello">
             <span :style="fadeableStyle">{{
                 hi.slice(0, typedOutLength).slice(0, 8)
             }}</span>
@@ -160,6 +182,7 @@ onMounted(() => {
                 makeRoomForSelfPraise:
                     relativeScrollY > selfPraiseAppearRelativeScrollY,
             }"
+            :style="traitsStyle"
         >
             <div class="trait" style="align-items: flex-start">
                 <div class="dummy">Programmer</div>
