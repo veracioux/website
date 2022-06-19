@@ -4,8 +4,14 @@ import {ScrollData} from "@/inject";
 import SelfPraiseManager from "@/components/home/SelfPraiseManager.vue";
 import type {SelfPraiseProps} from "@/components/home/SelfPraiseCard.vue";
 
+defineProps<{
+    /** Style of the 'veracioux' text. */
+    veraciouxStyle: Partial<CSSStyleDeclaration>
+}>();
+
 const emit = defineEmits<{
-    (e: "veracioux-mounted", element: HTMLElement): void
+    (e: "veraciouxMounted", element: HTMLElement): void
+    (e: "veraciouxCrossedThreshold", where: "above" | "below"): void
 }>();
 
 const hi = "Hi, I'm veracioux.";
@@ -41,6 +47,7 @@ const selfPraiseAppearRelativeScrollY = 0.26;
 // Interval (ms) between subsequent characters being typed out.
 const defaultTypingInterval = 90;
 const minTypingInterval = 15;
+const veraciouxThresholdScroll = 0.18;
 
 // Refs
 const typedOutLength = ref(0);
@@ -129,9 +136,11 @@ function snapTraitsToBottomIfNeeded() {
 }
 
 let relativeScrollYAtLastIntervalUpdate = 0;
+let veraciouxPosition: "above" | "below" = "below";
+
 function onScroll(value: number) {
     // Update opacity of fade-able part of the greeting text
-    fadeableStyle.value.opacity = 1 - Math.min(value * 4, 1);
+    fadeableStyle.value.opacity = 1 - Math.min(value * 5, 1);
 
     // As the user scrolls down, the typing interval must reduce proportionally.
     if (
@@ -144,6 +153,14 @@ function onScroll(value: number) {
     }
 
     snapTraitsToBottomIfNeeded();
+
+    if (relativeScrollY.value > veraciouxThresholdScroll && veraciouxPosition === "below") {
+        emit("veraciouxCrossedThreshold", "above");
+        veraciouxPosition = "above";
+    } else if (relativeScrollY.value < veraciouxThresholdScroll && veraciouxPosition === "above") {
+        emit("veraciouxCrossedThreshold", "below");
+        veraciouxPosition = "below";
+    }
 }
 
 watch(relativeScrollY, onScroll);
@@ -153,7 +170,7 @@ onMounted(() => {
         intervalId = setInterval(typeOut, calculateTypingInterval());
         typeOut();
     }, 300);
-    emit("veracioux-mounted", veracioux.value!);
+    emit("veraciouxMounted", veracioux.value!);
 });
 </script>
 
@@ -166,14 +183,14 @@ onMounted(() => {
         -->
         <div class="hello" :style="helloStyle" ref="hello">
             <span :style="fadeableStyle">{{
-                hi.slice(0, typedOutLength).slice(0, 8)
-            }}</span>
-            <span ref="veracioux">{{
-                hi.slice(8, typedOutLength).slice(0, 9)
-            }}</span>
+                    hi.slice(0, typedOutLength).slice(0, 8)
+                }}</span>
+            <span ref="veracioux" class="veracioux" :style="veraciouxStyle">{{
+                    hi.slice(8, typedOutLength).slice(0, 9)
+                }}</span>
             <span :style="fadeableStyle">{{
-                hi.slice(-1, typedOutLength)
-            }}</span>
+                    hi.slice(-1, typedOutLength)
+                }}</span>
         </div>
         <div
             ref="traits"
