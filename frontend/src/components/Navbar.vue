@@ -3,11 +3,8 @@ import {onMounted, ref} from "vue";
 // noinspection ES6UnusedImports
 import zindex from "@/zindex";
 
-defineProps<{
-    hideVeraciouxButton?: boolean;
-}>();
 const emit = defineEmits<{
-    (e: "animatableVeraciouxTextMounted", element: HTMLElement): void;
+    (e: "animatableVeraciouxTextElementMounted", element: HTMLElement): void;
 }>();
 
 const veraciouxButton = ref<HTMLElement>();
@@ -15,7 +12,7 @@ const animatableVeraciouxTextElement = ref<HTMLElement>();
 
 onMounted(() => {
     emit(
-        "animatableVeraciouxTextMounted",
+        "animatableVeraciouxTextElementMounted",
         animatableVeraciouxTextElement.value!
     );
 });
@@ -25,24 +22,19 @@ onMounted(() => {
     <div class="navbar">
         <div class="background" />
         <div class="content">
-            <div class="contentLeft">Contact</div>
+            <div class="contentLeft"></div>
             <div style="position: relative">
+                <a href="/#home" class="veracioux" ref="veraciouxButton">
+                    veracioux
+                </a>
                 <div
                     class="veracioux overlay"
                     ref="animatableVeraciouxTextElement"
                 >
                     veracioux
                 </div>
-                <a
-                    href="/#home"
-                    class="veracioux"
-                    :class="{hidden: hideVeraciouxButton}"
-                    ref="veraciouxButton"
-                >
-                    veracioux
-                </a>
             </div>
-            <div class="contentRight">Blog</div>
+            <div class="contentRight"></div>
         </div>
     </div>
 </template>
@@ -50,10 +42,6 @@ onMounted(() => {
 
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as common;
-
-.hidden {
-    visibility: hidden;
-}
 
 .background {
     position: absolute;
@@ -91,13 +79,17 @@ onMounted(() => {
 
 .overlay {
     position: absolute;
-    inset: 0;
-    color: red;
+    top: 0;
+    left: 0;
     pointer-events: none;
 }
 
 .veracioux {
     @include common.veracioux;
+}
+
+a.veracioux {
+    opacity: 0;
 }
 
 .navbar {

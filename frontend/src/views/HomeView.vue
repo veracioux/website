@@ -13,6 +13,8 @@ import Navbar from "@/components/Navbar.vue";
 
 const relativeScrollY = ref(0);
 const veraciouxStyle = reactive<CSSProperties>({});
+const animatableVeraciouxTextElement = ref<HTMLElement>();
+const veraciouxTextFadeable = ref(false);
 const navbarOpaque = ref(false);
 
 /**
@@ -36,14 +38,50 @@ function onScroll() {
     relativeScrollY.value = window.scrollY / window.innerHeight;
 }
 
-function onVeraciouxCrossedThreshold(where: "above" | "below") {
+let veraciouxTextAnimation: Animation | undefined = undefined;
+
+function onVeraciouxCrossedThreshold(
+    where: "above" | "below",
+    boundingRect: DOMRect
+) {
+    if (!animatableVeraciouxTextElement.value) return;
+
+    const sourceRect = boundingRect,
+        targetRect =
+            animatableVeraciouxTextElement.value!.getBoundingClientRect();
     if (where === "above") {
+        if (navbarOpaque.value)
+            // Navbar is already fully visible. The animation is not needed anymore.
+            return;
         navbarOpaque.value = true;
         veraciouxStyle.visibility = "hidden";
+        veraciouxTextAnimation?.cancel();
+        if (sourceRect.y >= sourceRect.height) {
+            veraciouxTextAnimation =
+                animatableVeraciouxTextElement.value!.animate(
+                    [
+                        {
+                            position: "fixed",
+                            top: `${sourceRect.y}px`,
+                            left: `${sourceRect.x}px`,
+                        },
+                        {
+                            position: "fixed",
+                            top: `${targetRect.y}px`,
+                            left: `${targetRect.x}px`,
+                        },
+                    ],
+                    {duration: 300, easing: "ease-in-out"}
+                );
+        }
     } else {
-        navbarOpaque.value = false;
+        veraciouxTextFadeable.value = true;
         veraciouxStyle.visibility = undefined;
     }
+}
+
+function onAnimatableVeraciouxTextElementMounted(element: HTMLElement) {
+    animatableVeraciouxTextElement.value = element;
 }
 
 onMounted(() => {
@@ -56,7 +94,12 @@ ScrollData.provide({
 });
 </script>
 <template>
-    <Navbar :class="{opaque: navbarOpaque}" />
+    <Navbar
+        :class="{opaque: navbarOpaque}"
+        @animatableVeraciouxTextElementMounted="
+            onAnimatableVeraciouxTextElementMounted
+        "
+    />
     <div class="container">
         <div
             class="%home-section-space-occupant"
@@ -72,7 +115,8 @@ ScrollData.provide({
             <Home
                 class="home"
                 :style="styleStickyUntilThreshold(1)"
-                :veraciouxStyle="veraciouxStyle"
+                :veracioux-style="veraciouxStyle"
+                :veracioux-text-fadeable="veraciouxTextFadeable"
                 @veraciouxCrossedThreshold="onVeraciouxCrossedThreshold"
             />
         </div>
@@ -91,6 +135,7 @@ ScrollData.provide({
         pointer-events: none;
         transition: opacity 0.6s;
     }
+
     &:not(.opaque) .veracioux {
         visibility: hidden;
     }

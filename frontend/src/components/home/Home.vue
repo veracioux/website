@@ -8,11 +8,17 @@ import type {CSSProperties} from "vue";
 defineProps<{
     /** Style of the 'veracioux' text. */
     veraciouxStyle?: CSSProperties;
+    /** Controls whether the 'veracioux' part should fade along with the rest of the greeting.  */
+    veraciouxTextFadeable?: boolean;
 }>();
 
 const emit = defineEmits<{
     (e: "veraciouxMounted", element: HTMLElement): void;
-    (e: "veraciouxCrossedThreshold", where: "above" | "below"): void;
+    (
+        e: "veraciouxCrossedThreshold",
+        where: "above" | "below",
+        boundingRect: DOMRect
+    ): void;
 }>();
 
 const hi = "Hi, I'm veracioux.";
@@ -48,7 +54,7 @@ const selfPraiseAppearRelativeScrollY = 0.26;
 /** Interval (ms) between subsequent characters being typed out. */
 const defaultTypingInterval = 90;
 const minTypingInterval = 15;
-const veraciouxThresholdScroll = 0.18;
+const veraciouxThresholdScroll = 0.2;
 
 // Refs
 const typedOutLength = ref(0);
@@ -154,13 +160,21 @@ function onScroll(value: number) {
     snapTraitsToBottomIfNeeded();
 
     if (value > veraciouxThresholdScroll && veraciouxPosition === "below") {
-        emit("veraciouxCrossedThreshold", "above");
+        emit(
+            "veraciouxCrossedThreshold",
+            "above",
+            veracioux.value!.getBoundingClientRect()
+        );
         veraciouxPosition = "above";
     } else if (
         value < veraciouxThresholdScroll &&
         veraciouxPosition === "above"
     ) {
-        emit("veraciouxCrossedThreshold", "below");
+        emit(
+            "veraciouxCrossedThreshold",
+            "below",
+            veracioux.value!.getBoundingClientRect()
+        );
         veraciouxPosition = "below";
     }
 }
@@ -187,7 +201,14 @@ onMounted(() => {
             <span :style="fadeableStyle">{{
                 hi.slice(0, typedOutLength).slice(0, 8)
             }}</span>
-            <span ref="veracioux" class="veracioux" :style="veraciouxStyle">
+            <span
+                ref="veracioux"
+                class="veracioux"
+                :style="{
+                    ...veraciouxStyle,
+                    ...(veraciouxTextFadeable && fadeableStyle),
+                }"
+            >
                 {{ hi.slice(8, typedOutLength).slice(0, 9) }}
             </span>
             <span :style="fadeableStyle">{{

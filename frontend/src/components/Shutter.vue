@@ -101,6 +101,7 @@ function onScroll(forceUpdate = false) {
 }
 
 const resizeEvent = ref(0);
+
 function onWindowResize() {
     resizeEvent.value = resizeEvent.value + 1;
     configKonva.width = window.innerWidth;
@@ -140,7 +141,6 @@ onMounted(() => {
             background: '#ff00ff55',
         }" class="indicator" :key="resizeEvent">Height: {{configKonva.height}}</div>
         </Transition>
-        -->
         <div
             style="
                 position: fixed;
@@ -154,6 +154,7 @@ onMounted(() => {
         >
             <div style="background: red; width: 30px; height: 30px" />
         </div>
+        -->
         <div ref="root">
             <v-stage :config="configKonva">
                 <v-layer>
@@ -188,9 +189,11 @@ Classes used temporarily for debugging.
 .indicator-enter-from {
     color: black;
 }
+
 .indicator-enter-to {
     color: transparent;
 }
+
 .indicator-enter-active {
     transition: all 1s ease;
 }
