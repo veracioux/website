@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import Icon from "@/components/generic/Icon.vue";
+import type {CSSProperties} from "vue";
 
 type IconData = {
     spec?: string | string[];
-    style: Partial<CSSStyleDeclaration>;
+    style: CSSProperties;
 };
 
 const nameMap: Record<string, IconData> = {

@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import Navbar from "@/components/Navbar.vue";
+// noinspection ES6UnusedImports
+import zindex from "@/zindex";
 </script>
 
 <template>
-    <div>
-        <Navbar class="navbar" />
-        <RouterView />
-    </div>
+    <RouterView />
 </template>
 
 <style>
@@ -19,10 +17,12 @@ body {
 }
 </style>
 
-<style scoped lang="scss">
+<style lang="scss">
 @import "@/assets/global.scss";
 
+// The navbar is included in each view separately, because different views will
+// want to customize its props. This is the common style for all of them.
 .navbar {
-    z-index: 100;
+    z-index: v-bind("zindex.navbar");
 }
 </style>

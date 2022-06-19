@@ -3,12 +3,17 @@ import Shutter from "@/components/Shutter.vue";
 import Projects from "@/components/home/Projects.vue";
 import Home from "@/components/home/Home.vue";
 import CV from "@/components/home/CV.vue";
-import {onMounted, ref} from "vue";
-import type {Ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
+import type {CSSProperties} from "vue";
 import {ScrollData} from "@/inject";
 import * as utils from "@/utils";
+// noinspection ES6UnusedImports
+import zindex from "@/zindex";
+import Navbar from "@/components/Navbar.vue";
 
-const relativeScrollY: Ref<number> = ref(0);
+const relativeScrollY = ref(0);
+const veraciouxStyle = reactive<CSSProperties>({});
+const navbarOpaque = ref(false);
 
 /**
  * Elements with this style will be sticky until a threshold is passed.
@@ -31,6 +36,16 @@ function onScroll() {
     relativeScrollY.value = window.scrollY / window.innerHeight;
 }
 
+function onVeraciouxCrossedThreshold(where: "above" | "below") {
+    if (where === "above") {
+        navbarOpaque.value = true;
+        veraciouxStyle.visibility = "hidden";
+    } else {
+        navbarOpaque.value = false;
+        veraciouxStyle.visibility = undefined;
+    }
+}
+
 onMounted(() => {
     utils.onScroll(onScroll);
     window.addEventListener("resize", onScroll);
@@ -41,7 +56,8 @@ ScrollData.provide({
 });
 </script>
 <template>
-    <div style="position: relative; top: 0">
+    <Navbar :class="{opaque: navbarOpaque}" />
+    <div class="container">
         <div
             class="%home-section-space-occupant"
             :style="styleWithRelativeHeight(0.4)"
@@ -53,7 +69,12 @@ ScrollData.provide({
         />
         <div style="position: relative" v-if="relativeScrollY <= 2">
             <Shutter class="shutter" :style="styleStickyUntilThreshold(1)" />
-            <Home class="home" :style="styleStickyUntilThreshold(1)" />
+            <Home
+                class="home"
+                :style="styleStickyUntilThreshold(1)"
+                :veraciouxStyle="veraciouxStyle"
+                @veraciouxCrossedThreshold="onVeraciouxCrossedThreshold"
+            />
         </div>
         <div class="-home-section-space-occupant fullWindow" />
         <Projects id="projects" class="projects" />
@@ -61,23 +82,51 @@ ScrollData.provide({
     </div>
 </template>
 
+<style lang="scss">
+.navbar {
+    .background,
+    .contentLeft,
+    .contentRight {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.6s;
+    }
+    &:not(.opaque) .veracioux {
+        visibility: hidden;
+    }
+
+    &.opaque {
+        .background,
+        .contentLeft,
+        .contentRight {
+            opacity: 1;
+            pointer-events: unset;
+        }
+    }
+}
+</style>
+
 <style scoped lang="scss">
+.container {
+    position: relative;
+}
+
 .shutter {
     position: absolute;
     inset: 0;
-    z-index: 50;
+    z-index: v-bind("zindex.shutter");
 }
 
 .home {
     position: absolute;
     inset: 0;
-    z-index: 60;
+    z-index: v-bind("zindex.section");
 }
 
 .projects,
 .cv {
-    z-index: 70;
     position: relative;
     background: var(--color-background-2);
+    z-index: v-bind("zindex.section");
 }
 </style>

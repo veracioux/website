@@ -3,15 +3,16 @@ import {onMounted, reactive, ref, watch} from "vue";
 import {ScrollData} from "@/inject";
 import SelfPraiseManager from "@/components/home/SelfPraiseManager.vue";
 import type {SelfPraiseProps} from "@/components/home/SelfPraiseCard.vue";
+import type {CSSProperties} from "vue";
 
 defineProps<{
     /** Style of the 'veracioux' text. */
-    veraciouxStyle: Partial<CSSStyleDeclaration>
+    veraciouxStyle?: CSSProperties;
 }>();
 
 const emit = defineEmits<{
-    (e: "veraciouxMounted", element: HTMLElement): void
-    (e: "veraciouxCrossedThreshold", where: "above" | "below"): void
+    (e: "veraciouxMounted", element: HTMLElement): void;
+    (e: "veraciouxCrossedThreshold", where: "above" | "below"): void;
 }>();
 
 const hi = "Hi, I'm veracioux.";
@@ -40,18 +41,18 @@ const selfPraiseItems: SelfPraiseProps[] = [
 
 // Config
 
-// relativeScrollY value at which the shutter is fully opened.
+/** relativeScrollY value at which the shutter is fully opened. */
 const shutterFullyOpenedScrollThreshold = 0.25;
-// relativeScrollY value at which the self praise appears.
+/** relativeScrollY value at which the self praise appears. */
 const selfPraiseAppearRelativeScrollY = 0.26;
-// Interval (ms) between subsequent characters being typed out.
+/** Interval (ms) between subsequent characters being typed out. */
 const defaultTypingInterval = 90;
 const minTypingInterval = 15;
 const veraciouxThresholdScroll = 0.18;
 
 // Refs
 const typedOutLength = ref(0);
-const fadeableStyle = ref({
+const fadeableStyle = reactive<CSSProperties>({
     opacity: 1,
 });
 const hello = ref<HTMLElement>();
@@ -59,8 +60,8 @@ const veracioux = ref<HTMLElement>();
 const traits = ref<HTMLElement>();
 const root = ref<HTMLElement>();
 
-const helloStyle = reactive<Partial<CSSStyleDeclaration>>({});
-const traitsStyle = reactive<Partial<CSSStyleDeclaration>>({});
+const helloStyle = reactive<CSSProperties>({});
+const traitsStyle = reactive<CSSProperties>({});
 
 const {relativeScrollY} = ScrollData.inject();
 
@@ -87,8 +88,9 @@ function calculateTypingInterval() {
     return Math.min(
         Math.max(
             defaultTypingInterval -
-            (defaultTypingInterval - minTypingInterval) /
-            shutterFullyOpenedScrollThreshold * relativeScrollY.value,
+                ((defaultTypingInterval - minTypingInterval) /
+                    shutterFullyOpenedScrollThreshold) *
+                    relativeScrollY.value,
             minTypingInterval
         ),
         defaultTypingInterval
@@ -111,10 +113,7 @@ function snapTraitsToBottomIfNeeded() {
         relativeScrollY.value
     );
 
-    if (
-        sectionRelativeScroll >=
-        shutterFullyOpenedScrollThreshold
-    ) {
+    if (sectionRelativeScroll >= shutterFullyOpenedScrollThreshold) {
         Object.assign(helloStyle, {
             position: "absolute",
             top: "0px",
@@ -140,7 +139,7 @@ let veraciouxPosition: "above" | "below" = "below";
 
 function onScroll(value: number) {
     // Update opacity of fade-able part of the greeting text
-    fadeableStyle.value.opacity = 1 - Math.min(value * 5, 1);
+    fadeableStyle.opacity = 1 - Math.min(value * 5, 1);
 
     // As the user scrolls down, the typing interval must reduce proportionally.
     if (
@@ -154,10 +153,13 @@ function onScroll(value: number) {
 
     snapTraitsToBottomIfNeeded();
 
-    if (relativeScrollY.value > veraciouxThresholdScroll && veraciouxPosition === "below") {
+    if (value > veraciouxThresholdScroll && veraciouxPosition === "below") {
         emit("veraciouxCrossedThreshold", "above");
         veraciouxPosition = "above";
-    } else if (relativeScrollY.value < veraciouxThresholdScroll && veraciouxPosition === "above") {
+    } else if (
+        value < veraciouxThresholdScroll &&
+        veraciouxPosition === "above"
+    ) {
         emit("veraciouxCrossedThreshold", "below");
         veraciouxPosition = "below";
     }
@@ -183,14 +185,14 @@ onMounted(() => {
         -->
         <div class="hello" :style="helloStyle" ref="hello">
             <span :style="fadeableStyle">{{
-                    hi.slice(0, typedOutLength).slice(0, 8)
-                }}</span>
-            <span ref="veracioux" class="veracioux" :style="veraciouxStyle">{{
-                    hi.slice(8, typedOutLength).slice(0, 9)
-                }}</span>
+                hi.slice(0, typedOutLength).slice(0, 8)
+            }}</span>
+            <span ref="veracioux" class="veracioux" :style="veraciouxStyle">
+                {{ hi.slice(8, typedOutLength).slice(0, 9) }}
+            </span>
             <span :style="fadeableStyle">{{
-                    hi.slice(-1, typedOutLength)
-                }}</span>
+                hi.slice(-1, typedOutLength)
+            }}</span>
         </div>
         <div
             ref="traits"
@@ -268,13 +270,17 @@ onMounted(() => {
     font-size: 0.8em;
     opacity: 0.5;
 
+    /**
+     * When the screen size is such that the traits and self-praise cards would
+     * overlap, hide the traits.
+     */
     &.makeRoomForSelfPraise {
         @include screenWidthBelow($large) {
             opacity: 0;
         }
     }
 
-    transition: opacity 0.2s ease-in-out;
+    transition: opacity 0.3s ease-in-out;
 }
 
 .trait {

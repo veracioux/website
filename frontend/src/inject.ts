@@ -2,7 +2,6 @@
  * @file A registry of all values that can be provided/injected.
  */
 import {inject as _inject, provide as _provide, ref} from "vue";
-import type {Ref} from "vue";
 
 export class ScrollData {
     /* The document scroll amount expressed as a number of sections. */
@@ -26,15 +25,5 @@ export class ScrollData {
 
     static provide(value: ScrollData) {
         return _provide("scrollData", value);
-    }
-}
-
-export class VeraciouxNavbarButton {
-    static inject() {
-        return _inject<HTMLElement>("veraciouxNavbarButton");
-    }
-
-    static provide(value: Ref<HTMLElement>) {
-        return _provide("veraciouxNavbarButton", value);
     }
 }
