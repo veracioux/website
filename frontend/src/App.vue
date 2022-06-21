@@ -19,7 +19,6 @@ body {
 
 <style lang="scss">
 @import "@/assets/global.scss";
-
 // The navbar is included in each view separately, because different views will
 // want to customize its props. This is the common style for all of them.
 .navbar {

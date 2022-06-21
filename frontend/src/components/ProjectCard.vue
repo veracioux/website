@@ -21,7 +21,7 @@ defineProps({
         </a>
         <img
             v-if="image_url"
-            :src="image_url"
+            v-lazy="image_url"
             alt="Project image"
             :class="$style.name"
         />

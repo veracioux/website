@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import GlitchedWriter from "vue-glitched-writer";
 import {ref} from "vue";
+import Navbar from "@/components/Navbar.vue";
 
 const phrases = [
     "Not Found",
@@ -18,6 +19,7 @@ function incrementActivePhrase() {
 </script>
 
 <template>
+    <Navbar />
     <div class="container">
         <div class="content">
             <GlitchedWriter
@@ -43,6 +45,7 @@ function incrementActivePhrase() {
 </template>
 
 <style scoped lang="scss">
+@import "@/assets/global.scss";
 .container {
     position: fixed;
     inset: 0;

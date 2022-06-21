@@ -48,7 +48,7 @@ onMounted(() => {
 <template>
     <div ref="root">
         <FontAwesomeIcon v-if="name" :icon="iconNames[name]" class="icon" />
-        <img v-if="src" :src="src" :alt="alt" v-bind="$attrs" class="icon" />
+        <img v-if="src" v-lazy="src" :alt="alt" v-bind="$attrs" class="icon" />
     </div>
 </template>
 

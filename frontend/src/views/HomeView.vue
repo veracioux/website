@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Shutter from "@/components/Shutter.vue";
 import Projects from "@/components/home/Projects.vue";
-import Home from "@/components/home/Home.vue";
+import Intro from "@/components/home/Intro.vue";
 import CV from "@/components/home/CV.vue";
 import {onMounted, reactive, ref} from "vue";
 import type {CSSProperties} from "vue";
@@ -112,7 +112,7 @@ ScrollData.provide({
         />
         <div style="position: relative" v-if="relativeScrollY <= 2">
             <Shutter class="shutter" :style="styleStickyUntilThreshold(1)" />
-            <Home
+            <Intro
                 class="home"
                 :style="styleStickyUntilThreshold(1)"
                 :veracioux-style="veraciouxStyle"

@@ -23,7 +23,6 @@
 </template>
 
 <style scoped lang="scss">
-@import "@/assets/global.scss";
 .container {
     line-height: 160%;
     display: flex;

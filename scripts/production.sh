@@ -12,6 +12,12 @@ pnpm run server &
 cd ..
 
 python3 manage.py collectstatic --noinput
+
+# Minify SVG icons and copy them to static root
+cd frontend
+pnpm svgo -f src/assets/icons -o /var/static_root/icons
+cd ..
+
 python3 manage.py migrate
 python3 manage.py loaddata projects.json
 

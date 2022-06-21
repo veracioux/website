@@ -10,19 +10,33 @@ const router = createRouter({
         {
             path: "/",
             name: "home",
+            meta: {
+                title: "veracioux",
+            },
             component: () => import("@/views/HomeView.vue"),
         },
         {
             path: "/contact",
             name: "contact",
+            meta: {
+                title: "veracioux | Contact",
+            },
             component: () => import("@/views/ContactView.vue"),
         },
         {
             path: "/:pathMatch(.*)*",
             name: "404",
+            meta: {
+                title: "veracioux | Not Found",
+            },
             component: () => import("@/views/404.vue"),
         },
     ],
+});
+
+router.beforeEach((to, from, next) => {
+    document.title = to.meta.title as string;
+    next();
 });
 
 export default router;

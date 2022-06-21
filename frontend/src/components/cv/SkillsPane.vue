@@ -73,7 +73,7 @@ import iconCSharp from "@/assets/icons/csharp.svg";
         </div>
         <h3 class="subsubsectionTitle">
             Stale
-            <Icon src=""></Icon>
+            <Icon src="" />
         </h3>
         <div class="labelContainer">
             <Icon :src="iconJava" alt="Java" class="icon" />
