@@ -29,5 +29,5 @@ until pgrep uvicorn; do
     :
 done
 
-envsubst < nginx.conf > /etc/nginx/nginx.conf
+envsubst '$PORT,$DJANGO_PORT,$WORKER_SERVER_PORT' < nginx.conf > /etc/nginx/nginx.conf
 nginx -g "daemon off;"
