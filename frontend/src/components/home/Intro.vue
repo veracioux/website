@@ -65,8 +65,10 @@ const fadeableStyle = reactive<CSSProperties>({
 const hello = ref<HTMLElement>();
 const veracioux = ref<HTMLElement>();
 const traits = ref<HTMLElement>();
+const traitsStatic = ref<HTMLElement>();
 const root = ref<HTMLElement>();
 
+// Styles
 const helloStyle = reactive<CSSProperties>({});
 const traitsStyle = reactive<CSSProperties>({});
 
@@ -110,34 +112,34 @@ function calculateTypingInterval() {
  * them as necessary.
  */
 function positionGreetingAndTraits() {
-    if (!hello.value) return;
-
-    const helloStyle = hello.value!.style;
-    const traitsStyle = traits.value!.style;
-
-    const sectionRelativeScroll = ScrollData.sectionRelativeScrollY(
-        root.value!,
-        relativeScrollY.value
+    console.assert(
+        hello.value !== undefined,
+        "`hello.value` is expected to be defined."
     );
-
-    if (sectionRelativeScroll >= shutterFullyOpenedScrollThreshold) {
-        Object.assign(traitsStyle, {
-            position: "absolute",
-            bottom: "0px",
-        });
-    } else {
-        Object.assign(helloStyle, {
-            position: "relative",
-            top: -1.5 * window.scrollY + "px",
-        });
-        Object.assign(traitsStyle, {
-            position: "relative",
-            bottom: -1.45 * window.scrollY + "px",
-        });
-    }
+    const traitsBottomY =
+        traitsStatic.value!.offsetTop + traitsStatic.value!.offsetHeight;
+    Object.assign(hello.value!.style, {
+        top: -1.5 * window.scrollY + "px",
+    });
+    Object.assign(traits.value!.style, {
+        translate: `0 ${
+            (window.innerHeight - traitsBottomY) *
+            Math.min(
+                relativeScrollY.value / shutterFullyOpenedScrollThreshold,
+                1
+            )
+        }px`,
+    });
 }
 
-function detectStoppedScrolling(scrollingDirection: "up" | "down") {
+/**
+ * Use a timeout to detect if scrolling has stopped and fully open/close the
+ * shutter based on `scrollingDirection`. This is done so the shutter isn't
+ * left in a partially opened state.
+ */
+function fullyOpenOrCloseShutterWhenStoppedScrolling(
+    scrollingDirection: "up" | "down"
+) {
     if (stopScrollingDetectorId !== undefined) {
         clearTimeout(stopScrollingDetectorId);
     }
@@ -171,7 +173,14 @@ function onScroll(value: number, oldValue: number) {
         relativeScrollYAtLastIntervalUpdate = value;
     }
 
-    positionGreetingAndTraits();
+    if (relativeScrollY.value < shutterFullyOpenedScrollThreshold) {
+        // Using a `watch` here ensures that positionGreetingAndTraits will be
+        // called even the first time after the condition is false.
+        const unwatch = watch(relativeScrollY, () => {
+            positionGreetingAndTraits();
+            unwatch();
+        });
+    }
 
     if (value > veraciouxThresholdScroll && veraciouxPosition === "below") {
         emit(
@@ -192,7 +201,9 @@ function onScroll(value: number, oldValue: number) {
         veraciouxPosition = "below";
     }
 
-    detectStoppedScrolling(value < oldValue ? "up" : "down");
+    fullyOpenOrCloseShutterWhenStoppedScrolling(
+        value < oldValue ? "up" : "down"
+    );
 }
 
 watch(relativeScrollY, onScroll);
@@ -203,6 +214,9 @@ onMounted(() => {
         typeOut();
     }, 300);
     emit("veraciouxMounted", veracioux.value!);
+    // TODO for some reason, `traitsStatic` initially doesn't have the proper
+    //  offset. This is a temporary fix.
+    setTimeout(positionGreetingAndTraits, 400);
 });
 </script>
 
@@ -231,46 +245,48 @@ onMounted(() => {
                 hi.slice(-1, typedOutLength)
             }}</span>
         </div>
-        <div
-            ref="traits"
-            :class="{
-                traits,
-                makeRoomForSelfPraise:
-                    relativeScrollY > selfPraiseAppearRelativeScrollY,
-            }"
-            :style="traitsStyle"
-        >
-            <div class="trait" style="align-items: flex-start">
-                <div class="dummy">Programmer</div>
-                <div>
-                    {{
-                        "Programmer".slice(
-                            0,
-                            Math.max(typedOutLength - hi.length, 0)
-                        )
-                    }}
+        <div ref="traitsStatic">
+            <div
+                ref="traits"
+                :class="{
+                    traits,
+                    makeRoomForSelfPraise:
+                        relativeScrollY > selfPraiseAppearRelativeScrollY,
+                }"
+                :style="traitsStyle"
+            >
+                <div class="trait" style="align-items: flex-start">
+                    <div class="dummy">Programmer</div>
+                    <div>
+                        {{
+                            "Programmer".slice(
+                                0,
+                                Math.max(typedOutLength - hi.length, 0)
+                            )
+                        }}
+                    </div>
                 </div>
-            </div>
-            <div class="trait" style="align-items: flex-end">
-                <div class="dummy">Engineer</div>
-                <div>
-                    {{
-                        "Engineer".slice(
-                            0,
-                            Math.max(typedOutLength - hi.length, 0)
-                        )
-                    }}
+                <div class="trait" style="align-items: flex-end">
+                    <div class="dummy">Engineer</div>
+                    <div>
+                        {{
+                            "Engineer".slice(
+                                0,
+                                Math.max(typedOutLength - hi.length, 0)
+                            )
+                        }}
+                    </div>
                 </div>
-            </div>
-            <div class="trait" style="align-items: flex-start">
-                <div class="dummy">Tinkerer</div>
-                <div>
-                    {{
-                        "Tinkerer".slice(
-                            0,
-                            Math.max(typedOutLength - hi.length, 0)
-                        )
-                    }}
+                <div class="trait" style="align-items: flex-start">
+                    <div class="dummy">Tinkerer</div>
+                    <div>
+                        {{
+                            "Tinkerer".slice(
+                                0,
+                                Math.max(typedOutLength - hi.length, 0)
+                            )
+                        }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -291,13 +307,13 @@ onMounted(() => {
     top: 0;
     justify-self: end;
     text-align: center;
+    margin-bottom: 4em;
 }
 
 .traits {
     position: relative;
     bottom: 0;
-    padding: 4em 0 1em 0;
-    justify-self: end;
+    margin-bottom: 1em;
 
     display: flex;
     flex-direction: column;
