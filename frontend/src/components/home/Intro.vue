@@ -54,7 +54,7 @@ const selfPraiseAppearRelativeScrollY = 0.3;
 /** Interval (ms) between subsequent characters being typed out. */
 const defaultTypingInterval = 90;
 const minTypingInterval = 15;
-const veraciouxThresholdScroll = 0.2;
+const veraciouxThresholdScroll = 0.15;
 let stopScrollingDetectorId: number | undefined = undefined;
 
 // Refs
@@ -63,6 +63,7 @@ const fadeableStyle = reactive<CSSProperties>({
     opacity: 1,
 });
 const hello = ref<HTMLElement>();
+const helloStatic = ref<HTMLElement>();
 const veracioux = ref<HTMLElement>();
 const traits = ref<HTMLElement>();
 const traitsStatic = ref<HTMLElement>();
@@ -116,9 +117,18 @@ function positionGreetingAndTraits() {
         hello.value !== undefined,
         "`hello.value` is expected to be defined."
     );
+    const helloTopY = helloStatic.value!.offsetTop;
     const traitsBottomY =
         traitsStatic.value!.offsetTop + traitsStatic.value!.offsetHeight;
     Object.assign(hello.value!.style, {
+        translate: `0 ${
+            -helloTopY *
+            Math.max(
+                (relativeScrollY.value / shutterFullyOpenedScrollThreshold) *
+                    0.2,
+                0
+            )
+        }px`,
         top: -1.5 * window.scrollY + "px",
     });
     Object.assign(traits.value!.style, {
@@ -161,7 +171,7 @@ let veraciouxPosition: "above" | "below" = "below";
 
 function onScroll(value: number, oldValue: number) {
     // Update opacity of fade-able part of the greeting text
-    fadeableStyle.opacity = 1 - Math.min(value * 5, 1);
+    fadeableStyle.opacity = Math.max(1 - value * 6.5, 0);
 
     // As the user scrolls down, the typing interval must reduce proportionally.
     if (
@@ -227,23 +237,25 @@ onMounted(() => {
             <div style="width: 20px; height: 20px; background: red; border-radius: 50%;"></div>
         </div>
         -->
-        <div class="hello" :style="helloStyle" ref="hello">
-            <span :style="fadeableStyle">{{
-                hi.slice(0, typedOutLength).slice(0, 8)
-            }}</span>
-            <span
-                ref="veracioux"
-                class="veracioux"
-                :style="{
-                    ...veraciouxStyle,
-                    ...(veraciouxTextFadeable && fadeableStyle),
-                }"
-            >
-                {{ hi.slice(8, typedOutLength).slice(0, 9) }}
-            </span>
-            <span :style="fadeableStyle">{{
-                hi.slice(-1, typedOutLength)
-            }}</span>
+        <div ref="helloStatic">
+            <div class="hello" :style="helloStyle" ref="hello">
+                <span :style="fadeableStyle">{{
+                    hi.slice(0, typedOutLength).slice(0, 8)
+                }}</span>
+                <span
+                    ref="veracioux"
+                    class="veracioux"
+                    :style="{
+                        ...veraciouxStyle,
+                        ...(veraciouxTextFadeable && fadeableStyle),
+                    }"
+                >
+                    {{ hi.slice(8, typedOutLength).slice(0, 9) }}
+                </span>
+                <span :style="fadeableStyle">{{
+                    hi.slice(-1, typedOutLength)
+                }}</span>
+            </div>
         </div>
         <div ref="traitsStatic">
             <div
@@ -307,7 +319,7 @@ onMounted(() => {
     top: 0;
     justify-self: end;
     text-align: center;
-    margin-bottom: 4em;
+    margin-bottom: 3em;
 }
 
 .traits {
