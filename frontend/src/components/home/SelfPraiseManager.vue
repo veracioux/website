@@ -165,7 +165,7 @@ watch(currentStep, (value, oldValue) => {
 @import "@/assets/global.scss";
 
 .fastTransition {
-    --transition-duration: 0.1s;
+    --transition-duration: 0.2s;
     color: red;
 }
 

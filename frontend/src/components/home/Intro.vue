@@ -48,13 +48,14 @@ const selfPraiseItems: SelfPraiseProps[] = [
 // Config
 
 /** relativeScrollY value at which the shutter is fully opened. */
-const shutterFullyOpenedScrollThreshold = 0.25;
+const shutterFullyOpenedScrollThreshold = 0.28;
 /** relativeScrollY value at which the self praise appears. */
-const selfPraiseAppearRelativeScrollY = 0.26;
+const selfPraiseAppearRelativeScrollY = 0.3;
 /** Interval (ms) between subsequent characters being typed out. */
 const defaultTypingInterval = 90;
 const minTypingInterval = 15;
 const veraciouxThresholdScroll = 0.2;
+let stopScrollingDetectorId: number | undefined = undefined;
 
 // Refs
 const typedOutLength = ref(0);
@@ -104,11 +105,11 @@ function calculateTypingInterval() {
 }
 
 /**
- * Snap traits element to the bottom of the screen if the scroll has crossed
- * a threshold. Also un-snap them when the user scrolls up from the threshold
- * value.
+ * Control the position of the greeting text and traits, based on scroll.
+ * Snap them to the window edges when a threshold is crossed, and un-snap
+ * them as necessary.
  */
-function snapTraitsToBottomIfNeeded() {
+function positionGreetingAndTraits() {
     if (!hello.value) return;
 
     const helloStyle = hello.value!.style;
@@ -120,10 +121,6 @@ function snapTraitsToBottomIfNeeded() {
     );
 
     if (sectionRelativeScroll >= shutterFullyOpenedScrollThreshold) {
-        Object.assign(helloStyle, {
-            position: "absolute",
-            top: "0px",
-        });
         Object.assign(traitsStyle, {
             position: "absolute",
             bottom: "0px",
@@ -140,10 +137,27 @@ function snapTraitsToBottomIfNeeded() {
     }
 }
 
+function detectStoppedScrolling(scrollingDirection: "up" | "down") {
+    if (stopScrollingDetectorId !== undefined) {
+        clearTimeout(stopScrollingDetectorId);
+    }
+
+    if (relativeScrollY.value < shutterFullyOpenedScrollThreshold) {
+        stopScrollingDetectorId = setTimeout(() => {
+            if (relativeScrollY.value >= shutterFullyOpenedScrollThreshold)
+                return;
+            if (scrollingDirection === "up") window.scrollTo(0, 0);
+            else document.getElementById("home")?.scrollIntoView();
+        }, 200);
+    } else {
+        stopScrollingDetectorId = undefined;
+    }
+}
+
 let relativeScrollYAtLastIntervalUpdate = 0;
 let veraciouxPosition: "above" | "below" = "below";
 
-function onScroll(value: number) {
+function onScroll(value: number, oldValue: number) {
     // Update opacity of fade-able part of the greeting text
     fadeableStyle.opacity = 1 - Math.min(value * 5, 1);
 
@@ -157,7 +171,7 @@ function onScroll(value: number) {
         relativeScrollYAtLastIntervalUpdate = value;
     }
 
-    snapTraitsToBottomIfNeeded();
+    positionGreetingAndTraits();
 
     if (value > veraciouxThresholdScroll && veraciouxPosition === "below") {
         emit(
@@ -177,6 +191,8 @@ function onScroll(value: number) {
         );
         veraciouxPosition = "below";
     }
+
+    detectStoppedScrolling(value < oldValue ? "up" : "down");
 }
 
 watch(relativeScrollY, onScroll);

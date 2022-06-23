@@ -56,7 +56,10 @@ function onVeraciouxCrossedThreshold(
         navbarOpaque.value = true;
         veraciouxStyle.visibility = "hidden";
         veraciouxTextAnimation?.cancel();
-        if (sourceRect.y >= sourceRect.height) {
+        if (
+            sourceRect.y >= sourceRect.height &&
+            sourceRect.y <= 0.3 * window.innerHeight
+        ) {
             veraciouxTextAnimation =
                 animatableVeraciouxTextElement.value!.animate(
                     [
