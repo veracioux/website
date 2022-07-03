@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+set -e
+
 # Because the project root directory on the host is being shared with the
 # container as a volume, we have to re-populate the node_modules directories at
 # runtime. This is a cheap operation since the modules have already been

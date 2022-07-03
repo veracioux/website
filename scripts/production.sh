@@ -3,7 +3,6 @@
 # Run this script to deploy the server
 set -e
 scripts/wait-for-it.sh -h "$DB_HOST" -p "$DB_PORT" -t 180
-set +e
 
 echo "Running production server on port $PORT"
 

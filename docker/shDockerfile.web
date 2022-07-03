@@ -1,9 +1,12 @@
 # NOTE: You can run 'dgen' to generate the production Dockerfile and the
 # Dockerfile used by docker-compose
 
-# Separate frontend build stage; reduces image size
+alpine_version=3.15
+python_version=3.9
+
+# Separate frontend build stage; reduces final image size
 if [ "$ENVIRONMENT" != "dev" ]; then
-    FROM node:16.15-alpine3.15 as frontend
+    FROM node:16.15-alpine"$alpine_version" as frontend
 
     RUN apk add --no-cache curl
 
@@ -22,25 +25,49 @@ if [ "$ENVIRONMENT" != "dev" ]; then
     RUN pnpm svgo -f src/assets/icons -o dist/static/icons
 fi
 
-FROM alpine:3.15
+# Separate python dependencies build stage; reduces final image size
+{
+    FROM python:"$python_version"-alpine"$alpine_version" as python
+
+    RUN apk add --no-cache python3 py3-pip
+    ## Dependencies for psycopg2
+    RUN apk add --no-cache libpq
+    RUN apk add --no-cache --virtual build-deps-postgres libpq-dev
+    ## Dependencies for pillow
+    RUN apk add --no-cache --virtual build-deps \
+                python3-dev gcc musl-dev zlib-dev jpeg-dev
+    RUN apk add --no-cache zlib jpeg linux-headers
+    ## Install pipenv
+    RUN pip install --no-cache-dir pipenv pipfile-requirements
+
+    WORKDIR /python
+    COPY Pipfile.lock ./
+    RUN pipfile2req '>' requirements.txt
+
+    RUN pip install --no-cache-dir -r requirements.txt
+
+    # Remove unnecessary packages
+    RUN pip uninstall --yes pipenv pipfile-requirements
+}
+
+#  ==========
+## Main stage
+#  ==========
+
+FROM python:"$python_version"-alpine"$alpine_version"
 
 #  ---------------------------
 ## Install global dependencies
 #  ---------------------------
 
-RUN apk add --no-cache python3 py3-pip nodejs curl
+RUN apk add --no-cache nodejs curl
+
+# Required by Pillow
+RUN apk add --no-cache zlib jpeg linux-headers
+
 # Install pnpm
 RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
 RUN apk add --no-cache nginx gettext
-## Dependencies for psycopg2
-RUN apk add --no-cache libpq
-RUN apk add --no-cache --virtual build-deps-postgres libpq-dev
-## Dependencies for pillow
-RUN apk add --no-cache --virtual build-deps \
-            python3-dev gcc musl-dev zlib-dev jpeg-dev
-RUN apk add --no-cache zlib jpeg linux-headers
-## Install pipenv
-RUN pip install --no-cache-dir pipenv
 
 ## Required by 'heroku ps:exec' and wait-for-it.sh
 RUN apk add --no-cache bash
@@ -53,23 +80,21 @@ RUN ln -sf /bin/bash /bin/sh
 ## Worker server
 
 WORKDIR /app/worker
-COPY worker/package.json worker/pnpm-lock.yaml ./
+COPY worker/{package.json,pnpm-lock.yaml} ./
 RUN pnpm install --frozen-lockfile
 
-## Backend
+## Backend dependencies
 
-WORKDIR /app
-COPY Pipfile.lock ./
-RUN LANG=en_US.UTF-8 pipenv sync
-# Install the virtual env globally, so it persists in the heroku filesystem
-RUN pipenv run pip freeze '|' tail -n +2 '>' /requirements.txt
-RUN pip install --no-cache-dir -r /requirements.txt
+# See 'python' build stage
+
+COPY --from=python /usr/local/lib/python"$python_version"{,}
+COPY --from=python /usr/local/bin{,}
 
 ## Frontend
 
 if [ "$ENVIRONMENT" = "dev" ]; then
     WORKDIR /app/frontend
-    COPY frontend/package.json frontend/pnpm-lock.yaml ./
+    COPY frontend/{package.json,pnpm-lock.yaml} ./
     RUN pnpm install --frozen-lockfile
 else
     COPY --from=frontend /frontend/dist /app/frontend/dist
@@ -81,9 +106,6 @@ fi
 
 WORKDIR /app
 COPY . /app
-
-## Remove build dependencies
-RUN apk del build-deps build-deps-postgres
 
 if [ "$ENVIRONMENT" = "dev" ]; then
     CMD scripts/dev.sh
