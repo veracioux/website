@@ -1,2 +1,5 @@
-complete -c up -f -a "web db rabbitmq worker_dotfiles"
-complete -c drm -f -a "web db rabbitmq worker_dotfiles"
+set -l services web db rabbitmq worker_dotfiles
+
+complete -c up   -f -a "$services"
+complete -c drm  -f -a "$services"
+complete -c into -f -a "$services"

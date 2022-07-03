@@ -3,7 +3,7 @@ if tem var -q target:prod
     set -g web    veracioux.me
     set -g api    api.veracioux.me
     set -g fe     veracioux.me
-elif tem var -q target:local
+else if tem var -q target:local
     set -g worker worker.localhost:5000
     set -g web    localhost:5000
     set -g api    api.localhost:5000

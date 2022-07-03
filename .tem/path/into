@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+# Shell into a project-related docker container.
+# If the container doesn't already exist, we'll try to start it, running bash as
+# the CMD.
+# Usage: into <SERVICE>
+
+tag="$([ "$(tem var target)" = "dev" ] && echo dev || echo latest)"
+
+if docker container inspect veracioux-"$1" >/dev/null 2>&1; then
+    docker exec --interactive --tty veracioux-"$1" bash
+else
+    echo "Container is not running. Trying to start it..." >&2
+    docker run --interactive --tty veracioux/"$1":"$tag" bash
+fi
