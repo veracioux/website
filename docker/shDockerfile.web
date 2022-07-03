@@ -1,6 +1,27 @@
 # NOTE: You can run 'dgen' to generate the production Dockerfile and the
 # Dockerfile used by docker-compose
 
+# Separate frontend build stage; reduces image size
+if [ "$ENVIRONMENT" != "dev" ]; then
+    FROM node:16.15-alpine3.15 as frontend
+
+    RUN apk add --no-cache curl
+
+    # Install pnpm
+    RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
+
+    WORKDIR /frontend
+    COPY frontend/{package.json,pnpm-lock.yaml} ./
+    RUN pnpm install --frozen-lockfile
+
+    ## Bundle frontend
+    COPY frontend .
+    RUN pnpm run build
+    # Minify SVG icons and copy them to static root
+    # TODO: integrate into "pnpm run build"
+    RUN pnpm svgo -f src/assets/icons -o dist/static/icons
+fi
+
 FROM alpine:3.15
 
 #  ---------------------------
@@ -46,19 +67,17 @@ RUN pip install --no-cache-dir -r /requirements.txt
 
 ## Frontend
 
-WORKDIR /app/frontend
-COPY frontend/package.json frontend/pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+if [ "$ENVIRONMENT" = "dev" ]; then
+    WORKDIR /app/frontend
+    COPY frontend/package.json frontend/pnpm-lock.yaml ./
+    RUN pnpm install --frozen-lockfile
+else
+    COPY --from=frontend /frontend/dist /app/frontend/dist
+fi
 
 #  ------------
 ## The rest...
 #  ------------
-
-if [ "$ENVIRONMENT" != "dev" ]; then
-    ## Bundle frontend
-    COPY frontend .
-    RUN pnpm run build
-fi
 
 WORKDIR /app
 COPY . /app
