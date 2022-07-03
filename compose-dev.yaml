@@ -23,7 +23,7 @@ services:
 
   web:
     # Image
-    image: veracioux/website:dev
+    image: veracioux/web:dev
     build:
       context: .
       dockerfile: Dockerfile.web.dev

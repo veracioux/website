@@ -24,7 +24,7 @@ services:
 
   web:
     # Image
-    image: veracioux/website:latest
+    image: veracioux/web:latest
     build:
       context: .
       dockerfile: Dockerfile.web

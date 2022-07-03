@@ -44,7 +44,7 @@ fi
     COPY Pipfile.lock ./
     RUN pipfile2req '>' requirements.txt
 
-    RUN pip install --no-cache-dir -r requirements.txt
+    RUN pip install --no-cache-dir --user -r requirements.txt
 
     # Remove unnecessary packages
     RUN pip uninstall --yes pipenv pipfile-requirements
@@ -87,8 +87,11 @@ RUN pnpm install --frozen-lockfile
 
 # See 'python' build stage
 
-COPY --from=python /usr/local/lib/python"$python_version"{,}
-COPY --from=python /usr/local/bin{,}
+COPY --from=python /root/.local/lib/python"$python_version"{,}
+COPY --from=python /root/.local/bin{,}
+SHDOCKER quote off
+ENV 'PATH=/root/.local/bin:${PATH}'
+SHDOCKER quote on
 
 ## Frontend
 
