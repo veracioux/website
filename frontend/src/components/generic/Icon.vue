@@ -11,6 +11,7 @@ import {
     faMonero,
 } from "@fortawesome/free-brands-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import Img from "@/components/generic/Img.vue";
 import {defineProps, onMounted, ref} from "vue";
 
 library.add(faArrowUpRightFromSquare, faCircleDollarToSlot, faGlobe);
@@ -48,7 +49,7 @@ onMounted(() => {
 <template>
     <div ref="root">
         <FontAwesomeIcon v-if="name" :icon="iconNames[name]" class="icon" />
-        <img v-if="src" v-lazy="src" :alt="alt" v-bind="$attrs" class="icon" />
+        <Img v-if="src" v-lazy="src" :alt="alt" v-bind="$attrs" class="icon" />
     </div>
 </template>
 

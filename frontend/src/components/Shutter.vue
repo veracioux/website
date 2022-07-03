@@ -2,6 +2,7 @@
 import {onMounted, reactive, ref, watch} from "vue";
 import {ScrollData} from "@/inject";
 import SocialIcon from "@/components/generic/SocialIcon.vue";
+import Img from "@/components/generic/Img.vue";
 import mugshot from "@/assets/mugshot.jpg";
 
 interface Slice {

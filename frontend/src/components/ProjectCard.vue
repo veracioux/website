@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import Label from "@/components/generic/Label.vue";
 import Icon from "@/components/generic/Icon.vue";
+import Img from "@/components/generic/Img.vue";
 import commonStyle from "@/assets/common.module.scss";
 
-defineProps({
-    title: String,
-    desc: String,
-    url: String,
-    image_url: String,
-    extra_image_url: String,
-    languages: Array,
-    roles: Array,
-});
+defineProps<{
+    title: string;
+    desc: string;
+    url: string;
+    image_url: string;
+    extra_image_url: string;
+    languages: string[];
+    roles: string[];
+}>();
 </script>
 
 <template>
@@ -19,7 +20,7 @@ defineProps({
         <a v-if="url" :href="url" target="_blank" :class="$style.externalLink">
             <Icon name="externalLink" :class="$style.externalLinkIcon" />
         </a>
-        <img
+        <Img
             v-if="image_url"
             v-lazy="image_url"
             alt="Project image"
