@@ -157,13 +157,12 @@ import zindex from "@/zindex";
         <div
             :class="{
                 [s.modalBackground]: true,
-                [s.poppingOut]: this.poppingOut,
+                [s.poppingOut]: poppingOut,
             }"
-            @click="this.close"
-            @scroll="testson"
+            @click="close"
         >
             <div :class="s.container" ref="container" @click.stop>
-                <button :class="s.closeButton" @click="this.close">
+                <button :class="s.closeButton" @click="close">
                     <Icon name="x" :class="s.closeIcon"></Icon>
                 </button>
                 <div :class="s.identity">
@@ -185,7 +184,7 @@ import zindex from "@/zindex";
                         v-if="project?.repo_url"
                         :href="project?.repo_url"
                         :iconProps="{
-                            name: this.getRepoUrlIconName(project?.repo_url),
+                            name: getRepoUrlIconName(project?.repo_url),
                         }"
                     >
                         Repo
