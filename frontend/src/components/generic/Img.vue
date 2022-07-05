@@ -8,6 +8,6 @@
 // Corresponding JS code is in App.vue.
 .image {
     opacity: 0;
-    transition: opacity 0.5s;
+    transition: opacity 1s;
 }
 </style>

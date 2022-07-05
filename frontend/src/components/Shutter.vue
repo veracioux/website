@@ -203,6 +203,7 @@ Classes used temporarily for debugging.
 </style>
 
 <style scoped lang="scss">
+@use "@/assets/common.module.scss" as c;
 .mugshotBackground {
     position: absolute;
     inset: 25% 0;
@@ -210,8 +211,7 @@ Classes used temporarily for debugging.
 }
 
 .mugshot {
-    position: absolute;
-    inset: 0;
+    @include c.fillParent;
     margin: auto;
 
     width: 280px;

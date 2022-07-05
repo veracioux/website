@@ -13,6 +13,51 @@
   color: var(--color-primary);
 }
 
+@mixin fillParent {
+  position: absolute;
+  inset: 0;
+}
+
+@mixin fillWindow {
+  position: fixed;
+  inset: 0;
+}
+
+@mixin centerFlex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex {
+  display: flex;
+}
+
+.centerFlex {
+  @include centerFlex;
+}
+
+.fillParent {
+  @include fillParent;
+}
+
+.fillWindow {
+  @include fillWindow;
+}
+
 .labelContainer {
   @include labelContainer;
+}
+
+@keyframes opacity-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@mixin opacityFadeIn($animationParams) {
+  animation: opacity-fade-in $animationParams;
 }

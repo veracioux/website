@@ -4,36 +4,61 @@ import {
     faArrowUpRightFromSquare,
     faCircleDollarToSlot,
     faGlobe,
+    faXmark,
+    faCode,
+    faCodePullRequest,
 } from "@fortawesome/free-solid-svg-icons";
 import {
     faGithub,
+    faGitlab,
     faLinkedin,
     faMonero,
 } from "@fortawesome/free-brands-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import Img from "@/components/generic/Img.vue";
-import {defineProps, onMounted, ref} from "vue";
+import {CSSProperties, defineProps, onMounted, ref} from "vue";
 
-library.add(faArrowUpRightFromSquare, faCircleDollarToSlot, faGlobe);
-library.add(faLinkedin, faGithub, faMonero);
+library.add(
+    faArrowUpRightFromSquare,
+    faCircleDollarToSlot,
+    faGlobe,
+    faXmark,
+    faCode,
+    faCodePullRequest
+);
+library.add(faGithub, faGitlab, faLinkedin, faMonero);
 
 const iconNames = {
     donate: "circle-dollar-to-slot",
-    website: "globe",
+    web: "globe",
     externalLink: "arrow-up-right-from-square",
+    x: "xmark",
+    code: "code",
+    PR: "code-pull-request",
     github: ["fab", "github"],
+    gitlab: ["fab", "gitlab"],
     linkedin: ["fab", "linkedin"],
 };
 
 type IconName = keyof typeof iconNames;
 
-const props = defineProps<{
+export interface IconProps {
     /** Name of a FontAwesome icon. */
     name?: IconName;
     /** Explicit URL to the image file. */
     src?: string;
     alt?: string;
-}>();
+}
+
+const props = defineProps<IconProps>();
+
+const iconStyle: CSSProperties = {
+    width: "100%",
+    height: "100%",
+    // No other method of centering seems to work with FontAwesomeIcon
+    margin: "50%",
+    translate: "-50% -50%",
+};
 
 const root = ref<HTMLElement>();
 onMounted(() => {
@@ -47,15 +72,31 @@ onMounted(() => {
 </script>
 
 <template>
-    <div ref="root">
-        <FontAwesomeIcon v-if="name" :icon="iconNames[name]" class="icon" />
-        <Img v-if="src" v-lazy="src" :alt="alt" v-bind="$attrs" class="icon" />
+    <div ref="root" :class="s.container">
+        <FontAwesomeIcon
+            v-if="name"
+            :icon="iconNames[name]"
+            :class="s.icon"
+            :style="iconStyle"
+        />
+        <Img
+            v-if="src"
+            v-lazy="src"
+            :alt="alt"
+            v-bind="$attrs"
+            :class="s.icon"
+            :style="iconStyle"
+        />
     </div>
 </template>
 
-<style scoped>
-.icon {
-    width: 100%;
-    height: 100%;
+<style module="s" lang="scss">
+@use "@/assets/common.module.scss" as c;
+
+.container {
+    .icon {
+        width: 100%;
+        height: 100%;
+    }
 }
 </style>

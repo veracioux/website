@@ -6,11 +6,13 @@ import router from "./router";
 import VueKonva from "vue-konva";
 import VueLazyload from "vue-lazyload";
 import App from "@/App.vue";
+import {plugin as modalPlugin} from "@/components/ProjectModal.vue";
 
 const app = createApp(App);
 
 app.use(router);
 app.use(VueKonva);
 app.use(VueLazyload);
+app.use(modalPlugin);
 
 app.mount("#app");

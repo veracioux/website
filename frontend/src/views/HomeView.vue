@@ -155,20 +155,19 @@ ScrollData.provide({
 </style>
 
 <style scoped lang="scss">
+@use "@/assets/common.module.scss" as c;
 .container {
     position: relative;
 }
 
 .shutter {
-    position: absolute;
-    inset: 0;
+    @include c.fillParent;
     z-index: v-bind("zindex.shutter");
 }
 
 .home {
-    position: absolute;
-    inset: 0;
-    z-index: v-bind("zindex.section");
+    @include c.fillParent;
+    z-index: v-bind("zindex.introSection");
 }
 
 .projects,

@@ -7,9 +7,13 @@
 // NOTE: When changing a property here, don't rely on IDE functionality to
 // find usages. Instead search for v-bind("zindex.<property-name>").
 export default {
-    shutter: 1,
-    section: 2,
-    navbar: 3,
-    navbarBackground: 3,
-    navbarContent: 4,
+    section: 1,
+    shutter: 2,
+    introSection: 3,
+    navbar: 4,
+    navbarBackground: 4,
+    navbarContent: 5,
+    // NOTE: The modal is wrapped by a <Teleport>, hence v-bind("zindex.modal") doesn't work.
+    // Therefore, this value is unused, but is kept here as documentation of that fact.
+    modal: 100,
 };

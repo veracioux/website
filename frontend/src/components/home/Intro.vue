@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref, watch} from "vue";
+import {onActivated, onMounted, reactive, ref, watch} from "vue";
 import {ScrollData} from "@/inject";
 import SelfPraiseManager from "@/components/home/SelfPraiseManager.vue";
 import type {SelfPraiseProps} from "@/components/home/SelfPraiseCard.vue";
@@ -117,7 +117,8 @@ function positionGreetingAndTraits() {
         hello.value !== undefined,
         "`hello.value` is expected to be defined."
     );
-    const helloTopY = helloStatic.value!.offsetTop;
+    if (!helloStatic.value) return;
+    const helloTopY = helloStatic.value.offsetTop;
     const traitsBottomY =
         traitsStatic.value!.offsetTop + traitsStatic.value!.offsetHeight;
     Object.assign(hello.value!.style, {

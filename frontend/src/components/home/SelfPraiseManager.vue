@@ -87,11 +87,11 @@ watch(currentStep, (value, oldValue) => {
 </template>
 
 <style module="s" lang="scss">
+@use "@/assets/common.module.scss" as c;
 @import "@/assets/global.scss";
 
 .wrapper {
-    position: absolute;
-    inset: 0;
+    @include c.fillParent;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -29,6 +29,8 @@
             "title": "Tuterm",
             "desc": "A better way to learn CLI programs.",
             "url": "https://github.com/veracioux/tuterm",
+            "repo_url": "https://github.com/veracioux/tuterm",
+            "extra_image_url": "https://gist.github.com/veracioux/66336d488e8d87c7b3fb696c5dbd93d1/raw/4b8bc0b043faf166abc92e12fc0bfb5acea55345/tuterm-demo.svg",
             "roles": [
                 "Original creator", "Maintainer"
             ],
@@ -45,6 +47,7 @@
             "title": "Shdocker",
             "desc": "Dockerfiles with shell superpowers",
             "url": "https://github.com/veracioux/shdocker",
+            "repo_url": "https://github.com/veracioux/shdocker",
             "roles": [
                 "Original creator", "Maintainer"
             ],

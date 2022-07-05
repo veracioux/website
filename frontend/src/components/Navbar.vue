@@ -38,14 +38,12 @@ onMounted(() => {
         </div>
     </div>
 </template>
->
 
 <style scoped lang="scss">
-@use "@/assets/common.module.scss" as common;
+@use "@/assets/common.module.scss" as c;
 
 .background {
-    position: absolute;
-    inset: 0;
+    @include c.fillParent;
 
     z-index: v-bind("zindex.navbarBackground");
     background: var(--color-background);
@@ -85,7 +83,7 @@ onMounted(() => {
 }
 
 .veracioux {
-    @include common.veracioux;
+    @include c.veracioux;
 }
 
 a.veracioux {

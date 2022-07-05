@@ -1,40 +1,49 @@
 <script setup lang="ts">
 import Label from "@/components/generic/Label.vue";
 import Icon from "@/components/generic/Icon.vue";
-import Img from "@/components/generic/Img.vue";
-import commonStyle from "@/assets/common.module.scss";
+import c from "@/assets/common.module.scss";
 
 defineProps<{
-    title: string;
-    desc: string;
-    url: string;
-    image_url: string;
-    extra_image_url: string;
-    languages: string[];
-    roles: string[];
+    title?: string;
+    desc?: string;
+    url?: string;
+    image_url?: string;
+    extra_image_url?: string;
+    languages?: string[];
+    roles?: string[];
+}>();
+
+defineEmits<{
+    (e: "expand"): void;
 }>();
 </script>
 
 <template>
-    <div :class="$style.container">
-        <a v-if="url" :href="url" target="_blank" :class="$style.externalLink">
-            <Icon name="externalLink" :class="$style.externalLinkIcon" />
+    <div :class="s.container">
+        <div :class="c.fillParent" @click="$emit('expand')" />
+        <a v-if="url" :href="url" target="_blank" :class="s.externalLink">
+            <Icon name="externalLink" :class="s.externalLinkIcon" />
         </a>
-        <Img
+        <Icon
             v-if="image_url"
-            v-lazy="image_url"
+            :src="image_url"
             alt="Project image"
-            :class="$style.name"
+            :class="p.logo"
         />
-        <div :class="$style.title">{{ title }}</div>
-        <div :class="$style.description">{{ desc }}</div>
-        <div :class="commonStyle.labelContainer">
+        <div :class="p.title">{{ title }}</div>
+        <div :class="p.description">{{ desc }}</div>
+        <div :class="c.labelContainer">
             <Label v-for="role in roles" :title="role" />
         </div>
     </div>
 </template>
 
-<style module lang="scss">
+<style module="p" lang="scss">
+@import "@/assets/project.module.scss";
+</style>
+
+<style module="s" lang="scss">
+@use "@/assets/project.module.scss" as p;
 .container {
     position: relative;
     display: flex;
@@ -46,16 +55,15 @@ defineProps<{
     width: 280px;
     font-size: 16px;
     border-radius: 10px;
-    background: #00000040;
+    background: rgba(var(--color-background-rgb), 0.7);
 
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .container:hover {
+    @include p.containerHighlighted;
     transform: scale(105%);
     transform-origin: center;
-    box-shadow: rgba(var(--color-secondary-rgb), 0.4) 0 0 8px;
-
     cursor: pointer;
 }
 
@@ -86,20 +94,5 @@ defineProps<{
     --color-drop-shadow: var(--color-primary);
     filter: drop-shadow(0 0 1px var(--color-drop-shadow))
         drop-shadow(0 0 4px var(--color-drop-shadow));
-}
-
-.name {
-    height: 54px;
-}
-
-.title {
-    color: #7c4dff;
-    font-weight: bold;
-    font-size: 24px;
-}
-
-.description {
-    text-align: center;
-    color: rgba(var(--color-secondary-rgb), 0.5);
 }
 </style>

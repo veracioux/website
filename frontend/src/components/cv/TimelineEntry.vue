@@ -26,6 +26,7 @@ defineProps<{
 </template>
 
 <style module="s" lang="scss">
+@use "@/assets/common.module.scss" as c;
 @import "@/assets/global.scss";
 .timelineItem,
 .timelineItem > :global(td) {
@@ -57,8 +58,7 @@ defineProps<{
     }
 
     .line {
-        position: absolute;
-        inset: 0;
+        @include c.fillParent;
         width: 3px;
         margin: 0 auto;
         background: rgba(var(--color-secondary-rgb), 0.3);
@@ -73,8 +73,7 @@ defineProps<{
     }
 
     .dot {
-        position: absolute;
-        inset: 0;
+        @include c.fillParent;
         margin: auto;
         width: 16px;
         height: 16px;
