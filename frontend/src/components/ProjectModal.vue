@@ -6,6 +6,7 @@ import type {Project} from "@/models";
 import Img from "@/components/generic/Img.vue";
 import Icon from "@/components/generic/Icon.vue";
 import Label from "@/components/generic/Label.vue";
+import Button from "@/components/generic/Button.vue";
 import type {IconProps} from "@/components/generic/Icon.vue";
 import type {IconName} from "@fortawesome/fontawesome-svg-core";
 
@@ -56,6 +57,7 @@ const component = defineComponent({
         Img,
         Icon,
         Label,
+        Button,
         UrlEntry: defineComponent({
             props: ["href", "iconProps"],
             render({href, iconProps}: URLEntryProps) {
@@ -148,7 +150,6 @@ export default component;
 
 <script setup lang="tsx">
 // TODO: for some reason if I leave this import out I get an error in the browser console.
-// noinspection ES6UnusedImports
 import zindex from "@/zindex";
 </script>
 
@@ -212,6 +213,7 @@ import zindex from "@/zindex";
                         />
                     </div>
                 </div>
+                <Button>Contribute</Button>
             </div>
         </div>
     </Teleport>

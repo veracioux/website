@@ -14,6 +14,7 @@ const modal = reactive<{show: boolean; project: Project | null}>({
 // Id of the project whose preview image/animation is shown.
 const previewedProjectId = ref<number>();
 const imageContainer = ref<HTMLElement>();
+const transitionEnabled = ref<boolean>(true);
 
 const {data: projects} = useSWRV<Array<Partial<Project>>>(
     () => "/api/projects/",
@@ -34,6 +35,10 @@ function openModal(project: Project) {
     modal.project = project;
 }
 
+function onMouseEnterProjectCard(projectId: number) {
+    previewedProjectId.value = projectId
+}
+
 function onMouseLeaveProjectCard() {
     if (!modal.show) previewedProjectId.value = undefined;
 }
@@ -41,7 +46,7 @@ function onMouseLeaveProjectCard() {
 
 <template>
     <div class="section">
-        <div class="imageContainer" id="image-container" ref="imageContainer">
+        <div class="imageContainer" id="image-container" ref="imageContainer" @mouseenter="previewedProjectId = undefined">
             <!-- Will hold the preview of the project (if it exists) via a <Teleport> -->
         </div>
         <h1 class="sectionTitle">Projects</h1>
@@ -66,7 +71,7 @@ function onMouseLeaveProjectCard() {
                         openModal(project);
                         previewedProjectId = project.id;
                     "
-                    @mouseenter="previewedProjectId = project.id"
+                    @mouseenter="onMouseEnterProjectCard(project.id)"
                     @mouseleave="onMouseLeaveProjectCard"
                 />
             </template>
@@ -75,7 +80,6 @@ function onMouseLeaveProjectCard() {
                 :project="modal.project"
                 @close="
                     modal.show = false;
-                    previewedProjectId = undefined;
                 "
             />
         </div>
