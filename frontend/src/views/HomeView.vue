@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import Shutter from "@/components/Shutter.vue";
-import Projects from "@/components/home/Projects.vue";
 import Intro from "@/components/home/Intro.vue";
-import CV from "@/components/home/CV.vue";
-import {onMounted, reactive, ref} from "vue";
+import {defineAsyncComponent, onMounted, reactive, ref} from "vue";
 import type {CSSProperties} from "vue";
 import {ScrollData} from "@/inject";
 import * as utils from "@/utils";
 // noinspection ES6UnusedImports
 import zindex from "@/zindex";
 import Navbar from "@/components/Navbar.vue";
+
+const Shutter = defineAsyncComponent(() => import("@/components/Shutter.vue"));
+const Projects = defineAsyncComponent(() => import("@/components/home/Projects.vue"));
+const CV = defineAsyncComponent(() => import("@/components/home/CV.vue"));
 
 const relativeScrollY = ref(0);
 const veraciouxStyle = reactive<CSSProperties>({});

@@ -3,7 +3,7 @@ import {onMounted, reactive, ref, watch} from "vue";
 import {ScrollData} from "@/inject";
 import SocialIcon from "@/components/generic/SocialIcon.vue";
 import Img from "@/components/generic/Img.vue";
-import mugshot from "@/assets/mugshot.jpg";
+import mugshot from "@/assets/mugshot.webp";
 
 interface Slice {
     pivotX: number;
@@ -132,7 +132,6 @@ onMounted(() => {
                     'blur(' + 15 * Math.max(1 - 4 * relativeScrollY, 0) + 'px)',
             }"
             :src="mugshot"
-            loading="lazy"
         />
         <!-- TODO debugging helper
         <Transition name="indicator">

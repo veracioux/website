@@ -4,7 +4,7 @@ import useSWRV from "swrv";
 import "@/assets/home.scss";
 import type {Project} from "@/models";
 import ProjectModal from "@/components/ProjectModal.vue";
-import {reactive, ref, watch} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import Img from "@/components/generic/Img.vue";
 
 const modal = reactive<{show: boolean; project: Project | null}>({
@@ -16,19 +16,18 @@ const previewedProjectId = ref<number>();
 const imageContainer = ref<HTMLElement>();
 
 const {data: projects} = useSWRV<Array<Partial<Project>>>(
-    "/api/projects/",
+    () => "/api/projects/",
     (key) => fetch(key).then((resp) => resp.json())
 );
-if (!projects.value) {
-    projects.value = [
-        {
-            id: 0,
-            title: "Dummy",
-            desc: "Dummy project",
-            url: "",
-        },
-    ];
-}
+
+projects.value = [
+    {
+        id: 0,
+        title: "Dummy",
+        desc: "Dummy project",
+        url: "",
+    },
+];
 
 function openModal(project: Project) {
     modal.show = true;

@@ -44,7 +44,7 @@ fi
     COPY Pipfile.lock ./
     RUN pipfile2req '>' requirements.txt
 
-    RUN pip install --no-cache-dir --user -r requirements.txt
+    RUN pip install --no-cache-dir -r requirements.txt
 
     # Remove unnecessary packages
     RUN pip uninstall --yes pipenv pipfile-requirements
@@ -87,21 +87,19 @@ RUN pnpm install --frozen-lockfile
 
 # See 'python' build stage
 
-COPY --from=python /root/.local/lib/python"$python_version"{,}
-COPY --from=python /root/.local/bin{,}
+COPY --from=python /usr/local/lib/python"$python_version"{,}
+COPY --from=python /usr/local/bin{,}
 SHDOCKER quote off
-ENV 'PATH=/root/.local/bin:${PATH}'
+ENV 'PATH=/usr/local/bin:${PATH}'
 SHDOCKER quote on
 
 ## Frontend
 
-if [ "$ENVIRONMENT" = "dev" ]; then
-    WORKDIR /app/frontend
-    COPY frontend/{package.json,pnpm-lock.yaml} ./
-    RUN pnpm install --frozen-lockfile
-else
+if [ "$ENVIRONMENT" != "dev" ]; then
     COPY --from=frontend /frontend/dist /app/frontend/dist
 fi
+
+# NOTE: the development container will run a build at runtime
 
 #  ------------
 ## The rest...
