@@ -3,13 +3,18 @@
 .idea
 .env
 
+# Docker
 docker
+Dockerfile*
 compose-*.yaml
 
 .pylintrc
 pyproject.toml
 Pipfile
 
+# .pnpm-store is generated in development mode when the project root is shared
+# to the container via a volume
+.pnpm-store
 frontend/node_modules
 frontend/dist
 
