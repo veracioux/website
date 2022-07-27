@@ -2,17 +2,15 @@ version: '3.4'
 
 services:
   db:
-    # Image
     image: postgres:14.1-alpine
-
-    # Container
     container_name: veracioux-db
     ports: ["5432:5432"]
     env_file: &env_file
       - ./.env/common
-      - ./.env/dev
-      - ./.env/compose
+      - ./.env/prod
+      - ./.env/prod.secret
       - worker/.env/common
+      - worker/.env/prod.secret
 
   rabbitmq:
     image: rabbitmq:3.7
@@ -20,37 +18,35 @@ services:
     ports: ["5672:5672"]
     env_file:
       - worker/.env/common
+      - worker/.env/prod.secret
 
   web:
     # Image
-    image: veracioux/web:dev
+    image: veracioux/web:latest
     build:
       context: .
-      dockerfile: Dockerfile.web.dev
+      dockerfile: Dockerfile.web
 
     # Container
     container_name: veracioux-web
     depends_on: [db]
-    ports: ["8000:8000", "8001:8001", "3000:3000"]
+    ports: ["80:80", "443:443"]
     env_file: *env_file
-    environment: &env
-      - PYTHONDONTWRITEBYTECODE=true
+    environment:
       - RABBITMQ_HOST=rabbitmq
-      - DB_HOST=db
-    volumes:
-      - .:/app:rw
+      - DB_HOST=rabbitmq
 
   worker_dotfiles:
     # Image
-    image: veracioux/worker_dotfiles:dev
+    image: veracioux/worker_dotfiles:latest
     build:
       context: .
-      dockerfile: Dockerfile.worker_dotfiles.dev
+      dockerfile: Dockerfile.worker_dotfiles
 
     # Container
     container_name: veracioux-worker_dotfiles
     env_file:
       - ./.env/common
       - worker/.env/common
-      - worker/.env/local.secret
-    environment: *env
+      - worker/.env/prod.secret
+    environment: *env_file

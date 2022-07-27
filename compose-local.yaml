@@ -2,17 +2,13 @@ version: '3.4'
 
 services:
   db:
-    # Image
     image: postgres:14.1-alpine
-
-    # Container
     container_name: veracioux-db
     ports: ["5432:5432"]
-    env_file: &env
+    env_file: &env_file
       - ./.env/common
       - ./.env/local
       - ./.env/local.secret
-      - ./.env/compose
       - worker/.env/common
 
   rabbitmq:
@@ -33,10 +29,10 @@ services:
     container_name: veracioux-web
     depends_on: [db]
     ports: ["5000:5000", "8000:8000", "8001:8001"]
-    env_file: *env
-    environment:
+    env_file: *env_file
+    environment: &env
       - RABBITMQ_HOST=rabbitmq
-      - PYTHONDONTWRITEBYTECODE=true
+      - DB_HOST=db
 
   worker_dotfiles:
     # Image
@@ -51,5 +47,4 @@ services:
       - ./.env/common
       - worker/.env/common
       - worker/.env/local.secret
-    environment:
-      - RABBITMQ_HOST=rabbitmq
+    environment: *env

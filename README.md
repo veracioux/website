@@ -27,7 +27,7 @@ think of it as local staging.
 
 # Some things that should be kept in mind
 
-- For greater maintainability and migratability, all ports are not hardcoded in
+- For greater maintainability and migratability, ports are not hardcoded in
     files (where possible). Instead they are taken from the environment. The
     most notable example is `nginx.conf` where variables are baked into the
     target file using `envsubst`. To avoid conflicts with nginx's own variables,
@@ -35,3 +35,8 @@ think of it as local staging.
     explicitly specified. So, if you want to add a new variable in `nginx.conf`,
     you will have to specify the variable inside `scripts/production.sh` where
     the `envsubst` command is invoked.
+
+# Static assets
+
+Static assets are collected by the Django backend into `/var/static_root`,
+because that's the easiest way (django provides the `collectstatic` command).

@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+[ -z "$ENVIRONMENT" ] && export ENVIRONMENT=dev
+
 set -e
 
 # Because the project root directory on the host is being shared with the
@@ -21,4 +23,4 @@ python3 manage.py migrate
 python3 manage.py createsuperuser --noinput
 python3 manage.py loaddata projects.json
 
-python3 manage.py runserver 0.0.0.0:$DJANGO_PORT
+python3 manage.py runserver $BACKEND_HOST:$BACKEND_PORT

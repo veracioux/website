@@ -150,6 +150,7 @@ export default component;
 
 <script setup lang="tsx">
 // TODO: for some reason if I leave this import out I get an error in the browser console.
+// noinspection ES6UnusedImports
 import zindex from "@/zindex";
 </script>
 
