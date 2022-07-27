@@ -7,7 +7,8 @@ cd "$(tem find -b veracioux-website)"
 dgen
 
 push() {
-    heroku container:push --app veracioux -R web worker_dotfiles "$@"
+    heroku container:push --app veracioux -R web "$@"
+    heroku container:push --app veracioux-worker-dotfiles -R worker_dotfiles "$@"
 }
 
 push || {

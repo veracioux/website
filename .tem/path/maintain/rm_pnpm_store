@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+# Remove .pnpm-store on the host created by the veracioux-web docker container
+# in dev mode (because in dev mode the project root is shared with the
+# container as a docker volume)
+
+cd "$(tem find -b veracioux-website)"
+docker run --volume "$PWD/frontend:/app/frontend:rw" alpine rm -rf /app/.pnpm-store
