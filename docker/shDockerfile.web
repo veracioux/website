@@ -32,10 +32,9 @@ fi
     RUN apk add --no-cache python3 py3-pip
     ## Dependencies for psycopg2
     RUN apk add --no-cache libpq
-    RUN apk add --no-cache --virtual build-deps-postgres libpq-dev
+    RUN apk add --no-cache libpq-dev
     ## Dependencies for pillow
-    RUN apk add --no-cache --virtual build-deps \
-                python3-dev gcc musl-dev zlib-dev jpeg-dev
+    RUN apk add --no-cache python3-dev gcc musl-dev zlib-dev jpeg-dev
     RUN apk add --no-cache zlib jpeg linux-headers
     ## Install pipenv
     RUN pip install --no-cache-dir pipenv pipfile-requirements
@@ -111,7 +110,6 @@ COPY . /app
 if [ "$ENVIRONMENT" = "dev" ]; then
     CMD scripts/dev.sh
 else
-    COPY nginx.conf ./
     CMD scripts/production.sh
 fi
 

@@ -35,6 +35,8 @@ services:
     environment:
       - RABBITMQ_HOST=rabbitmq
       - DB_HOST=rabbitmq
+    volumes:
+      - "${HOME}/cert:/cert"
 
   worker_dotfiles:
     # Image

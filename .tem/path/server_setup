@@ -1,3 +1,5 @@
 #!/usr/bin/env sh
 
-sudo apt-get install git fish docker docker-compose
+which docker || curl -fsSL https://get.docker.com | sh
+
+sudo apt-get install git fish docker-compose

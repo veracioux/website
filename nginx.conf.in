@@ -1,3 +1,23 @@
+{% macro listen(default_server) %}
+    {% if environment == 'prod' %}
+        listen 80 {{default_server}};
+        listen 443 ssl;
+        ssl_certificate     /home/haris/cert/server.crt;
+        ssl_certificate_key /home/haris/cert/server.key;
+        ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+        ssl_ciphers         HIGH:!aNULL:!MD5;
+    {% else %}
+        listen ${PORT} {{default_server}};
+    {% endif %}
+{% endmacro %}
+
+{% macro location_status() %}
+        location /status {
+            add_header Content-Type text/plain;
+            return 200 "alive";
+        }
+{% endmacro %}
+
 user root;
 
 events {}
@@ -7,7 +27,7 @@ http {
     default_type text/plain;
 
     server {
-        listen ${PORT} default_server;
+        {{ listen('default_server') }}
         server_name *.veracioux.me *.localhost;
 
         if ($http_x_forwarded_proto = "http") {
@@ -20,7 +40,7 @@ http {
     }
 
     server {
-        listen ${PORT};
+        {{ listen() }}
         server_name veracioux.me www.veracioux.me localhost www.localhost;
         # Error page is handled by vue-router
         error_page 404 /;
@@ -48,10 +68,7 @@ http {
             proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT}/api;
         }
 
-        location /status {
-            add_header Content-Type text/plain;
-            return 200 "alive";
-        }
+        {{ location_status() }}
 
         location /static {
             alias /var/static_root/;
@@ -61,7 +78,7 @@ http {
     }
 
     server {
-        listen ${PORT};
+        {{ listen() }}
         server_name api.veracioux.me api.localhost;
 
         if ($http_x_forwarded_proto = "http") {
@@ -78,14 +95,11 @@ http {
             add_header Cache-Control "public";
         }
 
-        location /status {
-            add_header Content-Type text/plain;
-            return 200 "alive";
-        }
+        {{ location_status() }}
     }
 
     server {
-        listen ${PORT};
+        {{ listen() }}
         server_name worker.veracioux.me worker.localhost;
 
         if ($http_x_forwarded_proto = "http") {
@@ -96,9 +110,6 @@ http {
             proxy_pass http://${WORKER_SERVER_HOST}:${WORKER_SERVER_PORT}/;
         }
 
-        location /status {
-            add_header Content-Type text/plain;
-            return 200 "alive";
-        }
+        {{ location_status() }}
     }
 }

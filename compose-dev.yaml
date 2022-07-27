@@ -11,7 +11,6 @@ services:
     env_file: &env_file
       - ./.env/common
       - ./.env/dev
-      - ./.env/compose
       - worker/.env/common
 
   rabbitmq:
