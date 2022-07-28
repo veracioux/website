@@ -1,8 +1,4 @@
 #!/usr/bin/env sh
 
-if tem var -q target:dev; then
-    echo compose-dev.yaml
-else
-    echo compose-local.yaml
-fi
+echo compose-"$(tem var target)".yaml
 

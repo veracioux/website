@@ -29,7 +29,6 @@ fi
 {
     FROM python:"$python_version"-alpine"$alpine_version" as python
 
-    RUN apk add --no-cache python3 py3-pip
     ## Dependencies for psycopg2
     RUN apk add --no-cache libpq
     RUN apk add --no-cache libpq-dev
@@ -108,9 +107,9 @@ WORKDIR /app
 COPY . /app
 
 if [ "$ENVIRONMENT" = "dev" ]; then
-    CMD scripts/dev.sh
+    CMD scripts/entrypoint-dev.sh
 else
-    CMD scripts/production.sh
+    CMD scripts/entrypoint-prod.sh
 fi
 
 # vim: filetype=dockerfile

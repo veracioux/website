@@ -33,7 +33,7 @@ think of it as local staging.
     target file using `envsubst`. To avoid conflicts with nginx's own variables,
     the `envsubst` command is called with the relevant environment variables
     explicitly specified. So, if you want to add a new variable in `nginx.conf`,
-    you will have to specify the variable inside `scripts/production.sh` where
+    you will have to specify the variable inside `scripts/entrypoint-prod.sh` where
     the `envsubst` command is invoked.
 
 # Static assets
