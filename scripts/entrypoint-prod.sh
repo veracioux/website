@@ -6,6 +6,8 @@
 
 [ -z "$ENVIRONMENT" ] && export ENVIRONMENT=prod
 
+echo -n "Running production web server on port $PORT"
+
 set -e
 scripts/wait-for-it.sh -h "$DB_HOST" -p "$DB_PORT" -t 180
 
@@ -28,9 +30,7 @@ until pgrep uvicorn; do
     :
 done
 
-if [ "$ENVIRONMENT" = "local" ]; then
-    jinja2 -D environment="$ENVIRONMENT" nginx.conf.in \
-        | envsubst '$PORT,$BACKEND_HOST,$BACKEND_PORT,$WORKER_SERVER_HOST,$WORKER_SERVER_PORT' \
-        > /etc/nginx/nginx.conf
-    nginx -g "daemon off;"
-fi
+jinja2 -D environment="$ENVIRONMENT" nginx.conf.in \
+    | envsubst '$PORT,$BACKEND_HOST,$BACKEND_PORT,$WORKER_SERVER_HOST,$WORKER_SERVER_PORT' \
+    > /etc/nginx/nginx.conf
+nginx -g "daemon off;"

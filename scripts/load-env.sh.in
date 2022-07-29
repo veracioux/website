@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+print_and_eval() {
+    echo "$1"
+    eval "$1"
+}
+
+load_envvars_from_file() {
+    for file in "$@"; do
+        print_and_eval "$(sed 's/^.\+=.\+/export &/' "$file")"
+    done
+}
+
+load_envvars_from_file .env/common
+
+for file in .env/"$ENVIRONMENT"{,.secret}; do
+    [ -f "$file" ] && load_envvars_from_file "$file"
+done

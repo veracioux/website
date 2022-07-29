@@ -30,9 +30,9 @@ services:
     # Container
     container_name: veracioux-web
     depends_on: [db]
-    ports: ["8000:8000", "8001:8001"]
+    ports: ["5000:5000"]
     env_file: *env_file
-    environment:
+    environment: &env
       - RABBITMQ_HOST=rabbitmq
       - DB_HOST=db
     volumes:
@@ -51,4 +51,4 @@ services:
       - ./.env/common
       - worker/.env/common
       - worker/.env/prod.secret
-    environment: *env_file
+    environment: *env
