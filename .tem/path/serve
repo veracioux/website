@@ -2,5 +2,7 @@
 
 cd "$(tem find -b veracioux-website)"
 
-sudo scripts/serve.sh
+up --detach
+
+sudo env PATH="$PATH" scripts/serve.sh
 

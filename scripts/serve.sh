@@ -7,5 +7,4 @@
 cat nginx.host.conf | envsubst '$PORT' > /etc/nginx/nginx.conf
 
 pkill nginx
-up --detach
 nginx
