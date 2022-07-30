@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 
-echo compose-"$(tem var target)".yaml
+echo compose-"$(tem var env)".yaml
 

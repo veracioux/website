@@ -1,21 +1,23 @@
-{% macro listen(server_options) %}
-    {% if environment == 'prod' %}
-        listen 80 {{server_options}};
-        listen 443 ssl {{server_options}};
-        ssl_certificate     /home/haris/cert/server.crt;
-        ssl_certificate_key /home/haris/cert/server.key;
-        ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
-        ssl_ciphers         HIGH:!aNULL:!MD5;
-    {% else %}
-        listen ${PORT} {{server_options}};
-    {% endif %}
-{% endmacro %}
-
 {% macro location_status() %}
         location /status {
             add_header Content-Type text/plain;
             return 200 "alive";
         }
+{% endmacro %}
+
+{% macro location_static() %}
+        location /static {
+            alias /var/static_root/;
+            expires 2M;
+            add_header Cache-Control "public";
+        }
+{% endmacro %}
+
+{% macro compression() %}
+        gzip on;
+        gzip_proxied any;
+        gzip_types text/plain text/html text/javascript application/javascript text/css;
+        gzip_min_length 512;
 {% endmacro %}
 
 user root;
@@ -27,12 +29,14 @@ http {
     default_type text/plain;
 
     server {
-        {{ listen('default_server') }}
+        listen ${PORT} default_server;
         server_name *.veracioux.me *.localhost;
 
         if ($http_x_forwarded_proto = "http") {
             return 301 https://$server_name$request_uri?;
         }
+
+        {{ compression() }}
 
         location / {
             return 404;
@@ -40,7 +44,7 @@ http {
     }
 
     server {
-        {{ listen() }}
+        listen ${PORT};
         server_name veracioux.me www.veracioux.me localhost www.localhost;
         # Error page is handled by vue-router
         error_page 404 /;
@@ -49,10 +53,7 @@ http {
             return 301 https://$server_name$request_uri?;
         }
 
-        gzip on;
-        gzip_proxied any;
-        gzip_types text/plain text/html text/javascript application/javascript text/css;
-        gzip_min_length 512;
+        {{ compression() }}
 
         # Make sure the routes matched by this rule match those configured in
         # vue-router
@@ -69,42 +70,36 @@ http {
         }
 
         {{ location_status() }}
-
-        location /static {
-            alias /var/static_root/;
-            expires 2M;
-            add_header Cache-Control "public";
-        }
+        {{ location_static() }}
     }
 
     server {
-        {{ listen() }}
+        listen ${PORT};
         server_name api.veracioux.me api.localhost;
 
         if ($http_x_forwarded_proto = "http") {
             return 301 https://$server_name$request_uri?;
         }
 
+        {{ compression() }}
+
         location / {
             proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT}/api/;
         }
 
-        location /static {
-            alias /var/static_root/;
-            expires 2M;
-            add_header Cache-Control "public";
-        }
-
         {{ location_status() }}
+        {{ location_static() }}
     }
 
     server {
-        {{ listen() }}
+        listen ${PORT};
         server_name worker.veracioux.me worker.localhost;
 
         if ($http_x_forwarded_proto = "http") {
             return 301 https://$server_name$request_uri?;
         }
+
+        {{ compression() }}
 
         location / {
             proxy_pass http://${WORKER_SERVER_HOST}:${WORKER_SERVER_PORT}/;

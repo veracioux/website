@@ -2,5 +2,5 @@
 
 cd "$(tem find -b veracioux-website)"
 
-scripts/serve.sh
+sudo scripts/serve.sh
 

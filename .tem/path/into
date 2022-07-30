@@ -5,7 +5,7 @@
 # the CMD.
 # Usage: into <SERVICE>
 
-tag="$([ "$(tem var target)" = "dev" ] && echo dev || echo latest)"
+tag="$([ "$(tem var env)" = "dev" ] && echo dev || echo latest)"
 
 if docker container inspect veracioux-"$1" >/dev/null 2>&1; then
     docker exec --interactive --tty veracioux-"$1" bash

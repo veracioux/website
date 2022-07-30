@@ -22,7 +22,7 @@ think of it as local staging.
 # Available commands
 
 - Deploy locally: `up`
-- Force remove all containers locally: `drm`
+- Force remove all containers locally: `down`
 - Deploy to heroku: `deploy`
 
 # Some things that should be kept in mind
