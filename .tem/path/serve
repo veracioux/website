@@ -1,8 +1,10 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 cd "$(tem find -b veracioux-website)"
 
-up --detach
+if ! _all_services_running; then
+    up --detach
+fi
 
 sudo env PATH="$PATH" scripts/serve.sh
 

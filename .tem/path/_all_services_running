@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+docker inspect --format '{{.State.Running}}' veracioux-{web,db,worker_dotfiles} rabbitmq | grep -qv '^false$'
