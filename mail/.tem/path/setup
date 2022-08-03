@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+
+if ! tem var -q env:prod; then
+    echo "This should only be run on the production server." >&2
+    exit 1
+fi
+
+# Install dependencies
+sudo apt-get install --yes postfix dovecot
+
+# Create users
+sudo useradd postfix
+sudo groupadd --gid 5000 vmail
+sudo useradd \
+    --gid vmail \
+    --uid 5000 \
+    --home-dir /var/mail/vmail \
+    --create-home
+    vmail

@@ -1,0 +1,20 @@
+[general]
+repo_path = ~/.local/share/tem/repo
+editor = vim
+
+[temdir]
+
+[ls]
+command = ls -1
+
+[path]
+hoist = true # unimplemented
+
+[git]
+# default_branch = tem
+
+[add]
+exclude = [] # TODO
+
+[put]
+exclude = [] # TODO

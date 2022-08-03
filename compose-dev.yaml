@@ -53,3 +53,13 @@ services:
       - worker/.env/common
       - worker/.env/local.secret
     environment: *env
+
+  mail:
+    # Image
+    image: veracioux/mail:dev
+    build:
+      context: mail
+      dockerfile: ../Dockerfile.mail.dev
+
+    # Container
+    container_name: veracioux-mail

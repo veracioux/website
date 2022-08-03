@@ -9,14 +9,9 @@ for arg in "$@"; do
     fi
 done
 
-# Obtain args with options removed
-args=()
-for arg in "$@"; do
-    if ! [[ "$arg" =~ ^- ]]; then
-        args=("${args[@]}" "$arg")
-    fi
-done
-
+# Generate the necessary dockerfiles
+# NOTE: we are generating all dockerfiles every time because some containers
+# may have dependencies.
 dgen
 
 tem run --no-tem docker-compose -f "$(_get_compose_file)" "$@"

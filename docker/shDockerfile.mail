@@ -1,0 +1,11 @@
+## NOTE: This is supposed to be run with mail/ as the context
+
+FROM alpine:3.15
+
+## Used for inspecting the container
+RUN apk add --no-cache bash
+
+## Dependencies
+RUN apk add --no-cache postfix dovecot
+
+TAG veracioux/mail
