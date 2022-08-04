@@ -11,6 +11,7 @@ dist
 
 # Docker and build process (I use shdocker to generate Dockerfiles)
 Dockerfile*
+/docker-compose.yaml
 
 # Miscellaneous
 _*/

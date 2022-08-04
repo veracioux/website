@@ -15,3 +15,5 @@ fi
 
 cd "$(tem find -b veracioux-website)"
 jinja2 -D env="$env" docker-compose.yaml.in > docker-compose.yaml
+
+echo "Generated docker-compose.yaml from template."

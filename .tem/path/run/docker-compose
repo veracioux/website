@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Wrapper around docker-compose that generates Dockerfiles from shDockerfiles
+# beforehand. You can disable this by setting VERACIOUX_COMPOSE_NO_GEN to a
+# non-empty value.
+
 cd "$(tem find -b veracioux-website)"
 
 for arg in "$@"; do
@@ -9,10 +13,12 @@ for arg in "$@"; do
     fi
 done
 
-# Generate the necessary dockerfiles
+# Generate the necessary Dockerfiles
 # NOTE: we are generating all dockerfiles every time because some containers
 # may have dependencies.
-dgen
+if [ -z "$VERACIOUX_COMPOSE_NO_GEN" ]; then
+    dgen
+fi
 
 _gen_docker_compose
 

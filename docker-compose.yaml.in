@@ -1,0 +1,101 @@
+{%- set tag %}{% if env == 'dev' %}dev{% else %}latest{% endif %}{% endset %}
+
+{#- File extension for the dev environment dockerfiles #}
+{%- set ext %}{% if env == 'dev' %}.dev{% else %}{% endif %}{% endset %}
+
+version: '3.4'
+
+services:
+  db:
+    # Image
+    image: postgres:14.1-alpine
+
+    # Container
+    container_name: veracioux-db
+    ports: ["5432:5432"]
+    env_file: &env_file
+      - ./.env/common
+      {%- if env == 'dev' %}
+      - ./.env/dev
+      {%- elif env == 'local' %}
+      - ./.env/local
+      - ./.env/local.secret
+      {%- elif env == 'prod' %}
+      - ./.env/prod
+      - ./.env/prod.secret
+      {%- endif %}
+      - worker/.env/common
+      {%- if env == 'prod' %}
+      - worker/.env/prod.secret
+      {%- endif %}
+
+  rabbitmq:
+    image: rabbitmq:3.7
+    container_name: veracioux-rabbitmq
+    ports: ["5672:5672"]
+    env_file:
+      - worker/.env/common
+      {%- if env == 'prod' %}
+      - worker/.env/prod.secret
+      {%- endif %}
+
+  web:
+    # Image
+    image: veracioux/web:{{tag}}
+    build:
+      context: .
+      dockerfile: Dockerfile.web{{ext}}
+
+    # Container
+    container_name: veracioux-web
+    depends_on: [db]
+    ports:
+      {%- if env == 'dev' %}
+      ["8000:8000", "8001:8001", "3000:3000"]
+      {%- elif env == 'local' %}
+      ["5000:5000", "8000:8000", "8001:8001"]
+      {%- elif env == 'prod' %}
+      ["5000:5000"]
+      {%- endif %}
+    env_file: *env_file
+    environment: &env
+      {%- if env == 'dev' %}
+      - PYTHONDONTWRITEBYTECODE=true
+      {%- endif %}
+      - RABBITMQ_HOST=rabbitmq
+      - DB_HOST=db
+    {%- if env == 'dev' %}
+    volumes:
+      - .:/app:rw
+    {%- endif %}
+
+  worker_dotfiles:
+    # Image
+    image: veracioux/worker_dotfiles:{{tag}}
+    build:
+      context: .
+      dockerfile: Dockerfile.worker_dotfiles{{ext}}
+
+    # Container
+    container_name: veracioux-worker_dotfiles
+    env_file:
+      - ./.env/common
+      - worker/.env/common
+      {%- if env == 'local' %}
+      - worker/.env/local.secret
+      {%- elif env == 'prod' %}
+      - worker/.env/prod.secret
+      {%- endif %}
+    environment: *env
+
+  mail:
+    # Image
+    image: veracioux/mail:{{tag}}
+    build:
+      context: mail
+      dockerfile: ../Dockerfile.mail{{ext}}
+
+    # Container
+    container_name: veracioux-mail
+
+# vim: filetype=yaml
