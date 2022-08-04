@@ -2,4 +2,6 @@
 
 which docker || curl -fsSL https://get.docker.com | sh
 
-sudo apt-get install git fish docker-compose
+sudo apt-get install \
+    git fish docker-compose \
+    apache2-utils # Provides command htpasswd

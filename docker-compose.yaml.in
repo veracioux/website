@@ -3,7 +3,7 @@
 {#- File extension for the dev environment dockerfiles #}
 {%- set ext %}{% if env == 'dev' %}.dev{% else %}{% endif %}{% endset %}
 
-version: '3.4'
+version: '3.9'
 
 services:
   db:
@@ -97,5 +97,24 @@ services:
 
     # Container
     container_name: veracioux-mail
+
+  {%- if env != 'dev' %}
+  docker-registry:
+    image: registry:2
+    container_name: veracioux-docker-registry
+    ports:
+      - 5001:5000
+    restart: always
+    {%- if env == 'prod' %}
+    environment:
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: "Registry Realm"
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+    volumes:
+      - "${HOME}/auth:/auth"
+      - "/var/lib/docker-registry:/var/lib/registry"
+    {%- endif %}
+
+  {%- endif %}
 
 # vim: filetype=yaml

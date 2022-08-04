@@ -4,6 +4,7 @@ cd "$(tem find -b veracioux-website)"
 
 if ! _all_services_running; then
     up --detach
+    docker-compose up --detach docker-registry
 fi
 
 sudo env PATH="$PATH" scripts/serve.sh

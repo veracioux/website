@@ -1,3 +1,9 @@
 #!/usr/bin/env bash
 
-docker inspect --format '{{.State.Running}}' veracioux-{web,db,worker_dotfiles} rabbitmq | grep -qv '^false$'
+containers=(veracioux-{web,db,worker_dotfiles,rabbitmq})
+
+if tem var -q env:prod; then
+    containers=("${containers[@]}" veracioux-docker-registry)
+fi
+
+docker inspect --format '{{.State.Running}}'  | grep -qv '^false$'
