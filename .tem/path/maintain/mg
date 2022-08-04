@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+# Run python manage.py
+
+cd "$(tem find -b veracioux-website)"
+python manage.py "$@"

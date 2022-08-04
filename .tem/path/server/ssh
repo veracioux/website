@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+# Modified SSH command that uses the right identity file to connect to my VPS
+
+tem run --no-tem ssh "$@"

@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+
+# Print the contents of the docker-compose.yaml.in file for the given
+# environment, after processing it with the template engine. If no argument is
+# given, it falls back to the current environment via `tem var env`
+#
+# Usage:
+#   _cat_docker_compose [ENVIRONMENT]
+
+if [ "$#" != 0 ]; then
+    env="$1"
+else
+    env="$(tem var env)" 
+fi
+
+cd "$(tem find -b veracioux-website)"
+jinja2 -D env="$env" docker-compose.yaml.in > docker-compose.yaml

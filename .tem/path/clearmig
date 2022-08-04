@@ -1,3 +1,1 @@
-#!/usr/bin/env sh
-
-rm -rf "$(tem find -b veracioux-website)"/backend/api/migrations
+maintain/clearmig

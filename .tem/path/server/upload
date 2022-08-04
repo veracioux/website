@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Build and upload the web image to the VPS
+
+cd "$(tem find -b veracioux-website)"
+
+ENVIRONMENT=prod shdocker -s docker/shDockerfile.web -- -t veracioux/web .
+
+curl --fail "docker.veracioux.me"
+code="$?"
+
+if [ "$code" != 0 ]; then
+    # Docker registry not running
+    docker save veracioux/web:latest | gzip > /tmp/veracioux-web.tar.gz
+    rsync --update --verbose --progress {,"$VPS_IP:"}/tmp/veracioux-web.tar.gz
+    ssh "$VPS_IP" bash -c "gunzip /tmp/veracioux-web.tar.gz | docker load"
+else
+    # TODO
+    echo TODO: not implemented
+fi

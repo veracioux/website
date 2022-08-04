@@ -1,4 +1,1 @@
-#!/usr/bin/env sh
-
-export PGPASSWORD=1234
-tem run --no-tem psql -h localhost -p 5432 -U postgres "$@"
+run/psql

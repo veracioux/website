@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+echo compose-"$(tem var env)".yaml
+

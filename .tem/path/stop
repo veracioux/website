@@ -1,6 +1,0 @@
-#!/usr/bin/env sh
-
-# Stop serving the website locally
-
-pkill 'npm run serve'
-

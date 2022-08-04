@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# Force-remove all docker containers related to veracioux-website
+
+cd "$(tem find -b veracioux-website)"
+docker-compose rm -sf "$@"

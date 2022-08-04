@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+cd "$(tem find -b veracioux-website)"
+
+for arg in "$@"; do
+    if [ "$arg" = "--help" ] || [ "$arg" = "-h" ]; then
+        /usr/bin/docker-compose -f nonexistent "$@"
+        exit
+    fi
+done
+
+# Generate the necessary dockerfiles
+# NOTE: we are generating all dockerfiles every time because some containers
+# may have dependencies.
+dgen
+
+_gen_docker_compose
+
+tem run --no-tem docker-compose "$@"

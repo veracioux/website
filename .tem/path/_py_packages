@@ -1,11 +1,1 @@
-#!/usr/bin/env sh
-
-# Automatically detect all root python packages in the project
-cd "$(tem find --root veracioux-website)"
-py_packages="$(
-    dirname $(ls */__init__.py) |
-        while read -r pkg_path; do
-            basename "$pkg_path"
-        done
-)"
-printf '%s\n' manage.py $py_packages
+util/_py_packages
