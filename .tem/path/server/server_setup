@@ -4,4 +4,7 @@ which docker || curl -fsSL https://get.docker.com | sh
 
 sudo apt-get install \
     git fish docker-compose \
+    jinja2
     apache2-utils # Provides command htpasswd
+
+pip install jinja2-cli

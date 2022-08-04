@@ -3,7 +3,7 @@
 {#- File extension for the dev environment dockerfiles #}
 {%- set ext %}{% if env == 'dev' %}.dev{% else %}{% endif %}{% endset %}
 
-version: '3.9'
+version: '3.4'
 
 services:
   db:
@@ -112,7 +112,7 @@ services:
       REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
     volumes:
       - "${HOME}/auth:/auth"
-      - "/var/lib/docker-registry:/var/lib/registry"
+      - "${HOME}/docker-registry:/var/lib/registry"
     {%- endif %}
 
   {%- endif %}
