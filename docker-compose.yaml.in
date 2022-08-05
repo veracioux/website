@@ -116,8 +116,6 @@ services:
     volumes:
       - "${HOME}/auth:/auth"
       - "${HOME}/docker-registry:/var/lib/registry"
-    profiles:
-      - dont_run_by_default
     {%- endif %}
 
   {%- endif %}
