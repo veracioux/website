@@ -12,6 +12,7 @@ services:
 
     # Container
     container_name: veracioux-db
+    restart: always
     ports: ["5432:5432"]
     env_file: &env_file
       - ./.env/common
@@ -48,6 +49,7 @@ services:
 
     # Container
     container_name: veracioux-web
+    restart: always
     depends_on: [db]
     ports:
       {%- if env == 'dev' %}
@@ -107,12 +109,15 @@ services:
     restart: always
     {%- if env == 'prod' %}
     environment:
+      REGISTRY_HTTP_HOST: https://veracioux.me:443
       REGISTRY_AUTH: htpasswd
       REGISTRY_AUTH_HTPASSWD_REALM: "Registry Realm"
       REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
     volumes:
       - "${HOME}/auth:/auth"
       - "${HOME}/docker-registry:/var/lib/registry"
+    profiles:
+      - dont_run_by_default
     {%- endif %}
 
   {%- endif %}

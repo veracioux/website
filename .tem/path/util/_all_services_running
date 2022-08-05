@@ -6,4 +6,4 @@ if tem var -q env:prod; then
     containers=("${containers[@]}" veracioux-docker-registry)
 fi
 
-docker inspect --format '{{.State.Running}}'  | grep -qv '^false$'
+docker inspect --format '{{.State.Running}}' "${containers[@]}" | grep -qv '^false$'

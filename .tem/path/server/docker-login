@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+lpass show docker-registry | docker login veracioux.me --username 'docker-registry' --password-stdin
