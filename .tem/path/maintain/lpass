@@ -2,7 +2,7 @@
 
 # Wrapper around GNU `pass` that uses a local password store for this project
 
-export PASSWORD_STORE_DIR="$(tem find -b veracioux-website)"/.tem/files/passwords
+export PASSWORD_STORE_DIR="$(tem find -b website)"/.tem/files/passwords
 mkdir -p "$PASSWORD_STORE_DIR"
 
 pass "$@"

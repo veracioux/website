@@ -2,7 +2,7 @@
 
 # Build and upload the web image to the VPS
 
-cd "$(tem find -b veracioux-website)"
+cd "$(tem find -b website)"
 
 echo "Building images..."
 docker-compose build

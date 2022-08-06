@@ -2,7 +2,7 @@
 
 # Release docker image on heroku
 
-cd "$(tem find -b veracioux-website)"
+cd "$(tem find -b website)"
 
 release() {
     heroku container:release --app veracioux web "$@"

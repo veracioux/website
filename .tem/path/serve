@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd "$(tem find -b veracioux-website)"
+cd "$(tem find -b website)"
 
 if ! _all_services_running; then
     up --detach

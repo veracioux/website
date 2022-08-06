@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 
-cd "$(tem find -b veracioux-website)/frontend"
+cd "$(tem find -b website)/frontend"
 jslint --fix
 stylelint --fix

@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-cd "$(tem find --root veracioux-website)"
+cd "$(tem find -b website)"
 # TODO npx prettier --write static templates
 py_packages="$(_py_packages)"
 pipenv run isort $py_packages

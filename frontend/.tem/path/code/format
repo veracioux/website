@@ -2,5 +2,5 @@
 
 shopt -s globstar
 
-cd "$(tem find -b veracioux-website)/frontend"
+cd "$(tem find -b website)/frontend"
 pnpx prettier . --ignore-path <(cat .gitignore .prettierignore) --write

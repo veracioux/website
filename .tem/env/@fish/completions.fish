@@ -4,4 +4,4 @@ complete -c up   -f -a "$services"
 complete -c down -f -a "$services"
 complete -c into -f -a "$services"
 
-complete -c lpass -f -a "(ls (tem find -b veracioux-website)/.tem/files/passwords | string replace .gpg '')"
+complete -c lpass -f -a "(ls (tem find -b website)/.tem/files/passwords | string replace .gpg '')"

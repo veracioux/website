@@ -4,7 +4,7 @@
 
 set -e
 
-cd "$(tem find -b veracioux-website)"
+cd "$(tem find -b website)"
 
 hpush
 hrelease

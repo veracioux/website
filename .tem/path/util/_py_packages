@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # Automatically detect all root python packages in the project
-cd "$(tem find --root veracioux-website)"
+cd "$(tem find -b website)"
 py_packages="$(
     dirname $(ls */__init__.py) |
         while read -r pkg_path; do

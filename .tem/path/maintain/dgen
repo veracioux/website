@@ -2,7 +2,7 @@
 
 # Generate dockerfiles from shDockerfile
 
-project_root="$(tem find -b veracioux-website)"
+project_root="$(tem find -b website)"
 
 process_types=("$@")
 

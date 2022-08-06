@@ -2,7 +2,7 @@
 
 # Convenience script that lints everything that should be linted in the project
 
-cd "$(tem find -r veracioux-website)/frontend"
+cd "$(tem find -b website)/frontend"
 
 jslint "$@"
 stylelint "$@"

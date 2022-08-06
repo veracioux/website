@@ -2,7 +2,7 @@
 
 # Start the development containers
 
-cd "$(tem find -b veracioux-website)"
+cd "$(tem find -b website)"
 
 positional_args=()
 

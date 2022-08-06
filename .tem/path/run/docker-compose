@@ -4,7 +4,7 @@
 # beforehand. You can disable this by setting VERACIOUX_COMPOSE_NO_GEN to a
 # non-empty value.
 
-cd "$(tem find -b veracioux-website)"
+cd "$(tem find -b website)"
 
 for arg in "$@"; do
     if [ "$arg" = "--help" ] || [ "$arg" = "-h" ]; then

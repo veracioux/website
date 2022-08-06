@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd "$(tem find --root veracioux-website)"
+cd "$(tem find -b website)"
 status=0
 
 pipenv run pylint $(_py_packages)

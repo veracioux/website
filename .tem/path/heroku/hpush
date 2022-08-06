@@ -2,7 +2,7 @@
 
 # Push docker image to heroku
 
-cd "$(tem find -b veracioux-website)"
+cd "$(tem find -b website)"
 
 dgen
 

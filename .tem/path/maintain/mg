@@ -2,5 +2,5 @@
 
 # Run python manage.py
 
-cd "$(tem find -b veracioux-website)"
+cd "$(tem find -b website)"
 python manage.py "$@"
