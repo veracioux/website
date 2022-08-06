@@ -42,7 +42,7 @@ services:
 
   web:
     # Image
-    image: veracioux/web:{{tag}}
+    image: veracioux.me/web:{{tag}}
     build:
       context: .
       dockerfile: Dockerfile.web{{ext}}
@@ -73,7 +73,7 @@ services:
 
   worker_dotfiles:
     # Image
-    image: veracioux/worker_dotfiles:{{tag}}
+    image: veracioux.me/worker_dotfiles:{{tag}}
     build:
       context: .
       dockerfile: Dockerfile.worker_dotfiles{{ext}}
@@ -92,7 +92,7 @@ services:
 
   mail:
     # Image
-    image: veracioux/mail:{{tag}}
+    image: veracioux.me/mail:{{tag}}
     build:
       context: mail
       dockerfile: ../Dockerfile.mail{{ext}}

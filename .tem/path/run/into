@@ -11,5 +11,5 @@ if docker container inspect veracioux-"$1" >/dev/null 2>&1; then
     docker exec --interactive --tty veracioux-"$1" bash
 else
     echo "Container is not running. Trying to start it..." >&2
-    docker run --interactive --tty veracioux/"$1":"$tag" bash
+    docker run --interactive --tty veracioux.me/"$1":"$tag" bash
 fi
