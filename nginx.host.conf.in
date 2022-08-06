@@ -46,7 +46,7 @@ http {
         }
 
         location /docker-status/ {
-            proxy_pass http://localhost:5001/;
+            proxy_pass http://localhost:${DOCKER_REGISTRY_PORT}/;
         }
 
         # We are using this path because `docker login` always goes for /v2,
@@ -57,7 +57,7 @@ http {
             proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header    X-Forwarded-Proto https;
             proxy_set_header    X-Forwarded-Ssl on;
-            proxy_pass          http://localhost:5001;
+            proxy_pass          http://localhost:${DOCKER_REGISTRY_PORT};
             proxy_cache off;
             proxy_read_timeout  900;
             client_max_body_size 0;

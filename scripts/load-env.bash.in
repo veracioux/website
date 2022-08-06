@@ -11,8 +11,11 @@ load_envvars_from_file() {
     done
 }
 
-load_envvars_from_file .env/common
-
-for file in .env/"$ENVIRONMENT"{,.secret}; do
+for file in \
+    .env/common \
+    .env/"$ENVIRONMENT"{,.secret} \
+    worker/.env/common \
+    worker/.env/"$ENVIRONMENT"{,.secret}
+do
     [ -f "$file" ] && load_envvars_from_file "$file"
 done

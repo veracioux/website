@@ -1,7 +1,6 @@
 # This env file is used only for development testing.
 
 ENVIRONMENT=local
-PORT=5000
 
 # For database container
 POSTGRES_PASSWORD=1234

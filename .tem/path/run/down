@@ -4,7 +4,20 @@
 
 cd "$(tem find -b website)"
 
+for arg in "$@"; do
+    if ! [[ "$arg" == -* ]]; then
+        positional_args=("${positional_args[@]}" "$arg")
+    fi
+    if [ "$arg" = "web" ] && command -v yq >/dev/null; then
+        _gen_docker_compose
+        positional_args=(
+            "${positional_args[@]}"
+            $(cat docker-compose.yaml | yq .services.web.depends_on[] --raw-output)
+        )
+    fi
+done
+
 # Documented in our custom `docker-compose` command
 export VERACIOUX_COMPOSE_NO_GEN=true
 
-docker-compose rm -sf "$@"
+docker-compose rm --stop --force "${positional_args[@]}"

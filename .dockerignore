@@ -6,7 +6,7 @@
 # Docker
 docker
 Dockerfile*
-compose-*.yaml
+docker-compose.yaml*
 
 .pylintrc
 pyproject.toml

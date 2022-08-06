@@ -4,7 +4,7 @@
 
 . scripts/load-env.bash.in
 
-cat nginx.host.conf | envsubst '$PORT,$USER_HOME' > /etc/nginx/nginx.conf
+cat nginx.host.conf.in | envsubst '$PORT,$USER_HOME,$DOCKER_REGISTRY_PORT' > /etc/nginx/nginx.conf
 
 pkill nginx
 nginx

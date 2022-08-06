@@ -11,19 +11,18 @@ think of it as local staging.
 
 # Ports
 
-**5432**: postgres
+**3000**: main web port
 
-**3000**: frontend
+**5432**: postgres database
 
-**8000**: web app
-
-**5000**: nginx
+**8000**: backend app
 
 # Available commands
 
 - Deploy locally: `up`
 - Force remove all containers locally: `down`
-- Deploy to heroku: `deploy`
+- Serve production server: `serve`
+  This command should be run on a VPS.
 
 # Some things that should be kept in mind
 
@@ -32,14 +31,15 @@ think of it as local staging.
     most notable example is `nginx.conf` where variables are baked into the
     target file using `envsubst`. To avoid conflicts with nginx's own variables,
     the `envsubst` command is called with the relevant environment variables
-    explicitly specified. So, if you want to add a new variable in `nginx.conf`,
-    you will have to specify the variable inside `scripts/entrypoint-prod.sh` where
-    the `envsubst` command is invoked.
+    explicitly specified as arguments. So, if you want to add a new variable in
+    `nginx.conf`, you will have to specify the variable inside
+    `scripts/entrypoint-prod.sh` where the `envsubst` command is invoked.
 
 # Static assets
 
-Static assets are collected by the Django backend into `/var/static_root`,
-because that's the easiest way (django provides the `collectstatic` command).
+Static assets are collected by the django `manage.py` script into
+`/var/static_root`, because that's the easiest way (django provides the
+`collectstatic` command).
 
 # Serving files temporarily
 
