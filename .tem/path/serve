@@ -7,5 +7,5 @@ if ! _all_services_running; then
     docker-compose up --detach docker-registry
 fi
 
-sudo env PATH="$PATH" scripts/serve.sh
+sudo env PATH="$PATH" USER_HOME="$HOME" scripts/serve.sh
 

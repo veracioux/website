@@ -40,3 +40,10 @@ think of it as local staging.
 
 Static assets are collected by the Django backend into `/var/static_root`,
 because that's the easiest way (django provides the `collectstatic` command).
+
+# Serving files temporarily
+
+To create a temporary endpoint for serving a file, just put a file (for example
+one named `myfile`) inside the `~/tmp-root` directory. The file will be
+available at a URL subpath that corresponds to the path of the file relative to
+`~/tmp-root` (in our example that is `/myfile`).
