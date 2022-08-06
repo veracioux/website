@@ -44,6 +44,8 @@ because that's the easiest way (django provides the `collectstatic` command).
 # Serving files temporarily
 
 To create a temporary endpoint for serving a file, just put a file (for example
-one named `myfile`) inside the `~/tmp-root` directory. The file will be
+one named `myfile`) inside the `~/tmp_root` directory. The file will be
 available at a URL subpath that corresponds to the path of the file relative to
-`~/tmp-root` (in our example that is `/myfile`).
+`~/tmp_root` (in our example that is `/myfile`). Note that `index.html` behave
+as usual, i.e. `~/tmp_root/myfile/index.html` will be available at `/myfile` and
+`/myfile/`.
