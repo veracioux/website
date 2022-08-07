@@ -1,3 +1,9 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-TERM=vt100 ssh "$VPS_IP" "$@"
+export TERM=vt100
+
+if [ "$#" = 0 ]; then
+    ssh veracioux.me
+else
+    ssh veracioux.me "bash -lc \"$(printf '%q ' "$@")\""
+fi
