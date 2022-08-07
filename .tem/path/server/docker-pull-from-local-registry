@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Pull all website-related images from the locally running registry
+
+connect '~/website/scripts/docker-pull-from-local-registry.sh'
