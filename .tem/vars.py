@@ -6,7 +6,7 @@ from tem.var import *
 
 # TODO: rename the variables to be more consistent
 
-env = Variable(["dev", "local", "prod"], default="dev")
+env = Variable(["dev", "staging", "prod"], default="dev")
 
 env.doc = (
     "The environment configuration that should be used. \n"
@@ -16,9 +16,11 @@ env.doc = (
     "target website."
 )
 env.doc["dev"] = "Use development server"
-env.doc["local"] = "Use local server with production config"
+env.doc["staging"] = "Use staging server"
 env.doc["prod"] = "Use production server"
 
-staging = Variant(False)
+is_server = Variant(False)
+is_server.doc = (
+    "Indicates whether the current device is the deployment server."
+)
 
-staging.doc = "Does the current environment act as staging?"

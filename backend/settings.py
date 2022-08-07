@@ -14,9 +14,9 @@ if "ENVIRONMENT" not in os.environ:
 environ.Env.read_env(BASE_DIR / ".env/common")
 if env("ENVIRONMENT") == "dev":
     environ.Env.read_env(BASE_DIR / ".env/dev")
-else:
-    environ.Env.read_env(BASE_DIR / ".env/local")
-    environ.Env.read_env(BASE_DIR / ".env/local.secret")
+elif env("ENVIRONMENT") == "staging":
+    environ.Env.read_env(BASE_DIR / ".env/staging")
+    environ.Env.read_env(BASE_DIR / ".env/staging.secret")
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")

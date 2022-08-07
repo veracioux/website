@@ -65,7 +65,7 @@ RUN apk add --no-cache zlib jpeg linux-headers
 
 # Install pnpm
 RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
-RUN apk add --no-cache nginx gettext
+RUN apk add --no-cache nginx gettext php8-fpm apache2-utils
 
 ## Required by 'heroku ps:exec' and wait-for-it.sh
 RUN apk add --no-cache bash

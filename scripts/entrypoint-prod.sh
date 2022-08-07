@@ -1,12 +1,12 @@
 #!/usr/bin/env sh
 
 # Deploy the production build of the server. This script should also be used for
-# the local preview (ENVIRONMENT=local) build, just make sure to set the
+# the staging build (ENVIRONMENT=staging), just make sure to set the
 # environment variables.
 
 [ -z "$ENVIRONMENT" ] && export ENVIRONMENT=prod
 
-echo -n "Running production web server on port $PORT"
+echo -n "Running production web server on port $WEB_PORT"
 
 set -e
 scripts/wait-for-it.sh -h "$DB_HOST" -p "$DB_PORT" -t 180
@@ -17,7 +17,7 @@ cd ..
 
 python3 manage.py collectstatic --noinput
 python3 manage.py migrate
-if [ "$ENVIRONMENT" = "local" ]; then
+if [ "$ENVIRONMENT" = "staging" ]; then
     python3 manage.py createsuperuser --noinput
 fi
 python3 manage.py loaddata projects.json
@@ -31,6 +31,8 @@ until pgrep uvicorn; do
 done
 
 jinja2 -D env="$ENVIRONMENT" nginx.conf.in \
-    | envsubst '$PORT,$BACKEND_HOST,$BACKEND_PORT,$WORKER_SERVER_HOST,$WORKER_SERVER_PORT' \
+    | envsubst '$WEB_PORT,$BACKEND_HOST,$BACKEND_PORT,$WORKER_SERVER_HOST,$WORKER_SERVER_PORT,$PHP_FCGI_PORT' \
     > /etc/nginx/nginx.conf
+
+php-fpm8
 nginx -g "daemon off;"

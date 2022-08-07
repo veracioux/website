@@ -5,6 +5,7 @@ through tem, this is done automatically.
 #}
 
 {%- set tag %}{% if env == 'dev' %}dev{% else %}latest{% endif %}{% endset %}
+{%- set prod -%}{% if env == 'prod' %}-prod{% endif %}{% endset %}
 
 {#- File extension for the dev environment dockerfiles #}
 {%- set ext %}{% if env == 'dev' %}.dev{% else %}{% endif %}{% endset %}
@@ -17,16 +18,16 @@ services:
     image: postgres:14.1-alpine
 
     # Container
-    container_name: veracioux-db
+    container_name: veracioux-db{{prod}}
     restart: always
     ports: ["$DB_PORT:5432"]
     env_file: &env_file
       - ./.env/common
       {%- if env == 'dev' %}
       - ./.env/dev
-      {%- elif env == 'local' %}
-      - ./.env/local
-      - ./.env/local.secret
+      {%- elif env == 'staging' %}
+      - ./.env/staging
+      - ./.env/staging.secret
       {%- elif env == 'prod' %}
       - ./.env/prod
       - ./.env/prod.secret
@@ -38,7 +39,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:3.7
-    container_name: veracioux-rabbitmq
+    container_name: veracioux-rabbitmq{{prod}}
     ports: ["$RABBITMQ_PORT:5672"]
     env_file:
       - worker/.env/common
@@ -54,16 +55,16 @@ services:
       dockerfile: Dockerfile.web{{ext}}
 
     # Container
-    container_name: veracioux-web
+    container_name: veracioux-web{{prod}}
     restart: always
     depends_on: [db, rabbitmq]
     ports:
       {%- if env == 'dev' %}
-      - "$PORT:3000"
+      - "$WEB_PORT:3000"
       {%- else %}
-      - "$PORT:$PORT"
+      - "$WEB_PORT:$WEB_PORT"
       {%- endif %}
-      {%- if env == 'dev' or env == 'local' %}
+      {%- if env == 'dev' or env == 'staging' %}
       - "$BACKEND_PORT:$BACKEND_PORT"
       - "$WORKER_SERVER_PORT:$WORKER_SERVER_PORT"
       {%- endif %}
@@ -77,6 +78,9 @@ services:
     {%- if env == 'dev' %}
     volumes:
       - .:/app:rw
+    {%- elif env == 'staging' and is_server == 'True' %}
+    volumes:
+      - $HOME/auth:/var/www
     {%- endif %}
 
   worker_dotfiles:
@@ -91,8 +95,8 @@ services:
     env_file:
       - ./.env/common
       - worker/.env/common
-      {%- if env == 'local' %}
-      - worker/.env/local.secret
+      {%- if env == 'staging' %}
+      - worker/.env/staging.secret
       {%- elif env == 'prod' %}
       - worker/.env/prod.secret
       {%- endif %}

@@ -36,13 +36,12 @@ http {
         }
 
         location @ {
-            proxy_pass http://localhost:${PORT};
+            proxy_pass http://localhost:${WEB_PORT};
         }
 
         # Staging server
         location /stg {
-            # Where to take PORT from?
-            proxy_pass http://localhost:1${PORT};
+            proxy_pass http://localhost:${STAGING_PORT}/;
         }
 
         location /docker-status/ {

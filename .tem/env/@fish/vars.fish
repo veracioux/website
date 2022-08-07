@@ -3,7 +3,7 @@ if tem var -q env:prod
     set -g web    veracioux.me
     set -g api    api.veracioux.me
     set -g fe     veracioux.me
-else if tem var -q env:local
+else if tem var -q env:staging
     set -g worker worker.localhost:5000
     set -g web    localhost:5000
     set -g api    api.localhost:5000

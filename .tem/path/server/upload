@@ -21,6 +21,10 @@ else
     # TODO
     echo "Pushing images to custom registry..."
     VERACIOUX_COMPOSE_NO_GEN=true docker-compose push
+    for image in {web,worker_dotfiles,mail}:latest; do
+        connect docker pull localhost:5000/"$image"
+        connect docker tag localhost:5000/"$image" veracioux.me/"$image"
+    done
 fi
 
 echo "All done."

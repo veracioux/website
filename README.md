@@ -3,11 +3,17 @@
 
 ### ENVIRONMENT
 
-The environment that the server is running in. Can be one of: `dev`, `local`,
-`prod`. The meaning of `dev` and `prod` is obvious. `local` is a local server
-that is meant to be as similar to `prod` as possible. It uses production's
-server config (e.g. uses nginx, uses dropbox as storage backend etc.). You can
-think of it as local staging.
+The environment that the server is running in. Can be one of: `dev`, `staging`,
+`prod`. The meaning of these should be obvious. The `dev` environment exposes
+ports of all containers to the host and it enables hot reloading. It uses a
+local (ephemeral) database and the local filesystem where applicable. The
+`staging` environment is meant to be as similar to `prod` as possible, using a
+persistent database, a dropbox account for storage of some files, etc. Obviously,
+it doesn't use the same accounts and API keys. `dev` and `staging` can be
+deployed locally. `staging` can also be served on a dedicated server. It is
+password protected regardless of whether it is served locally or on a server.
+The password is saved in the browser via cookie so you don't have to enter it
+every time.
 
 # Ports
 
@@ -23,6 +29,8 @@ think of it as local staging.
 - Force remove all containers locally: `down`
 - Serve production server: `serve`
   This command should be run on a VPS.
+- Manage local secrets: `lpass` - a wrapper around GNU `pass`
+- Upload local secrets to the server: `upload-secrets`
 
 # Some things that should be kept in mind
 

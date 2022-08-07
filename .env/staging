@@ -1,6 +1,6 @@
 # This env file is used only for development testing.
 
-ENVIRONMENT=local
+ENVIRONMENT=staging
 
 # For database container
 POSTGRES_PASSWORD=1234
