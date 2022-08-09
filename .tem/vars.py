@@ -6,7 +6,7 @@ from tem.var import *
 
 # TODO: rename the variables to be more consistent
 
-env = Variable(["dev", "staging", "prod"], default="dev")
+env = Variable(["dev", "staging", "prod"], default="dev", from_env="ENVIRONMENT")
 
 env.doc = (
     "The environment configuration that should be used. \n"

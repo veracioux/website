@@ -21,3 +21,8 @@ frontend/dist
 worker/node_modules
 worker/server.js
 worker/worker.js
+
+blog
+mail
+
+nginx.host.conf.in

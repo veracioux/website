@@ -91,7 +91,7 @@ services:
       dockerfile: Dockerfile.worker_dotfiles{{ext}}
 
     # Container
-    container_name: veracioux-worker_dotfiles
+    container_name: veracioux-worker_dotfiles{{prod}}
     env_file:
       - ./.env/common
       - worker/.env/common
@@ -110,12 +110,12 @@ services:
       dockerfile: ../Dockerfile.mail{{ext}}
 
     # Container
-    container_name: veracioux-mail
+    container_name: veracioux-mail{{prod}}
 
   {%- if env != 'dev' %}
   docker-registry:
     image: registry:2
-    container_name: veracioux-docker-registry
+    container_name: veracioux-docker-registry{{prod}}
     ports:
       - "$DOCKER_REGISTRY_PORT:5000"
     restart: always
