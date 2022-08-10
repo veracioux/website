@@ -321,6 +321,7 @@ onMounted(() => {
     justify-self: end;
     text-align: center;
     margin-bottom: 3em;
+    font-size: 2rem;
 }
 
 .traits {
@@ -333,7 +334,6 @@ onMounted(() => {
     align-items: center;
     gap: 1em;
 
-    font-size: 0.8em;
     opacity: 0.5;
 
     /**
@@ -354,6 +354,7 @@ onMounted(() => {
     flex-direction: column;
     min-height: 1em;
     max-height: 1em;
+    font-size: 1.4em;
 }
 
 .dummy {
@@ -369,6 +370,5 @@ onMounted(() => {
 
     color: var(--color-primary);
     font-family: monospace;
-    font-size: 2.5em;
 }
 </style>

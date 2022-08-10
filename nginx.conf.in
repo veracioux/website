@@ -57,7 +57,7 @@ http {
 
         # Make sure the routes matched by this rule match those configured in
         # vue-router
-        location ~ ^/(|contact)/?$ {
+        location ~ ^/(|contact|cv)/?$ {
             root   /app/frontend/dist;
             rewrite ^ /index.html break;
         }

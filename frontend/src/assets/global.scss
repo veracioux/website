@@ -1,3 +1,35 @@
+@mixin screenWidthAbove($width) {
+  @media only screen and (min-width: $width) {
+    @content;
+  }
+}
+
+@mixin screenWidthBelow($width) {
+  @media only screen and (max-width: $width) {
+    @content;
+  }
+}
+
+@mixin screenHeightAbove($height) {
+  @media only screen and (min-height: $height) {
+    @content;
+  }
+}
+
+@mixin screenSizeAbove($width, $height: null) {
+  @if $height == null {
+    $height: $width
+  }
+  @media only screen and (min-width: $width) and (min-height: $height) {
+    @content;
+  }
+}
+
+$tablet: 480px;
+$small: 768px;
+$large: 1024px;
+$xlarge: 1280px;
+
 :global(:root) {
   --color-primary: #7c4dff;
   --color-primary-rgb: 124, 77, 255;
@@ -12,10 +44,19 @@
   --color-text-rgb: 210, 220, 249;
 
   color: var(--color-text);
-  /*
-  font-family: monospace;
-  font-size: 15px;
-  */
+  font-size: 13px;
+
+  @include screenSizeAbove($small) {
+    font-size: 14px;
+  }
+
+  @include screenSizeAbove($large, $small) {
+    font-size: 15px;
+  }
+
+  @include screenSizeAbove($xlarge, $large) {
+    font-size: 16px;
+  }
 }
 
 :global(a) {
@@ -35,37 +76,14 @@
 }
 
 :global(h1) {
-  font-size: 48px;
+  font-size: 2.4em;
 }
 :global(h2) {
-  font-size: 32px;
+  font-size: 1.8em;
 }
 :global(h3) {
-  font-size: 26px;
+  font-size: 1.6em;
 }
 :global(h3) {
-  font-size: 20px;
+  font-size: 1.4em;
 }
-
-@mixin screenWidthAbove($width) {
-  @media only screen and (min-width: $width) {
-    @content;
-  }
-}
-
-@mixin screenWidthBelow($width) {
-  @media only screen and (max-width: $width) {
-    @content;
-  }
-}
-
-@mixin screenHeightAbove($height) {
-  @media only screen and (min-height: $height) {
-    @content;
-  }
-}
-
-$tablet: 480px;
-$small: 768px;
-$large: 1024px;
-$xlarge: 1200px;

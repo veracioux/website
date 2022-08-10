@@ -53,7 +53,7 @@ defineEmits<{
 
     padding: 64px 48px;
     width: 280px;
-    font-size: 16px;
+    font-size: 1em;
     border-radius: 10px;
     background: rgba(var(--color-background-rgb), 0.7);
 

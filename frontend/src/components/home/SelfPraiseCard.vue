@@ -23,12 +23,12 @@ defineProps<SelfPraiseProps>();
 
     .title {
         font-weight: bold;
-        font-size: 0.7em;
+        font-size: 1.3em;
         margin-bottom: 16px;
     }
 
     .content {
-        font-size: 0.5em;
+        font-size: 1em;
     }
 }
 </style>

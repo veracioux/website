@@ -11,7 +11,7 @@ defineProps<{
 <style module lang="scss">
 .container {
     display: inline-block;
-    font-size: 12px;
+    font-size: 0.8em;
     border-radius: 4px;
     padding: 6px;
     // Avoids the height being stretched out when displayed in the CV timeline

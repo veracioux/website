@@ -97,7 +97,7 @@ a.veracioux {
     padding: 8px;
 
     font-family: monospace;
-    font-size: 28px;
+    font-size: 2em;
     text-align: center;
 }
 
