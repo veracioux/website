@@ -2,8 +2,14 @@
 
 export TERM=vt100
 
-if [ "$#" = 0 ]; then
-    ssh veracioux.me
+if [ -n "$VPS_IP" ]; then
+    host="$VPS_IP"
 else
-    ssh veracioux.me "bash -lc \"$(printf '%q ' "$@")\""
+    host="veracioux.me"
+fi
+
+if [ "$#" = 0 ]; then
+    ssh "$host"
+else
+    ssh "$host" "bash -lc \"$(printf '%q ' "$@")\""
 fi
