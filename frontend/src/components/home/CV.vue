@@ -49,8 +49,8 @@ onMounted(() => {
                     <pre>- GPA 9.19/10.00</pre>
                 </TimelineEntry>
                 <TimelineEntry start-date="2021" end-date="present">
-                    <a href="https://flameshot.org" target="_blank"
-                        ><b>Flameshot</b></a
+                    <a href="https://flameshot.org" target="_blank">
+                        <b>Flameshot</b> </a
                     >, A Free & Open Source Screenshot Program <br />
                     <div class="labelContainer">
                         <Label title="Co-maintainer" />
@@ -63,7 +63,8 @@ onMounted(() => {
                     <a
                         href="https://github.com/veracioux/rotating-led-display"
                         target="_blank"
-                        ><b>Rotating LED Display</b></a
+                    >
+                        <b>Rotating LED Display</b> </a
                     >, High School Project Festival, Hadžići, Bosnia and
                     Herzegovina
                     <br />
@@ -77,7 +78,8 @@ onMounted(() => {
                     <a
                         href="https://github.com/veracioux/wood-fall"
                         target="_blank"
-                        ><b>Wood Fall</b></a
+                    >
+                        <b>Wood Fall</b> </a
                     >, video game, solo project
                     <br />
                     <div class="labelContainer">
@@ -117,8 +119,9 @@ onMounted(() => {
                     <a
                         href="https://search.bisnode.ba/ba/367191/elektromatik-d-o-o-zenica/"
                         target="_blank"
-                        >Elektromatik d.o.o. Zenica</a
                     >
+                        Elektromatik d.o.o. Zenica
+                    </a>
                     <br />
                     <div class="labelContainer">
                         <Label title="PLC programming" />
@@ -141,15 +144,94 @@ onMounted(() => {
                     <a
                         href="https://math.stackexchange.com/users/450231"
                         target="_blank"
-                        >Mathematics StackExchange</a
                     >
+                        Mathematics StackExchange
+                    </a>
                 </TimelineEntry>
                 <TimelineEntry start-date="2018" end-date="present" last>
-                    <b
-                        >Various personal projects on
-                        <a href="https://github.com/veracioux">GitHub</a></b
-                    >
+                    <b>
+                        Various personal projects on
+                        <a href="https://github.com/veracioux">GitHub</a>
+                    </b>
                     <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
+                </TimelineEntry>
+                <TimelineEntry start-date="2018" end-date="present" last>
+                    TODO <br />
                 </TimelineEntry>
             </table>
             <aside class="sidePane">
@@ -172,6 +254,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
     flex-direction: column;
     align-items: center;
     color: $colorDimText;
+    padding-bottom: 160px;
 
     .content {
         display: flex;
@@ -186,7 +269,8 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
 
         .timeline {
             border-spacing: 16px 0;
-            line-height: 180%;
+            line-height: 200%;
+            max-width: 900px;
 
             :global(td) {
                 padding: 0;
@@ -201,14 +285,10 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
 
             @include screenWidthAbove($xlarge) {
                 gap: 32px;
-            }
-
-            position: sticky;
-            top: 200px;
-            bottom: 200px;
-            height: 100%;
-
-            @include screenWidthAbove($xlarge) {
+                position: sticky;
+                top: 160px;
+                bottom: 160px;
+                height: 100%;
                 align-items: start;
             }
 

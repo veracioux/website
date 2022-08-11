@@ -9,18 +9,20 @@ defineProps<{
 </script>
 
 <template>
-    <tr :class="s.timelineItem">
-        <td :class="s.timeSpan">
-            {{ displayDate ?? `${startDate} - ${endDate}` }}
-        </td>
+    <tr :class="s.timeLineItem">
         <td>
-            <div :class="s.timeLine">
-                <div :class="{[s.line]: true, first: first, last: last}" />
-                <div :class="s.dot"></div>
+            <div :class="s.timeSpan">
+                {{ displayDate ?? `${startDate} - ${endDate}` }}
             </div>
         </td>
-        <td :class="s.text">
-            <slot />
+        <td :class="s.lineCell">
+            <div :class="s.line" />
+            <div :class="s.dot" />
+        </td>
+        <td>
+            <div :class="s.text">
+                <slot />
+            </div>
         </td>
     </tr>
 </template>
@@ -28,62 +30,85 @@ defineProps<{
 <style module="s" lang="scss">
 @use "@/assets/common.module.scss" as c;
 @import "@/assets/global.scss";
-.timelineItem,
-.timelineItem > :global(td) {
-    height: 100%;
-}
 
-.timeSpan {
-    text-align: right;
-    color: rgba(var(--color-secondary-rgb), 0.7);
-    font-weight: bold;
-    @include screenWidthBelow($small) {
-        max-width: 124px;
-    }
-    @include screenWidthBelow($tablet) {
-        max-width: 64px;
-    }
-}
-
-.timeLine {
+.timeLineItem {
     position: relative;
-    min-height: 48px;
-    inset: 0;
-    height: 100%;
-    width: 14px;
-    margin: 0;
 
-    @include screenWidthAbove($small) {
-        width: 28px;
+    &::before {
+        position: relative;
+        height: 10px;
+        content: "";
     }
 
-    .line {
-        @include c.fillParent;
-        width: 3px;
-        margin: 0 auto;
-        background: rgba(var(--color-secondary-rgb), 0.3);
+    &:first-child .lineCell .line {
+        top: 50%;
+    }
 
-        &:global(.first) {
-            top: 50%;
+    &:last-child .lineCell .line {
+        bottom: 50%;
+    }
+
+    .lineCell {
+        position: relative;
+        --width: 12px;
+        @include screenSizeAbove($tablet) {
+            --width: 14px;
+        }
+        @include screenWidthAbove($small) {
+            --width: 16px;
+        }
+        width: var(--width);
+
+        .line {
+            position: absolute;
+            width: var(--width);
+            inset: 0;
+            z-index: 0;
+
+            &::after {
+                display: block;
+                width: 4px;
+                height: 100%;
+                margin: auto;
+                background: rgba(var(--color-secondary-rgb), 0.3);
+                content: "";
+            }
         }
 
-        &:global(.last) {
-            bottom: 50%;
+        .dot {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+
+            background: var(--color-primary);
+            z-index: 1;
         }
     }
 
-    .dot {
-        @include c.fillParent;
-        margin: auto;
-        width: 16px;
-        height: 16px;
+    .timeSpan {
+        text-align: right;
+    }
 
-        background: var(--color-primary);
-        border-radius: 50%;
+    .text, .timeSpan {
+        margin: 2px 0;
+
+        @include screenSizeAbove($tablet) {
+            margin: 4px 0;
+        }
+
+        @include screenSizeAbove($small) {
+            margin: 6px 0;
+        }
+
+        @include screenSizeAbove($large, $small) {
+            margin: 8px 0;
+        }
     }
 }
 
-.text {
-    max-width: 560px;
-}
 </style>

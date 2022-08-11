@@ -30,7 +30,7 @@ $small: 768px;
 $large: 1024px;
 $xlarge: 1280px;
 
-:global(:root) {
+:root {
   --color-primary: #7c4dff;
   --color-primary-rgb: 124, 77, 255;
   --color-secondary: #99a3ff;
@@ -59,31 +59,36 @@ $xlarge: 1280px;
   }
 }
 
-:global(a) {
+a {
   color: rgba(var(--color-secondary-rgb), 0.9);
   text-decoration: none;
+  transition: scale ease-in-out 0.2s;
+}
+a:hover {
+  scale: 105%;
 }
 
-:global(h1),
-:global(h2),
-:global(h3),
-:global(h4),
-:global(h5),
-:global(h6) {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   text-align: center;
   user-select: none;
   margin: 0;
 }
 
-:global(h1) {
+h1 {
   font-size: 2.4em;
 }
-:global(h2) {
+h2 {
   font-size: 1.8em;
 }
-:global(h3) {
-  font-size: 1.6em;
-}
-:global(h3) {
+h3 {
   font-size: 1.4em;
+}
+
+pre {
+  margin: 0;
 }
