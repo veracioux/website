@@ -231,7 +231,7 @@ import zindex from "@/zindex";
 .modalBackground {
     @include c.fillWindow;
     @include c.centerFlex;
-    background: rgba(var(--color-background-rgb), 0.4);
+    background: rgba(var(--color-background-0-rgb), 0.4);
     // Would normally use v-bind("zindex.modal"), but doesn't cooperate with <Teleport>.
     z-index: 100;
 

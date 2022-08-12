@@ -4,8 +4,9 @@ import useSWRV from "swrv";
 import "@/assets/home.scss";
 import type {Project} from "@/models";
 import ProjectModal from "@/components/ProjectModal.vue";
-import {onMounted, reactive, ref} from "vue";
+import {reactive, ref} from "vue";
 import Img from "@/components/generic/Img.vue";
+import SectionTitle from "@/components/home/SectionTitle.vue";
 
 const modal = reactive<{show: boolean; project: Project | null}>({
     show: false,
@@ -14,7 +15,6 @@ const modal = reactive<{show: boolean; project: Project | null}>({
 // Id of the project whose preview image/animation is shown.
 const previewedProjectId = ref<number>();
 const imageContainer = ref<HTMLElement>();
-const transitionEnabled = ref<boolean>(true);
 
 const {data: projects} = useSWRV<Array<Partial<Project>>>(
     () => "/api/projects/",
@@ -49,7 +49,9 @@ function onMouseLeaveProjectCard() {
         <div class="imageContainer" id="image-container" ref="imageContainer" @mouseenter="previewedProjectId = undefined">
             <!-- Will hold the preview of the project (if it exists) via a <Teleport> -->
         </div>
-        <h1 class="sectionTitle">Projects</h1>
+        <SectionTitle :class="s.sectionTitle">
+            Projects
+        </SectionTitle>
         <div class="cardContainer">
             <template v-for="project in projects" :key="project.id">
                 <Teleport v-if="imageContainer" to="#image-container">
@@ -93,7 +95,7 @@ function onMouseLeaveProjectCard() {
 @import "@/assets/home.scss";
 
 .section {
-    background: #0e0f17;
+    background: var(--color-background-1);
     position: relative;
     min-height: 0;
     padding-bottom: 64px;
@@ -143,8 +145,17 @@ function onMouseLeaveProjectCard() {
     padding: 40px;
 }
 
-.card,
-.sectionTitle {
+.card {
     z-index: 1;
+}
+
+:deep(.titleDecoration) {
+    fill: var(--color-background-0);
+}
+</style>
+
+<style module="s" lang="scss">
+.sectionTitle {
+    margin-bottom: 32px;
 }
 </style>

@@ -46,7 +46,7 @@ onMounted(() => {
     @include c.fillParent;
 
     z-index: v-bind("zindex.navbarBackground");
-    background: var(--color-background);
+    background: var(--color-background-0);
     filter: drop-shadow(0 0 3px rgba(var(--color-primary-rgb), 0.8));
 }
 

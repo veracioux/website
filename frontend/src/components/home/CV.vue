@@ -4,6 +4,7 @@ import Label from "@/components/generic/Label.vue";
 import {onMounted, ref} from "vue";
 import SkillsPane from "@/components/cv/SkillsPane.vue";
 import LanguagesPane from "@/components/cv/LanguagesPane.vue";
+import SectionTitle from "@/components/home/SectionTitle.vue";
 
 const root = ref<HTMLElement>();
 
@@ -20,7 +21,9 @@ onMounted(() => {
 
 <template>
     <div ref="root" class="section">
-        <h1 class="sectionTitle">Curriculum Vitae</h1>
+        <SectionTitle :class="s.sectionTitle">
+            Curriculum Vitae
+        </SectionTitle>
         <div class="content">
             <table class="timeline">
                 <TimelineEntry
@@ -258,15 +261,15 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
     flex-direction: column;
     align-items: center;
     color: $colorDimText;
+    background: var(--color-background-2);
     padding-bottom: 120px;
-
-    --color-background: var(--color-background-2);
 
     .content {
         display: flex;
         flex-direction: column;
         justify-content: start;
         gap: 48px;
+        padding-top: 64px;
 
         @include screenWidthAbove($xlarge) {
             flex-direction: row;
@@ -292,7 +295,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
             @include screenWidthAbove($xlarge) {
                 gap: 32px;
                 position: sticky;
-                top: 160px;
+                top: 180px;
                 bottom: 160px;
                 height: 100%;
                 align-items: start;
@@ -323,17 +326,17 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
         .overlay {
             position: sticky;
             width: 100%;
-            height: 170px;
+            height: 200px;
             pointer-events: auto;
 
             &.top {
                 top: 0;
-                background: linear-gradient(var(--color-background) 75%, #00000000);
+                background: linear-gradient(var(--color-background-2) 75%, #00000000);
             }
 
             &.bottom {
                 bottom: 0;
-                background: linear-gradient(#00000000, var(--color-background) 50%);
+                background: linear-gradient(#00000000, var(--color-background-2) 50%);
                 // On mobile browsers we need to stretch this element downwards because
                 // the element may not perfectly hug the bottom of the viewport while
                 // scrolling, leaving parts of the underlying text visible.
@@ -343,23 +346,33 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
                     translate: 0 170px;
                     height: 100px;
                     width: 100%;
-                    background: var(--color-background);
+                    background: var(--color-background-2);
                 }
             }
         }
     }
 
-    .sectionTitle {
-        @extend .sectionTitle;
-        position: sticky;
-        top: 0;
+    :deep(.sectionTitle) {
         color: var(--color-text);
         z-index: 2;
+    }
+
+    :deep(.titleDecoration) {
+        fill: var(--color-background-1);
     }
 }
 
 .labelContainer {
     @include common.labelContainer;
     justify-content: start;
+}
+</style>
+
+<style module="s" lang="scss">
+.sectionTitle {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 2;
 }
 </style>

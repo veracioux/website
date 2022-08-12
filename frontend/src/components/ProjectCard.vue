@@ -55,7 +55,7 @@ defineEmits<{
     width: 280px;
     font-size: 1em;
     border-radius: 10px;
-    background: rgba(var(--color-background-rgb), 0.7);
+    background: rgba(var(--color-background-0-rgb), 0.7);
 
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }

@@ -35,9 +35,10 @@ $xlarge: 1280px;
   --color-primary-rgb: 124, 77, 255;
   --color-secondary: #99a3ff;
   --color-secondary-rgb: 153, 163, 255;
-  --color-background: black;
-  --color-background-rgb: 0, 0, 0;
-  --color-background-1: #12131d;
+  --color-background-0: black;
+  --color-background-0-rgb: 0, 0, 0;
+  --color-background-1: #0e0f17;
+  --color-background-1-rgb: 14, 15, 23;
   --color-background-2: #0a0b12;
   --color-background-2-rgb: 10, 11, 18;
   --color-text: #d2dcf9;
@@ -80,13 +81,13 @@ h6 {
 }
 
 h1 {
-  font-size: 2.4em;
+  font-size: 2em;
 }
 h2 {
-  font-size: 1.8em;
+  font-size: 1.6em;
 }
 h3 {
-  font-size: 1.4em;
+  font-size: 1.2em;
 }
 
 pre {

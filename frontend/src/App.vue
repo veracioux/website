@@ -10,7 +10,7 @@ import zindex from "@/zindex";
 <style>
 html,
 body {
-    background: var(--color-background);
+    background: var(--color-background-0);
     margin: 0;
     padding: 0;
     scroll-behavior: smooth;
