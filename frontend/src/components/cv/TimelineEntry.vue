@@ -94,7 +94,8 @@ defineProps<{
         text-align: right;
     }
 
-    .text, .timeSpan {
+    .text,
+    .timeSpan {
         margin: 2px 0;
 
         @include screenSizeAbove($tablet) {
@@ -110,5 +111,4 @@ defineProps<{
         }
     }
 }
-
 </style>

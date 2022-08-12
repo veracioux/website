@@ -21,9 +21,7 @@ onMounted(() => {
 
 <template>
     <div ref="root" class="section">
-        <SectionTitle :class="s.sectionTitle">
-            Curriculum Vitae
-        </SectionTitle>
+        <SectionTitle :class="s.sectionTitle"> Curriculum Vitae </SectionTitle>
         <div class="content">
             <table class="timeline">
                 <TimelineEntry
@@ -331,12 +329,18 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
 
             &.top {
                 top: 0;
-                background: linear-gradient(var(--color-background-2) 75%, #00000000);
+                background: linear-gradient(
+                    var(--color-background-2) 75%,
+                    #00000000
+                );
             }
 
             &.bottom {
                 bottom: 0;
-                background: linear-gradient(#00000000, var(--color-background-2) 50%);
+                background: linear-gradient(
+                    #00000000,
+                    var(--color-background-2) 50%
+                );
                 // On mobile browsers we need to stretch this element downwards because
                 // the element may not perfectly hug the bottom of the viewport while
                 // scrolling, leaving parts of the underlying text visible.

@@ -36,7 +36,7 @@ function openModal(project: Project) {
 }
 
 function onMouseEnterProjectCard(projectId: number) {
-    previewedProjectId.value = projectId
+    previewedProjectId.value = projectId;
 }
 
 function onMouseLeaveProjectCard() {
@@ -46,12 +46,15 @@ function onMouseLeaveProjectCard() {
 
 <template>
     <div class="section">
-        <div class="imageContainer" id="image-container" ref="imageContainer" @mouseenter="previewedProjectId = undefined">
+        <div
+            class="imageContainer"
+            id="image-container"
+            ref="imageContainer"
+            @mouseenter="previewedProjectId = undefined"
+        >
             <!-- Will hold the preview of the project (if it exists) via a <Teleport> -->
         </div>
-        <SectionTitle :class="s.sectionTitle">
-            Projects
-        </SectionTitle>
+        <SectionTitle :class="s.sectionTitle"> Projects </SectionTitle>
         <div class="cardContainer">
             <template v-for="project in projects" :key="project.id">
                 <Teleport v-if="imageContainer" to="#image-container">
@@ -80,9 +83,7 @@ function onMouseLeaveProjectCard() {
             <ProjectModal
                 v-if="modal.show"
                 :project="modal.project"
-                @close="
-                    modal.show = false;
-                "
+                @close="modal.show = false"
             />
         </div>
     </div>

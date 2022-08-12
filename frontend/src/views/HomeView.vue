@@ -9,7 +9,9 @@ import zindex from "@/zindex";
 import Navbar from "@/components/Navbar.vue";
 
 const Shutter = defineAsyncComponent(() => import("@/components/Shutter.vue"));
-const Projects = defineAsyncComponent(() => import("@/components/home/Projects.vue"));
+const Projects = defineAsyncComponent(
+    () => import("@/components/home/Projects.vue")
+);
 const CV = defineAsyncComponent(() => import("@/components/home/CV.vue"));
 const About = defineAsyncComponent(() => import("@/components/home/About.vue"));
 
@@ -180,5 +182,4 @@ ScrollData.provide({
     background: var(--color-background-2);
     z-index: v-bind("zindex.section");
 }
-
 </style>

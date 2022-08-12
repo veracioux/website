@@ -2,15 +2,13 @@
 import SectionTitle from "@/components/home/SectionTitle.vue";
 
 export default {
-    components: {SectionTitle}
-}
+    components: {SectionTitle},
+};
 </script>
 
 <template>
     <div class="fullWindow section">
-        <SectionTitle>
-            About Me
-        </SectionTitle>
+        <SectionTitle> About Me </SectionTitle>
     </div>
 </template>
 

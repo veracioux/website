@@ -18,7 +18,7 @@
 
 @mixin screenSizeAbove($width, $height: null) {
   @if $height == null {
-    $height: $width
+    $height: $width;
   }
   @media only screen and (min-width: $width) and (min-height: $height) {
     @content;
