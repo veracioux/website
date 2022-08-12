@@ -239,6 +239,10 @@ onMounted(() => {
                 <LanguagesPane class="languagesPane" />
             </aside>
         </div>
+        <div class="overlayContainer">
+            <div class="overlay top" />
+            <div class="overlay bottom" />
+        </div>
     </div>
 </template>
 
@@ -254,7 +258,9 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
     flex-direction: column;
     align-items: center;
     color: $colorDimText;
-    padding-bottom: 160px;
+    padding-bottom: 120px;
+
+    --color-background: var(--color-background-2);
 
     .content {
         display: flex;
@@ -304,14 +310,51 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
         }
     }
 
+    .overlayContainer {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .overlay {
+            position: sticky;
+            width: 100%;
+            height: 170px;
+            pointer-events: auto;
+
+            &.top {
+                top: 0;
+                background: linear-gradient(var(--color-background) 75%, #00000000);
+            }
+
+            &.bottom {
+                bottom: 0;
+                background: linear-gradient(#00000000, var(--color-background) 50%);
+                // On mobile browsers we need to stretch this element downwards because
+                // the element may not perfectly hug the bottom of the viewport while
+                // scrolling, leaving parts of the underlying text visible.
+                &::after {
+                    display: block;
+                    content: "";
+                    translate: 0 170px;
+                    height: 100px;
+                    width: 100%;
+                    background: var(--color-background);
+                }
+            }
+        }
+    }
+
     .sectionTitle {
         @extend .sectionTitle;
-        position: relative;
+        position: sticky;
         top: 0;
-        @include screenWidthAbove($xlarge) {
-            position: sticky;
-        }
         color: var(--color-text);
+        z-index: 2;
     }
 }
 
