@@ -57,7 +57,7 @@ const iconStyle: CSSProperties = {
     height: "100%",
     // No other method of centering seems to work with FontAwesomeIcon
     margin: "50%",
-    translate: "-50% -50%",
+    transform: "translate(-50%, -50%)",
 };
 
 const root = ref<HTMLElement>();

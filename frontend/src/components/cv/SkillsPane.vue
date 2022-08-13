@@ -148,7 +148,7 @@ number, not as a percentage)
 .iconJetBrains {
     $scale: 2.4;
     @include scaledIcon($scale);
-    translate: calc(-0.25 * #{$iconSize});
+    transform: translate(calc(-0.25 * #{$iconSize}));
     margin-right: calc((#{$scale} - 1 - 0.25 * #{$scale}) * #{$iconSize});
 }
 

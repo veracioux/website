@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Intro from "@/components/home/Intro.vue";
-import {defineAsyncComponent, onMounted, reactive, ref} from "vue";
+import {defineAsyncComponent, onMounted, reactive, ref, watch} from "vue";
 import type {CSSProperties} from "vue";
 import {ScrollData} from "@/inject";
 import * as utils from "@/utils";
@@ -20,6 +20,8 @@ const veraciouxStyle = reactive<CSSProperties>({});
 const animatableVeraciouxTextElement = ref<HTMLElement>();
 const veraciouxTextFadeable = ref(false);
 const navbarOpaque = ref(false);
+const navbar = ref<HTMLElement>();
+const container = ref<HTMLElement>();
 
 /**
  * Elements with this style will be sticky until a threshold is passed.
@@ -27,7 +29,7 @@ const navbarOpaque = ref(false);
  */
 function styleStickyUntilThreshold(relativeScrollThreshold: number) {
     if (relativeScrollY.value >= relativeScrollThreshold) {
-        return {position: "absolute"};
+        return {position: "absolute", top: `-${navbar.value!.clientHeight}px`};
     }
     return {position: "fixed"};
 }
@@ -39,7 +41,11 @@ function styleWithRelativeHeight(relativeHeight: number) {
 }
 
 function onScroll() {
-    relativeScrollY.value = window.scrollY / window.innerHeight;
+    if (container.value) {
+        console.debug("onScroll");
+        relativeScrollY.value =
+            container.value.scrollTop / container.value.clientHeight;
+    }
 }
 
 let veraciouxTextAnimation: Animation | undefined = undefined;
@@ -92,50 +98,60 @@ function onAnimatableVeraciouxTextElementMounted(element: HTMLElement) {
 }
 
 onMounted(() => {
-    utils.onScroll(onScroll);
+    utils.onScroll(onScroll, container.value);
     window.addEventListener("resize", onScroll);
 });
 
 ScrollData.provide({
     relativeScrollY,
+    scrollContainer: container,
 });
 </script>
 <template>
-    <Navbar
-        :class="{opaque: navbarOpaque}"
-        @animatableVeraciouxTextElementMounted="
-            onAnimatableVeraciouxTextElementMounted
-        "
-    />
-    <div class="container">
-        <div
-            class="%home-section-space-occupant"
-            :style="styleWithRelativeHeight(0.4)"
-        />
-        <div
-            id="home"
-            class="%home-section-space-occupant fullWindow"
-            :style="styleWithRelativeHeight(0.6)"
-        />
-        <div style="position: relative" v-if="relativeScrollY <= 2">
-            <Shutter class="shutter" :style="styleStickyUntilThreshold(1)" />
-            <Intro
-                class="home"
-                :style="styleStickyUntilThreshold(1)"
-                :veracioux-style="veraciouxStyle"
-                :veracioux-text-fadeable="veraciouxTextFadeable"
-                @veraciouxCrossedThreshold="onVeraciouxCrossedThreshold"
+    <div class="viewportContainer">
+        <div ref="navbar">
+            <Navbar
+                :class="{opaque: navbarOpaque}"
+                @animatableVeraciouxTextElementMounted="
+                    onAnimatableVeraciouxTextElementMounted
+                "
             />
         </div>
-        <div class="-home-section-space-occupant fullWindow" />
-        <Projects id="projects" class="projects" />
-        <CV id="cv" class="cv" />
-        <About id="about" class="about" />
+        <div class="container" ref="container">
+            <div
+                class="%home-section-space-occupant"
+                :style="styleWithRelativeHeight(0.4)"
+            />
+            <div
+                id="home"
+                class="%home-section-space-occupant"
+                :style="styleWithRelativeHeight(0.6)"
+            />
+            <div class="introSectionContainer" v-if="relativeScrollY <= 2">
+                <Shutter
+                    class="shutter"
+                    :style="styleStickyUntilThreshold(1)"
+                />
+                <Intro
+                    class="intro"
+                    :style="styleStickyUntilThreshold(1)"
+                    :veracioux-style="veraciouxStyle"
+                    :veracioux-text-fadeable="veraciouxTextFadeable"
+                    @veraciouxCrossedThreshold="onVeraciouxCrossedThreshold"
+                />
+            </div>
+            <div class="-home-section-space-occupant fullWindow" />
+            <Projects id="projects" class="projects" />
+            <CV id="cv" class="cv" />
+            <About id="about" class="about" />
+        </div>
     </div>
 </template>
 
 <style lang="scss">
 .navbar {
+    position: sticky;
+
     .background,
     .contentLeft,
     .contentRight {
@@ -161,17 +177,29 @@ ScrollData.provide({
 
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as c;
+
 .container {
+    position: relative;
+    height: 100%;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
+.introSectionContainer {
     position: relative;
 }
 
+.intro,
 .shutter {
     @include c.fillParent;
+}
+
+.shutter {
     z-index: v-bind("zindex.shutter");
 }
 
-.home {
-    @include c.fillParent;
+.intro {
     z-index: v-bind("zindex.introSection");
 }
 

@@ -261,6 +261,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
     color: $colorDimText;
     background: var(--color-background-2);
     padding-bottom: 120px;
+    width: 100vw;
 
     .content {
         display: flex;
@@ -312,8 +313,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
     }
 
     .overlayContainer {
-        position: absolute;
-        inset: 0;
+        @include common.fillParent;
         z-index: 1;
         pointer-events: none;
 
@@ -347,7 +347,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
                 &::after {
                     display: block;
                     content: "";
-                    translate: 0 170px;
+                    transform: translate(0, 170px);
                     height: 100px;
                     width: 100%;
                     background: var(--color-background-2);

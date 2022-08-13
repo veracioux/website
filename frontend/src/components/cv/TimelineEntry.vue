@@ -60,9 +60,8 @@ defineProps<{
         width: var(--width);
 
         .line {
-            position: absolute;
+            @include c.fillParent;
             width: var(--width);
-            inset: 0;
             z-index: 0;
 
             &::after {

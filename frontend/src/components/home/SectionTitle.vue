@@ -24,9 +24,9 @@
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/common.module.scss" as c;
 .titleDecorationContainer {
-    position: absolute;
-    inset: 0;
+    @include c.fillParent;
     z-index: 0;
 }
 
@@ -37,8 +37,7 @@
 .sectionTitle {
     position: relative;
     z-index: 1;
-    padding-top: 80px;
-    padding-bottom: 24px;
+    padding: 24px 0;
 }
 
 .sectionContainer {

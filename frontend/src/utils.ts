@@ -4,9 +4,12 @@
 import {ScrollData} from "@/inject";
 import {ref, watch} from "vue";
 
-export function onScroll(callback: (event?: Event) => void) {
+export function onScroll(
+    callback: (event?: Event) => void,
+    element?: HTMLElement
+) {
     let residualScrollTimerId: any;
-    window.addEventListener(
+    (element ?? window).addEventListener(
         "scroll",
         (ev) => {
             // If the user scrolls too fast, we might not get a scroll event fired at the final position.

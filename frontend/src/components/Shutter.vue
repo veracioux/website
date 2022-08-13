@@ -4,6 +4,7 @@ import {ScrollData} from "@/inject";
 import SocialIcon from "@/components/generic/SocialIcon.vue";
 import Img from "@/components/generic/Img.vue";
 import mugshot from "@/assets/mugshot.webp";
+import {shutterFullyOpenedScrollThreshold} from "@/constants";
 
 interface Slice {
     pivotX: number;
@@ -27,7 +28,7 @@ const configKonva = reactive({
 let relativeApertureSize = 0;
 const relativeScrollAtMaxAperture = 1 / 3.5;
 
-const {relativeScrollY} = ScrollData.inject();
+const {relativeScrollY, scrollContainer} = ScrollData.inject();
 
 function getShutterRadius() {
     return Math.max(window.innerWidth, window.innerHeight);
@@ -87,7 +88,36 @@ function updateRotation() {
     }
 }
 
-function onScroll(forceUpdate = false) {
+let stopScrollingDetectorId: number | undefined = undefined;
+
+/**
+ * Use a timeout to detect if scrolling has stopped and fully open/close the
+ * shutter based on `scrollingDirection`. This is done so the shutter isn't
+ * left in a partially opened state.
+ */
+function fullyOpenOrCloseShutterWhenStoppedScrolling(
+    scrollingDirection: "up" | "down"
+) {
+    if (stopScrollingDetectorId !== undefined) {
+        clearTimeout(stopScrollingDetectorId);
+    }
+
+    if (relativeScrollY.value < shutterFullyOpenedScrollThreshold) {
+        stopScrollingDetectorId = setTimeout(() => {
+            if (relativeScrollY.value >= shutterFullyOpenedScrollThreshold)
+                return;
+            if (scrollingDirection === "up")
+                scrollContainer.value?.scrollTo(0, 0);
+            else document.getElementById("home")?.scrollIntoView();
+        }, 200);
+    } else {
+        stopScrollingDetectorId = undefined;
+    }
+}
+
+function onScroll(value?: number, oldValue?: number, forceUpdate = false) {
+    if (value === undefined || oldValue === undefined)
+        value = oldValue = relativeScrollY.value;
     if (
         !forceUpdate &&
         relativeApertureSize == 1 &&
@@ -100,6 +130,13 @@ function onScroll(forceUpdate = false) {
     );
     updateShutterOutline();
     updateRotation();
+
+    // TODO: move this to Shutter
+    if (value != oldValue) {
+        fullyOpenOrCloseShutterWhenStoppedScrolling(
+            value < oldValue ? "up" : "down"
+        );
+    }
 }
 
 const resizeEvent = ref(0);
@@ -109,10 +146,10 @@ function onWindowResize() {
     configKonva.width = window.innerWidth;
     configKonva.height = window.innerHeight;
     updateShutterGeometry();
-    onScroll(true);
+    onScroll(relativeScrollY.value, relativeScrollY.value, true);
 }
 
-watch(relativeScrollY, () => onScroll());
+watch(relativeScrollY, (value, oldValue) => onScroll(value, oldValue));
 
 onMounted(() => {
     window.addEventListener("resize", onWindowResize);
@@ -122,7 +159,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="fullWindow">
+    <div class="fullWindow" :class="s.shutter">
         <div class="mugshotBackground" />
         <img
             alt="mugshot"
@@ -203,6 +240,7 @@ Classes used temporarily for debugging.
 
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as c;
+
 .mugshotBackground {
     position: absolute;
     inset: 25% 0;
@@ -219,5 +257,11 @@ Classes used temporarily for debugging.
     @media screen and (max-width: 640px), screen and (max-height: 640px) {
         width: 200px;
     }
+}
+</style>
+
+<style module="s" lang="scss">
+.shutter {
+    pointer-events: none;
 }
 </style>

@@ -6,6 +6,7 @@ import {inject as _inject, provide as _provide, ref} from "vue";
 export class ScrollData {
     /* The document scroll amount expressed as a number of sections. */
     relativeScrollY = ref(0);
+    scrollContainer = ref<HTMLElement | Window>();
 
     /*
      * Get the scroll amount from the beginning of the section expressed as a number of sections.

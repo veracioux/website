@@ -4,6 +4,7 @@ import {ScrollData} from "@/inject";
 import SelfPraiseManager from "@/components/home/SelfPraiseManager.vue";
 import type {SelfPraiseProps} from "@/components/home/SelfPraiseCard.vue";
 import type {CSSProperties} from "vue";
+import {shutterFullyOpenedScrollThreshold} from "@/constants";
 
 defineProps<{
     /** Style of the 'veracioux' text. */
@@ -47,15 +48,12 @@ const selfPraiseItems: SelfPraiseProps[] = [
 
 // Config
 
-/** relativeScrollY value at which the shutter is fully opened. */
-const shutterFullyOpenedScrollThreshold = 0.28;
 /** relativeScrollY value at which the self praise appears. */
 const selfPraiseAppearRelativeScrollY = 0.3;
 /** Interval (ms) between subsequent characters being typed out. */
 const defaultTypingInterval = 90;
 const minTypingInterval = 15;
-const veraciouxThresholdScroll = 0.15;
-let stopScrollingDetectorId: number | undefined = undefined;
+const veraciouxThresholdScroll = 0.2;
 
 // Refs
 const typedOutLength = ref(0);
@@ -121,58 +119,39 @@ function positionGreetingAndTraits() {
     const helloTopY = helloStatic.value.offsetTop;
     const traitsBottomY =
         traitsStatic.value!.offsetTop + traitsStatic.value!.offsetHeight;
-    Object.assign(hello.value!.style, {
-        translate: `0 ${
+    Object.assign(helloStyle, {
+        transform: `translate(0, ${
             -helloTopY *
             Math.max(
-                (relativeScrollY.value / shutterFullyOpenedScrollThreshold) *
-                    0.2,
+                relativeScrollY.value / shutterFullyOpenedScrollThreshold,
                 0
             )
-        }px`,
+        }px)`,
         top: -1.5 * window.scrollY + "px",
     });
-    Object.assign(traits.value!.style, {
-        translate: `0 ${
+    console.debug(
+        "here",
+        relativeScrollY.value,
+        shutterFullyOpenedScrollThreshold
+    );
+    console.debug("style", hello.value!.style);
+    Object.assign(traitsStyle, {
+        transform: `translate(0, ${
             (window.innerHeight - traitsBottomY) *
             Math.min(
                 relativeScrollY.value / shutterFullyOpenedScrollThreshold,
                 1
             )
-        }px`,
+        }px)`,
     });
-}
-
-/**
- * Use a timeout to detect if scrolling has stopped and fully open/close the
- * shutter based on `scrollingDirection`. This is done so the shutter isn't
- * left in a partially opened state.
- */
-function fullyOpenOrCloseShutterWhenStoppedScrolling(
-    scrollingDirection: "up" | "down"
-) {
-    if (stopScrollingDetectorId !== undefined) {
-        clearTimeout(stopScrollingDetectorId);
-    }
-
-    if (relativeScrollY.value < shutterFullyOpenedScrollThreshold) {
-        stopScrollingDetectorId = setTimeout(() => {
-            if (relativeScrollY.value >= shutterFullyOpenedScrollThreshold)
-                return;
-            if (scrollingDirection === "up") window.scrollTo(0, 0);
-            else document.getElementById("home")?.scrollIntoView();
-        }, 200);
-    } else {
-        stopScrollingDetectorId = undefined;
-    }
 }
 
 let relativeScrollYAtLastIntervalUpdate = 0;
 let veraciouxPosition: "above" | "below" = "below";
 
-function onScroll(value: number, oldValue: number) {
+function onScroll(value: number) {
     // Update opacity of fade-able part of the greeting text
-    fadeableStyle.opacity = Math.max(1 - value * 6.5, 0);
+    fadeableStyle.opacity = Math.max(1 - value / veraciouxThresholdScroll, 0);
 
     // As the user scrolls down, the typing interval must reduce proportionally.
     if (
@@ -184,6 +163,7 @@ function onScroll(value: number, oldValue: number) {
         relativeScrollYAtLastIntervalUpdate = value;
     }
 
+    /* Ensure proper positioning of greeting and traits based on scroll. */
     if (relativeScrollY.value < shutterFullyOpenedScrollThreshold) {
         // Using a `watch` here ensures that positionGreetingAndTraits will be
         // called even the first time after the condition is false.
@@ -211,10 +191,6 @@ function onScroll(value: number, oldValue: number) {
         );
         veraciouxPosition = "below";
     }
-
-    fullyOpenOrCloseShutterWhenStoppedScrolling(
-        value < oldValue ? "up" : "down"
-    );
 }
 
 watch(relativeScrollY, onScroll);
@@ -232,7 +208,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="home section" ref="root">
+    <div class="intro section" ref="root">
         <!-- TODO this is an indicator for testing mugshot centering
         <div style="display: flex; position: fixed; height: 100%; align-items: center; justify-content: center">
             <div style="width: 20px; height: 20px; background: red; border-radius: 50%;"></div>
@@ -317,11 +293,8 @@ onMounted(() => {
 .hello {
     @include common.veracioux;
     position: relative;
-    top: 0;
-    justify-self: end;
     text-align: center;
     margin-bottom: 3em;
-    font-size: 2rem;
 }
 
 .traits {
@@ -362,7 +335,7 @@ onMounted(() => {
     height: 0;
 }
 
-.home {
+.intro {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -370,5 +343,7 @@ onMounted(() => {
 
     color: var(--color-primary);
     font-family: monospace;
+
+    pointer-events: none;
 }
 </style>

@@ -35,12 +35,12 @@ function getPopupAnimation(element: HTMLElement) {
     const center = getCenterPoint(element);
     return [
         {
-            translate: `${x - center.x}px ${y - center.y}px`,
-            scale: 0,
+            transform: `translate(${x - center.x}px, ${
+                y - center.y
+            }px) scale(0)`,
         },
         {
-            translate: 0,
-            scale: 1,
+            transform: `translate(0) scale(1)`,
         },
     ];
 }

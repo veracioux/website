@@ -4,6 +4,25 @@ import CV from "@/components/home/CV.vue";
 </script>
 
 <template>
-    <Navbar />
-    <CV />
+    <div class="viewportContainer">
+        <Navbar :class="s.navbar" />
+        <div :class="s.content">
+            <CV />
+        </div>
+    </div>
 </template>
+
+<style module="s" lang="scss">
+:global(.viewportContainer) {
+    .navbar {
+        top: 0;
+        position: sticky;
+    }
+
+    .content {
+        position: relative;
+        height: 100%;
+        overflow: auto;
+    }
+}
+</style>

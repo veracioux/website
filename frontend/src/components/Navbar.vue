@@ -91,9 +91,7 @@ a.veracioux {
 }
 
 .navbar {
-    position: fixed;
-    max-height: 20vh;
-    width: 100%;
+    position: relative;
     padding: 8px;
 
     font-family: monospace;
