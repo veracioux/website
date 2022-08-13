@@ -7,6 +7,7 @@ import * as utils from "@/utils";
 // noinspection ES6UnusedImports
 import zindex from "@/zindex";
 import Navbar from "@/components/Navbar.vue";
+import PageWithNavbar from "@/components/PageWithNavbar.vue";
 
 const Shutter = defineAsyncComponent(() => import("@/components/Shutter.vue"));
 const Projects = defineAsyncComponent(
@@ -42,7 +43,6 @@ function styleWithRelativeHeight(relativeHeight: number) {
 
 function onScroll() {
     if (container.value) {
-        console.debug("onScroll");
         relativeScrollY.value =
             container.value.scrollTop / container.value.clientHeight;
     }
@@ -108,15 +108,17 @@ ScrollData.provide({
 });
 </script>
 <template>
-    <div class="viewportContainer">
-        <div ref="navbar">
-            <Navbar
-                :class="{opaque: navbarOpaque}"
-                @animatableVeraciouxTextElementMounted="
-                    onAnimatableVeraciouxTextElementMounted
-                "
-            />
-        </div>
+    <PageWithNavbar>
+        <template #navbar>
+            <div ref="navbar">
+                <Navbar
+                    :class="{opaque: navbarOpaque}"
+                    @animatableVeraciouxTextElementMounted="
+                        onAnimatableVeraciouxTextElementMounted
+                    "
+                />
+            </div>
+        </template>
         <div class="container" ref="container">
             <div
                 class="%home-section-space-occupant"
@@ -145,7 +147,7 @@ ScrollData.provide({
             <CV id="cv" class="cv" />
             <About id="about" class="about" />
         </div>
-    </div>
+    </PageWithNavbar>
 </template>
 
 <style lang="scss">
@@ -179,11 +181,7 @@ ScrollData.provide({
 @use "@/assets/common.module.scss" as c;
 
 .container {
-    position: relative;
-    height: 100%;
-    overflow-y: auto;
-    scroll-behavior: smooth;
-    overflow-x: hidden;
+    @include c.scrollContainer;
 }
 
 .introSectionContainer {

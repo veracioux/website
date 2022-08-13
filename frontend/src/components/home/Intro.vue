@@ -129,12 +129,6 @@ function positionGreetingAndTraits() {
         }px)`,
         top: -1.5 * window.scrollY + "px",
     });
-    console.debug(
-        "here",
-        relativeScrollY.value,
-        shutterFullyOpenedScrollThreshold
-    );
-    console.debug("style", hello.value!.style);
     Object.assign(traitsStyle, {
         transform: `translate(0, ${
             (window.innerHeight - traitsBottomY) *

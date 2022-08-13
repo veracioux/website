@@ -2,6 +2,7 @@
 import {defineComponent, onMounted} from "vue";
 import SocialIcon from "@/components/generic/SocialIcon.vue";
 import Icon from "@/components/generic/Icon.vue";
+import PageWithNavbar from "@/components/PageWithNavbar.vue";
 
 const addresses = {};
 
@@ -29,7 +30,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="fullWindow">
+    <PageWithNavbar>
         <AddressComponent>
             <div>0xDEADBEEF</div>
         </AddressComponent>
@@ -40,7 +41,7 @@ onMounted(() => {
         <AddressComponent />
         <AddressComponent />
         <AddressComponent />
-    </div>
+    </PageWithNavbar>
 </template>
 
 <style scoped lang="scss"></style>

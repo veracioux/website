@@ -1,9 +1,14 @@
+<script setup lang="ts">
+import Navbar from "@/components/Navbar.vue";
+</script>
+
 <template>
     <div :class="s.viewportContainer">
         <slot name="navbar" :class="s.navbar">
+            <Navbar />
         </slot>
         <div :class="s.content">
-            <slot name="content"></slot>
+            <slot></slot>
         </div>
     </div>
 </template>
@@ -22,16 +27,7 @@
     }
 
     .content {
-        position: relative;
-        overflow: auto;
-        height: 100%;
-        //@include c.scrollContainer;
+        @include c.scrollContainer;
     }
 }
 </style>
-<script>
-import Navbar from "@/components/Navbar";
-export default {
-    components: {Navbar}
-}
-</script>
