@@ -260,8 +260,12 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
     align-items: center;
     color: $colorDimText;
     background: var(--color-background-2);
-    padding-bottom: 120px;
     width: 100vw;
+    padding-bottom: 120px;
+
+    @include screenWidthAbove($xlarge) {
+        padding-bottom: 200px;
+    }
 
     .content {
         display: flex;
@@ -294,8 +298,8 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
             @include screenWidthAbove($xlarge) {
                 gap: 32px;
                 position: sticky;
-                top: 180px;
-                bottom: 160px;
+                top: 150px;
+                bottom: 150px;
                 height: 100%;
                 align-items: start;
             }
@@ -324,22 +328,23 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
         .overlay {
             position: sticky;
             width: 100%;
-            height: 200px;
             pointer-events: auto;
 
             &.top {
                 top: 0;
+                height: 160px;
                 background: linear-gradient(
-                    var(--color-background-2) 75%,
+                    var(--color-background-2) 60%,
                     #00000000
                 );
             }
 
             &.bottom {
                 bottom: 0;
+                height: 200px;
                 background: linear-gradient(
                     #00000000,
-                    var(--color-background-2) 50%
+                    var(--color-background-2) 40%
                 );
                 // On mobile browsers we need to stretch this element downwards because
                 // the element may not perfectly hug the bottom of the viewport while
