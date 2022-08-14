@@ -6,6 +6,7 @@ import {
     faGlobe,
     faXmark,
     faCode,
+    faEnvelope,
     faCodePullRequest,
 } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -24,6 +25,7 @@ library.add(
     faGlobe,
     faXmark,
     faCode,
+    faEnvelope,
     faCodePullRequest
 );
 library.add(faGithub, faGitlab, faLinkedin, faMonero);
@@ -34,6 +36,7 @@ const iconNames = {
     externalLink: "arrow-up-right-from-square",
     x: "xmark",
     code: "code",
+    mail: "envelope",
     PR: "code-pull-request",
     github: ["fab", "github"],
     gitlab: ["fab", "gitlab"],
@@ -72,7 +75,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div ref="root" :class="s.container">
+    <span ref="root" :class="s.container">
         <FontAwesomeIcon
             v-if="name"
             :icon="iconNames[name]"
@@ -87,7 +90,7 @@ onMounted(() => {
             :class="s.icon"
             :style="iconStyle"
         />
-    </div>
+    </span>
 </template>
 
 <style module="s" lang="scss">

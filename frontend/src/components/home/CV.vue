@@ -361,7 +361,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
         }
     }
 
-    :deep(.sectionTitle) {
+    :deep(.titleText) {
         color: var(--color-text);
         z-index: 2;
     }

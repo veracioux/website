@@ -1,44 +1,55 @@
 <script setup lang="ts">
 import Icon from "@/components/generic/Icon.vue";
 import type {CSSProperties} from "vue";
+import urls from "@/urls.json";
 
-type IconData = {
-    spec?: string | string[];
+export interface SocialIconProps {
+    iconName: keyof typeof nameToDataMap;
+    /** The URL. */
+    href?: string;
+    /** Content that should be copied to clipboard when the icon is clicked.  */
+    clipboard?: string;
+}
+
+type IconData = SocialIconProps & {
     style: CSSProperties;
 };
 
-const nameMap: Record<string, IconData> = {
+const nameToDataMap: Record<string, IconData> = {
     linkedin: {
+        iconName: "linkedin",
+        href: urls.linkedin,
         style: {
             color: "#0a66c2",
         },
     },
     github: {
+        iconName: "github",
+        href: urls.github,
         style: {
             color: "white",
         },
     },
     monero: {
+        iconName: "monero",
+        clipboard: "TODO",
         style: {
             color: "#e66320",
         },
     },
 };
 
-defineProps({
-    iconName: String as () => keyof typeof nameMap,
-    href: String,
-});
+defineProps<SocialIconProps>();
 </script>
 
 <template>
-    <a :href="href">
+    <component :is="href ? 'a' : 'span'" :href="href">
         <Icon
-            :icon="nameMap[iconName].spec ?? iconName"
-            :style="nameMap[iconName].style"
+            :name="nameToDataMap[iconName].spec ?? iconName"
+            :style="nameToDataMap[iconName].style"
             class="icon"
         />
-    </a>
+    </component>
 </template>
 
 <style scoped lang="scss">

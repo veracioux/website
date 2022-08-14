@@ -16,7 +16,7 @@
                     class="titleDecoration"
                 />
             </svg>
-            <h1 class="sectionTitle">
+            <h1 class="titleText" :class="s.sectionTitle">
                 <slot />
             </h1>
         </div>
@@ -34,7 +34,7 @@
     fill: var(--color-background-2);
 }
 
-.sectionTitle {
+.titleText {
     position: relative;
     z-index: 1;
     padding: 24px 0;
@@ -43,4 +43,8 @@
 .sectionContainer {
     position: relative;
 }
+</style>
+
+<style module="s" lang="scss">
+@import "@/assets/home.scss";
 </style>

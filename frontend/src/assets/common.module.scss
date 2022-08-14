@@ -33,8 +33,13 @@
   position: relative;
   height: 100%;
   overflow-y: auto;
-  scroll-behavior: smooth;
   overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+@mixin paddingSide($size) {
+  padding-left: $size;
+  padding-right: $size;
 }
 
 .flex {
@@ -68,4 +73,25 @@
 
 @mixin opacityFadeIn($animationParams) {
   animation: opacity-fade-in $animationParams;
+}
+
+@function beveledEdges($size) {
+  @return polygon(
+    // top-left
+    0 $size,
+    $size 0,
+    // top-right
+    calc(100% - $size) 0,
+    100% $size,
+    // bottom-right
+    100% calc(100% - $size),
+    calc(100% - $size) 100%,
+    // bottom-left
+    $size 100%,
+    0 calc(100% - $size)
+  );
+}
+
+@mixin beveledEdges($size) {
+  clip-path: beveledEdges($size);
 }
