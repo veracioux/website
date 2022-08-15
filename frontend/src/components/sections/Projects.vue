@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import ProjectCard from "@/components/ProjectCard.vue";
+import ProjectCard from "@/components/projects/ProjectCard.vue";
 import useSWRV from "swrv";
 import "@/assets/home.scss";
 import type {Project} from "@/models";
-import ProjectModal from "@/components/ProjectModal.vue";
+import ProjectModal from "@/components/projects/ProjectModal.vue";
 import {reactive, ref} from "vue";
 import Img from "@/components/generic/Img.vue";
-import SectionTitle from "@/components/home/SectionTitle.vue";
+import SectionTitle from "@/components/SectionTitle.vue";
 
 const modal = reactive<{show: boolean; project: Project | null}>({
     show: false,

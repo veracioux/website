@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SectionTitle from "@/components/home/SectionTitle.vue";
+import SectionTitle from "@/components/SectionTitle.vue";
 import Icon from "@/components/generic/Icon.vue";
 import mugshot from "@/assets/mugshot.webp";
 </script>

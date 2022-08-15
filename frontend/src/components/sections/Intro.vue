@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import {onActivated, onMounted, reactive, ref, watch} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {ScrollData} from "@/inject";
-import SelfPraiseManager from "@/components/home/SelfPraiseManager.vue";
-import type {SelfPraiseProps} from "@/components/home/SelfPraiseCard.vue";
+import SelfPraiseManager from "@/components/intro/SelfPraiseManager.vue";
+import type {SelfPraiseProps} from "@/components/intro/SelfPraiseCard.vue";
 import type {CSSProperties} from "vue";
 import {shutterFullyOpenedScrollThreshold} from "@/constants";
 

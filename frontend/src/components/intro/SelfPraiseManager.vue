@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type {SelfPraiseProps} from "@/components/home/SelfPraiseCard.vue";
-import SelfPraiseCard from "@/components/home/SelfPraiseCard.vue";
+import type {SelfPraiseProps} from "@/components/intro/SelfPraiseCard.vue";
+import SelfPraiseCard from "@/components/intro/SelfPraiseCard.vue";
 import {ScrollData} from "@/inject";
-import {computed, ref, watch} from "vue";
+import {ref, watch} from "vue";
 import {useFastScrollingDetector} from "@/utils";
 
 const {selfPraiseItems, appearRelativeScrollY} = defineProps<{

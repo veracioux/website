@@ -4,7 +4,7 @@ import Label from "@/components/generic/Label.vue";
 import {onMounted, ref} from "vue";
 import SkillsPane from "@/components/cv/SkillsPane.vue";
 import LanguagesPane from "@/components/cv/LanguagesPane.vue";
-import SectionTitle from "@/components/home/SectionTitle.vue";
+import SectionTitle from "@/components/SectionTitle.vue";
 
 const root = ref<HTMLElement>();
 
