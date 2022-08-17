@@ -16,20 +16,28 @@ const router = createRouter({
             component: () => import("@/views/HomeView.vue"),
         },
         {
-            path: "/contact",
-            name: "contact",
-            meta: {
-                title: "veracioux | Contact",
-            },
-            component: () => import("@/views/ContactView.vue"),
-        },
-        {
             path: "/cv",
             name: "cv",
             meta: {
                 title: "veracioux | CV",
             },
             component: () => import("@/views/CVView.vue"),
+        },
+        {
+            path: "/about",
+            name: "about",
+            meta: {
+                title: "veracioux | About Me",
+            },
+            component: () => import("@/views/AboutView.vue"),
+        },
+        {
+            path: "/contact",
+            name: "contact",
+            meta: {
+                title: "veracioux | Contact",
+            },
+            component: () => import("@/views/ContactView.vue"),
         },
         {
             path: "/:pathMatch(.*)*",

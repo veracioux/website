@@ -15,9 +15,17 @@ export class ScrollData {
      */
     static sectionRelativeScrollY(
         element: HTMLElement,
-        relativeScrollY: number
+        scrollData: ScrollData
     ): number {
-        return relativeScrollY - element.offsetTop / window.innerHeight;
+        const {relativeScrollY, scrollContainer} = scrollData;
+        const height =
+            scrollContainer.value instanceof Window
+                ? scrollContainer.value.innerHeight
+                : scrollContainer.value?.offsetHeight;
+        if (!height) {
+            return 0;
+        }
+        return relativeScrollY.value - element.offsetTop / height;
     }
 
     static inject(): ScrollData {

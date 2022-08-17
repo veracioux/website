@@ -100,58 +100,58 @@ function onMouseLeaveProjectCard() {
     position: relative;
     min-height: 0;
     padding-bottom: 64px;
-}
 
-.imageContainer {
-    @include c.fillParent;
-    @include c.centerFlex;
-    max-width: 100%;
-    max-height: 100%;
-    overflow: hidden;
-
-    .previewImage {
+    .imageContainer {
         @include c.fillParent;
-        user-select: none;
-        pointer-events: none;
-        opacity: 0.15;
-        transition: opacity 2s;
+        @include c.centerFlex;
+        max-width: 100%;
+        max-height: 100%;
+        overflow: hidden;
 
-        min-width: 100%;
-        min-height: 100%;
+        .previewImage {
+            @include c.fillParent;
+            user-select: none;
+            pointer-events: none;
+            opacity: 0.15;
+            transition: opacity 2s;
 
-        &.preview-image-fade-enter-from {
-            opacity: 0;
-        }
+            min-width: 100%;
+            min-height: 100%;
 
-        &.preview-image-fade-enter-to {
-            opacity: 0.15 !important;
-        }
+            &.preview-image-fade-enter-from {
+                opacity: 0;
+            }
 
-        &.preview-image-fade-leave-from {
-            opacity: 0.15 !important;
-        }
+            &.preview-image-fade-enter-to {
+                opacity: 0.15 !important;
+            }
 
-        &.preview-image-fade-leave-to {
-            opacity: 0;
+            &.preview-image-fade-leave-from {
+                opacity: 0.15 !important;
+            }
+
+            &.preview-image-fade-leave-to {
+                opacity: 0;
+            }
         }
     }
-}
 
-.cardContainer {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 40px;
-    padding: 40px;
-}
+    .cardContainer {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 40px;
+        padding: 40px;
+    }
 
-.card {
-    z-index: 1;
-}
+    .card {
+        z-index: 1;
+    }
 
-:deep(.titleDecoration) {
-    fill: var(--color-background-0);
+    :deep(.titleDecoration) {
+        fill: var(--color-background-0);
+    }
 }
 </style>
 

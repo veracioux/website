@@ -30,10 +30,6 @@
     z-index: 0;
 }
 
-.titleDecoration {
-    fill: var(--color-background-2);
-}
-
 .titleText {
     position: relative;
     z-index: 1;

@@ -19,6 +19,9 @@ const CV = defineAsyncComponent(() => import("@/components/sections/CV.vue"));
 const About = defineAsyncComponent(
     () => import("@/components/sections/About.vue")
 );
+const Contact = defineAsyncComponent(
+    () => import("@/components/sections/Contact.vue")
+);
 
 const relativeScrollY = ref(0);
 const veraciouxStyle = reactive<CSSProperties>({});
@@ -150,6 +153,7 @@ ScrollData.provide({
             <Projects id="projects" class="projects" />
             <CV id="cv" class="cv" />
             <About id="about" class="about" />
+            <Contact id="contact" class="contact" />
         </div>
     </PageWithNavbar>
 </template>
@@ -207,9 +211,9 @@ ScrollData.provide({
 
 .projects,
 .cv,
-.about {
+.about,
+.contact {
     position: relative;
-    background: var(--color-background-2);
     z-index: v-bind("zindex.section");
 }
 </style>

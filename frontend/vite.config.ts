@@ -7,11 +7,7 @@ import vueJsx from "@vitejs/plugin-vue-jsx";
 import {rollupPlugin} from "ascii-mugshot";
 
 export default defineConfig({
-    plugins: [
-        vue(),
-        vueJsx(),
-        rollupPlugin(),
-    ],
+    plugins: [vue(), vueJsx(), rollupPlugin()],
     resolve: {
         alias: {
             "@": fileURLToPath(new URL("./src", import.meta.url)),
