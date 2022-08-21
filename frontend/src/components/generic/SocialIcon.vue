@@ -4,49 +4,58 @@ import type {CSSProperties} from "vue";
 import urls from "@/urls.json";
 
 export interface SocialIconProps {
-    iconName: keyof typeof nameToDataMap;
+    name: keyof typeof nameToDataMap;
     /** The URL. */
     href?: string;
     /** Content that should be copied to clipboard when the icon is clicked.  */
     clipboard?: string;
+    /** Whether to use the icon's natural color rather than CSS color property. */
+    colorize?: boolean;
 }
 
 type IconData = SocialIconProps & {
-    style: CSSProperties;
+    name: string;
+    style?: CSSProperties;
 };
 
 const nameToDataMap: Record<string, IconData> = {
     linkedin: {
-        iconName: "linkedin",
+        name: "linkedin",
         href: urls.linkedin,
         style: {
             color: "#0a66c2",
         },
     },
     github: {
-        iconName: "github",
+        name: "github",
         href: urls.github,
         style: {
             color: "white",
         },
     },
     monero: {
-        iconName: "monero",
+        name: "monero",
         clipboard: "TODO",
         style: {
             color: "#e66320",
         },
     },
+    mail: {
+        name: "mail",
+        href: "mailto:hgusic.pub@gmail.com",
+    },
 };
 
-defineProps<SocialIconProps>();
+const props = defineProps<SocialIconProps>();
+
+const href = props.href ?? nameToDataMap[props.name].href;
 </script>
 
 <template>
-    <component :is="href ? 'a' : 'span'" :href="href">
+    <component :is="href ? 'a' : 'span'" :href="href" target="_blank">
         <Icon
-            :name="nameToDataMap[iconName].spec ?? iconName"
-            :style="nameToDataMap[iconName].style"
+            :name="nameToDataMap[name]?.name ?? name"
+            :style="colorize ? nameToDataMap[name].style : undefined"
             class="icon"
         />
     </component>

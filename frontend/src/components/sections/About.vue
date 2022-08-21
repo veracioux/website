@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import SectionTitle from "@/components/SectionTitle.vue";
-import Icon from "@/components/generic/Icon.vue";
+import SocialIcon from "@/components/generic/SocialIcon.vue";
 import AnimatedPhoto from "@/components/about/AnimatedPhoto.vue";
 import Workflow from "@/components/about/Workflow.vue";
 import {ScrollData} from "@/inject";
-import {onMounted, ref, watch} from "vue";
+import {onMounted, ref} from "vue";
 
 const scrollData = ScrollData.inject();
 
@@ -40,9 +40,9 @@ onMounted(() => {
                             </div>
                             <div class="socialsContainer">
                                 <div class="socials">
-                                    <Icon name="github" class="icon" />
-                                    <Icon name="linkedin" class="icon" />
-                                    <Icon name="mail" class="icon" />
+                                    <SocialIcon name="github" class="icon" />
+                                    <SocialIcon name="linkedin" class="icon" />
+                                    <SocialIcon name="mail" class="icon" />
                                 </div>
                             </div>
                         </div>
