@@ -213,6 +213,7 @@ onMounted(() => {
                     />
                 </v-layer>
             </v-stage>
+            <div class="shadowOverlay" />
         </div>
     </div>
 </template>
@@ -258,6 +259,12 @@ Classes used temporarily for debugging.
     @include g.screenSizeAbove(768px) {
         width: 280px;
     }
+}
+
+.shadowOverlay {
+    @include c.fillParent;
+    z-index: 1;
+    box-shadow: inset 0 0 min(40vw, 40vh) var(--color-background-0);
 }
 </style>
 
