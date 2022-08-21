@@ -153,7 +153,7 @@ ScrollData.provide({
             <Projects id="projects" class="projects" />
             <CV id="cv" class="cv" />
             <About id="about" class="about" />
-            <Contact id="contact" class="contact" />
+            <!--            <Contact id="contact" class="contact" />-->
         </div>
     </PageWithNavbar>
 </template>

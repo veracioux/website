@@ -8,7 +8,10 @@
   opacity: 1;
 }
 
-.standard-fade-enter-active,
-.standard-fade-leave-active {
+.standard-fade-enter-active {
   transition: opacity 0.25s ease-in-out;
+}
+
+.standard-fade-leave-active {
+  transition: opacity 0s;
 }

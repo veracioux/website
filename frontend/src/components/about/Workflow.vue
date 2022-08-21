@@ -94,12 +94,16 @@ const workflow: Record<string, any[]> = {
 
 <template>
     <div class="workflowRoot">
+        <span style="display: inline"
+            ><b class="highlight" style="display: inline">Workflow</b
+            >.json</span
+        >
         <div>{</div>
         <div
             v-for="([key, items], i) of Object.entries(workflow)"
             class="indented"
         >
-            "<span class="highlight emphasize">{{ key }}</span
+            "<b class="highlight">{{ key }}</b
             >": [
             <div class="indented">
                 <span v-for="(item, i) of items" style="line-height: 1">
@@ -123,15 +127,11 @@ const workflow: Record<string, any[]> = {
     color: #ffffff33; // TODO change
     @include c.beveledEdges(20px);
     padding: 24px;
-    line-height: 2.5;
+    line-height: 2;
 }
 
 .highlight {
     color: white;
-}
-
-.emphasize {
-    font-weight: bold;
 }
 
 .indented {
@@ -175,6 +175,7 @@ const workflow: Record<string, any[]> = {
 
 span,
 a,
+b,
 :deep(span) {
     white-space: nowrap;
     // This is just so browser inspect tools show a reasonable boundary around items

@@ -18,12 +18,12 @@ const prompt = computed(() =>
         ? defaultPrompt
         : props.prompt === false
         ? ""
-        : defaultPrompt
+        : props.prompt ?? defaultPrompt
 );
 </script>
 
 <template>
-    <div>
+    <div style="position: relative">
         <div :style="end <= text.length + 1 && {opacity: 0}">
             <slot />
         </div>
@@ -41,25 +41,13 @@ const prompt = computed(() =>
 
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as c;
+@use "@/assets/about.module.scss" as a;
 
 .cli {
     @include c.fillParent;
     padding: 12px;
-
-    @keyframes blink {
-        50% {
-            opacity: 1;
-        }
-        51% {
-            opacity: 0;
-        }
-        to {
-            opacity: 0;
-        }
-    }
-
     .cursor {
-        animation: blink 1.5s ease-in-out infinite;
+        @include a.cursor;
     }
 }
 </style>

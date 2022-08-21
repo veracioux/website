@@ -1,0 +1,15 @@
+@keyframes blink {
+  50% {
+    opacity: 1;
+  }
+  51% {
+    opacity: 0;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@mixin cursor {
+  animation: blink 1.5s ease-in-out infinite;
+}

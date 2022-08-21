@@ -4,9 +4,10 @@ import SocialIcon from "@/components/generic/SocialIcon.vue";
 import AnimatedPhoto from "@/components/about/AnimatedPhoto.vue";
 import Workflow from "@/components/about/Workflow.vue";
 import {ScrollData} from "@/inject";
-import {computed, onMounted, ref, watch} from "vue";
+import {computed, onMounted, ref} from "vue";
 import CliEffect from "@/components/CliEffect.vue";
-import {logChanges, mapRange} from "@/utils";
+import Pager from "@/components/about/Pager.vue";
+import {mapRange} from "@/utils";
 
 const scrollData = ScrollData.inject();
 
@@ -16,12 +17,18 @@ const progress = ref(0);
 
 const checkpoints = computed(() => {
     return {
-        showPhotoCliPrompt: progress.value > 0,
-        photoCli: mapRange(progress.value, [0.05, 0.25], [0, 1]),
-        photo: mapRange(progress.value, [0.2, 1], [0, 2]),
+        showFrame: progress.value > -0.6,
+        photoCli: mapRange(progress.value, [-0.5, -0.2], [0, 1]),
+        photo: mapRange(progress.value, [-0.25, 0.3], [0, 1]),
+        showSocials: progress.value > -0.2,
+        showVersion: progress.value > -0.2,
+        socials: mapRange(progress.value, [-0.25, 0], [0, 1]),
+        version: mapRange(progress.value, [-0.25, 0], [0, 1]),
+        bioCli: mapRange(progress.value, [0.1, 0.4], [0, 1]),
+        workflowCli: mapRange(progress.value, [0.6, 0.9], [0, 1]),
+        showWorkflow: progress.value >= 0.9,
     };
 });
-logChanges(progress);
 
 onMounted(() => {
     scrollData.scrollContainer.value?.addEventListener("scroll", () => {
@@ -46,8 +53,8 @@ onMounted(() => {
                         <div class="frame">
                             <div class="photoWrapper">
                                 <CliEffect
-                                    :prompt="checkpoints.showPhotoCliPrompt"
-                                    text="hello"
+                                    prompt="$ "
+                                    text="cat mugshot"
                                     :progress="checkpoints.photoCli"
                                 >
                                     <AnimatedPhoto
@@ -55,87 +62,128 @@ onMounted(() => {
                                     />
                                 </CliEffect>
                             </div>
-                            <div class="versionContainer">
-                                <span class="version"> version: 23 </span>
-                            </div>
                             <div class="socialsContainer">
-                                <div class="socials">
-                                    <SocialIcon name="github" class="icon" />
-                                    <SocialIcon name="linkedin" class="icon" />
-                                    <SocialIcon name="mail" class="icon" />
-                                </div>
+                                <Transition name="standard-fade">
+                                    <div
+                                        v-if="checkpoints.showSocials"
+                                        class="badge"
+                                    >
+                                        <CliEffect
+                                            :progress="checkpoints.socials"
+                                            prompt="$ "
+                                            text="lsof -i"
+                                        >
+                                            <div class="socials">
+                                                <SocialIcon
+                                                    name="github"
+                                                    class="icon"
+                                                />
+                                                <SocialIcon
+                                                    name="linkedin"
+                                                    class="icon"
+                                                />
+                                                <SocialIcon
+                                                    name="mail"
+                                                    class="icon"
+                                                />
+                                            </div>
+                                        </CliEffect>
+                                    </div>
+                                </Transition>
+                            </div>
+                            <div class="versionContainer">
+                                <Transition name="standard-fade">
+                                    <div
+                                        v-if="checkpoints.showVersion"
+                                        class="badge"
+                                    >
+                                        <CliEffect
+                                            :progress="checkpoints.version"
+                                            prompt="$ "
+                                            text="uname -r"
+                                        >
+                                            <span class="version">
+                                                version: 23
+                                            </span>
+                                        </CliEffect>
+                                    </div>
+                                </Transition>
                             </div>
                         </div>
                     </div>
-                    <div class="bio">
-                        <div class="bioContent">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit. Maecenas vitae lorem eu velit tincidunt
-                            sagittis eget sit amet nulla. Curabitur sodales
-                            malesuada tempor. Pellentesque ut lacus egestas,
-                            mattis lectus non, tincidunt urna. Duis ut blandit
-                            neque. Curabitur eu mattis leo. Phasellus eleifend
-                            velit maximus tempus finibus. Fusce varius, nisl non
-                            cursus ultricies, dui odio luctus ipsum, et placerat
-                            orci tellus in dolor. Cras vitae ipsum ac sapien
-                            interdum euismod eget id dolor. Praesent tincidunt
-                            finibus enim quis sagittis. Nunc posuere iaculis
-                            fermentum. Praesent fermentum mi id bibendum tempus.
-                            Etiam eget nisl at libero dapibus pulvinar a in
-                            purus. Ut at magna diam. Proin sed interdum ex.
-                            Integer at urna pretium, facilisis felis tempor,
-                            cursus dui. Proin blandit ipsum vitae tristique
-                            posuere. Integer et turpis sit amet eros molestie
-                            porta et sed sem. Curabitur suscipit magna mauris,
-                            eu molestie ipsum tincidunt vel. Maecenas sit amet
-                            ipsum tempus, fermentum orci eget, ornare ipsum.
-                            Vivamus eget elit et elit interdum sagittis. Mauris
-                            viverra, dui sit amet molestie dictum, quam nisl
-                            ultrices purus, eget faucibus libero felis a nunc.
-                            Vivamus pellentesque fermentum consequat. Ut mollis,
-                            mauris non tincidunt congue, est tortor venenatis
-                            nulla, quis interdum nisi lorem at lectus. Curabitur
-                            nunc diam, auctor et purus ut, rhoncus condimentum
-                            dolor. Nulla ultricies lectus quam, eget iaculis
-                            magna rutrum at. Mauris auctor at ante a
-                            scelerisque. Suspendisse potenti. Class aptent
-                            taciti sociosqu ad litora torquent per conubia
-                            nostra, per inceptos himenaeos. Ut at metus vel
-                            lacus gravida tempus id eget odio. Sed pellentesque
-                            sem eget elit tempor ultrices. Ut ac quam nunc.
-                            Vestibulum ante ipsum primis in faucibus orci luctus
-                            et ultrices posuere cubilia curae; Donec vestibulum
-                            libero eu urna imperdiet egestas. Pellentesque
-                            sodales purus enim, vel feugiat ligula finibus ut.
-                            Etiam ut malesuada libero. Suspendisse lacinia
-                            feugiat nisl, rutrum vestibulum lorem lobortis
-                            varius. In vel leo molestie, sollicitudin justo eu,
-                            mollis est. Praesent id faucibus felis. Donec
-                            tincidunt felis facilisis est cursus, convallis
-                            varius elit rutrum. Proin faucibus neque ac tortor
-                            convallis, sed interdum dui scelerisque. Vestibulum
-                            quis posuere libero. Duis pharetra purus nec sapien
-                            auctor porttitor. Aliquam dignissim molestie odio,
-                            ac pharetra ex ornare ut. Proin facilisis a leo eget
-                            mattis. Morbi turpis purus, suscipit vitae pretium
-                            ac, pulvinar ac sem. In et mattis orci. Nunc
-                            imperdiet nibh sed cursus dapibus. Integer efficitur
-                            diam tincidunt magna tincidunt, ut eleifend eros
-                            dapibus. Aliquam consequat quam nec diam bibendum,
-                            in feugiat nisi facilisis. Morbi eget leo ut ipsum
-                            dignissim ultricies. Aenean malesuada, dui at
-                            scelerisque ullamcorper, massa velit fermentum orci,
-                            at hendrerit augue metus id purus. Aliquam vitae
-                            metus non metus euismod consectetur. Duis sit amet
-                            justo at purus interdum pharetra. Fusce congue
-                            fringilla consequat. Suspendisse tincidunt lacus
-                            dui, et ultricies nunc faucibus auctor. Nullam
-                            gravida diam dapibus urna ultricies maximus. Mauris
-                            ac accumsan neque. Suspendisse nec elit elit. Mauris
-                            tincidunt fermentum viverra.
-                        </div>
-                    </div>
-                    <Workflow />
+                    <CliEffect
+                        :progress="checkpoints.bioCli"
+                        prompt=">>> "
+                        text="print(self.__doc__)"
+                    >
+                        <Pager class="bio">
+                            <div>
+                                Hi, I'm Haris. I'm a programmer, engineer, and
+                                creator of wonderful things. Since I was a kid
+                                I've had a fascination with science and
+                                engineering. The first time I ran a computer
+                                program, I immediately wanted to create my own.
+                                I got started programming by making Minecraft
+                                mods in Java when I was about 12.
+                                <br /><br />
+                                In high school I discovered C++ and fell in love
+                                with it. I bought an Arduino and played with it
+                                endlessly. I used it in an
+                                <a
+                                    href="https://github.com/veracioux/rotating-led-display"
+                                    target="_blank"
+                                    >interesting little project</a
+                                >. <br /><br />
+                                I also made a
+                                <a
+                                    href="https://github.com/veracioux/wood-fall"
+                                    target="_blank"
+                                    >2D Android game</a
+                                >
+                                in Unity. That was fun, though looking back I'm
+                                a little embarrassed by some stylistic choices.
+                                <br /><br />
+                                Then came college. I got a Bachelor's degree in
+                                Automation and Electronics. During that time I
+                                fell out of programming due to focusing on my
+                                studies. But I rediscovered it again in my third
+                                year and decided to take my career in that
+                                direction.
+                                <br /><br />
+                                Around that time I switched to Linux and learned
+                                a great deal about it. I enhanced my workflow
+                                with powerful and esoteric tools like
+                                <a
+                                    href="https://github.com/veracioux/dotfiles"
+                                    target="_blank"
+                                    >vim, emacs, tiling window managers and I
+                                    made the terminal my cozy new home</a
+                                >. I have been
+                                <a
+                                    href="https://github.com/veracioux"
+                                    target="_blank"
+                                    >actively contributing</a
+                                >
+                                to open source projects, mainly original
+                                projects but also to an established popular
+                                project called
+                                <a
+                                    href="https://github.com/flameshot-org/flameshot"
+                                    target="_blank"
+                                    >Flameshot</a
+                                >.
+                            </div>
+                        </Pager>
+                    </CliEffect>
+                    <CliEffect
+                        :progress="checkpoints.workflowCli"
+                        prompt="> "
+                        text="JSON.stringify(workflow)"
+                    >
+                        <Workflow
+                            :style="checkpoints.showWorkflow || {opacity: 0}"
+                        />
+                    </CliEffect>
                 </div>
             </div>
         </div>
@@ -235,24 +283,28 @@ onMounted(() => {
                             #{$side}: 0;
                             height: var(--frame-height);
                             @include c.centerFlex;
-                        }
+                            user-select: none;
 
-                        @mixin badge {
-                            padding: 0.5em 0.75em;
-                            background: var(--color-background-0);
+                            .badge {
+                                padding: 0.5em 0.75em;
+                                background: var(--color-background-0);
+
+                                @include c.beveledEdges(8px);
+
+                                :deep(.cli) {
+                                    padding: 0;
+                                    font-size: 0.9em;
+                                }
+                            }
                         }
 
                         .versionContainer {
                             @include badgeContainer(bottom);
-                            user-select: none;
 
                             .version {
                                 font-family: monospace;
                                 font-weight: bold;
                                 color: var(--color-secondary);
-
-                                @include badge;
-                                @include c.beveledEdges(8px);
                             }
                         }
 
@@ -262,8 +314,6 @@ onMounted(() => {
                             .socials {
                                 @include c.centerFlex;
                                 gap: 1em;
-                                @include badge;
-                                @include c.beveledEdges(8px);
 
                                 .icon {
                                     width: 1.2em;
@@ -277,19 +327,22 @@ onMounted(() => {
 
                 .bio {
                     max-width: 600px;
-                    height: 400px;
-                    overflow: hidden;
+                    line-height: 1.5em;
+                    height: calc(25 * 1.5em);
+                    text-align: justify;
 
-                    .bioContent {
-                        -webkit-column-width: 600px;
-                        column-width: 600px;
-                        height: 100%;
-                        line-height: 150%;
-                        text-align: justify;
+                    &,
+                    :deep(.cli) {
+                        padding: 16px;
                     }
                 }
             }
         }
     }
 }
+</style>
+
+<!-- Standard fade transition style -->
+<style scoped lang="scss">
+@import "@/assets/standard-fade-transition.module.scss";
 </style>
