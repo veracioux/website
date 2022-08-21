@@ -33,6 +33,18 @@ const workflow: Record<string, any[]> = {
         ),
         () => <Icon src={iconI3} alt="i3" href="https://i3.org" />,
         () => (
+            <a href="https://alacritty.org" target="_blank" class="icon">
+                <Icon src={iconAlacritty} alt="alacritty" />
+                &nbsp;alacritty
+            </a>
+        ),
+        () => (
+            <a href="https://fishshell.com" target="_blank" class="icon">
+                <Icon src={iconFish} alt="fish" href="https://fishshell.com" />
+                &nbsp;fish
+            </a>
+        ),
+        () => (
             <a
                 href="https://github.com/veracioux/dotfiles"
                 target="_blank"
@@ -42,23 +54,19 @@ const workflow: Record<string, any[]> = {
                 &nbsp;dotfiles
             </a>
         ),
-        () => (
-            <Icon
-                src={iconAlacritty}
-                alt="alacritty"
-                href="https://alacritty.org"
-            />
-        ),
-        () => <Icon src={iconFish} alt="fish" href="https://fishshell.com" />,
     ],
     editors: [
-        () => <Icon src={iconNeovim} alt="neovim" href="https://neovim.io/" />,
         () => (
-            <Icon
-                src={iconEmacs}
-                alt="emacs"
-                href="https://www.gnu.org/s/emacs"
-            />
+            <a href="https://neovim.io/" target="_blank" class="icon">
+                <Icon src={iconNeovim} alt="neovim" />
+                &nbsp;neovim
+            </a>
+        ),
+        () => (
+            <a href="https://www.gnu.org/s/emacs" target="_blank" class="icon">
+                <Icon src={iconEmacs} alt="emacs" />
+                &nbsp;emacs
+            </a>
         ),
         () => (
             <Icon
@@ -93,8 +101,8 @@ const workflow: Record<string, any[]> = {
         >
             "<span class="highlight emphasize">{{ key }}</span
             >": [
-            <div class="indented" style="line-height: 1">
-                <span v-for="(item, i) of items">
+            <div class="indented">
+                <span v-for="(item, i) of items" style="line-height: 1">
                     <span class="highlight">
                         <component :is="item" />
                     </span>
@@ -143,7 +151,7 @@ const workflow: Record<string, any[]> = {
 
     &[alt="fish"] {
         margin-left: 0.3em;
-        transform: translateY(-5%) scale(1.3);
+        transform: translateY(-5%) scale(1.1);
     }
 
     &[alt="jetbrains"] {
@@ -157,6 +165,10 @@ const workflow: Record<string, any[]> = {
     }
 
     &[alt="git"] {
+        transform: scale(0.75);
+    }
+
+    &[alt="alacritty"] {
         transform: scale(0.75);
     }
 }
