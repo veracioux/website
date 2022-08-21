@@ -232,7 +232,7 @@ import zindex from "@/zindex";
     @include c.fillWindow;
     @include c.centerFlex;
     background: rgba(var(--color-background-0-rgb), 0.4);
-    // Would normally use v-bind("zindex.modal"), but doesn't cooperate with <Teleport>.
+    // TODO Would normally use v-bind("zindex.modal"), but doesn't cooperate with <Teleport>.
     z-index: 100;
 
     @include c.opacityFadeIn(0.2s ease-in-out);

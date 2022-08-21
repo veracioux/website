@@ -265,6 +265,11 @@ Classes used temporarily for debugging.
     @include c.fillParent;
     z-index: 1;
     box-shadow: inset 0 0 min(40vw, 40vh) var(--color-background-0);
+
+    &::after {
+        @include c.fillParent;
+        box-shadow: inset 0 0 min(10vw, 10vh) var(--color-background-0);
+    }
 }
 </style>
 

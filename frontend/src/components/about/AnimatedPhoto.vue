@@ -2,6 +2,7 @@
 import mugshot from "@/assets/mugshot.webp";
 import {computed, CSSProperties, onMounted, reactive, ref, watch} from "vue";
 import useSWRV from "swrv";
+import {mapRangeClipped} from "@/utils";
 
 const props = defineProps<{
     progress: number;
@@ -9,11 +10,10 @@ const props = defineProps<{
 
 const photo = ref<HTMLElement>();
 const asciiArtContainers = ref<HTMLElement[]>();
-const asciiArtStyle = reactive<CSSProperties>({transformOrigin: "0 0"});
+const asciiArtStyle = reactive<CSSProperties>({});
 
-const {data: htmlSources} = useSWRV("ascii-mugshots", async () => [
-    "",
-    ...(
+const {data: htmlSources} = useSWRV("ascii-mugshots", async () =>
+    (
         await Promise.all([
             // @ts-ignore
             import(`virtual:ascii-mugshot/6`),
@@ -34,8 +34,8 @@ const {data: htmlSources} = useSWRV("ascii-mugshots", async () => [
             // @ts-ignore
             import(`virtual:ascii-mugshot/35`),
         ])
-    ).map((s) => s.default),
-]);
+    ).map((s) => s.default)
+);
 
 const activeAsciiArtIndex = computed(() => {
     return Math.max(
@@ -48,9 +48,9 @@ const asciiArtContainer = computed(() => {
     return asciiArtContainers.value?.[activeAsciiArtIndex.value];
 });
 
-const photoOpacity = computed(() => {
-    return props.progress > 0.667 ? 3 * props.progress - 2 : 0;
-});
+const photoOpacity = computed(() =>
+    mapRangeClipped(props.progress, [0.667, 1], [0, 1])
+);
 
 function updateAsciiArtSize() {
     if (!asciiArtContainer.value || !photo.value) {
@@ -114,10 +114,8 @@ onMounted(() => {
 .asciiArtContainer {
     position: absolute;
     inset: 0;
+    font-family: monospace;
 
-    .asciiArt {
-        font-family: monospace;
-        transform-origin: 0 0;
-    }
+    transform-origin: 0 0;
 }
 </style>

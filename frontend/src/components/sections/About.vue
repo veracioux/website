@@ -4,7 +4,9 @@ import SocialIcon from "@/components/generic/SocialIcon.vue";
 import AnimatedPhoto from "@/components/about/AnimatedPhoto.vue";
 import Workflow from "@/components/about/Workflow.vue";
 import {ScrollData} from "@/inject";
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
+import CliEffect from "@/components/CliEffect.vue";
+import {logChanges, mapRange} from "@/utils";
 
 const scrollData = ScrollData.inject();
 
@@ -12,11 +14,21 @@ const root = ref<HTMLElement>();
 
 const progress = ref(0);
 
+const checkpoints = computed(() => {
+    return {
+        showPhotoCliPrompt: progress.value > 0,
+        photoCli: mapRange(progress.value, [0.05, 0.25], [0, 1]),
+        photo: mapRange(progress.value, [0.2, 1], [0, 2]),
+    };
+});
+logChanges(progress);
+
 onMounted(() => {
     scrollData.scrollContainer.value?.addEventListener("scroll", () => {
+        // The factor of 2 was obtained empirically
         progress.value = root.value
             ? -(
-                  root.value.getBoundingClientRect().top /
+                  (2 * root.value.getBoundingClientRect().top) /
                   root.value.offsetHeight
               )
             : 0;
@@ -33,7 +45,15 @@ onMounted(() => {
                     <div class="leftContent">
                         <div class="frame">
                             <div class="photoWrapper">
-                                <AnimatedPhoto :progress="progress * 2" />
+                                <CliEffect
+                                    :prompt="checkpoints.showPhotoCliPrompt"
+                                    text="hello"
+                                    :progress="checkpoints.photoCli"
+                                >
+                                    <AnimatedPhoto
+                                        :progress="checkpoints.photo"
+                                    />
+                                </CliEffect>
                             </div>
                             <div class="versionContainer">
                                 <span class="version"> version: 23 </span>
