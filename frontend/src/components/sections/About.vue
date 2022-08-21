@@ -2,6 +2,7 @@
 import SectionTitle from "@/components/SectionTitle.vue";
 import Icon from "@/components/generic/Icon.vue";
 import AnimatedPhoto from "@/components/about/AnimatedPhoto.vue";
+import Workflow from "@/components/about/Workflow.vue";
 import {ScrollData} from "@/inject";
 import {onMounted, ref, watch} from "vue";
 
@@ -114,6 +115,7 @@ onMounted(() => {
                             tincidunt fermentum viverra.
                         </div>
                     </div>
+                    <Workflow />
                 </div>
             </div>
         </div>

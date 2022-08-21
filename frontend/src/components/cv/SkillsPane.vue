@@ -14,7 +14,7 @@ import iconVue from "@/assets/icons/vue.svg";
 import iconDjango from "@/assets/icons/django.svg";
 import iconDocker from "@/assets/icons/docker.svg";
 import iconLinux from "@/assets/icons/linux.svg";
-import iconGit from "@/assets/icons/git.svg";
+import iconGit from "@/assets/icons/git-with-text.svg";
 import iconJetBrains from "@/assets/icons/jetbrains.svg";
 import iconEmacs from "@/assets/icons/emacs.svg";
 import iconEthereum from "@/assets/icons/ethereum.svg";

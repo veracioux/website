@@ -17,7 +17,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import Img from "@/components/generic/Img.vue";
-import {CSSProperties, defineProps, onMounted, ref} from "vue";
+import {defineProps, onMounted, ref} from "vue";
 
 library.add(
     faArrowUpRightFromSquare,
@@ -30,7 +30,7 @@ library.add(
 );
 library.add(faGithub, faGitlab, faLinkedin, faMonero);
 
-const iconNames = {
+const iconNameToFontAwesomeMap = {
     donate: "circle-dollar-to-slot",
     web: "globe",
     externalLink: "arrow-up-right-from-square",
@@ -43,7 +43,13 @@ const iconNames = {
     linkedin: ["fab", "linkedin"],
 };
 
-type IconName = keyof typeof iconNames;
+// NOTE: I created this and the required functionality, but it turned out
+// I don't need it (yet). I'm keeping it in case I need it in the future.
+const iconNameToSrcMap = {};
+
+type IconName =
+    | keyof typeof iconNameToFontAwesomeMap
+    | keyof typeof iconNameToSrcMap;
 
 export interface IconProps {
     /** Name of a FontAwesome icon. */
@@ -54,14 +60,6 @@ export interface IconProps {
 }
 
 const props = defineProps<IconProps>();
-
-const iconStyle: CSSProperties = {
-    width: "100%",
-    height: "100%",
-    // No other method of centering seems to work with FontAwesomeIcon
-    margin: "50%",
-    transform: "translate(-50%, -50%)",
-};
 
 const root = ref<HTMLElement>();
 onMounted(() => {
@@ -75,31 +73,42 @@ onMounted(() => {
 </script>
 
 <template>
-    <span ref="root" :class="s.container">
+    <span ref="root">
         <FontAwesomeIcon
-            v-if="name"
-            :icon="iconNames[name]"
-            :class="s.icon"
-            :style="iconStyle"
+            v-if="props.name && iconNameToFontAwesomeMap[props.name]"
+            :icon="iconNameToFontAwesomeMap[name]"
+            class="faIcon"
         />
         <Img
-            v-if="src"
-            v-lazy="src"
+            v-else
+            v-lazy="
+                name
+                    ? iconNameToSrcMap[name]?.src ??
+                      iconNameToSrcMap[name] ??
+                      src
+                    : src
+            "
             :alt="alt"
             v-bind="$attrs"
-            :class="s.icon"
-            :style="iconStyle"
+            :class="['icon', iconNameToSrcMap[name]?.className]"
         />
     </span>
 </template>
 
-<style module="s" lang="scss">
+<style scoped lang="scss">
 @use "@/assets/common.module.scss" as c;
 
-.container {
-    .icon {
-        width: 100%;
-        height: 100%;
-    }
+.faIcon {
+    width: 100%;
+    height: 100%;
+    // No other method of centering seems to work with FontAwesomeIcon
+    margin: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.icon {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
 }
 </style>
