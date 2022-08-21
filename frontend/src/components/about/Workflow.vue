@@ -132,7 +132,7 @@ const workflow: Record<string, any[]> = {
 }
 
 .icon,
-:deep(.icon) {
+:deep(.customIcon) {
     $iconSize: 24px;
     height: $iconSize;
     width: auto;

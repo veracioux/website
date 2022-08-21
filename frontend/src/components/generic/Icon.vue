@@ -73,7 +73,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <span ref="root">
+    <span class="iconRoot" ref="root">
         <FontAwesomeIcon
             v-if="props.name && iconNameToFontAwesomeMap[props.name]"
             :icon="iconNameToFontAwesomeMap[name]"
@@ -90,13 +90,17 @@ onMounted(() => {
             "
             :alt="alt"
             v-bind="$attrs"
-            :class="['icon', iconNameToSrcMap[name]?.className]"
+            :class="['customIcon', iconNameToSrcMap[name]?.className]"
         />
     </span>
 </template>
 
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as c;
+
+.iconRoot {
+    display: inline-block;
+}
 
 .faIcon {
     width: 100%;
@@ -106,7 +110,9 @@ onMounted(() => {
     transform: translate(-50%, -50%);
 }
 
-.icon {
+// NOTE: I tried to use .icon here, but for some reason it messes up
+// the display completely
+.customIcon {
     display: inline-block;
     width: 100%;
     height: 100%;

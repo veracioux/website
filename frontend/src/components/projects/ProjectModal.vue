@@ -257,6 +257,9 @@ import zindex from "@/zindex";
         color: rgba(var(--color-secondary-rgb), 0.8);
         width: 32px;
         height: 32px;
+
+        // Fixes a display bug where the button's height is elongated.
+        display: block;
     }
 }
 
