@@ -150,7 +150,7 @@ watch(currentStep, (value, oldValue) => {
 .spacer {
     --size: 240px;
 
-    @include screenWidthAbove(640px) {
+    @include screenSizeAbove(768px) {
         --size: 350px;
     }
 

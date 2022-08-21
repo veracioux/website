@@ -81,7 +81,7 @@ function updateShutterOutline() {
 function updateRotation() {
     let radius = getShutterRadius();
     // These values were obtained empirically
-    if (Math.min(window.innerWidth, window.innerHeight) < 640) {
+    if (Math.min(window.innerWidth, window.innerHeight) < 768) {
         rotation.value = (relativeApertureSize * 7200) / radius;
     } else {
         rotation.value = (relativeApertureSize * 10200) / radius;
@@ -240,6 +240,7 @@ Classes used temporarily for debugging.
 
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as c;
+@use "@/assets/global.scss" as g;
 
 .mugshotBackground {
     position: absolute;
@@ -251,11 +252,11 @@ Classes used temporarily for debugging.
     @include c.fillParent;
     margin: auto;
 
-    width: 280px;
+    width: 200px;
     transform: translate(0, 3%);
 
-    @media screen and (max-width: 640px), screen and (max-height: 640px) {
-        width: 200px;
+    @include g.screenSizeAbove(768px) {
+        width: 280px;
     }
 }
 </style>
