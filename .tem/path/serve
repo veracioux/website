@@ -4,7 +4,7 @@ cd "$(tem find -b website)"
 
 if ! _all_services_running; then
     up --detach
-    docker-compose up --detach docker-registry
+    VERACIOUX_COMPOSE_NO_GEN=true docker-compose up --detach docker-registry
 fi
 
 sudo env PATH="$PATH" USER_HOME="$HOME" scripts/serve.sh
