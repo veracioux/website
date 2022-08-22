@@ -67,11 +67,11 @@ $xlarge: 1280px;
 a {
   color: rgba(var(--color-secondary-rgb), 0.9);
   text-decoration: none;
-  transition: scale ease-in-out 0.2s;
+  transition: transform ease-in-out 0.2s;
 }
 
 a:hover {
-  scale: 105%;
+  transform: scale(105%);
 }
 
 h1,
