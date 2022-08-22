@@ -8,6 +8,7 @@ import SectionTitle from "@/components/SectionTitle.vue";
 </template>
 <style scoped lang="scss">
 .section {
+    position: relative;
     background: var(--color-background-2);
 
     :deep(.titleDecoration) {

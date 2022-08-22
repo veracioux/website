@@ -195,6 +195,7 @@ onMounted(() => {
 @use "@/assets/global.scss" as g;
 
 .section {
+    position: relative;
     height: 200vh;
     background: var(--color-background-1);
 

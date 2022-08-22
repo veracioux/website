@@ -96,8 +96,8 @@ function onMouseLeaveProjectCard() {
 @import "@/assets/home.scss";
 
 .section {
-    background: var(--color-background-1);
     position: relative;
+    background: var(--color-background-1);
     min-height: 0;
     padding-bottom: 64px;
 

@@ -111,8 +111,8 @@ onMounted(() => {
                     Electrical Engineering University of Sarajevo, Course:
                     <i>Design of Microprocessor Systems</i>
                     <div class="labelContainer">
-                        <Label title="PLC programming"/>
-                        <Label title="SoMachine"/>
+                        <Label title="PLC programming" />
+                        <Label title="SoMachine" />
                     </div>
                 </TimelineEntry>
                 <TimelineEntry
@@ -144,7 +144,7 @@ onMounted(() => {
                     Electrical Engineering, University of Sarajevo, Course:
                     <i>Programming Techniques</i>
                     <div class="labelContainer">
-                        <Label title="C++"/>
+                        <Label title="C++" />
                     </div>
                 </TimelineEntry>
                 <TimelineEntry start-date="2018" end-date="present">
@@ -184,17 +184,14 @@ onMounted(() => {
 $colorDimText: rgba(var(--color-text-rgb), 0.7);
 
 .section {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     color: $colorDimText;
     background: var(--color-background-2);
     width: 100vw;
-    padding-bottom: 120px;
-
-    @include screenWidthAbove($xlarge) {
-        padding-bottom: 200px;
-    }
+    padding-bottom: 160px;
 
     .content {
         display: flex;
@@ -227,7 +224,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
             @include screenWidthAbove($xlarge) {
                 gap: 32px;
                 position: sticky;
-                top: 150px;
+                top: 130px;
                 bottom: 150px;
                 height: 100%;
                 align-items: start;

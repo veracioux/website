@@ -213,7 +213,6 @@ ScrollData.provide({
 .cv,
 .about,
 .contact {
-    position: relative;
     z-index: v-bind("zindex.section");
 }
 </style>

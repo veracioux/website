@@ -214,7 +214,7 @@ import zindex from "@/zindex";
                         />
                     </div>
                 </div>
-<!--                <Button>Contribute</Button>-->
+                <!--                <Button>Contribute</Button>-->
             </div>
         </div>
     </Teleport>
