@@ -46,6 +46,7 @@ $xlarge: 1280px;
 
   color: var(--color-text);
   font-size: 13px;
+  font-family: "Ubuntu", "Ubuntu Mono", Helvetica, sans-serif;
 
   @include screenSizeAbove($small) {
     font-size: 14px;

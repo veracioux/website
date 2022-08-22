@@ -1,3 +1,5 @@
+import "virtual:fonts.css";
+
 import {createApp} from "vue";
 // For some reason using "@/router" here doesn't work. It's not a roadblock,
 // but it's weird
