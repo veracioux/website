@@ -6,7 +6,7 @@ import vueJsx from "@vitejs/plugin-vue-jsx";
 // @ts-ignore
 import {rollupPlugin} from "ascii-mugshot";
 
-import { VitePluginFonts } from 'vite-plugin-fonts'
+import {VitePluginFonts} from "vite-plugin-fonts";
 
 export default defineConfig({
     plugins: [
@@ -15,7 +15,7 @@ export default defineConfig({
         rollupPlugin(),
         VitePluginFonts({
             google: {
-                families: ["Ubuntu", "Ubuntu Mono"],
+                families: ["Secular One", "Roboto Mono"],
             },
         }),
     ],
