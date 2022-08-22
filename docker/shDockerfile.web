@@ -15,10 +15,13 @@ if [ "$ENVIRONMENT" != "dev" ]; then
 
     WORKDIR /frontend
     COPY frontend/{package.json,pnpm-lock.yaml} ./
+    COPY frontend/{package.json,pnpm-lock.yaml,pnpm-workspace.yaml} ./
+    COPY frontend/gimmicks/ascii-mugshot/package.json gimmicks/ascii-mugshot/
     RUN pnpm install --frozen-lockfile
 
     ## Bundle frontend
     COPY frontend .
+
     RUN pnpm run build
     # Minify SVG icons and copy them to static root
     # TODO: integrate into "pnpm run build"

@@ -15,10 +15,9 @@ Pipfile
 # .pnpm-store is generated in development mode when the project root is shared
 # to the container via a volume
 .pnpm-store
-frontend/node_modules
+**/node_modules
 frontend/dist
 
-worker/node_modules
 worker/server.js
 worker/worker.js
 
