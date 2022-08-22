@@ -19,17 +19,17 @@ defineProps<{
 
     text-align: center;
     white-space: nowrap;
-    background: rgba(var(--color-primary-rgb), 0.2);
+    background: rgba(var(--color-primary-rgb), 0.25);
     color: white;
 
     user-select: none;
 }
 
 .container[title="C++"] {
-    background: orange;
+    // TODO background: orange;
 }
 
 .container[title="Qt"] {
-    background: orange;
+    // TODO background: orange;
 }
 </style>

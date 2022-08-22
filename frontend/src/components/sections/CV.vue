@@ -110,6 +110,10 @@ onMounted(() => {
                     <b>Undergraduate Teaching Assistant</b>, Faculty of
                     Electrical Engineering University of Sarajevo, Course:
                     <i>Design of Microprocessor Systems</i>
+                    <div class="labelContainer">
+                        <Label title="PLC programming"/>
+                        <Label title="SoMachine"/>
+                    </div>
                 </TimelineEntry>
                 <TimelineEntry
                     start-date="2019"
@@ -139,6 +143,9 @@ onMounted(() => {
                     <b>Undergraduate Teaching Assistant</b>, Faculty of
                     Electrical Engineering, University of Sarajevo, Course:
                     <i>Programming Techniques</i>
+                    <div class="labelContainer">
+                        <Label title="C++"/>
+                    </div>
                 </TimelineEntry>
                 <TimelineEntry start-date="2018" end-date="present">
                     <b>Answering community questions</b>,
