@@ -2,6 +2,8 @@
 
 if [ "$ENVIRONMENT" = "dev" ]; then
     tag="dev"
+elif [ "$ENVIRONMENT" = "staging" ]; then
+    tag="staging"
 else
     tag="latest"
 fi

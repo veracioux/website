@@ -19,8 +19,10 @@ env.doc["dev"] = "Use development server"
 env.doc["staging"] = "Use staging server"
 env.doc["prod"] = "Use production server"
 
-is_server = Variant(False)
-is_server.doc = (
-    "Indicates whether the current device is the deployment server."
+device = Variable(["dev", "public"], default="dev", from_env="DEVICE")
+device.doc = (
+    "Indicates whether the current device is a development device or a"
+    "public-facing server. The latter can be a production server or staging"
+    "server, or a single instance that serves both functions."
 )
 

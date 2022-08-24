@@ -63,11 +63,11 @@ function incrementActivePhrase() {
         color: var(--color-secondary);
 
         .number {
-            font-size: 80px;
+            font-size: 4em;
         }
 
         .notFound {
-            font-size: 48px;
+            font-size: 2em;
             height: 64px;
             vertical-align: middle;
         }

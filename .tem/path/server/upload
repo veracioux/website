@@ -21,14 +21,6 @@ else
     echo "Pushing images to custom registry..."
     VERACIOUX_COMPOSE_NO_GEN=true docker-compose push
     tem run server/docker-pull-from-local-registry
-
-    for image in {web,worker_dotfiles,mail}:latest; do
-        echo "Pulling image localhost:5000/$image from local registry into daemon..."
-        connect docker pull localhost:5000/"$image"
-        echo "Re-tagging image as veracioux.me/$image"
-        connect docker tag localhost:5000/"$image" veracioux.me/"$image"
-    done
-
 fi
 
 echo "All done."

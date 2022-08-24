@@ -1,6 +1,18 @@
 #!/usr/bin/env bash
 
+# Usage: serve ["prod"]
+# If no arguments are specified, serves the staging server.
+
 cd "$(tem find -b website)"
+
+if [ "$#" != 0 ] && [ "$1" != "prod" ]; then
+    echo "Script argument can only be 'prod'" >&2
+    exit 1
+fi
+
+if [ "$1" != "prod" ]; then
+    export ENVIRONMENT=staging
+fi
 
 if ! _all_services_running; then
     up --detach

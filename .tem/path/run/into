@@ -5,11 +5,10 @@
 # the CMD.
 # Usage: into <SERVICE>
 
-tag="$([ "$(tem var env)" = "dev" ] && echo dev || echo latest)"
-
 if docker container inspect veracioux-"$1" >/dev/null 2>&1; then
     docker exec --interactive --tty veracioux-"$1" bash
 else
-    echo "Container is not running. Trying to start it..." >&2
+    tag="$([ "$(tem var env)" = "dev" ] && echo dev || [ "$(tem var env)" = "staging" ] && echo staging || echo latest)"
+    echo "Container is not running. Trying to start it from image veracioux-me/$1:$tag ..." >&2
     docker run --interactive --tty veracioux.me/"$1":"$tag" bash
 fi

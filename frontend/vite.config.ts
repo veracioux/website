@@ -25,17 +25,18 @@ export default defineConfig({
         },
     },
     server: {
-        port: 3000,
+        port: Number(process.env.WEB_PORT ?? 3000),
         proxy: {
             "/api": {
-                target: "http://0.0.0.0:8000",
+                target: `http://0.0.0.0:${process.env.BACKEND_PORT ?? 8000}`,
                 changeOrigin: true,
             },
         },
     },
     build: {
         write: true,
-        assetsDir: "static",
+        assetsDir:
+            process.env.ENVIRONMENT === "staging" ? "stg/static" : "static",
     },
     css: {
         modules: {
@@ -43,3 +44,5 @@ export default defineConfig({
         },
     },
 });
+
+process.env.VITE_ENVIRONMENT = process.env.ENVIRONMENT;

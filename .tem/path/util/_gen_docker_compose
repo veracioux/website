@@ -17,7 +17,7 @@ cd "$(tem find -b website)"
 
 source scripts/load-env.bash.in >/dev/null
 cp -f docker-compose.yaml /tmp/veracioux-docker-compose_old.yaml
-jinja2 -D env="$env" -D is_server="$(tem var is_server)" docker-compose.yaml.in \
+jinja2 -D env="$env" -D device="$(tem var device)" docker-compose.yaml.in \
     | envsubst > docker-compose.yaml
 
 if ! diff docker-compose.yaml /tmp/veracioux-docker-compose_old.yaml >/dev/null 2>/dev/null

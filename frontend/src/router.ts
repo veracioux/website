@@ -4,11 +4,22 @@ import {createRouter, createWebHistory} from "vue-router";
 // return a response containing the SPA and with a 404 status code (for better SEO).
 // So, whenever you add a new route here, add it to nginx.conf as well.
 
+/**
+ * Generate a regex that will match against both `path` and /stg/`path`.
+ */
+function path(path: string) {
+    if (import.meta.env.VITE_ENVIRONMENT === "staging") {
+        return `/:stg(stg/|stg)?${path}`;
+    } else {
+        return `/${path}`;
+    }
+}
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
-            path: "/",
+            path: path(""),
             name: "home",
             meta: {
                 title: "veracioux",
@@ -16,7 +27,7 @@ const router = createRouter({
             component: () => import("@/views/HomeView.vue"),
         },
         {
-            path: "/cv",
+            path: path("cv"),
             name: "cv",
             meta: {
                 title: "veracioux | CV",
@@ -24,7 +35,7 @@ const router = createRouter({
             component: () => import("@/views/CVView.vue"),
         },
         {
-            path: "/about",
+            path: path("about"),
             name: "about",
             meta: {
                 title: "veracioux | About Me",
@@ -32,7 +43,7 @@ const router = createRouter({
             component: () => import("@/views/AboutView.vue"),
         },
         {
-            path: "/contact",
+            path: path("contact"),
             name: "contact",
             meta: {
                 title: "veracioux | Contact",

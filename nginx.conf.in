@@ -11,6 +11,13 @@
             expires 2M;
             add_header Cache-Control "public";
         }
+    {%- if env == "staging" %}
+        location /stg/static {
+            alias /var/static_root/;
+            expires 2M;
+            add_header Cache-Control "public";
+        }
+    {%- endif %}
 {%- endmacro %}
 
 {%- macro compression() %}
@@ -66,13 +73,37 @@ http {
             proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT}/api;
         }
 
-        location ~ ^/staging-auth/?$ {
-            alias /app/scripts/;
-            try_files staging-auth.php staging-auth.php;
-            fastcgi_pass 127.0.0.1:${PHP_FCGI_PORT};
-            fastcgi_param VERACIOUX_STAGING_ROOT "/stg";
-            include fastcgi.conf;
+    {%- if env == "staging" %}
+        # Staging URL prefix, redirects to / after successful staging auth
+        location /stg {
+            auth_request /stg-auth;
+            try_files _ @stg;
+            error_page 401 /stg-login?redirect=$request_uri;
         }
+
+        # Location that is visited when staging auth succeeds. Resolves to /.
+        location @stg {
+            rewrite ^/stg$ /;
+            rewrite ^/stg/(.*) /$1;
+        }
+
+        # Returns 204 for successful staging auth, 401 otherwise
+        location = /stg-auth {
+            fastcgi_pass unix:/var/run/php-fpm.sock;
+            include fastcgi.conf;
+            fastcgi_param SCRIPT_FILENAME /app/proxy/staging-auth.php;
+            fastcgi_param VERACIOUX_STAGING_ROOT "/stg";
+            fastcgi_param CONTENT_LENGTH "";
+            fastcgi_pass_request_body off;
+        }
+
+        # Staging loging form (GET) and credential submission endpoint (POST)
+        location = /stg-login {
+            fastcgi_pass unix:/var/run/php-fpm.sock;
+            include fastcgi.conf;
+            fastcgi_param SCRIPT_FILENAME /app/proxy/staging-login.php;
+        }
+    {% endif %}
 
         {{ location_status() }}
         {{ location_static() }}

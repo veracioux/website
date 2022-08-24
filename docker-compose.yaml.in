@@ -4,11 +4,10 @@ the _gen_docker_compose command provided by tem. When running `docker-compose`
 through tem, this is done automatically.
 #}
 
-{%- set tag %}{% if env == 'dev' %}dev{% else %}latest{% endif %}{% endset %}
+{%- set tag %}
+  {%- if env == 'dev' %}dev{% elif env == 'staging' %}staging{% else %}latest{% endif %}
+{%- endset %}
 {%- set prod -%}{% if env == 'prod' %}-prod{% endif %}{% endset %}
-
-{#- File extension for the dev environment dockerfiles #}
-{%- set ext %}{% if env == 'dev' %}.dev{% else %}{% endif %}{% endset %}
 
 version: '3.4'
 
@@ -20,7 +19,9 @@ services:
     # Container
     container_name: veracioux-db{{prod}}
     restart: always
+    {%- if env == 'dev' or env == 'staging' %}
     ports: ["$DB_PORT:5432"]
+    {%- endif %}
     env_file: &env_file
       - ./.env/common
       {%- if env == 'dev' %}
@@ -40,7 +41,9 @@ services:
   rabbitmq:
     image: rabbitmq:3.7
     container_name: veracioux-rabbitmq{{prod}}
+    {%- if env == 'dev' or env == 'staging' %}
     ports: ["$RABBITMQ_PORT:5672"]
+    {%- endif %}
     env_file:
       - worker/.env/common
       {%- if env == 'prod' %}
@@ -52,15 +55,15 @@ services:
     image: veracioux.me/web:{{tag}}
     build:
       context: .
-      dockerfile: Dockerfile.web{{ext}}
+      dockerfile: Dockerfile.web.{{env}}
 
     # Container
     container_name: veracioux-web{{prod}}
     restart: always
     depends_on: [db, rabbitmq]
     ports:
-      {%- if env == 'dev' %}
-      - "$WEB_PORT:3000"
+      {%- if env == "staging" and device == "public" %}
+      - "$WEB_PORT_STAGING:$WEB_PORT"
       {%- else %}
       - "$WEB_PORT:$WEB_PORT"
       {%- endif %}
@@ -78,9 +81,9 @@ services:
     {%- if env == 'dev' %}
     volumes:
       - .:/app:rw
-    {%- elif env == 'staging' and is_server == 'True' %}
+    {%- elif env == 'staging' and device == 'server' %}
     volumes:
-      - $HOME/auth:/var/www
+      - $HOME/auth:/var/www/auth
     {%- endif %}
 
   worker_dotfiles:
@@ -88,7 +91,7 @@ services:
     image: veracioux.me/worker_dotfiles:{{tag}}
     build:
       context: .
-      dockerfile: Dockerfile.worker_dotfiles{{ext}}
+      dockerfile: Dockerfile.worker_dotfiles.{{env}}
 
     # Container
     container_name: veracioux-worker_dotfiles{{prod}}
@@ -107,7 +110,7 @@ services:
     image: veracioux.me/mail:{{tag}}
     build:
       context: mail
-      dockerfile: ../Dockerfile.mail{{ext}}
+      dockerfile: ../Dockerfile.mail.{{env}}
 
     # Container
     container_name: veracioux-mail{{prod}}

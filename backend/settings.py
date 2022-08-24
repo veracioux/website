@@ -116,8 +116,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join("/var/static_root/")
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "frontend/dist/static")]
+if env("ENVIRONMENT") == "staging":
+    frontend_static = os.path.join(BASE_DIR, "frontend/dist/stg/static")
+    STATIC_URL = f"/stg{STATIC_URL}"
+else:
+    frontend_static = os.path.join(BASE_DIR, "frontend/dist/static")
+
+STATIC_ROOT = "/var/static_root/"
+STATICFILES_DIRS = [frontend_static] if os.path.isdir(frontend_static) else []
 
 # File storage
 if env("ENVIRONMENT") != "dev":

@@ -23,6 +23,8 @@ every time.
 
 **8000**: backend app
 
+**5000**: Docker registry
+
 # Available commands
 
 - Deploy locally: `up`
@@ -57,3 +59,13 @@ available at a URL subpath that corresponds to the path of the file relative to
 `~/tmp_root` (in our example that is `/myfile`). Note that `index.html` behave
 as usual, i.e. `~/tmp_root/myfile/index.html` will be available at `/myfile` and
 `/myfile/`.
+
+# Staging
+
+The staging version of the website can be accessed at `/stg`. A form will be
+displayed for you to login. Your auth will be stored in the session, so you don't
+have to login again until the staging website is restarted.
+
+When testing the staging build locally, you can use the following credentials:
+Username: `test`
+Password: `test`
