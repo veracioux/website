@@ -1,8 +1,21 @@
 #!/usr/bin/env bash
 
 # Build and upload the web image to the VPS
+# Usage: upload ["prod"]
 
 cd "$(tem find -b website)"
+
+if [ "$#" -gt "1" ] || { [ "$#" = "1" ] && [ "$1" != "prod" ]; }; then
+    echo "Error: Optional argument can only have value 'prod'." >&2
+    exit 1
+fi
+
+if [ "$1" = "prod" ]; then
+    tag="latest"
+else
+    export ENVIRONMENT=staging
+    tag="staging"
+fi
 
 echo "Building images..."
 docker-compose build
@@ -13,7 +26,7 @@ code="$?"
 if [ "$code" != 0 ]; then
     # Docker registry not running
     echo "Registry not running. Pushing manually as tar.gz file..."
-    images=(veracioux.me/{web,worker_dotfiles,mail}:latest)
+    images=(veracioux.me/{web,worker_dotfiles,mail}:"$tag")
     docker save "${images[@]}" | gzip > /tmp/veracioux-images.tar.gz
     rsync --update --verbose --progress {,"$VPS_IP:"}/tmp/veracioux-images.tar.gz
     ssh "$VPS_IP" bash -c "gunzip /tmp/veracioux-images.tar.gz | docker load"
