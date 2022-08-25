@@ -2,4 +2,4 @@
 
 # Pull all website-related images from the locally running registry
 
-connect /home/haris/website/scripts/docker-pull-from-local-registry.sh
+connect ENVIRONMENT="$ENVIRONMENT" /home/haris/website/scripts/docker-pull-from-local-registry.sh

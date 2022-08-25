@@ -18,6 +18,7 @@ for arg in "$@"; do
 done
 
 # Documented in our custom `docker-compose` command
-export VERACIOUX_COMPOSE_NO_GEN=true
+# export VERACIOUX_COMPOSE_NO_GEN=true
+# TODO: Use hashes to determine if the dockerfiles have changed
 
 docker-compose rm --stop --force "${positional_args[@]}"

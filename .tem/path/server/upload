@@ -11,6 +11,7 @@ if [ "$#" -gt "1" ] || { [ "$#" = "1" ] && [ "$1" != "prod" ]; }; then
 fi
 
 if [ "$1" = "prod" ]; then
+    export ENVIRONMENT=prod
     tag="latest"
 else
     export ENVIRONMENT=staging
