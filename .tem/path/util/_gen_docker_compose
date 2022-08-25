@@ -16,11 +16,14 @@ fi
 cd "$(tem find -b website)"
 
 source scripts/load-env.bash.in >/dev/null
-cp -f docker-compose.yaml /tmp/veracioux-docker-compose_old.yaml
-jinja2 -D env="$env" -D device="$(tem var device)" docker-compose.yaml.in \
-    | envsubst > docker-compose.yaml
 
-if ! diff docker-compose.yaml /tmp/veracioux-docker-compose_old.yaml >/dev/null 2>/dev/null
+file="$(_find_docker_compose)"
+
+cp -f "$file" /tmp/veracioux-old-"$file"
+jinja2 -D env="$env" -D device="$(tem var device)" docker-compose.yaml.in \
+    | envsubst > "$file"
+
+if ! diff "$file" /tmp/veracioux-old-"$file" >/dev/null 2>/dev/null
 then
     echo "Generated docker-compose.yaml from template."
 fi

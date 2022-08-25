@@ -15,7 +15,7 @@ done
 down "${positional_args[@]}"
 
 build_arg='--build'
-if tem var -q env:prod; then
+if tem var -q device:public; then
     build_arg=''
 fi
 

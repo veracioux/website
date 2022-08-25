@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+
+cd "$(tem find -b website)"
+
+if tem var -q env:dev; then
+    echo docker-compose.yaml
+    exit
+fi
+
+if tem var -q device:public; then
+    echo docker-compose."$(tem var env)".yaml
+else
+    echo docker-compose.yaml
+fi

@@ -8,10 +8,16 @@ cd "$(tem find -b website)"
 
 for arg in "$@"; do
     if [ "$arg" = "--help" ] || [ "$arg" = "-h" ]; then
-        /usr/bin/docker-compose -f nonexistent "$@"
+        tem run --no-tem docker-compose -f nonexistent "$@"
         exit
     fi
 done
+
+if tem var -q device:public; then
+    project_name="veracioux-website-$(tem var env)"
+else
+    project_name="veracioux-website"
+fi
 
 # Generate the necessary Dockerfiles
 # NOTE: we are generating all dockerfiles every time because some containers
@@ -22,4 +28,4 @@ fi
 
 _gen_docker_compose
 
-tem run --no-tem docker-compose "$@"
+tem run --no-tem docker-compose --project-name "$project_name" -f "$(_find_docker_compose)" "$@"

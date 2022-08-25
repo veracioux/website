@@ -7,7 +7,7 @@ through tem, this is done automatically.
 {%- set tag %}
   {%- if env == 'dev' %}dev{% elif env == 'staging' %}staging{% else %}latest{% endif %}
 {%- endset %}
-{%- set prod -%}{% if env == 'prod' %}-prod{% endif %}{% endset %}
+{%- set suffix -%}{% if env == 'prod' %}-prod{% endif %}{% endset %}
 
 version: '3.4'
 
@@ -17,7 +17,7 @@ services:
     image: postgres:14.1-alpine
 
     # Container
-    container_name: veracioux-db{{prod}}
+    container_name: veracioux-db{{suffix}}
     restart: always
     {%- if env == 'dev' or env == 'staging' %}
     ports: ["$DB_PORT:5432"]
@@ -40,7 +40,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:3.7
-    container_name: veracioux-rabbitmq{{prod}}
+    container_name: veracioux-rabbitmq{{suffix}}
     {%- if env == 'dev' or env == 'staging' %}
     ports: ["$RABBITMQ_PORT:5672"]
     {%- endif %}
@@ -58,7 +58,7 @@ services:
       dockerfile: Dockerfile.web.{{env}}
 
     # Container
-    container_name: veracioux-web{{prod}}
+    container_name: veracioux-web{{suffix}}
     restart: always
     depends_on: [db, rabbitmq]
     ports:
@@ -94,7 +94,7 @@ services:
       dockerfile: Dockerfile.worker_dotfiles.{{env}}
 
     # Container
-    container_name: veracioux-worker_dotfiles{{prod}}
+    container_name: veracioux-worker_dotfiles{{suffix}}
     env_file:
       - ./.env/common
       - worker/.env/common
@@ -113,16 +113,15 @@ services:
       dockerfile: ../Dockerfile.mail.{{env}}
 
     # Container
-    container_name: veracioux-mail{{prod}}
+    container_name: veracioux-mail{{suffix}}
 
-  {%- if env != 'dev' %}
+  {%- if env == 'prod' %}
   docker-registry:
     image: registry:2
-    container_name: veracioux-docker-registry{{prod}}
+    container_name: veracioux-docker-registry{{suffix}}
     ports:
       - "$DOCKER_REGISTRY_PORT:5000"
     restart: always
-    {%- if env == 'prod' %}
     environment:
       REGISTRY_HTTP_HOST: https://veracioux.me:443
       REGISTRY_AUTH: htpasswd
@@ -131,8 +130,6 @@ services:
     volumes:
       - "${HOME}/auth:/auth"
       - "${HOME}/docker-registry:/var/lib/registry"
-    {%- endif %}
-
   {%- endif %}
 
 # vim: filetype=yaml
