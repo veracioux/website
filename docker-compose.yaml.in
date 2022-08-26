@@ -81,7 +81,7 @@ services:
     {%- if env == 'dev' %}
     volumes:
       - .:/app:rw
-    {%- elif env == 'staging' and device == 'server' %}
+    {%- elif env == 'staging' and device == 'public' %}
     volumes:
       - $HOME/auth:/var/www/auth
     {%- endif %}

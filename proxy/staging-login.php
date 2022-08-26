@@ -5,7 +5,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = $_POST["password"];
 
     # Verify password
-    exec("htpasswd -Bbv /var/www/auth/staging.htpasswd $username $password", $output, $return);
+    exec(
+        "htpasswd -Bbv /var/www/auth/staging.htpasswd $username " .
+        escapeshellarg($password),
+        $output,
+        $return
+    );
+
     if ($return === 0) {
         $_SESSION["authenticated"] = true;
         header("Location: ${_GET['redirect']}", response_code: 301);
@@ -40,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </style>
 </head>
 <body>
-<form method="POST" action="/stg-login?<?php echo $_SERVER['QUERY_STRING']?>">
+<form method="POST" action="/stg-login?<?php echo $_SERVER['QUERY_STRING'] ?>">
     <h2>Staging login</h2>
     <label for="username">Username:</label>
     <input type="text" name="username" id="username" />

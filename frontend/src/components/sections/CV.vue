@@ -108,7 +108,7 @@ onMounted(() => {
                     display-date="Mar - Jun 2021"
                 >
                     <b>Undergraduate Teaching Assistant</b>, Faculty of
-                    Electrical Engineering University of Sarajevo, Course:
+                    Electrical Engineering, University of Sarajevo, Course:
                     <i>Design of Microprocessor Systems</i>
                     <div class="labelContainer">
                         <Label title="PLC programming" />

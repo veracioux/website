@@ -12,6 +12,8 @@ fi
 
 if [ "$1" != "prod" ]; then
     export ENVIRONMENT=staging
+else
+    export ENVIRONMENT=prod
 fi
 
 if ! _all_services_running; then
