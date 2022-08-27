@@ -14,7 +14,7 @@ def dotfiles(request: HttpRequest) -> HttpResponseBase:
 
     resp = requests.get(
         f"http://0.0.0.0:{os.environ.get('WORKER_SERVER_PORT')}/dotfiles?ref={ref}",
-        stream=True
+        stream=True,
     )
     print(resp)
 

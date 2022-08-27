@@ -46,3 +46,4 @@ export default defineConfig({
 });
 
 process.env.VITE_ENVIRONMENT = process.env.ENVIRONMENT;
+process.env.VITE_MACHINE = process.env.MACHINE;

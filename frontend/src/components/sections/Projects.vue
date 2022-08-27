@@ -7,6 +7,7 @@ import ProjectModal from "@/components/projects/ProjectModal.vue";
 import {reactive, ref} from "vue";
 import Img from "@/components/generic/Img.vue";
 import SectionTitle from "@/components/SectionTitle.vue";
+import api from "@/api";
 
 const modal = reactive<{show: boolean; project: Project | null}>({
     show: false,
@@ -17,7 +18,7 @@ const previewedProjectId = ref<number>();
 const imageContainer = ref<HTMLElement>();
 
 const {data: projects} = useSWRV<Array<Partial<Project>>>(
-    () => "/api/projects/",
+    () => api.projects,
     (key) => fetch(key).then((resp) => resp.json())
 );
 

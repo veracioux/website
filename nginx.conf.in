@@ -44,6 +44,10 @@ events {}
 http {
     include mime.types;
     default_type text/plain;
+    # Needed for REST framework browsable API to display URLs correctly
+    proxy_set_header Host $http_host;
+    # Prevents client maliciously sending a X-Forwarded-Proto header
+    proxy_set_header X-Forwarded-Proto $scheme;
 
     {{ compression() }}
 
@@ -64,28 +68,41 @@ http {
 
         # Make sure the routes matched by this rule match those configured in
         # vue-router
-        location ~ ^/(|contact|cv)/?$ {
-            root   /app/frontend/dist;
+        location ~ ^/(|contact|cv|about)/?$ {
+            root /app/frontend/dist;
             rewrite ^ /index.html break;
         }
 
-        location /api {
-            proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT}/api;
+        location / {
+            try_files _ @;
+        }
+
+        location @ {
+            proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT};
+            proxy_intercept_errors on;
         }
 
     {%- if env == "staging" %}
         # Staging URL prefix, redirects to / after successful staging auth
         location /stg {
             auth_request /stg-auth;
+            # NOTE: can't use a simple rewrite, would override auth_request
             try_files _ @stg;
             error_page 401 /stg-login?redirect=$request_uri;
+            error_page 404 /stg;
         }
 
         # Location that is visited when staging auth succeeds. Resolves to /.
         location @stg {
+            try_files _ @;
+            error_page 404 @stg-redirect-to-root;
+        }
+
+        location @stg-redirect-to-root {
             rewrite ^/stg$ /;
             rewrite ^/stg/(.*) /$1;
         }
+
 
         # Returns 204 for successful staging auth, 401 otherwise
         location = /stg-auth {
@@ -97,7 +114,7 @@ http {
             fastcgi_pass_request_body off;
         }
 
-        # Staging loging form (GET) and credential submission endpoint (POST)
+        # Staging login form (GET) and credential submission endpoint (POST)
         location = /stg-login {
             fastcgi_pass unix:/var/run/php-fpm.sock;
             include fastcgi.conf;

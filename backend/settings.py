@@ -23,7 +23,14 @@ SECRET_KEY = env("SECRET_KEY")
 
 DEBUG = env("ENVIRONMENT") == "dev"
 
-ALLOWED_HOSTS = ["*"]
+if env("ENVIRONMENT") == "prod" or (
+    env("ENVIRONMENT") == "staging" and env("MACHINE") == "public"
+):
+    ALLOWED_HOSTS = [".veracioux.me"]
+else:
+    ALLOWED_HOSTS = ["*"]
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Application definition
 
@@ -135,3 +142,9 @@ MEDIA_ROOT = "/var/media"
 # Default primary key field type
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+URL_PREFIX = (
+    "/stg"
+    if env("ENVIRONMENT") == "staging" and env("MACHINE") == "public"
+    else ""
+)

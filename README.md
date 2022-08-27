@@ -69,3 +69,22 @@ have to login again until the staging website is restarted.
 When testing the staging build locally, you can use the following credentials:
 Username: `test`
 Password: `test`
+
+## Notes
+
+The `web` container (if run with a staging configuration) also allows you to
+access the website at `/`, without password protection for convenience, just
+like in `dev` or `prod`. The website host machine will map `/` to `/` of the
+production container and `/stg` to `/stg` of the staging container. So, the `/`
+tree of the staging container won't be available to the public.
+
+When accessing the REST framework's browsable API on staging, we want the
+generated API URLs to have a `/stg` path prefix. That's why we specify each
+endpoint of the backend twice, once without a prefix and another time with the
+`/stg` prefix (in `backend/urls.py`). In the nginx config of the staging
+container, we first attempt to proxy_pass `/stg/<subpath>` to the `@` location
+without modifying the path. If this fails, the `/stg` prefix is stripped and the
+request is handled as if directed at `/`. Note that if we immediately stripped
+`/stg` from the original request URI, the REST framework's browsable API would
+show `<host>/api/...` URLs instead of `<host>/stg/api/...`.
+
