@@ -121,6 +121,7 @@ fi
 if [ "$ENVIRONMENT" = "dev" ]; then
     CMD scripts/entrypoint-dev.sh
 else
+    ENV MACHINE="$MACHINE"
     CMD scripts/entrypoint-prod.sh
 fi
 

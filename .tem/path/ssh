@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+TERM=vt100 tem run --no-tem ssh "$@"

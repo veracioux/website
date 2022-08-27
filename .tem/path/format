@@ -3,5 +3,5 @@
 cd "$(tem find -b website)"
 # TODO npx prettier --write static templates
 py_packages="$(_py_packages)"
-pipenv run isort $py_packages
-pipenv run black $py_packages
+isort $py_packages
+black $py_packages

@@ -10,8 +10,10 @@ if [ -z "$process_types" ]; then
     process_types=(web worker_dotfiles mail)
 fi
 
+export ENVIRONMENT="$(tem var env)"
+export MACHINE="$(tem var device)"
+
 for process_type in "${process_types[@]}"; do
-    export ENVIRONMENT="$(tem var env)"
     echo "Generating Dockerfile.$process_type.$ENVIRONMENT ..."
     shdocker \
         -s "$project_root/docker/shDockerfile.$process_type" \
