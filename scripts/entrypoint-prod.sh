@@ -18,7 +18,9 @@ cd ..
 python3 manage.py collectstatic --noinput
 python3 manage.py migrate
 if [ "$ENVIRONMENT" = "staging" ]; then
-    python3 manage.py createsuperuser --noinput
+    set +e
+    python3 manage.py createsuperuser --noinput 2>&1 | sed 's/Error/Info/g' >&2
+    set -e
 fi
 python3 manage.py loaddata projects.json
 

@@ -37,11 +37,13 @@ http {
 
         location @ {
             proxy_pass http://localhost:${WEB_PORT};
+            proxy_set_header Host $http_host;
         }
 
         # Staging server
         location /stg {
             proxy_pass http://localhost:${WEB_PORT_STAGING}/stg;
+            proxy_set_header Host $http_host;
         }
 
         location /docker-status/ {

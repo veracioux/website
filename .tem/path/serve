@@ -18,7 +18,9 @@ fi
 
 if ! _all_services_running; then
     up --detach
-    VERACIOUX_COMPOSE_NO_GEN=true docker-compose up --detach docker-registry
+    if tem var -q env:prod; then
+        VERACIOUX_COMPOSE_NO_GEN=true docker-compose up --detach docker-registry
+    fi
 fi
 
 sudo env PATH="$PATH" USER_HOME="$HOME" scripts/serve.sh

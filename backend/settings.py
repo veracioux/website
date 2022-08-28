@@ -23,12 +23,7 @@ SECRET_KEY = env("SECRET_KEY")
 
 DEBUG = env("ENVIRONMENT") == "dev"
 
-if env("ENVIRONMENT") == "prod" or (
-    env("ENVIRONMENT") == "staging" and env("MACHINE") == "public"
-):
-    ALLOWED_HOSTS = [".veracioux.me"]
-else:
-    ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*"]
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 

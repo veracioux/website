@@ -96,8 +96,18 @@ http {
             error_page 404 /stg;
         }
 
-        # Location that is visited when staging auth succeeds. Resolves to /.
+        # Location that is visited when staging auth succeeds. In a perfect
+        # world, we would want this to just strip the /stg prefix from the URI,
+        # but we have to first try to pass the URI as-is to the backend (see
+        # backend/urls.py for the reason). Only if the backend returns 404 do we
+        # strip the /stg prefix and process the request as usual.
         location @stg {
+            proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT};
+            proxy_intercept_errors on;
+            error_page 404 @stg-redirect-to-root;
+        }
+
+        location @stg-redirect-to-root {
             rewrite ^/stg$ /;
             rewrite ^/stg/(.*) /$1;
         }
