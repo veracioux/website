@@ -82,9 +82,9 @@ When accessing the REST framework's browsable API on staging, we want the
 generated API URLs to have a `/stg` path prefix. That's why we specify each
 endpoint of the backend twice, once without a prefix and another time with the
 `/stg` prefix (in `backend/urls.py`). In the nginx config of the staging
-container, we first attempt to proxy_pass `/stg/<subpath>` to the `@` location
-without modifying the path. If this fails, the `/stg` prefix is stripped and the
-request is handled as if directed at `/`. Note that if we immediately stripped
-`/stg` from the original request URI, the REST framework's browsable API would
-show `<host>/api/...` URLs instead of `<host>/stg/api/...`.
+container, we first attempt to proxy_pass `/stg/<subpath>` to the `@backend`
+location without modifying the path. If this fails, the `/stg` prefix is
+stripped and the request is handled as if directed at `/`. Note that if we
+immediately stripped `/stg` from the original request URI, the REST framework's
+browsable API would show `<host>/api/...` URLs instead of `<host>/stg/api/...`.
 

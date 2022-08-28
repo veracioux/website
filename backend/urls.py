@@ -1,5 +1,6 @@
 """backend URL configuration"""
-from django.conf import settings
+import os
+
 from django.contrib import admin
 from django.http import HttpRequest, HttpResponse
 from django.urls import include, path, re_path
@@ -12,15 +13,20 @@ def echo(request: HttpRequest):
     return HttpResponse(str(request.headers))
 
 
-URL_PREFIX = getattr(settings, "URL_PREFIX", "")
-
 urlpatterns = []
 
-for prefix in (p for p in ["", URL_PREFIX or None] if p is not None):
-    if prefix and not prefix.endswith("/"):
-        prefix = f"{prefix}/"
-    if prefix.startswith("/"):
-        prefix = prefix[1:]
+prefixes = (["stg/"] if os.environ.get("ENVIRONMENT") == "staging" else []) + [
+    ""
+]
+
+# NOTE: REST framework router uses the most recent URL registered in the
+# urlpatterns list. On an actual host server, we want the URLs to be prefixed
+# with /stg, but on a development server we want no prefix (so we don't have
+# to use staging auth to explore and make requests to the API).
+if os.environ.get("MACHINE") == "public":
+    prefixes = reversed(prefixes)
+
+for prefix in prefixes:
     urlpatterns += [
         path(f"{prefix}admin/", admin.site.urls),
         path(f"{prefix}api/", include("backend.api.urls")),

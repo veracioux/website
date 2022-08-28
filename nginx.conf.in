@@ -64,20 +64,24 @@ http {
         server_name veracioux.me www.veracioux.me localhost www.localhost;
         listen ${WEB_PORT};
         # Error page is handled by vue-router
-        error_page 404 /;
+        error_page 404 @frontend;
 
         # Make sure the routes matched by this rule match those configured in
         # vue-router
         location ~ ^/(|contact|cv|about)/?$ {
+            try_files _ @frontend;
+        }
+
+        location / {
+            try_files _ @backend;
+        }
+
+        location @frontend {
             root /app/frontend/dist;
             rewrite ^ /index.html break;
         }
 
-        location / {
-            try_files _ @;
-        }
-
-        location @ {
+        location @backend {
             proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT};
             proxy_intercept_errors on;
         }
@@ -94,15 +98,9 @@ http {
 
         # Location that is visited when staging auth succeeds. Resolves to /.
         location @stg {
-            try_files _ @;
-            error_page 404 @stg-redirect-to-root;
-        }
-
-        location @stg-redirect-to-root {
             rewrite ^/stg$ /;
             rewrite ^/stg/(.*) /$1;
         }
-
 
         # Returns 204 for successful staging auth, 401 otherwise
         location = /stg-auth {
