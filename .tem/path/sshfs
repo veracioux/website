@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+tem run --no-tem sshfs -o ssh_command="$(tem run --no-tem --find ssh)"  "$@"
