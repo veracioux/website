@@ -191,18 +191,19 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
     color: $colorDimText;
     background: var(--color-background-2);
     width: 100vw;
-    padding-bottom: 160px;
 
     .content {
         display: flex;
         flex-direction: column;
         justify-content: start;
         gap: 48px;
-        padding-top: 64px;
+        padding-top: 24px;
+        padding-bottom: 80px;
 
         @include screenWidthAbove($xlarge) {
             flex-direction: row;
             gap: 16px;
+            padding-top: 32px;
         }
 
         .timeline {
@@ -224,8 +225,8 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
             @include screenWidthAbove($xlarge) {
                 gap: 32px;
                 position: sticky;
-                top: 130px;
-                bottom: 150px;
+                top: 100px;
+                bottom: 80px;
                 height: 100%;
                 align-items: start;
             }
@@ -258,19 +259,23 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
 
             &.top {
                 top: 0;
-                height: 160px;
+                height: 100px;
                 background: linear-gradient(
                     var(--color-background-2) 60%,
                     #00000000
                 );
+
+                @include screenWidthAbove($xlarge) {
+                    height: 120px;
+                }
             }
 
             &.bottom {
-                bottom: 0;
-                height: 200px;
+                bottom: 26px;
+                height: 100px;
                 background: linear-gradient(
                     #00000000,
-                    var(--color-background-2) 40%
+                    var(--color-background-2) 50%
                 );
                 // On mobile browsers we need to stretch this element downwards because
                 // the element may not perfectly hug the bottom of the viewport while
@@ -278,8 +283,8 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
                 &::after {
                     display: block;
                     content: "";
-                    transform: translate(0, 170px);
-                    height: 100px;
+                    transform: translate(0, 70px);
+                    height: 100%;
                     width: 100%;
                     background: var(--color-background-2);
                 }

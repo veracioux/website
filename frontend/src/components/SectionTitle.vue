@@ -37,12 +37,17 @@ onMounted(() => {
     onResize();
     window.addEventListener("resize", onResize);
 
-    scrollData.scrollContainer.value?.addEventListener("scroll", () => {
-        // The factor of 2 was obtained empirically
-        progress.value = root.value
-            ? (-2 * root.value.getBoundingClientRect().top) / window.innerHeight
-            : 0;
-    });
+    if (scrollData) {
+        scrollData.scrollContainer.value?.addEventListener("scroll", () => {
+            // The factor of 2 was obtained empirically
+            progress.value = root.value
+                ? (-2 * root.value.getBoundingClientRect().top) /
+                  window.innerHeight
+                : 0;
+        });
+    } else {
+        progress.value = 1;
+    }
 });
 </script>
 
