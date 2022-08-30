@@ -246,7 +246,7 @@ import zindex from "@/zindex";
 .closeButton {
     all: unset;
     position: absolute;
-    inset: 20px 20px auto auto;
+    inset: 14px 14px auto auto;
     padding: 4px;
     border-radius: 8px;
 
@@ -255,8 +255,8 @@ import zindex from "@/zindex";
 
     .closeIcon {
         color: rgba(var(--color-secondary-rgb), 0.8);
-        width: 32px;
-        height: 32px;
+        width: 20px;
+        height: 20px;
 
         // Fixes a display bug where the button's height is elongated.
         display: block;

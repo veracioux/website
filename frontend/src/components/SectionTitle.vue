@@ -16,7 +16,7 @@ const root = ref<HTMLElement>();
 const style = reactive<CSSProperties>({});
 
 const checkpoints = computed(() => {
-    const _cliTextUnclipped = mapRange(progress.value, [-1, -0.3], [0, 1]);
+    const _cliTextUnclipped = mapRange(progress.value, [-1.1, -0.5], [0, 1]);
     return {
         textDecorationScaleY: mapRangeClipped(progress.value, [-2, -1], [0, 1]),
         cliText: clip(_cliTextUnclipped, [-999, 1]),
@@ -27,11 +27,11 @@ const checkpoints = computed(() => {
 onMounted(() => {
     const onResize = () => {
         if (window.innerWidth >= 800) {
-            edgeCoordinatesX.value = [35, 65];
+            edgeCoordinatesX.value = [30, 70];
         } else if (window.innerWidth >= 640) {
-            edgeCoordinatesX.value = [25, 75];
-        } else {
             edgeCoordinatesX.value = [20, 80];
+        } else {
+            edgeCoordinatesX.value = [25, 75];
         }
     };
     onResize();
@@ -94,7 +94,8 @@ onMounted(() => {
     display: block;
     position: relative;
     z-index: 1;
-    padding: 0.3em 0;
+    padding-top: 0.3em;
+    padding-bottom: 0.1em;
 
     :deep(.cli) {
         padding: 0;

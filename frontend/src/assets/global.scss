@@ -45,7 +45,7 @@ $xlarge: 1280px;
   --color-text-rgb: 210, 220, 249;
 
   color: var(--color-text);
-  font-size: 13px;
+  font-size: 12px;
 
   // All these fonts are here so I can switch when I get bored of the current one
   font-family: "Secular One", "Kanit", "Play", "Mitr", "Hammersmith One",
@@ -87,6 +87,9 @@ h6 {
 
 h1 {
   font-size: 2em;
+  @include screenWidthBelow($tablet) {
+    font-size: 1.8em;
+  }
 }
 
 h2 {

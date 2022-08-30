@@ -95,18 +95,18 @@ defineProps<{
 
     .text,
     .timeSpan {
-        margin: 2px 0;
+        margin: 10px 0;
 
         @include screenSizeAbove($tablet) {
-            margin: 4px 0;
+            margin: 12px 0;
         }
 
         @include screenSizeAbove($small) {
-            margin: 6px 0;
+            margin: 14px 0;
         }
 
         @include screenSizeAbove($large, $small) {
-            margin: 8px 0;
+            margin: 16px 0;
         }
     }
 }
