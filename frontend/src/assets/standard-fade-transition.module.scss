@@ -1,3 +1,7 @@
+@mixin standardFadeTransition {
+  transition: opacity 0.25s ease-in-out;
+}
+
 .standard-fade-enter-from,
 .standard-fade-leave-to {
   opacity: 0;

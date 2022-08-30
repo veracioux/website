@@ -11,5 +11,6 @@
 }
 
 @mixin cursor {
+  font-family: monospace;
   animation: blink 1.5s ease-in-out infinite;
 }

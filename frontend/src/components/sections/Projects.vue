@@ -55,7 +55,7 @@ function onMouseLeaveProjectCard() {
         >
             <!-- Will hold the preview of the project (if it exists) via a <Teleport> -->
         </div>
-        <SectionTitle :class="s.sectionTitle"> Projects </SectionTitle>
+        <SectionTitle :class="s.sectionTitle" text="Projects" />
         <div class="cardContainer">
             <template v-for="project in projects" :key="project.id">
                 <Teleport v-if="imageContainer" to="#image-container">

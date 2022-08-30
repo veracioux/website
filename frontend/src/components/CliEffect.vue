@@ -2,13 +2,20 @@
 import {computed, watch} from "vue";
 import {clip} from "@/utils";
 
-const props = defineProps<{
-    /** The shell prompt text to show, or, in case of a boolean, whether to show the default prompt. */
-    prompt?: string | boolean;
-    text: string;
-    /** Percentage of the command line that must be typed out. */
-    progress: number;
-}>();
+const props = withDefaults(
+    defineProps<{
+        /** The shell prompt text to show, or, in case of a boolean, whether to show the default prompt. */
+        prompt?: string | boolean;
+        text: string;
+        /** Percentage of the command line that must be typed out. */
+        progress: number;
+        /** Whether to show a blinking text cursor (default: true) */
+        showCursor?: boolean;
+    }>(),
+    {
+        showCursor: true,
+    }
+);
 
 const defaultPrompt = "$ ";
 
@@ -27,28 +34,47 @@ const prompt = computed(() =>
         <div :style="end <= text.length + 1 && {opacity: 0}">
             <slot />
         </div>
-        <Transition name="standard-fade">
-            <div v-if="end >= 0 && end <= text.length" class="cli">
-                <span v-if="prompt">{{ prompt }}</span>
-                <span>{{
-                    text.slice(0, clip(end, [0, props.text.length]))
-                }}</span>
-                <span v-if="end <= text.length" class="cursor">█</span>
-            </div>
-        </Transition>
+        <div
+            :class="[
+                'cli',
+                end >= 0 && end <= text.length ? 'visible' : null,
+                this.$slots.default ? 'fillParent' : null,
+            ]"
+        >
+            <span v-if="prompt">{{ prompt }}</span>
+            <span>{{ text.slice(0, clip(end, [1, props.text.length])) }}</span>
+            <span style="position: relative">
+                <span v-if="showCursor && end <= text.length" class="cursor"
+                    >█</span
+                >
+            </span>
+        </div>
     </div>
 </template>
 
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as c;
 @use "@/assets/about.module.scss" as a;
+@use "@/assets/standard-fade-transition.module.scss" as t;
 
 .cli {
-    @include c.fillParent;
     padding: 12px;
+    opacity: 0;
+    pointer-events: none;
+
     .cursor {
+        position: absolute;
         @include a.cursor;
     }
+
+    &.visible {
+        opacity: 1;
+        @include t.standardFadeTransition;
+    }
+}
+
+.fillParent {
+    @include c.fillParent;
 }
 </style>
 

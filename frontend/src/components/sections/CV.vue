@@ -21,7 +21,7 @@ onMounted(() => {
 
 <template>
     <div ref="root" class="section">
-        <SectionTitle :class="s.sectionTitle"> Curriculum Vitae </SectionTitle>
+        <SectionTitle :class="s.sectionTitle" text="Curriculum Vitae" />
         <div class="content">
             <table class="timeline">
                 <TimelineEntry

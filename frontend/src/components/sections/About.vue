@@ -34,10 +34,8 @@ onMounted(() => {
     scrollData.scrollContainer.value?.addEventListener("scroll", () => {
         // The factor of 2 was obtained empirically
         progress.value = root.value
-            ? -(
-                  (2 * root.value.getBoundingClientRect().top) /
-                  root.value.offsetHeight
-              )
+            ? (-2 * root.value.getBoundingClientRect().top) /
+              root.value.offsetHeight
             : 0;
     });
 });
@@ -46,7 +44,7 @@ onMounted(() => {
 <template>
     <div class="fullWindow section" ref="root">
         <div class="stickyContainer">
-            <SectionTitle class="sectionTitle"> About Me</SectionTitle>
+            <SectionTitle class="sectionTitle" text="About Me" />
             <div class="contentContainer">
                 <div class="content">
                     <div class="leftContent">

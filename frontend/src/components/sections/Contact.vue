@@ -3,7 +3,7 @@ import SectionTitle from "@/components/SectionTitle.vue";
 </script>
 <template>
     <div class="section">
-        <SectionTitle class="sectionTitle"> Contact </SectionTitle>
+        <SectionTitle text="Contact" />
     </div>
 </template>
 <style scoped lang="scss">

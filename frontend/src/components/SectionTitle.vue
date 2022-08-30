@@ -1,27 +1,57 @@
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {computed, CSSProperties, onMounted, reactive, ref, watch} from "vue";
+import {ScrollData} from "@/inject";
+import {mapRange, mapRangeClipped, clip} from "@/utils";
+import CliEffect from "@/components/CliEffect.vue";
 
-const edgeCoordinatesX = ref([15, 85]);
+defineProps<{
+    text: string;
+}>();
+
+const edgeCoordinatesX = ref([20, 80]);
+
+const scrollData = ScrollData.inject();
+const progress = ref(0);
+const root = ref<HTMLElement>();
+const style = reactive<CSSProperties>({});
+
+const checkpoints = computed(() => {
+    const _cliTextUnclipped = mapRange(progress.value, [-1, -0.3], [0, 1]);
+    return {
+        textDecorationScaleY: mapRangeClipped(progress.value, [-2, -1], [0, 1]),
+        cliText: clip(_cliTextUnclipped, [-999, 1]),
+        showCliCursor: _cliTextUnclipped <= 1,
+    };
+});
 
 onMounted(() => {
     const onResize = () => {
         if (window.innerWidth >= 800) {
-            console.debug("HELLO");
             edgeCoordinatesX.value = [35, 65];
         } else if (window.innerWidth >= 640) {
             edgeCoordinatesX.value = [25, 75];
         } else {
-            edgeCoordinatesX.value = [15, 85];
+            edgeCoordinatesX.value = [20, 80];
         }
     };
     onResize();
     window.addEventListener("resize", onResize);
+
+    scrollData.scrollContainer.value?.addEventListener("scroll", () => {
+        // The factor of 2 was obtained empirically
+        progress.value = root.value
+            ? (-2 * root.value.getBoundingClientRect().top) / window.innerHeight
+            : 0;
+    });
 });
 </script>
 
 <template>
-    <div>
-        <div class="sectionContainer">
+    <div ref="root">
+        <div
+            class="sectionTitleContainer"
+            :style="{transform: `scaleY(${checkpoints.textDecorationScaleY})`}"
+        >
             <svg
                 class="titleDecorationContainer"
                 width="100%"
@@ -36,7 +66,12 @@ onMounted(() => {
                 />
             </svg>
             <h1 class="titleText" :class="s.sectionTitle">
-                <slot />
+                <CliEffect
+                    prompt=""
+                    :text="text"
+                    :progress="checkpoints.cliText"
+                    :show-cursor="checkpoints.showCliCursor"
+                />
             </h1>
         </div>
     </div>
@@ -51,13 +86,19 @@ onMounted(() => {
 }
 
 .titleText {
+    display: block;
     position: relative;
     z-index: 1;
     padding: 0.3em 0;
+
+    :deep(.cli) {
+        padding: 0;
+    }
 }
 
-.sectionContainer {
+.sectionTitleContainer {
     position: relative;
+    transform-origin: 50% 0;
 }
 </style>
 
