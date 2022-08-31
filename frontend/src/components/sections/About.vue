@@ -24,10 +24,10 @@ const checkpoints = computed(() => {
         showVersion: progress.value > -0.2,
         socials: mapRange(progress.value, [-0.25, 0], [0, 1]),
         version: mapRange(progress.value, [-0.25, 0], [0, 1]),
-        bioCli: mapRange(progress.value, [0, 0.5], [0, 1]),
-        workflowCli: mapRange(progress.value, [0.1, 0.55], [0, 1]),
-        showWorkflow: progress.value >= 0.55,
-        bioPager: mapRange(progress.value, [0.6, 0.9], [0, 1]),
+        bioCli: mapRange(progress.value, [0, 0.4], [0, 1]),
+        workflowCli: mapRange(progress.value, [0.1, 0.45], [0, 1]),
+        showWorkflow: progress.value >= 0.45,
+        bioPager: mapRange(progress.value, [0.45, 0.9], [0, 1]),
     };
 });
 

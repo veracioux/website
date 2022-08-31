@@ -18,9 +18,9 @@ logChanges(progress);
 watch(progress, (value) => {
     if (!scrollBox.value) return;
     // Linger for a while on the first line
-    if (value < 0.2) value = 0;
+    if (value < 0.3) value = 0;
     const naturalScrollTop =
-        value *
+        (value - 0.3) *
         (scrollBox.value.scrollHeight -
             scrollBox.value.getBoundingClientRect().height);
     const discretizedScrollTop =
