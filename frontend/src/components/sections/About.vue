@@ -24,9 +24,10 @@ const checkpoints = computed(() => {
         showVersion: progress.value > -0.2,
         socials: mapRange(progress.value, [-0.25, 0], [0, 1]),
         version: mapRange(progress.value, [-0.25, 0], [0, 1]),
-        bioCli: mapRange(progress.value, [0.1, 0.4], [0, 1]),
-        workflowCli: mapRange(progress.value, [0.6, 0.9], [0, 1]),
-        showWorkflow: progress.value >= 0.9,
+        bioCli: mapRange(progress.value, [0, 0.5], [0, 1]),
+        workflowCli: mapRange(progress.value, [0.1, 0.55], [0, 1]),
+        showWorkflow: progress.value >= 0.55,
+        bioPager: mapRange(progress.value, [0.6, 0.9], [0, 1]),
     };
 });
 
@@ -113,8 +114,9 @@ onMounted(() => {
                         :progress="checkpoints.bioCli"
                         prompt=">>> "
                         text="print(self.__doc__)"
+                        class="bioCliEffect"
                     >
-                        <Pager class="bio">
+                        <Pager class="bio" :progress="checkpoints.bioPager">
                             <div>
                                 Hi, I'm Haris. I'm a programmer, engineer, and
                                 creator of wonderful things. Since I was a kid
@@ -324,16 +326,13 @@ onMounted(() => {
                     }
                 }
 
+                .bioCliEffect :deep(.cli) {
+                    padding: 0;
+                }
+
                 .bio {
                     max-width: 600px;
-                    line-height: 1.5em;
-                    height: calc(25 * 1.5em);
                     text-align: justify;
-
-                    &,
-                    :deep(.cli) {
-                        padding: 16px;
-                    }
                 }
             }
         }

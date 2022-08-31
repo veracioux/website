@@ -42,7 +42,10 @@ const prompt = computed(() =>
             ]"
         >
             <span v-if="prompt">{{ prompt }}</span>
-            <span>{{ text.slice(0, clip(end, [1, props.text.length])) }}</span>
+            <span
+                :class="[end >= 0 && end <= text.length ? 'visible' : null]"
+                >{{ text.slice(0, clip(end, [1, props.text.length])) }}</span
+            >
             <span style="position: relative">
                 <span v-if="showCursor && end <= text.length" class="cursor"
                     >█</span
