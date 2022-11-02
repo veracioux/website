@@ -239,7 +239,7 @@ onMounted(() => {
                 :style="traitsStyle"
             >
                 <div class="trait" style="align-items: flex-start">
-                    <div class="dummy">Programmer</div>
+                    <div class="dummy" data-nosnippet>Programmer</div>
                     <div>
                         {{
                             "Programmer".slice(
@@ -250,7 +250,7 @@ onMounted(() => {
                     </div>
                 </div>
                 <div class="trait" style="align-items: flex-end">
-                    <div class="dummy">Engineer</div>
+                    <div class="dummy" data-nosnippet>Engineer</div>
                     <div>
                         {{
                             "Engineer".slice(
@@ -261,7 +261,7 @@ onMounted(() => {
                     </div>
                 </div>
                 <div class="trait" style="align-items: flex-start">
-                    <div class="dummy">Tinkerer</div>
+                    <div class="dummy" data-nosnippet>Tinkerer</div>
                     <div>
                         {{
                             "Tinkerer".slice(

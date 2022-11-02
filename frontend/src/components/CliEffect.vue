@@ -38,7 +38,7 @@ const prompt = computed(() =>
             :class="[
                 'cli',
                 end >= 0 && end <= text.length ? 'visible' : null,
-                this.$slots.default ? 'fillParent' : null,
+                $slots.default ? 'fillParent' : null,
             ]"
         >
             <span v-if="prompt">{{ prompt }}</span>

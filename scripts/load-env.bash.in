@@ -15,6 +15,7 @@ load_envvars_from_file() {
 
 for file in \
     .env/common \
+    .env/staging \
     .env/"$ENVIRONMENT"{,.secret} \
     worker/.env/common \
     worker/.env/"$ENVIRONMENT"{,.secret}
