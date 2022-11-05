@@ -137,9 +137,3 @@ MEDIA_ROOT = "/var/media"
 # Default primary key field type
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-URL_PREFIX = (
-    "/stg"
-    if env("ENVIRONMENT") == "staging" and env("MACHINE") == "public"
-    else ""
-)

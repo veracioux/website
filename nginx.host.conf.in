@@ -16,7 +16,14 @@ http {
     # HTTP to HTTPS redirect
     server {
         listen 80 default_server;
-        return 301 https://veracioux.me$request_uri;
+
+        location / {
+            return 301 https://veracioux.me$request_uri;
+        }
+
+        location /status {
+            return 200 "alive";
+        }
     }
 
     server {

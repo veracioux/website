@@ -12,17 +12,10 @@ def echo(request: HttpRequest):
     return HttpResponse(str(request.headers))
 
 
-prefix = getattr(settings, "URL_PREFIX", "")
-
-if prefix.startswith("/"):
-    prefix = prefix[1:]
-if prefix and not prefix.endswith("/"):
-    prefix = prefix + "/"
-
 urlpatterns = [
-    path(f"{prefix}admin/", admin.site.urls),
-    path(f"{prefix}api/", include("backend.api.urls")),
-    path(f"{prefix}dotfiles", dotfiles),
+    path("admin/", admin.site.urls),
+    path("api/", include("backend.api.urls")),
+    path("dotfiles", dotfiles),
     # Utility endpoint for debugging request headers received from proxy
-    re_path(f"^{prefix}backend/echo/?$", echo),
+    re_path("^backend/echo/?$", echo),
 ]

@@ -11,13 +11,6 @@
             expires 2M;
             add_header Cache-Control "public";
         }
-    {%- if env == "staging" %}
-        location /stg/static {
-            alias /var/static_root/;
-            expires 2M;
-            add_header Cache-Control "public";
-        }
-    {%- endif %}
 {%- endmacro %}
 
 {%- macro compression() %}
@@ -77,30 +70,26 @@ http {
             proxy_intercept_errors on;
         }
 
+        {{ location_status() }}
+        {{ location_static() }}
+    }
+
     {%- if env == "staging" %}
-        # Staging URL prefix, redirects to / after successful staging auth
-        location /stg {
+    server {
+        server_name stg.veracioux.me stg.localhost;
+        listen ${WEB_PORT};
+
+        # Staging root, redirects to / after successful staging auth
+        location / {
             auth_request /stg-auth;
-            # NOTE: can't use a simple rewrite, would override auth_request
-            try_files _ @stg;
+            # NOTE: can't use a simple rewrite, it would override auth_request
+            try_files _ @;
             error_page 401 /stg-login?redirect=$request_uri;
-            error_page 404 /stg;
         }
 
-        # Location that is visited when staging auth succeeds. In a perfect
-        # world, we would want this to just strip the /stg prefix from the URI,
-        # but we have to first try to pass the URI as-is to the backend (see
-        # backend/urls.py for the reason). Only if the backend returns 404 do we
-        # strip the /stg prefix and process the request as usual.
-        location @stg {
-            proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT};
-            proxy_intercept_errors on;
-            error_page 404 @stg-redirect-to-root;
-        }
-
-        location @stg-redirect-to-root {
-            rewrite ^/stg$ /;
-            rewrite ^/stg/(.*) /$1;
+        location @ {
+            proxy_pass http://0.0.0.0:${WEB_PORT};
+            proxy_set_header Host localhost;
         }
 
         # Returns 204 for successful staging auth, 401 otherwise
@@ -108,7 +97,6 @@ http {
             fastcgi_pass unix:/var/run/php-fpm.sock;
             include fastcgi.conf;
             fastcgi_param SCRIPT_FILENAME /app/proxy/staging-auth.php;
-            fastcgi_param VERACIOUX_STAGING_ROOT "/stg";
             fastcgi_param CONTENT_LENGTH "";
             fastcgi_pass_request_body off;
         }
@@ -119,11 +107,12 @@ http {
             include fastcgi.conf;
             fastcgi_param SCRIPT_FILENAME /app/proxy/staging-login.php;
         }
-    {% endif %}
 
         {{ location_status() }}
         {{ location_static() }}
+
     }
+    {% endif %}
 
     server {
         server_name api.veracioux.me api.localhost;
