@@ -4,29 +4,41 @@
 alpine_version=3.15
 python_version=3.9
 
+node_canvas_deps=(
+    build-base
+    g++
+    cairo-dev
+    jpeg-dev
+    pango-dev
+    giflib-dev
+)
+
 # Separate frontend build stage; reduces final image size
 if [ "$ENVIRONMENT" != "dev" ]; then
     FROM node:16.15-alpine"$alpine_version" as frontend
 
-    RUN apk add --no-cache curl
+    ## Install deps for "canvas" node package
+    RUN apk add --no-cache curl "${node_canvas_deps[@]}"
 
     # Install pnpm
     RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
+    RUN curl -L https://unpkg.com/@pnpm/self-installer
+    RUN which pnpm
 
     WORKDIR /frontend
     COPY frontend/{package.json,pnpm-lock.yaml} ./
     COPY frontend/{package.json,pnpm-lock.yaml,pnpm-workspace.yaml} ./
     COPY frontend/gimmicks/ascii-mugshot/package.json gimmicks/ascii-mugshot/
-    RUN pnpm install --frozen-lockfile --prod
+    RUN pnpm install --shamefully-hoist --frozen-lockfile --prod
 
     ## Bundle frontend
     COPY frontend .
 
     ENV ENVIRONMENT="$ENVIRONMENT" MACHINE="$MACHINE"
-    RUN pnpm run build
+    RUN pnpm run generate
     # Minify SVG icons and copy them to static root
-    # TODO: integrate into "pnpm run build" or as a vite plugin
-    RUN pnpm svgo -f src/assets/icons -o dist/static/icons
+    # TODO: integrate into "pnpm run generate" or as a vite plugin
+    RUN pnpm svgo -f assets/icons -o dist/static/icons
 fi
 
 # Separate python dependencies build stage; reduces final image size
@@ -71,6 +83,10 @@ RUN apk add --no-cache zlib jpeg linux-headers
 RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
 # Install web server dependencies
 RUN apk add --no-cache nginx gettext php8-fpm php8-session apache2-utils
+if [ "$ENVIRONMENT" = "dev" ]; then
+    ## Install deps for "canvas" node package
+    RUN apk add --no-cache "${node_canvas_deps[@]}"
+fi
 
 ## Required by 'heroku ps:exec' and wait-for-it.sh
 RUN apk add --no-cache bash
@@ -116,6 +132,12 @@ if [ "$ENVIRONMENT" = "staging" ]; then
     COPY proxy/php-fpm.conf /etc/php8/php-fpm.d/www.conf
     COPY proxy/php.ini /etc/php8/php.ini
     COPY proxy/dummy.staging.htpasswd /var/www/auth/staging.htpasswd
+fi
+
+if [ "$ENVIRONMENT" = "dev" ]; then
+    RUN adduser -u "$(id -u)" -D user
+    RUN mkdir -p /var/static_root '&&' chown -R user /app /var/static_root
+    USER user
 fi
 
 if [ "$ENVIRONMENT" = "dev" ]; then

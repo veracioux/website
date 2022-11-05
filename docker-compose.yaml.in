@@ -85,6 +85,9 @@ services:
     volumes:
       - $HOME/auth:/var/www/auth
     {%- endif %}
+    {%- if env == 'dev' %}
+    user: {{uid}}:{{gid}}
+    {%- endif %}
 
   worker_dotfiles:
     # Image

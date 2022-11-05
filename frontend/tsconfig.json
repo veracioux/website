@@ -1,14 +1,10 @@
 {
   "extends": "./.nuxt/tsconfig.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "app.vue"],
-  "exclude": ["src/**/__tests__/*"],
+  "include": ["*.ts", "**/*.ts", "*.vue" ,"**/*.vue"],
   "compilerOptions": {
     "composite": true,
     "lib": ["es2020", "dom"],
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["./*"],
-    }
   },
   "jsx": "preserve"
 }

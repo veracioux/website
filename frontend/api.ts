@@ -1,10 +1,18 @@
-const base =
-    import.meta.env.VITE_ENVIRONMENT == "staging" &&
-    import.meta.env.VITE_MACHINE == "public"
-        ? "/stg/api"
-        : "/api";
+import {useRuntimeConfig} from "#app";
 
-export default {
-    base,
-    projects: `${base}/projects/`,
+export default function api(resourceName: "base" | "projects") {
+    const runtimeConfig = useRuntimeConfig();
+
+    /*
+    const host = runtimeConfig.public.env === "dev" ?
+        `http://localhost:${runtimeConfig.public.backendPort}` : "";
+     */
+    const base = "/api";
+
+    const values = {
+        base,
+        projects: `${base}/projects/`,
+    }
+
+    return values[resourceName];
 };

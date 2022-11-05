@@ -2,9 +2,7 @@
   "name": "veracioux-website",
   "version": "0.1.0",
   "scripts": {
-    "dev": "nuxt dev",
-    "build": "nuxt build",
-    "preview": "nuxt preview",
+    "dev": "nuxt dev --host 0.0.0.0",
     "generate": "nuxt generate",
     "postinstall": "nuxt prepare",
     "generate-pdf-cv": "node scripts/generate-pdf-cv.js"
@@ -24,16 +22,16 @@
     "nuxt": "3.0.0-rc.12",
     "sass": "^1.52.2",
     "svgo": "^2.8.0",
-    "swrv": "^1.0.0-beta.8",
+    "swrv": "^1.0.1",
     "typescript": "~4.6.3",
     "vite": "^3.2.2",
     "vue": "^3.2.33",
     "vue-glitched-writer": "^1.2.2",
     "vue-konva": "^3.0.0",
-    "vue-lazyload": "^3.0.0-rc.2"
+    "vue3-lazyload": "^0.3.6",
+    "@nuxtjs/google-fonts": "3.0.0-1"
   },
   "devDependencies": {
-    "@nuxtjs/google-fonts": "3.0.0-1",
     "@rushstack/eslint-patch": "^1.1.0",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^10.0.0",

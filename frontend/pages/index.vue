@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import Intro from "@/components/sections/Intro.vue";
-import {onMounted, reactive, ref, watch} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import type {CSSProperties} from "vue";
 import {ScrollData} from "@/inject";
-import * as utils from "@/utils";
 import _zindex from "@/zindex";
 import Navbar from "@/components/Navbar.vue";
 import PageWithNavbar from "@/components/PageWithNavbar.vue";
@@ -25,6 +24,8 @@ const {
     relativeScrollY,
     scrollContainer: scrollContainer,
 } = ScrollData.provide();
+
+const showCover = ref(true);
 
 /**
  * Elements with this style will be sticky until a threshold is passed.
@@ -92,6 +93,11 @@ function onAnimatableVeraciouxTextElementMounted(element: HTMLElement) {
     animatableVeraciouxTextElement.value = element;
 }
 
+onMounted(() => {
+    // Avoid the mugshot flashing to the user on initial load
+    showCover.value = false;
+});
+
 </script>
 <template>
     <PageWithNavbar>
@@ -127,9 +133,10 @@ function onAnimatableVeraciouxTextElementMounted(element: HTMLElement) {
                     :veracioux-text-fadeable="veraciouxTextFadeable"
                     @veraciouxCrossedThreshold="onVeraciouxCrossedThreshold"
                 />
+                <div v-if="showCover" class="mugshotCover"></div>
             </div>
             <div class="-home-section-space-occupant fullWindow" />
-<!--            <Projects id="projects" class="projects" />-->
+            <Projects id="projects" class="projects" />
             <CV id="cv" class="cv" />
             <!--            <About id="about" class="about" />-->
             <!--            <Contact id="contact" class="contact" />-->
@@ -182,6 +189,13 @@ function onAnimatableVeraciouxTextElementMounted(element: HTMLElement) {
 
 .shutter {
     z-index: v-bind("zindex.shutter");
+}
+
+.mugshotCover {
+    position: fixed;
+    inset: 0;
+    background: var(--color-background-0);
+    z-index: v-bind("zindex.mugshotCover");
 }
 
 .intro {

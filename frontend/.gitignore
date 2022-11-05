@@ -1,9 +1,8 @@
 .nuxt
+dist
 .output
 node_modules
 npm-debug.log*
 .pnpm-debug.log*
 
 src/assets/_*
-
-# TODO migration

@@ -1,14 +1,18 @@
-import {fileURLToPath, URL} from "url";
-
 import vueJsx from "@vitejs/plugin-vue-jsx";
 // @ts-ignore
 import {rollupPlugin} from "ascii-mugshot";
 
-import {defineNuxtConfig} from "nuxt/config";
+import {defineNuxtConfig, NuxtConfig} from "nuxt/config";
 
 export default defineNuxtConfig({
     modules: ["@nuxtjs/proxy"],
     buildModules: ["@nuxtjs/google-fonts"],
+    runtimeConfig: {
+        public: {
+            env: process.env.ENVIRONMENT,
+            machine: process.env.MACHINE,
+        },
+    },
     googleFonts: {
         families: {
             "Secular One": true,
@@ -26,6 +30,7 @@ export default defineNuxtConfig({
     devServer: {
         // NOTE: a nuxt bug causes this to be ignored
         port: Number(process.env.WEB_PORT ?? 3000),
+        hostname: "0.0.0.0",
     },
     css: ["@/assets/global.scss"],
     vite: {
@@ -44,4 +49,4 @@ export default defineNuxtConfig({
             },
         },
     }
-})
+}) as NuxtConfig;

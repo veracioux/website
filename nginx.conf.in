@@ -64,21 +64,12 @@ http {
         server_name veracioux.me www.veracioux.me localhost www.localhost;
         listen ${WEB_PORT};
         # Error page is handled by vue-router
-        error_page 404 @frontend;
+        error_page 404 /404.html;
 
         # Make sure the routes matched by this rule match those configured in
-        # vue-router
-        location ~ ^/(|contact|cv|about)/?$ {
-            try_files _ @frontend;
-        }
-
         location / {
-            try_files _ @backend;
-        }
-
-        location @frontend {
             root /app/frontend/dist;
-            rewrite ^ /index.html break;
+            try_files $uri $uri/index.html @backend;
         }
 
         location @backend {

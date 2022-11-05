@@ -9,10 +9,11 @@
 export default {
     section: 1,
     shutter: 2,
-    introSection: 3,
-    navbar: 4,
-    navbarBackground: 4,
-    navbarContent: 5,
+    mugshotCover: 3,
+    introSection: 4,
+    navbar: 5,
+    navbarBackground: 6,
+    navbarContent: 7,
     // NOTE: The modal is wrapped by a <Teleport>, hence v-bind("zindex.modal") doesn't work.
     // Therefore, this value is unused, but is kept here as documentation of that fact.
     modal: 100,

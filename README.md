@@ -88,3 +88,6 @@ stripped and the request is handled as if directed at `/`. Note that if we
 immediately stripped `/stg` from the original request URI, the REST framework's
 browsable API would show `<host>/api/...` URLs instead of `<host>/stg/api/...`.
 
+# Known errors and workarounds
+- The nuxt config doesn't respect the `devServer.port` option, so the frontend port is
+  hardcoded as 3000.

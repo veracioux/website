@@ -20,7 +20,7 @@ source scripts/load-env.bash.in >/dev/null
 file="$(_find_docker_compose)"
 
 cp -f "$file" /tmp/veracioux-old-"$file"
-jinja2 -D env="$env" -D device="$(tem var device)" docker-compose.yaml.in \
+jinja2 -D env="$env" -D device="$(tem var device)" -D uid="$(id -u)" -D gid="$(id -g)" docker-compose.yaml.in \
     | envsubst > "$file"
 
 if ! diff "$file" /tmp/veracioux-old-"$file" >/dev/null 2>/dev/null

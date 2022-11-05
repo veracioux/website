@@ -4,12 +4,12 @@ import useSWRV from "swrv";
 import "@/assets/home.scss";
 import type {Project} from "@/models";
 import ProjectModal from "@/components/projects/ProjectModal.vue";
-import {reactive, ref} from "vue";
+import {onMounted, reactive, Ref, ref, toRaw} from "vue";
 import Img from "@/components/generic/Img.vue";
 import SectionTitle from "@/components/SectionTitle.vue";
 import api from "@/api";
 
-const modal = reactive<{show: boolean; project: Project | null}>({
+const modal = reactive<{ show: boolean; project: Partial<Project> | null }>({
     show: false,
     project: null,
 });
@@ -17,12 +17,16 @@ const modal = reactive<{show: boolean; project: Project | null}>({
 const previewedProjectId = ref<number>();
 const imageContainer = ref<HTMLElement>();
 
-const {data: projects} = useSWRV<Array<Partial<Project>>>(
-    () => api.projects,
-    (key) => fetch(key).then((resp) => resp.json())
-);
+const {data: projects} = (typeof useSWRV === "function" ?
+    useSWRV<Partial<Project>[]>(
+        () => process.client && api("projects"),
+        (key) => {
+            return fetch(key).then(resp => resp.json()).catch(console.error);
+        }
+    )
+    : {data: ref([] as Partial<Project> > [])});
 
-projects.value = [
+projects.value = projects.value ?? [
     {
         id: 0,
         title: "Dummy",
@@ -31,7 +35,7 @@ projects.value = [
     },
 ];
 
-function openModal(project: Project) {
+function openModal(project: Partial<Project>) {
     modal.show = true;
     modal.project = project;
 }
