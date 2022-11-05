@@ -23,7 +23,7 @@ onMounted(() => {
 
 <template>
     <div ref="root" class="section">
-        <SectionTitle :class="s.sectionTitle" text="Curriculum Vitae" slug="cv" />
+        <SectionTitle class="sectionTitle" text="Curriculum Vitae" slug="cv" />
         <div class="content">
             <table class="timeline">
                 <TimelineEntry
@@ -310,7 +310,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
 }
 </style>
 
-<style module="s" lang="scss">
+<style scoped lang="scss">
 .sectionTitle {
     position: sticky;
     top: 0;

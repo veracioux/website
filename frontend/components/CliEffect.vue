@@ -17,6 +17,10 @@ const props = withDefaults(
     }
 );
 
+watch(() => props.progress, (value) => {
+    console.debug("progress", value);
+});
+
 const defaultPrompt = "$ ";
 
 const end = computed(() => Math.floor(props.progress * props.text.length));

@@ -57,6 +57,7 @@ onMounted(() => {
 
 <template>
     <div
+        ref="root"
         class="sectionTitleContainer"
         :style="{transform: `scaleY(${checkpoints.textDecorationScaleY})`}"
     >
@@ -74,7 +75,7 @@ onMounted(() => {
             />
         </svg>
         <a :href="anchor">
-            <h1 class="titleText" :class="s.sectionTitle">
+            <h1 class="titleText">
                 <CliEffect
                     prompt=""
                     :text="text"
@@ -113,10 +114,7 @@ onMounted(() => {
     a {
         transition: transform 0s;
         cursor: pointer;
+        color: var(--color-text);
     }
 }
-</style>
-
-<style module="s" lang="scss">
-@import "@/assets/home.scss";
 </style>
