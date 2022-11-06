@@ -9,7 +9,7 @@ async function printPdf() {
 
     browser.close();
 
-    const dir = __dirname + "/../.output";
+    const dir = __dirname + "/../dist";
     fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(dir + "/cv.pdf", pdf);
 }
