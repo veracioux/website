@@ -17,7 +17,7 @@ else
     export ENVIRONMENT=staging
     tag="staging"
 fi
-export MACHINE=public
+export DEVICE=public
 
 echo "Building images..."
 docker-compose build
