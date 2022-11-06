@@ -13,9 +13,11 @@ fi
 export ENVIRONMENT="$(tem var env)"
 export MACHINE="$(tem var device)"
 
+mkdir -p _docker
+
 for process_type in "${process_types[@]}"; do
-    echo "Generating Dockerfile.$process_type.$ENVIRONMENT ..."
+    echo "Generating _docker/Dockerfile.$process_type.$ENVIRONMENT ..."
     shdocker \
         -s "$project_root/docker/shDockerfile.$process_type" \
-        -d "$project_root/Dockerfile.$process_type.$ENVIRONMENT"
+        -d "$project_root/_docker/Dockerfile.$process_type.$ENVIRONMENT"
 done

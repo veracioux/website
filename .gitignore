@@ -10,7 +10,7 @@ dist
 .env/*.secret
 
 # Docker and build process (I use shdocker to generate Dockerfiles)
-Dockerfile*
+_docker
 /docker-compose*.yaml
 
 # Miscellaneous

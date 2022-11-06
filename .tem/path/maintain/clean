@@ -5,7 +5,8 @@ shopt -s globstar
 # If this repo had a makefile, this would perform 'make clean'
 
 cd "$(tem find -b website)"
-rm Dockerfile.*
+rm -rf _docker
+rm docker-compose.*.yaml
 rm -rf **/__pycache__
 
 # Remove node_modules/ created in the host by the containers because frontend/

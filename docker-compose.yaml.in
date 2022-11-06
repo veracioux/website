@@ -55,7 +55,7 @@ services:
     image: veracioux.me/web:{{tag}}
     build:
       context: .
-      dockerfile: Dockerfile.web.{{env}}
+      dockerfile: _docker/Dockerfile.web.{{env}}
 
     # Container
     container_name: veracioux-web{{suffix}}
@@ -94,7 +94,7 @@ services:
     image: veracioux.me/worker_dotfiles:{{tag}}
     build:
       context: .
-      dockerfile: Dockerfile.worker_dotfiles.{{env}}
+      dockerfile: _docker/Dockerfile.worker_dotfiles.{{env}}
 
     # Container
     container_name: veracioux-worker_dotfiles{{suffix}}
@@ -113,7 +113,7 @@ services:
     image: veracioux.me/mail:{{tag}}
     build:
       context: mail
-      dockerfile: ../Dockerfile.mail.{{env}}
+      dockerfile: ../_docker/Dockerfile.mail.{{env}}
 
     # Container
     container_name: veracioux-mail{{suffix}}
