@@ -1,20 +1,77 @@
 #+TITLE: veracioux website
+#+LINK: tem https://github.com/tem-cli/tem
+#+LINK: shdocker https://github.com/veracioux/shdocker
+#+LINK: upload ./.tem/path/upload
+#+LINK: upload-secrets ./.tem/path/upload-secrets
+
+* Deployment
+Deployment is controlled using =tem=
+
+** TODO Production
+Run the following commands on your local machine:
+- [[upload-secrets][=upload-secrets=]] :: Upload private =.env= files and passwords stored in =.htpasswd= files.
+- [[./.tem/path/upload][=upload=]] :: Builds all images and pushes them to the registry.
+
+* Infrastructure
+The website comprises the following components:
+- Frontend :: =frontend/=, Vue 3, Nuxt 3
+- API backend :: =backend/=, Django 3
+- Worker server :: =worker/=, node http server, rabbitmq
+- Staging proxy :: =proxy/=, PHP, provides password auth for staging
+- Docker registry :: Facilitates efficient image uploads (runs only on production)
+- Mail server :: =mail/=, planned, will probably use iRedMail
+
+The plan is to have them organized in the following docker containers
+(services), managed by =docker compose=:
+- =web= :: Runs an =nginx= server configured from =nginx.conf.in= that serves the
+  static frontend and acts as a reverse proxy for all the other services. In a
+  staging environment, it also proxies all requests through a password auth PHP
+  script located in =proxy/=.
+- =backend= :: Runs the Django API backend.
+- =mail= :: My private mail server, placeholder for now
+- =docker-registry= :: Runs a docker registry using the =registry= image.
+- =worker= :: The main worker server. It schedules tasks for individual workers via
+  message queue. It also serves a simple API that can be used to request that a
+  task be performed.
+- =worker_<name>= :: Each individual worker is its own docker container. It
+  consumes a message from the MQ and runs its task.
+
+/NOTE: Currently, the =web= service runs both the API backend and worker server, and proxies them internally through nginx and also serves the static frontend via nginx./
+
+/NOTE: All config files ending with =.in= are preprocessed by jinja2. Scripts ending with =.in= are meant to be sourced instead of executed./
+
+I use this project frequently as a playing ground to test some **unorthodox
+practices and novel workflows** that I am working on. Some of them have proven
+very useful, and I have decided to make them a central part of the development
+workflow of my website:
+- [[tem][=tem=]] :: A new way to manage project environments. It is still in its early
+  stages, but is still useful as it made my workflow very efficient.
+  Using this program, I am able to create shell scripts for common tasks and
+  automatically have them available in my =PATH= whenever I enter the project
+  directory using the CLI. I have also set the project up so that some shell
+  variables are automatically available to me when I use the =fish= shell.
+- [[shdocker][=shdocker=]] :: A preprocessor for Dockerfiles that allows me to use the shell
+  to inject dynamic data into them. For example, each configuration (production,
+  staging and dev) is defined in the same shDockerfile, and I control the
+  different output Dockerfiles using =if= statements in the shDockerfile. See for
+  yourself in [[./docker/shDockerfile.web]].
 
 * Environment variables
 ** =ENVIRONMENT=
 The environment that the server is running in. Can be one of: =dev=, =staging=,
-=prod=. The meaning of these should be obvious. The =dev= environment exposes
-ports of all containers to the host and it enables hot reloading. It uses a
-local (ephemeral) database and the local filesystem where applicable. The
-=staging= environment is meant to be as similar to =prod= as possible, using a
-persistent database, a dropbox account for storage of some files, etc. Obviously,
-it doesn't use the same accounts and API keys. =dev= and =staging= can be
-deployed locally. =staging= can also be served on a dedicated server. It is
-password protected regardless of whether it is served locally or on a server.
-The password is saved in the browser via cookie so you don't have to enter it
-every time.
+=prod=.
 
-** =MACHINE=
+The meaning of these should be obvious. The =dev= environment exposes ports of all
+containers to the host and it enables hot reloading. It uses a local (ephemeral)
+database and the local filesystem where applicable. The =staging= environment is
+meant to be as similar to =prod= as possible, using a persistent database, a
+dropbox account for storage of some files, etc. Obviously, it doesn't use the
+same accounts and API keys. =dev= and =staging= can be deployed locally. =staging= can
+also be served on a dedicated server. It is password protected regardless of
+whether it is served locally or on a server. The password is saved in the
+browser via cookie so you don't have to enter it every time.
+
+** =DEVICE=
 ** TODO Ports
 | Env variable | Value | Description   |
 | =WEB_PORT=     |  3000 | Main web port |
