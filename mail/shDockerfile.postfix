@@ -8,4 +8,4 @@ RUN apk add --no-cache bash
 ## Dependencies
 RUN apk add --no-cache postfix dovecot
 
-TAG veracioux.me/mail
+TAG docker.veracioux.me/mail

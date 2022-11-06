@@ -36,7 +36,6 @@ if [ "$ENVIRONMENT" != "dev" ]; then
 
     ENV ENVIRONMENT="$ENVIRONMENT" DEVICE="$DEVICE"
     RUN pnpm run generate
-    RUN pnpm run generate-pdf-cv
     # Minify SVG icons and copy them to static root
     # TODO: integrate into "pnpm run generate" or as a vite plugin
     RUN pnpm svgo -f assets/icons -o dist/static/icons

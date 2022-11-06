@@ -22,13 +22,13 @@ export DEVICE=public
 echo "Building images..."
 docker-compose build
 
-curl --fail --insecure "https://veracioux.me/docker-status/"
+curl --fail --insecure "https://docker.veracioux.me/"
 code="$?"
 
 if [ "$code" != 0 ]; then
     # Docker registry not running
     echo "Registry not running. Pushing manually as tar.gz file..."
-    images=(veracioux.me/{web,worker_dotfiles,mail}:"$tag")
+    images=(docker.veracioux.me/{web,worker_dotfiles,mail}:"$tag")
     docker save "${images[@]}" | gzip > /tmp/veracioux-images.tar.gz
     rsync --update --verbose --progress {,"$VPS_IP:"}/tmp/veracioux-images.tar.gz
     ssh "$VPS_IP" bash -c "gunzip /tmp/veracioux-images.tar.gz | docker load"

@@ -13,43 +13,24 @@ http {
     ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
     ssl_ciphers         HIGH:!aNULL:!MD5;
 
-    gzip on;
-    gzip_types text/plain text/html text/javascript application/javascript text/css;
-    gzip_min_length 512;
 
     # HTTP to HTTPS redirect
     server {
         listen 80 default_server;
-
-        location / {
-            return 301 https://veracioux.me$request_uri;
-        }
-
-        location /status {
-            return 200 "alive";
-        }
+        return 301 https://veracioux.me$request_uri;
     }
 
     server {
-        server_name stg.veracioux.me;
+        server_name *.veracioux.me *.localhost;
         listen 443 ssl;
 
-        # Staging server
-        location / {
-            proxy_pass http://localhost:${WEB_PORT_STAGING};
-            proxy_set_header Host $http_host;
-        }
-    }
-
-    server {
-        server_name *.veracioux.me;
-        listen 443 ssl;
+        gzip on;
+        gzip_types text/plain text/html text/javascript application/javascript text/css;
+        gzip_min_length 512;
 
         location / {
             # Path where we can put files to be served as temporary endpoints
             root ${USER_HOME}/tmp_root;
-            # NOTE: For some reason using $uri/ (rather than $uri/index.html)
-            # results in 403 Forbidden when accessing the / endpoint.
             try_files $uri $uri/index.html @;
         }
 
@@ -57,20 +38,31 @@ http {
             proxy_pass http://localhost:${WEB_PORT};
             proxy_set_header Host $http_host;
         }
+    }
 
-        location /docker-status/ {
-            proxy_pass http://localhost:${DOCKER_REGISTRY_PORT}/;
+    server {
+        server_name stg.veracioux.me;
+        listen 443 ssl;
+
+        gzip on;
+        gzip_types text/plain text/html text/javascript application/javascript text/css;
+        gzip_min_length 512;
+
+        location / {
+            proxy_pass http://localhost:${WEB_PORT_STAGING};
         }
+    }
 
-        # We are using this path because `docker login` always goes for /v2,
-        # even when the SERVER argument contains a URL with a subpath.
-        location /v2/ {
+    server {
+        server_name docker.veracioux.me;
+        listen 443 ssl;
+        location / {
             proxy_set_header    Host $host;
             proxy_set_header    X-Real-IP $remote_addr;
             proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header    X-Forwarded-Proto https;
             proxy_set_header    X-Forwarded-Ssl on;
-            proxy_pass          http://localhost:${DOCKER_REGISTRY_PORT};
+            proxy_pass          http://localhost:${DOCKER_REGISTRY_PORT}/;
             proxy_cache off;
             proxy_read_timeout  900;
             client_max_body_size 0;

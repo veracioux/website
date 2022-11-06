@@ -52,7 +52,7 @@ services:
 
   web:
     # Image
-    image: veracioux.me/web:{{tag}}
+    image: docker.veracioux.me/web:{{tag}}
     build:
       context: .
       dockerfile: _docker/Dockerfile.web.{{env}}
@@ -91,7 +91,7 @@ services:
 
   worker_dotfiles:
     # Image
-    image: veracioux.me/worker_dotfiles:{{tag}}
+    image: docker.veracioux.me/worker_dotfiles:{{tag}}
     build:
       context: .
       dockerfile: _docker/Dockerfile.worker_dotfiles.{{env}}
@@ -110,7 +110,7 @@ services:
 
   mail:
     # Image
-    image: veracioux.me/mail:{{tag}}
+    image: docker.veracioux.me/mail:{{tag}}
     build:
       context: mail
       dockerfile: ../_docker/Dockerfile.mail.{{env}}
@@ -126,9 +126,9 @@ services:
       - "$DOCKER_REGISTRY_PORT:5000"
     restart: always
     environment:
-      REGISTRY_HTTP_HOST: https://veracioux.me:443
+      REGISTRY_HTTP_HOST: https://docker.veracioux.me:443
       REGISTRY_AUTH: htpasswd
-      REGISTRY_AUTH_HTPASSWD_REALM: "Registry Realm"
+      REGISTRY_AUTH_HTPASSWD_REALM: "Registry"
       REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
     volumes:
       - "${HOME}/auth:/auth"

@@ -1,5 +1,5 @@
 {%- macro location_status() %}
-        location /status {
+        location = /status {
             add_header Content-Type text/plain;
             return 200 "alive";
         }

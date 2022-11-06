@@ -10,5 +10,5 @@ if docker container inspect veracioux-"$1" >/dev/null 2>&1; then
 else
     tag="$([ "$(tem var env)" = "dev" ] && echo dev || [ "$(tem var env)" = "staging" ] && echo staging || echo latest)"
     echo "Container is not running. Trying to start it from image veracioux-me/$1:$tag ..." >&2
-    docker run --interactive --tty veracioux.me/"$1":"$tag" bash
+    docker run --interactive --tty docker.veracioux.me/"$1":"$tag" bash
 fi
