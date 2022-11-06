@@ -11,7 +11,7 @@ if [ -z "$process_types" ]; then
 fi
 
 export ENVIRONMENT="$(tem var env)"
-export MACHINE="$(tem var device)"
+export DEVICE="$(tem var device)"
 
 mkdir -p _docker
 

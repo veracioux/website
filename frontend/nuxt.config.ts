@@ -10,7 +10,6 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
             env: process.env.ENVIRONMENT,
-            machine: process.env.MACHINE,
         },
     },
     googleFonts: {

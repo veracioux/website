@@ -32,7 +32,7 @@ until pgrep uvicorn; do
     :
 done
 
-jinja2 -D env="$ENVIRONMENT" nginx.conf.in \
+jinja2 -D env="$ENVIRONMENT" -D device="$DEVICE" nginx.conf.in \
     | envsubst '$WEB_PORT,$WEB_PORT_STAGING,$BACKEND_HOST,$BACKEND_PORT,$WORKER_SERVER_HOST,$WORKER_SERVER_PORT' \
     > /etc/nginx/nginx.conf
 

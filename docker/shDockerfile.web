@@ -34,7 +34,7 @@ if [ "$ENVIRONMENT" != "dev" ]; then
     ## Bundle frontend
     COPY frontend .
 
-    ENV ENVIRONMENT="$ENVIRONMENT" MACHINE="$MACHINE"
+    ENV ENVIRONMENT="$ENVIRONMENT" DEVICE="$DEVICE"
     RUN pnpm run generate
     # Minify SVG icons and copy them to static root
     # TODO: integrate into "pnpm run generate" or as a vite plugin
@@ -143,7 +143,7 @@ fi
 if [ "$ENVIRONMENT" = "dev" ]; then
     CMD scripts/entrypoint-dev.sh
 else
-    ENV MACHINE="$MACHINE"
+    ENV DEVICE="$DEVICE"
     CMD scripts/entrypoint-prod.sh
 fi
 

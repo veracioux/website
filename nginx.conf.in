@@ -53,14 +53,25 @@ http {
         }
     }
 
+    # This block is defined as a macro because, in a staging configuration on a
+    # development device, it is replicated a couple of times: once without protection
+    # and once with protection accessed through a 'stg.*' subdomain
+    {%- macro server_root_domain(protected=False, stg_subdomain=False) %}
     server {
-        server_name veracioux.me www.veracioux.me localhost www.localhost;
+        server_name
+            {%- if stg_subdomain %}
+                stg.veracioux.me stg.localhost
+            {%- else %}
+                veracioux.me www.veracioux.me localhost www.localhost
+            {%- endif %};
+
         listen ${WEB_PORT};
+
         # Error page is handled by vue-router
         error_page 404 /404.html;
 
         # Make sure the routes matched by this rule match those configured in
-        location / {
+        location @ {
             root /app/frontend/dist;
             try_files $uri $uri/index.html @backend;
         }
@@ -70,28 +81,19 @@ http {
             proxy_intercept_errors on;
         }
 
-        {{ location_status() }}
-        {{ location_static() }}
-    }
-
-    {%- if env == "staging" %}
-    server {
-        server_name stg.veracioux.me stg.localhost;
-        listen ${WEB_PORT};
-
-        # Staging root, redirects to / after successful staging auth
+        # If accessed regularly (unprotected), this will just serve the website.
+        # If accessed via a 'stg.*' subdomain, this redirects to / after successful auth
         location / {
+            {%- if protected %}
             auth_request /stg-auth;
+            error_page 401 /stg-login?redirect=$request_uri;
+            {%- endif %}
             # NOTE: can't use a simple rewrite, it would override auth_request
             try_files _ @;
-            error_page 401 /stg-login?redirect=$request_uri;
         }
 
-        location @ {
-            proxy_pass http://0.0.0.0:${WEB_PORT};
-            proxy_set_header Host localhost;
-        }
 
+        {%- if protected %}
         # Returns 204 for successful staging auth, 401 otherwise
         location = /stg-auth {
             fastcgi_pass unix:/var/run/php-fpm.sock;
@@ -107,12 +109,21 @@ http {
             include fastcgi.conf;
             fastcgi_param SCRIPT_FILENAME /app/proxy/staging-login.php;
         }
+        {%- endif %}
 
         {{ location_status() }}
         {{ location_static() }}
-
     }
-    {% endif %}
+    {%- endmacro %}
+
+    {%- if device == 'dev' %}
+        {{ server_root_domain(protected=False, stg_subdomain=False) }}
+        {%- if env == 'staging' %}
+            {{ server_root_domain(protected=True, stg_subdomain=True) }}
+        {%- endif %}
+    {%- else %}
+        {{ server_root_domain(protected=True, stg_subdomain=False) }}
+    {%- endif %}
 
     server {
         server_name api.veracioux.me api.localhost;
