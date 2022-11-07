@@ -5,8 +5,14 @@
 # the CMD.
 # Usage: into <SERVICE>
 
+prod_suffix=
+
+if tem var -q env:prod; then
+    prod_suffix="-prod"
+fi
+
 if docker container inspect veracioux-"$1" >/dev/null 2>&1; then
-    docker exec --interactive --tty veracioux-"$1" bash
+    docker exec --interactive --tty "veracioux-$1$prod_suffix" bash
 else
     tag="$([ "$(tem var env)" = "dev" ] && echo dev || [ "$(tem var env)" = "staging" ] && echo staging || echo latest)"
     echo "Container is not running. Trying to start it from image veracioux-me/$1:$tag ..." >&2

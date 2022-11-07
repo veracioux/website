@@ -10,6 +10,7 @@ import {
     faCodePullRequest,
     faMobile,
     faLocationDot,
+    faCircleInfo,
 } from "@fortawesome/free-solid-svg-icons";
 import {
     faGithub,
@@ -32,8 +33,13 @@ library.add(
     faCodePullRequest,
     faMobile,
     faLocationDot,
+    faCircleInfo,
+    faGithub,
+    faGitlab,
+    faLinkedin,
+    faMonero,
+    faMobile,
 );
-library.add(faGithub, faGitlab, faLinkedin, faMonero, faMobile);
 
 const iconNameToFontAwesomeMap = {
     donate: "circle-dollar-to-slot",
@@ -44,6 +50,7 @@ const iconNameToFontAwesomeMap = {
     mail: "envelope",
     phone: "mobile",
     location: "location-dot",
+    info: "circle-info",
     PR: "code-pull-request",
     github: ["fab", "github"],
     gitlab: ["fab", "gitlab"],
@@ -81,7 +88,7 @@ const imageSrc = computed(() =>
 );
 
 const isPdf = ContextIsPdf.inject();
-const imgClass = ['icon', 'customIcon', iconNameToSrcMap[props.name]?.className];
+const imgClass = ['iconWrapper', 'customIcon', iconNameToSrcMap[props.name]?.className];
 
 onMounted(() => {
     if ((props.name !== undefined) == (props.src !== undefined)) {
@@ -98,7 +105,7 @@ onMounted(() => {
             <FontAwesomeIcon
                 v-if="props.name && iconNameToFontAwesomeMap[props.name]"
                 :icon="iconNameToFontAwesomeMap[name]"
-                :class="{center}"
+                class="iconWrapper faIcon"
             />
             <Img
                 v-else-if="isPdf"
@@ -120,16 +127,21 @@ onMounted(() => {
 
 .icon {
     display: inline-block;
+    vertical-align: middle;
 
     .iconWrapper {
         display: inline-block;
+        vertical-align: middle;
         width: 100%;
         height: 100%;
     }
 }
 
-.center {
-    // No other method of centering seems to work with FontAwesomeIcon
+.faIcon {
+    aspect-ratio: 1;
+
+    // NOTE: seems to be the only way to make the FA icon centered in its
+    // container.
     margin: 50%;
     transform: translate(-50%, -50%);
 }

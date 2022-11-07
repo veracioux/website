@@ -64,17 +64,25 @@ const href = props.href ?? nameToDataMap[props.name].href;
 </script>
 
 <template>
-    <component :is="href ? 'a' : 'span'" :href="href" target="_blank">
+    <component :is="href ? 'a' : 'span'" :href="href" target="_blank" class="socialIconRoot">
         <Icon
             :name="nameToDataMap[name]?.name ?? name"
             :style="colorize ? nameToDataMap[name].style : undefined"
             class="icon"
         />
-        {{ text }}
+        <span class="text">{{ text }}</span>
     </component>
 </template>
 
 <style scoped lang="scss">
+.socialIconRoot {
+    line-height: 1.8;
+
+    .text {
+        margin-left: 6px;
+    }
+}
+
 .icon {
     height: 28px;
 }

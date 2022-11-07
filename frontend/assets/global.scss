@@ -30,6 +30,8 @@ $small: 768px;
 $large: 1024px;
 $xlarge: 1280px;
 
+$monospace: "Roboto Mono";
+
 :root {
   // Font settings
   font-size: 12px;
@@ -64,6 +66,8 @@ $xlarge: 1280px;
   --color-background-2-rgb: 14, 15, 23;
   --color-text: #d2dcf9;
   --color-text-rgb: 210, 220, 249;
+  --color-text-pale: #b7b7b7;
+  --color-text-pale-rgb: 183, 183, 183;
 
   &[data-theme="light"] {
     --color-primary: #303F9F;
@@ -78,6 +82,8 @@ $xlarge: 1280px;
     --color-background-2-rgb: 221, 221, 221; // TODO
     --color-text: black;
     --color-text-rgb: 0, 0, 0;
+    --color-text-pale: #202020;
+    --color-text-pale-rgb: 32, 32, 32;
   }
 
   color: var(--color-text);

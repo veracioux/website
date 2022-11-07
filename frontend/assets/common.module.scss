@@ -95,3 +95,28 @@
 @mixin beveledEdges($size) {
   clip-path: beveledEdges($size);
 }
+
+// Create a beveled frame around an element
+@mixin beveledFrame($bevelWidth, $frameWidth, $color, $background) {
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: $color;
+    @include beveledEdges($bevelWidth);
+    z-index: 0;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    background: $background;
+    @include beveledEdges(calc($bevelWidth - $frameWidth / 2));
+    z-index: 0;
+  }
+
+  > * {
+    z-index: 1;
+  }
+}

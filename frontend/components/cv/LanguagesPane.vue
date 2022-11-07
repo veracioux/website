@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="languagesPaneContainer">
         <h2 class="subsectionTitle">Languages</h2>
         <table class="languageTable">
             <tr>
@@ -23,7 +23,16 @@
 </template>
 
 <style scoped lang="scss">
-.container {
+@use "@/assets/common.module.scss" as c;
+
+:root[data-pdf] .languagesPaneContainer {
+    position: relative;
+    padding: 16px;
+
+    @include c.beveledFrame(16px, 2px, #aaa, #f7f7f7);
+}
+
+.languagesPaneContainer {
     line-height: 160%;
     display: flex;
     flex-direction: column;

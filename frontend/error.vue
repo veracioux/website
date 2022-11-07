@@ -45,6 +45,7 @@ function incrementActivePhrase() {
 </template>
 
 <style scoped lang="scss">
+@import "@/assets/global.scss";
 
 .container {
     position: fixed;
@@ -59,7 +60,7 @@ function incrementActivePhrase() {
         flex-direction: column;
         align-items: center;
 
-        font-family: monospace;
+        font-family: $monospace;
         color: var(--color-secondary);
 
         .number {

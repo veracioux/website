@@ -74,7 +74,8 @@ onMounted(() => {
                 class="titleDecoration"
             />
         </svg>
-        <a :href="anchor">
+        <!-- TODO: convert to <a> -->
+        <div>
             <h1 class="titleText">
                 <CliEffect
                     prompt=""
@@ -83,7 +84,7 @@ onMounted(() => {
                     :show-cursor="checkpoints.showCliCursor"
                 />
             </h1>
-        </a>
+        </div>
     </div>
 </template>
 

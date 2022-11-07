@@ -11,13 +11,14 @@ import Projects from "@/components/sections/Projects.vue";
 import CV from "@/components/sections/CV.vue";
 import About from "@/components/sections/About.vue";
 import Contact from "@/components/sections/Contact.vue";
+import {useRoute} from "#app";
 
 const zindex = reactive(_zindex);
 
 const veraciouxStyle = reactive<CSSProperties>({});
 const animatableVeraciouxTextElement = ref<HTMLElement>();
 const veraciouxTextFadeable = ref(false);
-const navbarOpaque = ref(false);
+const navbarOpaque = ref(useRoute().hash !== '');
 const navbar = ref<HTMLElement>();
 
 const {

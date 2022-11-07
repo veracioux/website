@@ -25,7 +25,7 @@ onMounted(() => {
         <div class="content">
             <div class="contentLeft"></div>
             <div style="position: relative">
-                <a href="/#home" class="veracioux" ref="veraciouxButton">
+                <a class="veracioux" ref="veraciouxButton">
                     veracioux
                 </a>
                 <div
@@ -42,6 +42,7 @@ onMounted(() => {
 
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as c;
+@import "@/assets/global.scss";
 
 .background {
     @include c.fillParent;
@@ -95,7 +96,7 @@ a.veracioux {
     position: relative;
     padding: 8px;
 
-    font-family: monospace;
+    font-family: $monospace;
     font-size: 2em;
     text-align: center;
     z-index: v-bind("zindex.navbar");

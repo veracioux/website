@@ -336,7 +336,7 @@ onMounted(() => {
     justify-content: center;
 
     color: var(--color-primary);
-    font-family: monospace;
+    font-family: $monospace;
 
     pointer-events: none;
 }

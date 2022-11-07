@@ -2,8 +2,15 @@
 import _zindex from "@/zindex";
 import {reactive} from "vue";
 import {NuxtPage} from "#components";
+import {useHead} from "#head";
 
 const zindex = reactive(_zindex);
+useHead({
+    title: "veracioux | Haris Gušić",
+    htmlAttrs: {
+        lang: "en",
+    }
+});
 </script>
 
 <template>

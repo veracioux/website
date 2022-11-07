@@ -252,6 +252,8 @@ const zindex = reactive(_zindex)
     padding: 4px;
     border-radius: 8px;
 
+    display: inline-flex;
+
     background: rgba(var(--color-secondary-rgb), 0.2);
     cursor: pointer;
 
@@ -259,9 +261,6 @@ const zindex = reactive(_zindex)
         color: rgba(var(--color-secondary-rgb), 0.8);
         width: 20px;
         height: 20px;
-
-        // Fixes a display bug where the button's height is elongated.
-        display: block;
     }
 }
 
@@ -310,8 +309,7 @@ const zindex = reactive(_zindex)
     }
 
     :deep(.externalLink) {
-        width: 12px;
-        height: 12px;
+        height: 13px;
         color: var(--color-secondary);
     }
 }

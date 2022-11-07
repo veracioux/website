@@ -59,33 +59,35 @@ const displayType: "grouped" | "linear" = isPdf.value ? "grouped" : "linear";
     <div class="cvRoot">
         <CVHeader v-if="isPdf" />
         <div class="content">
-            <table class="timeline">
-                <template v-if="displayType === 'linear'"
-                          v-for="[key, entry] of enabledEntries"
-                >
-                    <TimelineEntry v-bind="entry" />
-                </template>
-                <template v-else>
-                    <template v-for="([key, group], i) of enabledGroups">
-                        <h3 :class="['groupTitle', {intermittent: i !== 0}]">
-                            {{ group.name }}</h3>
-                        <template
-                            v-for="(entry, j) of group.entries"
-                        >
-                            <TimelineEntry
-                                v-bind="entry"
-                                :class="[
+            <div class="timelineWrapper">
+                <table class="timeline">
+                    <template v-if="displayType === 'linear'"
+                              v-for="[key, entry] of enabledEntries"
+                    >
+                        <TimelineEntry v-bind="entry" />
+                    </template>
+                    <template v-else>
+                        <template v-for="([key, group], i) of enabledGroups">
+                            <h3 :class="['groupTitle', {intermittent: i !== 0}]">
+                                {{ group.name }}</h3>
+                            <template
+                                v-for="(entry, j) of group.entries"
+                            >
+                                <TimelineEntry
+                                    v-bind="entry"
+                                    :class="[
                                     'groupedTimeLineEntry',
                                     {
                                         marginTop: j === 0,
                                         marginBottom: j === group.entries.length - 1 && i !== enabledGroups.length - 1,
                                     }
                                 ]"
-                            />
+                                />
+                            </template>
                         </template>
                     </template>
-                </template>
-            </table>
+                </table>
+            </div>
             <aside class="sidePane">
                 <SkillsPane class="skillsPane" :variant="variant" />
                 <LanguagesPane class="languagesPane" />
@@ -109,6 +111,29 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
     }
 }
 
+:root[data-pdf] {
+    .content {
+        align-items: stretch;
+
+        .timelineWrapper {
+            position: relative;
+            padding: 24px;
+            width: 440px;
+
+            --timeline-background: #f7f7f7;
+            --timeline-background-rgb: 247, 247, 247;
+
+            @include common.beveledEdges(16px);
+            @include common.beveledFrame(16px, 2px, #aaa, var(--timeline-background));
+        }
+
+        .sidePane {
+            gap: 24px !important;
+            flex: 1 1 0;
+        }
+    }
+}
+
 .cvRoot {
     display: flex;
     flex-direction: column;
@@ -118,23 +143,55 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
         flex-direction: column;
         justify-content: flex-start;
         gap: 48px;
-        padding-top: 24px;
-        padding-bottom: 80px;
+        margin-top: 24px;
+        margin-bottom: 80px;
 
         @include screenWidthAboveCriticalPoint {
             flex-direction: row;
             gap: 16px;
-            padding-top: 32px;
+            margin-top: 32px;
         }
 
         .timeline {
+            position: relative;
             border-spacing: 16px 0;
-            line-height: 200%;
+            line-height: 2;
             max-width: 900px;
             height: fit-content;
 
             :global(td) {
                 padding: 0;
+            }
+
+            .groupTitle {
+                font-size: 1.8em;
+                position: absolute;
+                left: 0;
+                right: 0;
+                text-align: left;
+                z-index: 2;
+
+                // Even though alpha is 0, the color is important for PDF generation
+                $transparent: rgba(var(--timeline-background-rgb), 0);
+                $background: var(--timeline-background);
+
+                &.intermittent {
+                    transform: translateY(-50%);
+                    background: linear-gradient(
+                            $transparent, $background, $background, $transparent
+                    );
+                    line-height: 4;
+                }
+            }
+
+            .groupedTimeLineEntry {
+                &.marginTop:deep(.acceptsMargin) {
+                    @include timeline.responsiveVerticalMargin($top: 16px);
+                }
+
+                &.marginBottom:deep(.acceptsMargin) {
+                    @include timeline.responsiveVerticalMargin($bottom: 16px);
+                }
             }
         }
 
@@ -163,40 +220,13 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
                 margin: 0 12px;
             }
         }
-
-        .groupTitle {
-            font-size: 1.8em;
-            position: absolute;
-            // Even though alpha is 0, the color is important for PDF generation
-            $transparent: rgba(var(--color-background-0-rgb), 0);
-            $background: var(--color-background-0);
-
-            &.intermittent {
-                transform: translateY(-50%);
-                background: linear-gradient(
-                        $transparent, $background, $background, $transparent
-                );
-                line-height: 4;
-                z-index: 1;
-            }
-        }
-
-        .groupedTimeLineEntry {
-            &.marginTop:deep(.acceptsMargin) {
-                @include timeline.responsiveVerticalMargin($top: 32px);
-            }
-
-            &.marginBottom:deep(.acceptsMargin) {
-                @include timeline.responsiveVerticalMargin($bottom: 24px);
-            }
-        }
     }
 
 }
 
 :root[data-pdf] .content {
-    padding-top: 64px;
-    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 </style>
 

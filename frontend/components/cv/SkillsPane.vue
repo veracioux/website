@@ -57,6 +57,12 @@ const extraClasses: Partial<Record<keyof typeof skills, string>> = {
 @use "@/assets/common.module.scss" as common;
 @import "@/assets/global.scss";
 
+:root[data-pdf] .container {
+    position: relative;
+    padding: 16px;
+    @include common.beveledFrame(16px, 2px, rgba(black, 0.3), #f7f7f7);
+}
+
 .container {
     display: flex;
     flex-direction: column;

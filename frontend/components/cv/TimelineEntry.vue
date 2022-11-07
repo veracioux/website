@@ -112,7 +112,7 @@ const isPdf = ContextIsPdf.inject();
         @include timeline.responsiveVerticalMargin(10px, 10px);
 
         &.isPdf {
-            @include timeline.responsiveVerticalMargin(7px, 7px);
+            @include timeline.responsiveVerticalMargin(4px, 4px);
         }
     }
 }
