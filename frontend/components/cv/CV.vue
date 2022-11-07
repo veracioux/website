@@ -202,7 +202,7 @@ const isPdf = ContextIsPdf.inject();
                 </TimelineEntry>
             </table>
             <aside class="sidePane">
-                <SkillsPane class="skillsPane" />
+                <SkillsPane class="skillsPane" :variant="variant" />
                 <LanguagesPane class="languagesPane" />
             </aside>
         </div>
