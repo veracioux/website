@@ -5,7 +5,7 @@
             <tr>
                 <td>English</td>
                 <td rowspan="0" class="columnDelimiter"></td>
-                <td><b>Advanced</b> (TOEFL iBT score: 109/120)</td>
+                <td><b>Advanced</b> (TOEFL iBT score: 109/120, expired)</td>
             </tr>
             <tr>
                 <td>German</td>

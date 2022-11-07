@@ -8,7 +8,7 @@ import {useRoute} from "#app";
 
 const {query} = useRoute();
 const render = query.render as "pdf" | "html" | undefined;
-const variant = query.variant as "" | undefined;
+const variant = query.variant as "1" | undefined;
 
 const isPdf = computed(() => render === "pdf");
 
@@ -29,7 +29,7 @@ if (process.client && isPdf.value) {
     </PageWithNavbar>
     <div v-else class="outsideOfPage">
         <div class="page">
-            <CV class="cv" variant="variant" />
+            <CV class="cv" :variant="variant" />
         </div>
     </div>
 </template>
@@ -49,7 +49,7 @@ if (process.client && isPdf.value) {
         background: var(--color-background-0);
 
         .cv {
-            font-size: 12px;
+            font-size: 11px;
         }
     }
 }

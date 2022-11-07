@@ -1,19 +1,24 @@
 <script setup lang="ts">
-import {defineProps} from "vue";
+import {defineProps, VNode} from "vue";
+import {ContextIsPdf} from "@/inject";
+import Label from '@/components/generic/Label.vue';
 
-defineProps<{
-    startDate: string | number;
+const props = defineProps<{
+    node?: () => VNode;
+    startDate?: string | number;
     endDate?: string | number;
     displayDate?: string;
-    first?: boolean;
-    last?: boolean;
+    labels?: string[];
 }>();
+
+const isPdf = ContextIsPdf.inject();
+
 </script>
 
 <template>
     <tr :class="s.timeLineItem">
         <td>
-            <div :class="s.timeSpan">
+            <div :class="[s.timeSpan, { [s.isPdf]: isPdf }]">
                 {{ displayDate ?? `${startDate} - ${endDate}` }}
             </div>
         </td>
@@ -22,8 +27,13 @@ defineProps<{
             <div :class="s.dot" />
         </td>
         <td>
-            <div :class="s.text">
-                <slot />
+            <div :class="[s.text, { [s.isPdf]: isPdf }]">
+                <slot>
+                    <component v-if="node" :is="node" />
+                </slot>
+                <div v-if="labels" :class="s.labelContainer">
+                    <Label v-for="label of labels" :title="label" />
+                </div>
             </div>
         </td>
     </tr>
@@ -97,19 +107,30 @@ defineProps<{
 
     .text,
     .timeSpan {
-        margin: 10px 0;
+        --vertical-margin: 10px;
+
+        &.isPdf {
+            --vertical-margin: 5px;
+        }
+
+        margin: var(--vertical-margin) 0;
 
         @include screenSizeAbove($tablet) {
-            margin: 12px 0;
+            margin: calc(var(--vertical-margin) * 1.2) 0;
         }
 
         @include screenSizeAbove($small) {
-            margin: 14px 0;
+            margin: calc(var(--vertical-margin) * 1.4) 0;
         }
 
         @include screenSizeAbove($large, $small) {
-            margin: 16px 0;
+            margin: calc(var(--vertical-margin) * 1.6) 0;
         }
     }
+}
+
+.labelContainer {
+    @include c.labelContainer;
+    justify-content: flex-start;
 }
 </style>

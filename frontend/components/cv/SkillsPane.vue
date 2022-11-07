@@ -11,7 +11,6 @@ import iconEmacs from "assets/icons/emacs.svg";
 const props = defineProps<{
     variant?: "1";
 }>();
-console.debug(skills);
 
 const extraClasses: Partial<Record<keyof typeof skills, string>> = {
     bash: "iconBash",

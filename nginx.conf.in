@@ -121,8 +121,10 @@ http {
         {%- if env == 'staging' %}
             {{ server_root_domain(protected=True, stg_subdomain=True) }}
         {%- endif %}
-    {%- else %}
+    {%- elif env == 'staging' %}
         {{ server_root_domain(protected=True, stg_subdomain=False) }}
+    {%- else %}
+        {{ server_root_domain(protected=False, stg_subdomain=False) }}
     {%- endif %}
 
     server {

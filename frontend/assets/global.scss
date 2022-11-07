@@ -123,6 +123,11 @@ pre {
   margin: 0;
 }
 
+hr {
+  margin: 0;
+  width: 100%;
+}
+
 // Disable all scroll bars everywhere
 * {
   &::-webkit-scrollbar {

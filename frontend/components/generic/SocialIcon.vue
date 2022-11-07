@@ -42,6 +42,9 @@ const nameToDataMap: Record<string, IconData> = {
         name: "phone",
         href: urls.phone,
     },
+    location: {
+        name: "location",
+    },
     monero: {
         name: "monero",
         clipboard: "TODO",

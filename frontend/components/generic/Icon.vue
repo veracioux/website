@@ -9,6 +9,7 @@ import {
     faEnvelope,
     faCodePullRequest,
     faMobile,
+    faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import {
     faGithub,
@@ -19,7 +20,7 @@ import {
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import Img from "@/components/generic/Img.vue";
 import {computed, defineProps, onMounted, ref} from "vue";
-import {ContextIsPdf} from "~/inject";
+import {ContextIsPdf} from "@/inject";
 
 library.add(
     faArrowUpRightFromSquare,
@@ -30,6 +31,7 @@ library.add(
     faEnvelope,
     faCodePullRequest,
     faMobile,
+    faLocationDot,
 );
 library.add(faGithub, faGitlab, faLinkedin, faMonero, faMobile);
 
@@ -41,6 +43,7 @@ const iconNameToFontAwesomeMap = {
     code: "code",
     mail: "envelope",
     phone: "mobile",
+    location: "location-dot",
     PR: "code-pull-request",
     github: ["fab", "github"],
     gitlab: ["fab", "gitlab"],
