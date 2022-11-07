@@ -4,7 +4,7 @@ import useSWRV from "swrv";
 import "@/assets/home.scss";
 import type {Project} from "@/models";
 import ProjectModal from "@/components/projects/ProjectModal.vue";
-import {onMounted, reactive, Ref, ref, toRaw} from "vue";
+import {reactive, ref, toRaw, watch} from "vue";
 import Img from "@/components/generic/Img.vue";
 import SectionTitle from "@/components/SectionTitle.vue";
 import api from "@/api";
@@ -17,23 +17,27 @@ const modal = reactive<{ show: boolean; project: Partial<Project> | null }>({
 const previewedProjectId = ref<number>();
 const imageContainer = ref<HTMLElement>();
 
+const dummyProjects = [{
+    id: 0,
+    title: "Dummy",
+    desc: "Dummy project",
+    url: "",
+}];
+
 const {data: projects} = (typeof useSWRV === "function" ?
     useSWRV<Partial<Project>[]>(
         () => process.client && api("projects"),
         (key) => {
-            return fetch(key).then(resp => resp.json()).catch(console.error);
+            return fetch(key).then(async resp => {
+                return resp.status < 300 ? resp.json() : dummyProjects;
+            }).catch((e) => {
+                projects.value = dummyProjects;
+                console.error(e);
+            });
         }
     )
     : {data: ref([] as Partial<Project> > [])});
 
-projects.value = projects.value ?? [
-    {
-        id: 0,
-        title: "Dummy",
-        desc: "Dummy project",
-        url: "",
-    },
-];
 
 function openModal(project: Partial<Project>) {
     modal.show = true;
@@ -47,6 +51,7 @@ function onMouseEnterProjectCard(projectId: number) {
 function onMouseLeaveProjectCard() {
     if (!modal.show) previewedProjectId.value = undefined;
 }
+
 </script>
 
 <template>

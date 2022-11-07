@@ -1,17 +1,17 @@
 @mixin screenWidthAbove($width) {
-  @media only screen and (min-width: $width) {
+  @media (min-width: $width) {
     @content;
   }
 }
 
 @mixin screenWidthBelow($width) {
-  @media only screen and (max-width: $width) {
+  @media (max-width: $width) {
     @content;
   }
 }
 
 @mixin screenHeightAbove($height) {
-  @media only screen and (min-height: $height) {
+  @media (min-height: $height) {
     @content;
   }
 }
@@ -20,7 +20,7 @@
   @if $height == null {
     $height: $width;
   }
-  @media only screen and (min-width: $width) and (min-height: $height) {
+  @media (min-width: $width) and (min-height: $height) {
     @content;
   }
 }
@@ -31,6 +31,27 @@ $large: 1024px;
 $xlarge: 1280px;
 
 :root {
+  // Font settings
+  font-size: 12px;
+
+  // All these fonts are here so I can switch when I get bored of the current one
+  font-family: "Secular One", "Kanit", "Play", "Mitr", "Hammersmith One",
+  "Roboto Mono", Helvetica, sans-serif;
+
+  @include screenSizeAbove($small) {
+    font-size: 14px;
+  }
+
+  @include screenSizeAbove($large, $small) {
+    font-size: 15px;
+  }
+
+  @include screenSizeAbove($xlarge, $large) {
+    font-size: 16px;
+  }
+
+  // Theme colors
+
   --color-primary: #5f58ff;
   --color-primary-rgb: 95, 88, 255;
   --color-secondary: #99a3ff;
@@ -44,24 +65,22 @@ $xlarge: 1280px;
   --color-text: #d2dcf9;
   --color-text-rgb: 210, 220, 249;
 
+  &[data-theme="light"] {
+    --color-primary: #303F9F;
+    --color-primary-rgb: 48, 63, 159;
+    --color-secondary: #673AB7;
+    --color-secondary-rgb: 103, 58, 183;
+    --color-background-0: white;
+    --color-background-0-rgb: 255, 255, 255;
+    --color-background-1: #eeeeee;
+    --color-background-1-rgb: 238, 238, 238; // TODO
+    --color-background-2: #dddddd;
+    --color-background-2-rgb: 221, 221, 221; // TODO
+    --color-text: black;
+    --color-text-rgb: 0, 0, 0;
+  }
+
   color: var(--color-text);
-  font-size: 12px;
-
-  // All these fonts are here so I can switch when I get bored of the current one
-  font-family: "Secular One", "Kanit", "Play", "Mitr", "Hammersmith One",
-    "Roboto Mono", Helvetica, sans-serif;
-
-  @include screenSizeAbove($small) {
-    font-size: 14px;
-  }
-
-  @include screenSizeAbove($large, $small) {
-    font-size: 15px;
-  }
-
-  @include screenSizeAbove($xlarge, $large) {
-    font-size: 16px;
-  }
 }
 
 a {

@@ -15,12 +15,12 @@ defineProps<{
     border-radius: 4px;
     padding: 6px;
     // Avoids the height being stretched out when displayed in the CV timeline
-    line-height: 1em;
+    line-height: 0.8;
 
     text-align: center;
     white-space: nowrap;
     background: rgba(var(--color-primary-rgb), 0.25);
-    color: white;
+    color: var(--color-text);
 
     user-select: none;
 }

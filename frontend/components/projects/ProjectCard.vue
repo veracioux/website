@@ -22,13 +22,14 @@ defineEmits<{
     <div :class="s.container">
         <div :class="c.fillParent" @click="$emit('expand')" />
         <a v-if="url" :href="url" target="_blank" :class="s.externalLink">
-            <Icon name="externalLink" :class="s.externalLinkIcon" />
+            <Icon name="externalLink" :class="s.externalLinkIcon" center />
         </a>
         <Icon
             v-if="image_url"
             :src="image_url"
             alt="Project image"
             :class="p.logo"
+            center
         />
         <div :class="p.title">{{ title }}</div>
         <div :class="p.description">{{ desc }}</div>

@@ -15,7 +15,7 @@ cd worker/
 pnpm run server &
 cd ..
 
-python3 manage.py collectstatic --noinput
+scripts/collectstatic.sh
 python3 manage.py migrate
 if [ "$ENVIRONMENT" = "staging" ]; then
     set +e

@@ -5,6 +5,7 @@ import urls from "@/urls.json";
 
 export interface SocialIconProps {
     name: keyof typeof nameToDataMap;
+    text?: string;
     /** The URL. */
     href?: string;
     /** Content that should be copied to clipboard when the icon is clicked.  */
@@ -33,6 +34,14 @@ const nameToDataMap: Record<string, IconData> = {
             color: "white",
         },
     },
+    web: {
+        name: "web",
+        href: urls.website,
+    },
+    phone: {
+        name: "phone",
+        href: urls.phone,
+    },
     monero: {
         name: "monero",
         clipboard: "TODO",
@@ -58,6 +67,7 @@ const href = props.href ?? nameToDataMap[props.name].href;
             :style="colorize ? nameToDataMap[name].style : undefined"
             class="icon"
         />
+        {{ text }}
     </component>
 </template>
 

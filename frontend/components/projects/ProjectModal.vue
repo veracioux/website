@@ -68,6 +68,7 @@ const component = defineComponent({
                         <Icon
                             name="externalLink"
                             className="icon externalLink"
+                            center
                         />
                     </a>
                 );
@@ -166,7 +167,7 @@ const zindex = reactive(_zindex)
         >
             <div :class="s.container" ref="container" @click.stop>
                 <button :class="s.closeButton" @click="close">
-                    <Icon name="x" :class="s.closeIcon"></Icon>
+                    <Icon name="x" :class="s.closeIcon" center></Icon>
                 </button>
                 <div :class="s.identity">
                     <img

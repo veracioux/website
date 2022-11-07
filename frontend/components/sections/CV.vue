@@ -1,14 +1,11 @@
 <script setup lang="ts">
-import {ref} from "vue";
 import SectionTitle from "@/components/SectionTitle.vue";
 import CV from "@/components/cv/CV.vue";
-
-const root = ref<HTMLElement>();
 
 </script>
 
 <template>
-    <div ref="root" class="section">
+    <div class="section">
         <SectionTitle class="sectionTitle" text="Curriculum Vitae" slug="cv" />
         <CV />
         <div class="overlayContainer">

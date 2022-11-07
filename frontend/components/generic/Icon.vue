@@ -8,6 +8,7 @@ import {
     faCode,
     faEnvelope,
     faCodePullRequest,
+    faMobile,
 } from "@fortawesome/free-solid-svg-icons";
 import {
     faGithub,
@@ -17,7 +18,8 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import Img from "@/components/generic/Img.vue";
-import {defineProps, onMounted, ref} from "vue";
+import {computed, defineProps, onMounted, ref} from "vue";
+import {ContextIsPdf} from "~/inject";
 
 library.add(
     faArrowUpRightFromSquare,
@@ -26,9 +28,10 @@ library.add(
     faXmark,
     faCode,
     faEnvelope,
-    faCodePullRequest
+    faCodePullRequest,
+    faMobile,
 );
-library.add(faGithub, faGitlab, faLinkedin, faMonero);
+library.add(faGithub, faGitlab, faLinkedin, faMonero, faMobile);
 
 const iconNameToFontAwesomeMap = {
     donate: "circle-dollar-to-slot",
@@ -37,6 +40,7 @@ const iconNameToFontAwesomeMap = {
     x: "xmark",
     code: "code",
     mail: "envelope",
+    phone: "mobile",
     PR: "code-pull-request",
     github: ["fab", "github"],
     gitlab: ["fab", "gitlab"],
@@ -57,11 +61,25 @@ export interface IconProps {
     /** Explicit URL to the image file. */
     src?: string;
     alt?: string;
+    // TODO: This is a workaround to an annoying problem where the icon won't
+    //  center properly
+    center?: boolean;
 }
 
 const props = defineProps<IconProps>();
 
 const root = ref<HTMLElement>();
+
+const imageSrc = computed(() =>
+    props.name ? iconNameToSrcMap[props.name]?.src ??
+        iconNameToSrcMap[props.name] ??
+        props.src
+        : props.src
+);
+
+const isPdf = ContextIsPdf.inject();
+const imgClass = ['icon', 'customIcon', iconNameToSrcMap[props.name]?.className];
+
 onMounted(() => {
     if ((props.name !== undefined) == (props.src !== undefined)) {
         console.error(
@@ -73,38 +91,41 @@ onMounted(() => {
 </script>
 
 <template>
-    <span class="iconRoot" ref="root">
-        <FontAwesomeIcon
-            v-if="props.name && iconNameToFontAwesomeMap[props.name]"
-            :icon="iconNameToFontAwesomeMap[name]"
-            class="faIcon"
-        />
-        <Img
-            v-else
-            v-lazy="
-                name
-                    ? iconNameToSrcMap[name]?.src ??
-                      iconNameToSrcMap[name] ??
-                      src
-                    : src
-            "
-            :alt="alt"
-            v-bind="$attrs"
-            :class="['customIcon', iconNameToSrcMap[name]?.className]"
-        />
+    <span class="icon" ref="root">
+            <FontAwesomeIcon
+                v-if="props.name && iconNameToFontAwesomeMap[props.name]"
+                :icon="iconNameToFontAwesomeMap[name]"
+                :class="{center}"
+            />
+            <Img
+                v-else-if="isPdf"
+                :src="imageSrc"
+                :alt="alt"
+                :class="imgClass"
+            />
+            <Img
+                v-else
+                v-lazy="imageSrc"
+                :alt="alt"
+                :class="imgClass"
+            />
     </span>
 </template>
 
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as c;
 
-.iconRoot {
+.icon {
     display: inline-block;
+
+    .iconWrapper {
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+    }
 }
 
-.faIcon {
-    width: 100%;
-    height: 100%;
+.center {
     // No other method of centering seems to work with FontAwesomeIcon
     margin: 50%;
     transform: translate(-50%, -50%);
@@ -113,8 +134,8 @@ onMounted(() => {
 // NOTE: I tried to use .icon here, but for some reason it messes up
 // the display completely
 .customIcon {
-    display: inline-block;
     width: 100%;
     height: 100%;
+    display: inline-block;
 }
 </style>

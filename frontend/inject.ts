@@ -1,7 +1,7 @@
 /**
  * @file A registry of all values that can be provided/injected.
  */
-import {inject as _inject, onMounted, provide as _provide, ref} from "vue";
+import {inject as _inject, onMounted, provide as _provide, Ref, ref} from "vue";
 import * as utils from "@/utils";
 
 export class ScrollData {
@@ -52,5 +52,15 @@ export class ScrollData {
         const value = {scrollContainer, relativeScrollY};
         _provide("scrollData", value);
         return value
+    }
+}
+
+export class ContextIsPdf {
+    static inject(): Ref<boolean> {
+        return _inject("isPdf");
+    }
+
+    static provide(value: Ref<boolean>) {
+        _provide("isPdf", value);
     }
 }

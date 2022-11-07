@@ -1,7 +1,5 @@
 #!/usr/bin/env sh
 
+mkdir -p /app/frontend/dist/static
+
 python3 manage.py collectstatic --noinput
-
-stg="$([ "$ENVIRONMENT" = "staging" ] && echo 'stg/')"
-
-cp -r frontend/dist/"${stg}"static/* /var/static_root/

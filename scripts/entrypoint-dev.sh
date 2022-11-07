@@ -19,7 +19,7 @@ scripts/wait-for-it.sh -h db -p "$DB_PORT" -t 15
 
 pnpm run --dir worker/ server &
 
-python3 manage.py collectstatic --noinput
+scripts/collectstatic.sh
 python3 manage.py migrate
 python3 manage.py createsuperuser --noinput
 python3 manage.py loaddata projects.json
