@@ -28,7 +28,7 @@ const extraClasses: Partial<Record<keyof typeof skills, string>> = {
 
 </script>
 <template>
-    <div class="container">
+    <div class="skillsPaneRoot">
         <h2 class="subsectionTitle" style="margin-top: 0">Skills</h2>
         <template v-for="group of skillGroups">
             <template v-if="!group.disabled">
@@ -57,17 +57,29 @@ const extraClasses: Partial<Record<keyof typeof skills, string>> = {
 @use "@/assets/common.module.scss" as common;
 @import "@/assets/global.scss";
 
-:root[data-pdf] .container {
-    position: relative;
-    padding: 16px;
-    @include common.beveledFrame(16px, 2px, rgba(black, 0.3), #f7f7f7);
-}
-
-.container {
+.skillsPaneRoot {
     display: flex;
     flex-direction: column;
     align-items: inherit;
     gap: 16px;
+
+    --icon-scale-multiplier: 1;
+
+    @media print {
+        position: relative;
+        padding: 16px;
+
+        --icon-scale-multiplier: 0.8;
+
+        @include common.beveledFrame(16px, 2px, rgba(black, 0.3), #f7f7f7);
+    }
+}
+
+.subsubsectionTitle {
+    @media print {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
 }
 
 .labelContainer {
@@ -75,6 +87,12 @@ const extraClasses: Partial<Record<keyof typeof skills, string>> = {
     margin-left: 24px;
     margin-right: 24px;
     justify-content: center;
+
+    @media print {
+        margin-left: 12px;
+        margin-right: 12px;
+    }
+
     @include screenWidthAbove($xlarge) {
         justify-content: flex-start;
     }
@@ -85,6 +103,8 @@ $iconSize: 32px;
 .icon {
     width: $iconSize;
     height: $iconSize;
+
+    transform: scale(var(--icon-scale-multiplier));
 }
 
 /*
@@ -101,9 +121,10 @@ overlap with sibling elements. ($scale must be specified as a
 number, not as a percentage)
  */
 @mixin scaledIcon($scale) {
-    transform: scale($scale);
+    $_scale: calc($scale * var(--icon-scale-multiplier));
+    transform: scale($_scale);
     transform-origin: 0;
-    margin-right: calc(#{$iconSize} * (#{$scale} - 1));
+    margin-right: calc(#{$iconSize} * (#{$_scale} - 1));
 }
 
 .iconBash {
@@ -122,10 +143,15 @@ number, not as a percentage)
     @include scaledIcon(1.6);
 }
 
+:root[data-theme="light"] .iconJetBrains {
+    --icon-scale-multiplier: 0.6;
+}
+
 .iconJetBrains {
-    transform: scale(2.4) translate(calc(-0.25 * #{$iconSize}));
+    $scale: calc(2.4 * var(--icon-scale-multiplier));
+    transform: scale($scale) translate(calc(-0.1 * #{$scale} * #{$iconSize}));
     transform-origin: 0;
-    margin-right: calc(0.125 * #{$iconSize});
+    margin-right: calc((0.3 * #{$scale} - 0.6) * #{$iconSize});
 }
 
 .iconEthereum,

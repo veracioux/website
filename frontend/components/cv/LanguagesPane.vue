@@ -25,19 +25,19 @@
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as c;
 
-:root[data-pdf] .languagesPaneContainer {
-    position: relative;
-    padding: 16px;
-
-    @include c.beveledFrame(16px, 2px, #aaa, #f7f7f7);
-}
-
 .languagesPaneContainer {
     line-height: 160%;
     display: flex;
     flex-direction: column;
     align-items: inherit;
     gap: 16px;
+
+    @media print {
+        position: relative;
+        padding: 16px;
+
+        @include c.beveledFrame(16px, 2px, #aaa, #f7f7f7);
+    }
 
     .languageTable {
         border-spacing: 16px;

@@ -111,7 +111,7 @@ const isPdf = ContextIsPdf.inject();
         margin-right: 0;
         @include timeline.responsiveVerticalMargin(10px, 10px);
 
-        &.isPdf {
+        @media print {
             @include timeline.responsiveVerticalMargin(4px, 4px);
         }
     }

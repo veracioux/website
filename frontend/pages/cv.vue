@@ -18,8 +18,6 @@ ContextIsPdf.provide(isPdf);
 if (process.client && isPdf.value) {
     document.querySelector(":root")
         ?.setAttribute("data-theme", "light");
-    document.querySelector(":root")
-        ?.setAttribute("data-pdf", "");
 }
 </script>
 

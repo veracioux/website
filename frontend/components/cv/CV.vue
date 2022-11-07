@@ -111,29 +111,6 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
     }
 }
 
-:root[data-pdf] {
-    .content {
-        align-items: stretch;
-
-        .timelineWrapper {
-            position: relative;
-            padding: 24px;
-            width: 440px;
-
-            --timeline-background: #f7f7f7;
-            --timeline-background-rgb: 247, 247, 247;
-
-            @include common.beveledEdges(16px);
-            @include common.beveledFrame(16px, 2px, #aaa, var(--timeline-background));
-        }
-
-        .sidePane {
-            gap: 24px !important;
-            flex: 1 1 0;
-        }
-    }
-}
-
 .cvRoot {
     display: flex;
     flex-direction: column;
@@ -150,6 +127,26 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
             flex-direction: row;
             gap: 16px;
             margin-top: 32px;
+        }
+
+        @media print {
+            align-items: stretch;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .timelineWrapper {
+            @media print {
+                position: relative;
+                padding: 24px;
+                width: 440px;
+
+                --timeline-background: #f7f7f7;
+                --timeline-background-rgb: 247, 247, 247;
+
+                @include common.beveledEdges(16px);
+                @include common.beveledFrame(16px, 2px, #aaa, var(--timeline-background));
+            }
         }
 
         .timeline {
@@ -201,6 +198,13 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
             align-items: center;
             gap: inherit;
 
+            @media print {
+                // TODO verify
+                align-items: start;
+                gap: 24px !important;
+                flex: 1 1 0;
+            }
+
             @include screenWidthAboveCriticalPoint {
                 gap: 32px;
                 position: sticky;
@@ -224,10 +228,6 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
 
 }
 
-:root[data-pdf] .content {
-    margin-top: 0;
-    margin-bottom: 0;
-}
 </style>
 
 <style scoped lang="scss">
