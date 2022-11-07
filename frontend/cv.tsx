@@ -191,6 +191,7 @@ export const skills = _skills as Record<keyof typeof _skills, Skill>;
 export interface Group {
     name: string;
     disabled?: boolean;
+    entries?: Entry[];
 }
 
 export interface Entry {

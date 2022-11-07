@@ -29,7 +29,6 @@ const excludedGroups = props.variant === "1" ? ([
 ] as (keyof typeof groups)[]) : [];
 
 const enabledGroups = Object.entries(groups).filter(([key]) => !excludedGroups.includes(key as any))
-//const enabledGroups = props.variant === "1" ? ([] as (keyof typeof groups)[]).map(key => [key, groups[key]]) : Object.entries(groups);
 
 const excludedEntries = [
     ...(
@@ -47,7 +46,10 @@ const excludedEntries = [
 ];
 
 const enabledEntries = Object.entries(entries).filter(([key]) => !excludedEntries.includes(key));
-console.debug({excludedEntries, entries, enabledEntries}, enabledEntries.filter(([_, entry]) => entry.group === enabledGroups[0][1]))
+
+enabledGroups.forEach(([_, group]) => {
+    group.entries = enabledEntries.filter(([_, entry]) => entry.group === group).map(([_, entry]) => entry);
+});
 
 const displayType: "grouped" | "linear" = isPdf.value ? "grouped" : "linear";
 
@@ -57,21 +59,31 @@ const displayType: "grouped" | "linear" = isPdf.value ? "grouped" : "linear";
     <div class="cvRoot">
         <CVHeader v-if="isPdf" />
         <div class="content">
-            <div v-if="displayType === 'grouped'">
-                <template v-for="[key, group] of enabledGroups">
-                    <h3 class="groupTitle">{{ group.name }}</h3>
-                    <table class="timeline">
-                        <!--                            v-for="[key, entry] of enabledEntries.filter(([_, entry]) => entry.group === group)"-->
-                        <div
-                            v-for="[key] of enabledEntries.filter(([_, entry]) => entry.group === group)"
-                        >{{key}}
-                        </div>
-                    </table>
-                </template>
-            </div>
-            <table v-else class="timeline">
-                <template v-for="[key, entry] of enabledEntries">
+            <table class="timeline">
+                <template v-if="displayType === 'linear'"
+                          v-for="[key, entry] of enabledEntries"
+                >
                     <TimelineEntry v-bind="entry" />
+                </template>
+                <template v-else>
+                    <template v-for="([key, group], i) of enabledGroups">
+                        <h3 :class="['groupTitle', {intermittent: i !== 0}]">
+                            {{ group.name }}</h3>
+                        <template
+                            v-for="(entry, j) of group.entries"
+                        >
+                            <TimelineEntry
+                                v-bind="entry"
+                                :class="[
+                                    'groupedTimeLineEntry',
+                                    {
+                                        marginTop: j === 0,
+                                        marginBottom: j === group.entries.length - 1 && i !== enabledGroups.length - 1,
+                                    }
+                                ]"
+                            />
+                        </template>
+                    </template>
                 </template>
             </table>
             <aside class="sidePane">
@@ -84,8 +96,8 @@ const displayType: "grouped" | "linear" = isPdf.value ? "grouped" : "linear";
 
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as common;
+@use "@/assets/timeline-entry.module.scss" as timeline;
 @import "@/assets/global.scss";
-@import "@/assets/home.scss";
 
 $colorDimText: rgba(var(--color-text-rgb), 0.7);
 @mixin screenWidthAboveCriticalPoint {
@@ -153,10 +165,38 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
         }
 
         .groupTitle {
-            text-align: left;
+            font-size: 1.8em;
+            position: absolute;
+            // Even though alpha is 0, the color is important for PDF generation
+            $transparent: rgba(var(--color-background-0-rgb), 0);
+            $background: var(--color-background-0);
+
+            &.intermittent {
+                transform: translateY(-50%);
+                background: linear-gradient(
+                        $transparent, $background, $background, $transparent
+                );
+                line-height: 4;
+                z-index: 1;
+            }
+        }
+
+        .groupedTimeLineEntry {
+            &.marginTop:deep(.acceptsMargin) {
+                @include timeline.responsiveVerticalMargin($top: 32px);
+            }
+
+            &.marginBottom:deep(.acceptsMargin) {
+                @include timeline.responsiveVerticalMargin($bottom: 24px);
+            }
         }
     }
 
+}
+
+:root[data-pdf] .content {
+    padding-top: 64px;
+    padding-bottom: 0;
 }
 </style>
 

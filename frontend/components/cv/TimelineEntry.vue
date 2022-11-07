@@ -16,22 +16,22 @@ const isPdf = ContextIsPdf.inject();
 </script>
 
 <template>
-    <tr :class="s.timeLineItem">
+    <tr class="timeLineItem">
         <td>
-            <div :class="[s.timeSpan, { [s.isPdf]: isPdf }]">
+            <div :class="['timeSpan', { isPdf }]">
                 {{ displayDate ?? `${startDate} - ${endDate}` }}
             </div>
         </td>
-        <td :class="s.lineCell">
-            <div :class="s.line" />
-            <div :class="s.dot" />
+        <td class="lineCell">
+            <div class="line" />
+            <div class="dot" />
         </td>
         <td>
-            <div :class="[s.text, { [s.isPdf]: isPdf }]">
+            <div :class="['text', 'acceptsMargin', { isPdf }]">
                 <slot>
                     <component v-if="node" :is="node" />
                 </slot>
-                <div v-if="labels" :class="s.labelContainer">
+                <div v-if="labels" class="labelContainer">
                     <Label v-for="label of labels" :title="label" />
                 </div>
             </div>
@@ -39,8 +39,9 @@ const isPdf = ContextIsPdf.inject();
     </tr>
 </template>
 
-<style module="s" lang="scss">
+<style scoped lang="scss">
 @use "@/assets/common.module.scss" as c;
+@use "@/assets/timeline-entry.module.scss" as timeline;
 @import "@/assets/global.scss";
 
 .timeLineItem {
@@ -52,11 +53,11 @@ const isPdf = ContextIsPdf.inject();
         content: "";
     }
 
-    &:first-child .lineCell .line {
+    &:first-of-type .lineCell .line {
         top: 50%;
     }
 
-    &:last-child .lineCell .line {
+    &:last-of-type .lineCell .line {
         bottom: 50%;
     }
 
@@ -105,26 +106,13 @@ const isPdf = ContextIsPdf.inject();
         text-align: right;
     }
 
-    .text,
-    .timeSpan {
-        --vertical-margin: 10px;
+    .acceptsMargin {
+        margin-left: 0;
+        margin-right: 0;
+        @include timeline.responsiveVerticalMargin(10px, 10px);
 
         &.isPdf {
-            --vertical-margin: 5px;
-        }
-
-        margin: var(--vertical-margin) 0;
-
-        @include screenSizeAbove($tablet) {
-            margin: calc(var(--vertical-margin) * 1.2) 0;
-        }
-
-        @include screenSizeAbove($small) {
-            margin: calc(var(--vertical-margin) * 1.4) 0;
-        }
-
-        @include screenSizeAbove($large, $small) {
-            margin: calc(var(--vertical-margin) * 1.6) 0;
+            @include timeline.responsiveVerticalMargin(7px, 7px);
         }
     }
 }

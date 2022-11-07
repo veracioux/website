@@ -57,7 +57,7 @@ export class ScrollData {
 
 export class ContextIsPdf {
     static inject(): Ref<boolean> {
-        return _inject("isPdf");
+        return _inject("isPdf") ?? ref(false);
     }
 
     static provide(value: Ref<boolean>) {
