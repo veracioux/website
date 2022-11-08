@@ -54,7 +54,7 @@ const isPdf = ContextIsPdf.inject();
     cursor: pointer;
 
     .dot, .timeSpan, .text {
-        transition: transform 0.2s ease-in-out;
+        transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
     }
 
     .dot {
@@ -102,8 +102,11 @@ const isPdf = ContextIsPdf.inject();
         @include scaleAll(1.025);
     }
 
-    &.selected {
+    &.selected, &.active {
         @include scaleAll(1.035);
+        .dot {
+            background: var(--color-tertiary) !important;
+        }
     }
 
     &:hover.selected {

@@ -35,6 +35,8 @@
     @media print {
         position: relative;
         padding: 16px;
+        align-items: center;
+        gap: 12px;
 
         @include c.beveledFrame(16px, 2px, #aaa, #f7f7f7);
     }
@@ -46,10 +48,6 @@
     .columnDelimiter {
         width: 2px;
         background: rgba(var(--color-secondary-rgb), 0.6);
-    }
-
-    .sectionTitle {
-        text-align: center;
     }
 }
 </style>

@@ -420,7 +420,13 @@ Object.entries(skills).forEach(([key, skill]) => skill.key = key);
 Object.entries(skillGroups).forEach(([key, skillGroup]) => skillGroup.key = key);
 Object.entries(entries).forEach(([key, entry]) => entry.key = key);
 Object.entries(groups).forEach(([key, group]) => {
-    group.key = key
+    group.key = key;
     group.entries = Object.values(entries).filter((entry) => entry.group === group);
-    console.debug("setting:", group.entries)
 });
+
+const userHints = {
+    hoverEntryOrSkill: "Place your cursor over a timeline entry or skill.",
+    hoverEntry: "Place y",
+    clickEntryToSelect: "Click the timeline entry to select it.",
+    clickSkillToSelect: "Click the skill to select it.",
+}

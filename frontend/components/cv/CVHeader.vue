@@ -53,6 +53,12 @@ import Icon from "@/components/generic/Icon.vue";
                     </div>
                 </div>
             </div>
+            <ClientOnly>
+                <div class="warning">
+                    Warning: this page should be viewed with print mode enabled
+                    in developer tools.
+                </div>
+            </ClientOnly>
         </div>
     </ClientOnly>
 </template>
@@ -142,25 +148,19 @@ import Icon from "@/components/generic/Icon.vue";
         line-height: 2em;
     }
 
-    .titleSubtitle {
+    .warning {
+        font-size: 1.4em;
+        color: #EF5350;
         position: absolute;
         left: 0;
         right: 0;
         bottom: 0;
-        height: 64px;
-        transform: translateY(100%);
-
-        z-index: 1;
         text-align: center;
+        transform: translateY(100%);
+        line-height: 32px;
 
-        .title {
-            font-size: 2.6em;
-            line-height: 1.16;
-        }
-
-        .subtitle {
-            opacity: 0.5;
-            font-size: 1.2em;
+        @media print {
+            display: none;
         }
     }
 }

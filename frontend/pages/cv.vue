@@ -24,7 +24,7 @@ if (process.client && isPdf.value) {
 
 <template>
     <PageWithNavbar v-if="!isPdf">
-        <CVSection :resume="resume" />
+        <CVSection :resume="resume" :variant="variant" />
     </PageWithNavbar>
     <div v-else class="outsideOfPage">
         <div class="page">

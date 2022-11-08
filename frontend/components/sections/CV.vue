@@ -5,6 +5,7 @@ import {computed} from "vue";
 
 const props = defineProps<{
     resume?: boolean;
+    variant?: "1" | undefined;
 }>();
 
 const title = computed(() => props.resume ? "Resume" : "Curiculum Vitae");
@@ -14,7 +15,7 @@ const title = computed(() => props.resume ? "Resume" : "Curiculum Vitae");
 <template>
     <div class="section">
         <SectionTitle class="sectionTitle" :text="title" slug="cv" />
-        <CV />
+        <CV :variant="variant" />
         <div class="overlayContainer">
             <div class="overlay top" />
             <div class="overlay bottom" />

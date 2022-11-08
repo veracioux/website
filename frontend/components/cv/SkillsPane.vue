@@ -7,7 +7,6 @@ import iconGit from "@/assets/icons/git-with-text.svg";
 import iconJetBrains from "@/assets/icons/jetbrains.svg";
 import iconLinux from "@/assets/icons/linux.svg";
 import iconEmacs from "@/assets/icons/emacs.svg";
-import {watch} from "vue";
 
 const props = defineProps<{
     variant?: "1";
@@ -74,7 +73,7 @@ function shouldHighlight(skill: Skill) {
                             :src="skill.icon"
                             :alt="skill.name"
                             :title="skill.name"
-                            :class="`icon ${extraClasses[key] ?? ''}`"
+                            :class="`icon ${extraClasses[skill.key] ?? ''}`"
                         />
                         <Label v-else :title="skill.name" />
                     </span>
@@ -94,11 +93,16 @@ function shouldHighlight(skill: Skill) {
     align-items: inherit;
     gap: 16px;
 
+    @media print {
+        gap: 12px;
+    }
+
     --icon-scale-multiplier: 1;
 
     @media print {
         position: relative;
         padding: 16px;
+        align-items: center;
 
         --icon-scale-multiplier: 0.8;
 
@@ -106,26 +110,21 @@ function shouldHighlight(skill: Skill) {
     }
 }
 
-.subsubsectionTitle {
-    @media print {
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-    }
-}
-
 .labelContainer {
     @include common.labelContainer;
-    margin-left: 24px;
-    margin-right: 24px;
     justify-content: center;
 
-    @media print {
-        margin-left: 12px;
-        margin-right: 12px;
+    @media not print {
+        margin-left: 24px;
+        margin-right: 24px;
     }
 
     @include screenWidthAbove($xlarge) {
         justify-content: flex-start;
+    }
+
+    @media print {
+        justify-content: center;
     }
 }
 
@@ -173,7 +172,7 @@ Tweaks for individual icons
  */
 
 .iconQt {
-    transform: scale(2);
+    transform: scale(calc(2.2 * var(--icon-scale-multiplier)));
 }
 
 /*

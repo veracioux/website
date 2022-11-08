@@ -41,16 +41,18 @@ const excludedEntries = props.variant === "1" ? ([
     "renovation",
     "demosTP",
     "demosPMS",
-] as (keyof typeof entries)[]) : []
+] as (keyof typeof entries)[]) : [];
 
 const allExcludedEntries = [
     ...excludedEntries,
-    Object.values(entries)
-        .filter(entry => Object.values(excludedGroups).find(gKey => groups[gKey] === entry.group))
+    ...Object.values(entries)
+        .filter(entry => excludedGroups.find((key) => key === entry.group?.key))
         .map(({key}) => key)
 ];
 
-const enabledEntries = Object.values(entries).filter(({key}) => !allExcludedEntries.includes(key as any));
+
+const enabledEntries = Object.values(entries)
+    .filter(({key}) => !allExcludedEntries.includes(key as any));
 
 const displayType: "grouped" | "linear" = isPdf.value ? "grouped" : "linear";
 
@@ -104,6 +106,7 @@ watch([hoveredEntry, selectedEntry], ([h, s]) => {
 });
 
 onMounted(() => {
+    // On click outside of any entity
     document.addEventListener("click", e => {
         selectedEntry.value = selectedSkill.value = null;
     });
@@ -138,6 +141,7 @@ onMounted(() => {
                                 v-for="(entry, j) of group.entries"
                             >
                                 <TimelineEntry
+                                    v-if="!excludedEntries.includes(entry.key)"
                                     v-bind="entry"
                                     :class="[
                                     'groupedTimeLineEntry',
