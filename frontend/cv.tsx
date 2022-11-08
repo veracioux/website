@@ -20,6 +20,7 @@ import iconJava from "@/assets/icons/java.svg";
 import iconCSharp from "@/assets/icons/csharp.svg";
 
 export interface Skill {
+    key?: string;
     name: string;
     icon?: string;
     disabled?: boolean;
@@ -27,6 +28,7 @@ export interface Skill {
 }
 
 export interface SkillGroup {
+    key: string;
     name: string;
     disabled?: boolean;
 }
@@ -189,12 +191,14 @@ const _skills = {
 export const skills = _skills as Record<keyof typeof _skills, Skill>;
 
 export interface Group {
+    key: string;
     name: string;
     disabled?: boolean;
     entries?: Entry[];
 }
 
 export interface Entry {
+    key?: string;
     node: () => JSX.Element;
     startDate: string;
     endDate?: string;
@@ -222,22 +226,47 @@ const _groups = {
 
 export const groups = _groups as Record<keyof typeof _groups, Group>;
 
-const _entries = {
+let _entries = {
     evoltSoftwareEngineer: {
-        node: () => <span><b>Evolt</b>, Software Engineer</span>,
+        node: () => <span><a href="https://www.linkedin.com/company/evolt-dev/"
+                             target="_blank"><b>Evolt</b></a>, Software Engineer</span>,
         startDate: "2022-01",
         displayDate: "Jan 2022 - present",
-        skills: [skills.javascript, skills.typescript, skills.react, skills.git, skills.docker, skills.ethereum],
+        skills: [skills.javascript, skills.typescript, skills.react, skills.git, skills.docker, skills.ethereum, skills.docker, skills.jetbrains, skills.docker],
         labels: ["Backend", "Frontend", "Blockchain"],
         group: groups.professionalExperience,
     },
     evoltInternship: {
-        node: () => <span><b>Evolt</b>, one month internship</span>,
+        node: () => <span><a href="https://www.linkedin.com/company/evolt-dev/"
+                             target="_blank"><b>Evolt</b></a>, one month internship</span>,
         startDate: "2021-12",
         displayDate: "Dec 2021",
-        skills: [skills.python, skills.django, skills.docker],
+        skills: [skills.python, skills.django, skills.docker, skills.jetbrains],
         labels: ["Backend"],
         group: groups.professionalExperience,
+    },
+    personalWebsite: {
+        node: () => <span><a href="https://github.com/veracioux/website" target="_blank">Personal website and webserver</a></span>,
+        startDate: "2021-11",
+        displayDate: "Nov 2021 - present",
+        skills: [skills.python, skills.django, skills.typescript, skills.javascript, skills.docker, skills.vue, skills.nginx, skills.linux, skills.bash],
+        labels: ["Backend", "Frontend", "Google Cloud"],
+        group: groups.otherExperience,
+    },
+    flameshot: {
+        node: () => (
+            <span>
+                <a href="https://flameshot.org" target="_blank">
+                    <b>Flameshot</b>
+                </a>,
+                A Free & Open Source Screenshot Program <br />
+            </span>
+        ),
+        startDate: "2021",
+        endDate: "present",
+        skills: [skills.cpp, skills.qt, skills.git],
+        labels: ["Co-maintainer", "Developer", "Tester", "UI/UX Designer"],
+        group: groups.otherExperience,
     },
     bachelor: {
         node: () => (
@@ -252,20 +281,7 @@ const _entries = {
         startDate: "2017",
         endDate: "2020",
         group: groups.education,
-    },
-    flameshot: {
-        node: () => (
-            <span>
-                <a href="https://flameshot.org" target="_blank">
-                    <b>Flameshot</b>
-                </a>,
-                A Free & Open Source Screenshot Program <br />
-            </span>
-        ),
-        startDate: "2021",
-        endDate: "present",
-        labels: ["Co-maintainer", "Developer", "Tester", "UI/UX Designer"],
-        group: groups.otherExperience,
+        skills: [skills.plc, skills.soMachine, skills.cpp],
     },
     rotatingLedDisplay: {
         node: () => (
@@ -393,8 +409,18 @@ const _entries = {
         ),
         startDate: "2018",
         endDate: "present",
+        skills: [skills.jetbrains, skills.git, skills.nginx, skills.c, skills.cpp, skills.docker, skills.typescript, skills.javascript, skills.django, skills.qt, skills.bash, skills.technicalWriting],
         group: groups.otherExperience,
     },
 }
 
 export const entries = _entries as Record<keyof typeof _entries, Entry>;
+
+Object.entries(skills).forEach(([key, skill]) => skill.key = key);
+Object.entries(skillGroups).forEach(([key, skillGroup]) => skillGroup.key = key);
+Object.entries(entries).forEach(([key, entry]) => entry.key = key);
+Object.entries(groups).forEach(([key, group]) => {
+    group.key = key
+    group.entries = Object.values(entries).filter((entry) => entry.group === group);
+    console.debug("setting:", group.entries)
+});

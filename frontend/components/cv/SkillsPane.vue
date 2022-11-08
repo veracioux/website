@@ -1,15 +1,27 @@
 <script setup lang="ts">
 import Label from "@/components/generic/Label.vue";
 import Icon from "@/components/generic/Icon.vue";
-import {skills, skillGroups} from "@/cv";
-import iconDocker from "assets/icons/docker.svg";
-import iconGit from "assets/icons/git-with-text.svg";
-import iconJetBrains from "assets/icons/jetbrains.svg";
-import iconLinux from "assets/icons/linux.svg";
-import iconEmacs from "assets/icons/emacs.svg";
+import {skills, skillGroups, Skill, Entry} from "@/cv";
+import iconDocker from "@/assets/icons/docker.svg";
+import iconGit from "@/assets/icons/git-with-text.svg";
+import iconJetBrains from "@/assets/icons/jetbrains.svg";
+import iconLinux from "@/assets/icons/linux.svg";
+import iconEmacs from "@/assets/icons/emacs.svg";
+import {watch} from "vue";
 
 const props = defineProps<{
     variant?: "1";
+    hoveredSkill?: Skill | null;
+    selectedSkill?: Skill | null;
+    hoveredEntry?: Entry | null;
+    selectedEntry?: Entry | null;
+    activeSkills?: Skill[] | null;
+}>();
+
+const emit = defineEmits<{
+    (e: "hoverSkill", skill: Skill): void;
+    (e: "leaveSkill", skill: Skill): void;
+    (e: "selectSkill", skill: Skill): void;
 }>();
 
 const extraClasses: Partial<Record<keyof typeof skills, string>> = {
@@ -26,6 +38,22 @@ const extraClasses: Partial<Record<keyof typeof skills, string>> = {
     emacs: "iconEmacs",
 };
 
+function isActive(skill: Skill) {
+    return !!props.activeSkills?.find(s => s.key === skill.key);
+}
+
+function isSelected(skill: Skill) {
+    return skill.key === props.selectedSkill?.key;
+}
+
+function isHovered(skill: Skill) {
+    return skill.key === props.hoveredSkill?.key;
+}
+
+function shouldHighlight(skill: Skill) {
+    return isHovered(skill) || isSelected(skill) || isActive(skill);
+}
+
 </script>
 <template>
     <div class="skillsPaneRoot">
@@ -34,19 +62,22 @@ const extraClasses: Partial<Record<keyof typeof skills, string>> = {
             <template v-if="!group.disabled">
                 <h3 class="subsubsectionTitle">{{ group.name }}</h3>
                 <div class="labelContainer">
-                    <template
-                        v-for="[key, {icon, name}] of
-                        Object.entries(skills).filter(([_, skill]) => skill.group === group && !skill.disabled)"
+                    <span
+                        v-for="skill of Object.values(skills).filter(skill => skill.group === group && !skill.disabled)"
+                        :class="['skill', {active: isActive(skill), selected: isSelected(skill)}]"
+                        @mouseover="emit('hoverSkill', skill)"
+                        @mouseleave="emit('leaveSkill', skill)"
+                        @click.stop="emit('selectSkill', skill)"
                     >
                         <Icon
-                            v-if="icon"
-                            :src="icon"
-                            :alt="name"
-                            :title="name"
+                            v-if="skill.icon"
+                            :src="skill.icon"
+                            :alt="skill.name"
+                            :title="skill.name"
                             :class="`icon ${extraClasses[key] ?? ''}`"
                         />
-                        <Label v-else :title="name" />
-                    </template>
+                        <Label v-else :title="skill.name" />
+                    </span>
                 </div>
             </template>
         </template>
@@ -95,6 +126,36 @@ const extraClasses: Partial<Record<keyof typeof skills, string>> = {
 
     @include screenWidthAbove($xlarge) {
         justify-content: flex-start;
+    }
+}
+
+.skill {
+    transition: transform 0.1s ease-in-out;
+    cursor: pointer;
+
+    @mixin scaleAndShadow($scale) {
+        transform: scale($scale);
+        filter: drop-shadow(0 0 calc($scale * 8px) var(--color-secondary));
+    }
+
+    &:hover {
+        @include scaleAndShadow(1.04);
+    }
+
+    &.active {
+        @include scaleAndShadow(1.08);
+    }
+
+    &:hover.active {
+        @include scaleAndShadow(1.1);
+    }
+
+    &.selected {
+        @include scaleAndShadow(1.14);
+    }
+
+    &:hover.selected {
+        @include scaleAndShadow(1.16);
     }
 }
 

@@ -88,7 +88,8 @@ const imageSrc = computed(() =>
 );
 
 const isPdf = ContextIsPdf.inject();
-const imgClass = ['iconWrapper', 'customIcon', iconNameToSrcMap[props.name]?.className];
+const className = iconNameToSrcMap[props.name]?.className;
+const imgClass = ['customIcon', className];
 
 onMounted(() => {
     if ((props.name !== undefined) == (props.src !== undefined)) {
@@ -102,10 +103,11 @@ onMounted(() => {
 
 <template>
     <span class="icon" ref="root">
+        <span class="iconWrapper">
             <FontAwesomeIcon
                 v-if="props.name && iconNameToFontAwesomeMap[props.name]"
                 :icon="iconNameToFontAwesomeMap[name]"
-                class="iconWrapper faIcon"
+                class="internalIcon faIcon"
             />
             <Img
                 v-else-if="isPdf"
@@ -119,6 +121,7 @@ onMounted(() => {
                 :alt="alt"
                 :class="imgClass"
             />
+        </span>
     </span>
 </template>
 
@@ -129,7 +132,7 @@ onMounted(() => {
     display: inline-block;
     vertical-align: middle;
 
-    .iconWrapper {
+    .internalIcon {
         display: inline-block;
         vertical-align: middle;
         width: 100%;

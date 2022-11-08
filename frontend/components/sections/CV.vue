@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import SectionTitle from "@/components/SectionTitle.vue";
 import CV from "@/components/cv/CV.vue";
+import {computed} from "vue";
+
+const props = defineProps<{
+    resume?: boolean;
+}>();
+
+const title = computed(() => props.resume ? "Resume" : "Curiculum Vitae");
 
 </script>
 
 <template>
     <div class="section">
-        <SectionTitle class="sectionTitle" text="Curriculum Vitae" slug="cv" />
+        <SectionTitle class="sectionTitle" :text="title" slug="cv" />
         <CV />
         <div class="overlayContainer">
             <div class="overlay top" />
@@ -73,7 +80,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
             height: 100px;
             background: linear-gradient(
                     #00000000,
-                    var(--color-background-2) 50%
+                    var(--color-background-2) 40%
             );
             // On mobile browsers we need to stretch this element downwards because
             // the element may not perfectly hug the bottom of the viewport while

@@ -47,7 +47,7 @@ import Icon from "@/components/generic/Icon.vue";
                         <Icon name="info" />
                         <span class="text">
                         An interactive version of this resume is available <a
-                            href="https://veracioux.me/cv?variant=1"
+                            href="https://veracioux.me/cv?variant=1&resume=true"
                             target="_blank">here</a>.
                     </span>
                     </div>
@@ -123,6 +123,12 @@ import Icon from "@/components/generic/Icon.vue";
             .footer {
                 line-height: 1.8;
                 color: rgba(black, 0.5);
+
+                :deep(.icon) {
+                    height: 1em;
+                    // TODO temporary fix
+                    transform: translateY(-4%);
+                }
 
                 .text {
                     margin-left: 4px;

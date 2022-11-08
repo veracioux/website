@@ -9,6 +9,7 @@ import {useRoute} from "#app";
 const {query} = useRoute();
 const render = query.render as "pdf" | "html" | undefined;
 const variant = query.variant as "1" | undefined;
+const resume = query.resume === "true";
 
 const isPdf = computed(() => render === "pdf");
 
@@ -23,7 +24,7 @@ if (process.client && isPdf.value) {
 
 <template>
     <PageWithNavbar v-if="!isPdf">
-        <CVSection />
+        <CVSection :resume="resume" />
     </PageWithNavbar>
     <div v-else class="outsideOfPage">
         <div class="page">

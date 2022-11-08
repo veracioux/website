@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import {defineProps, VNode} from "vue";
+import {computed, defineProps, VNode} from "vue";
 import {ContextIsPdf} from "@/inject";
 import Label from '@/components/generic/Label.vue';
 
 const props = defineProps<{
+    name?: string,
     node?: () => VNode;
     startDate?: string | number;
     endDate?: string | number;
     displayDate?: string;
     labels?: string[];
+    hovered?: boolean;
+    selected?: boolean;
+    active?: boolean;
 }>();
 
 const isPdf = ContextIsPdf.inject();
@@ -16,7 +20,7 @@ const isPdf = ContextIsPdf.inject();
 </script>
 
 <template>
-    <tr class="timeLineItem">
+    <tr :class="['timeLineItem', {active, selected}]">
         <td>
             <div :class="['timeSpan', { isPdf }]">
                 {{ displayDate ?? `${startDate} - ${endDate}` }}
@@ -46,6 +50,65 @@ const isPdf = ContextIsPdf.inject();
 
 .timeLineItem {
     position: relative;
+
+    cursor: pointer;
+
+    .dot, .timeSpan, .text {
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .dot {
+        transform-origin: 50%;
+    }
+
+    .timeSpan {
+        transform-origin: 100%;
+    }
+
+    .text {
+        transform-origin: 0;
+    }
+
+    @mixin scaleAll($base) {
+        .text {
+            transform: scale(calc($base));
+        }
+        .timeSpan {
+            transform: scale(calc(1.03 * $base));
+        }
+        .dot {
+            transform: scale(calc(1.26 * $base));
+        }
+    }
+
+    &:hover, &.active, &.selected {
+        .dot, .timeSpan, .text {
+            text-shadow: 2px 2px 6px rgba(var(--color-text-rgb), 0.4);
+        }
+        .dot {
+            background: var(--color-secondary) !important;
+        }
+    }
+
+    &:hover {
+        @include scaleAll(1.015);
+    }
+
+    &.active {
+        @include scaleAll(1.02);
+    }
+
+    &:hover.active {
+        @include scaleAll(1.025);
+    }
+
+    &.selected {
+        @include scaleAll(1.035);
+    }
+
+    &:hover.selected {
+        @include scaleAll(1.04);
+    }
 
     &::before {
         position: relative;

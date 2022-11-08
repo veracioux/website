@@ -5,7 +5,7 @@ defineProps<{
 </script>
 
 <template>
-    <div :class="$style.container" :title="title">{{ title }}</div>
+    <span :class="$style.container" :title="title">{{ title }}</span>
 </template>
 
 <style module lang="scss">

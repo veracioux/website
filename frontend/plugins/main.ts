@@ -1,5 +1,3 @@
-// TODO import "virtual:fonts.css";
-
 import VueKonva from "vue-konva";
 import VueLazyload from "vue3-lazyload";
 import {plugin as modalPlugin} from "@/components/projects/ProjectModal.vue";

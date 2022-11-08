@@ -25,7 +25,7 @@ onMounted(() => {
         <div class="content">
             <div class="contentLeft"></div>
             <div style="position: relative">
-                <a class="veracioux" ref="veraciouxButton">
+                <a href="/" class="veracioux" ref="veraciouxButton">
                     veracioux
                 </a>
                 <div
