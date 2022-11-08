@@ -8,7 +8,7 @@ import {groups, entries, Entry, Skill, skills} from "@/cv";
 import {onMounted, onUnmounted, ref, toRaw, watch} from "vue";
 
 const props = defineProps<{
-    variant?: "1";
+    variant: string;
 }>();
 
 // NOTE: Skills and Entries are tethered. Whenever you hover over a skill, an
@@ -30,7 +30,8 @@ const activeSkills = ref<Skill[]>([]);
 
 const isPdf = ContextIsPdf.inject();
 
-const excludedGroups = props.variant === "1" ? ([
+// TODO Devise a method to define variants in external files.
+const excludedGroups = props.variant ? ([
     "extraCurricular",
 ] as (keyof typeof groups)[]) : [];
 
@@ -38,7 +39,7 @@ const enabledGroups = Object.values(groups)
     .filter(({key}) => !excludedGroups.includes(key as any))
 
 // All entries that should are explicitly excluded
-const excludedEntries = props.variant === "1" ? ([
+const excludedEntries = props.variant ? ([
     "renovation",
     "demosTP",
     "demosPMS",
@@ -122,7 +123,7 @@ onMounted(() => {
 
 <template>
     <div class="cvRoot">
-        <CVHeader v-if="isPdf" />
+        <CVHeader v-if="isPdf" :variant="variant" />
         <div class="content" @click="onDeselect">
             <div class="timelineWrapper">
                 <table class="timeline">

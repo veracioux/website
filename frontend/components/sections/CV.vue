@@ -5,10 +5,10 @@ import {computed} from "vue";
 
 const props = defineProps<{
     resume?: boolean;
-    variant?: "1" | undefined;
+    variant?: string;
 }>();
 
-const title = computed(() => props.resume ? "Resume" : "Curiculum Vitae");
+const title = computed(() => props.resume ? "Resume" : "Curriculum Vitae");
 
 </script>
 

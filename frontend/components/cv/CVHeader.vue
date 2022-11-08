@@ -3,6 +3,9 @@ import mugshot from "@/assets/mugshot.webp";
 import SocialIcon from "@/components/generic/SocialIcon.vue";
 import Icon from "@/components/generic/Icon.vue";
 
+const props = defineProps<{
+    variant?: string;
+}>();
 </script>
 
 <template>
@@ -46,8 +49,8 @@ import Icon from "@/components/generic/Icon.vue";
                     <div class="footer">
                         <Icon name="info" />
                         <span class="text">
-                        An interactive version of this resume is available <a
-                            href="https://veracioux.me/cv?variant=1&resume=true"
+                            An interactive version of this resume is available <a
+                            :href="`https://veracioux.me/cv?variant=${variant}&resume=true`"
                             target="_blank">here</a>.
                     </span>
                     </div>

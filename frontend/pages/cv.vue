@@ -8,7 +8,7 @@ import {useRoute} from "#app";
 
 const {query} = useRoute();
 const render = query.render as "pdf" | "html" | undefined;
-const variant = query.variant as "1" | undefined;
+const variant = query.variant;
 const resume = query.resume === "true";
 
 const isPdf = computed(() => render === "pdf");

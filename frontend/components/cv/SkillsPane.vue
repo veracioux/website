@@ -9,7 +9,7 @@ import iconLinux from "@/assets/icons/linux.svg";
 import iconEmacs from "@/assets/icons/emacs.svg";
 
 const props = defineProps<{
-    variant?: "1";
+    variant?: string;
     hoveredSkill?: Skill | null;
     selectedSkill?: Skill | null;
     hoveredEntry?: Entry | null;
@@ -204,11 +204,11 @@ number, not as a percentage)
 }
 
 :root[data-theme="light"] .iconJetBrains {
-    --icon-scale-multiplier: 0.6;
+    --icon-scale-multiplier: 0.65;
 }
 
 .iconJetBrains {
-    $scale: calc(2.4 * var(--icon-scale-multiplier));
+    $scale: calc(2.2 * var(--icon-scale-multiplier));
     transform: scale($scale) translate(calc(-0.1 * #{$scale} * #{$iconSize}));
     transform-origin: 0;
     margin-right: calc((0.3 * #{$scale} - 0.6) * #{$iconSize});
