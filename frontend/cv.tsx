@@ -409,7 +409,7 @@ let _entries = {
         ),
         startDate: "2018",
         endDate: "present",
-        skills: [skills.jetbrains, skills.git, skills.nginx, skills.c, skills.cpp, skills.docker, skills.typescript, skills.javascript, skills.django, skills.qt, skills.bash, skills.technicalWriting],
+        skills: [skills.jetbrains, skills.git, skills.nginx, skills.c, skills.cpp, skills.docker, skills.typescript, skills.javascript, skills.django, skills.qt, skills.bash, skills.technicalWriting, skills.emacs],
         group: groups.otherExperience,
     },
 }

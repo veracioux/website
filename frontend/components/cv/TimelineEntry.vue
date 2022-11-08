@@ -15,28 +15,32 @@ const props = defineProps<{
     active?: boolean;
 }>();
 
-const isPdf = ContextIsPdf.inject();
-
 </script>
 
 <template>
     <tr :class="['timeLineItem', {active, selected}]">
         <td>
-            <div :class="['timeSpan', { isPdf }]">
-                {{ displayDate ?? `${startDate} - ${endDate}` }}
+            <div class="acceptsMargin">
+                <div class="timeSpan">
+                    {{ displayDate ?? `${startDate} - ${endDate}` }}
+                </div>
             </div>
         </td>
         <td class="lineCell">
-            <div class="line" />
-            <div class="dot" />
+            <div class="acceptsMargin">
+                <div class="line" />
+                <div class="dot" />
+            </div>
         </td>
         <td>
-            <div :class="['text', 'acceptsMargin', { isPdf }]">
-                <slot>
-                    <component v-if="node" :is="node" />
-                </slot>
-                <div v-if="labels" class="labelContainer">
-                    <Label v-for="label of labels" :title="label" />
+            <div class="acceptsMargin">
+                <div class="description">
+                    <slot>
+                        <component v-if="node" :is="node" />
+                    </slot>
+                    <div v-if="labels" class="labelContainer">
+                        <Label v-for="label of labels" :title="label" />
+                    </div>
                 </div>
             </div>
         </td>
@@ -53,7 +57,7 @@ const isPdf = ContextIsPdf.inject();
 
     cursor: pointer;
 
-    .dot, .timeSpan, .text {
+    .dot, .timeSpan, .description {
         transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
     }
 
@@ -65,12 +69,12 @@ const isPdf = ContextIsPdf.inject();
         transform-origin: 100%;
     }
 
-    .text {
+    .description {
         transform-origin: 0;
     }
 
     @mixin scaleAll($base) {
-        .text {
+        .description {
             transform: scale(calc($base));
         }
         .timeSpan {
@@ -82,9 +86,10 @@ const isPdf = ContextIsPdf.inject();
     }
 
     &:hover, &.active, &.selected {
-        .dot, .timeSpan, .text {
+        .dot, .timeSpan, .description {
             text-shadow: 2px 2px 6px rgba(var(--color-text-rgb), 0.4);
         }
+
         .dot {
             background: var(--color-secondary) !important;
         }
@@ -104,6 +109,7 @@ const isPdf = ContextIsPdf.inject();
 
     &.selected, &.active {
         @include scaleAll(1.035);
+
         .dot {
             background: var(--color-tertiary) !important;
         }
@@ -178,7 +184,7 @@ const isPdf = ContextIsPdf.inject();
         @include timeline.responsiveVerticalMargin(10px, 10px);
 
         @media print {
-            @include timeline.responsiveVerticalMargin(4px, 4px);
+            @include timeline.responsiveVerticalMargin(7px, 7px);
         }
     }
 }

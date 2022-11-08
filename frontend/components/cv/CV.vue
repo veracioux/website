@@ -37,12 +37,15 @@ const excludedGroups = props.variant === "1" ? ([
 const enabledGroups = Object.values(groups)
     .filter(({key}) => !excludedGroups.includes(key as any))
 
+// All entries that should are explicitly excluded
 const excludedEntries = props.variant === "1" ? ([
     "renovation",
     "demosTP",
     "demosPMS",
 ] as (keyof typeof entries)[]) : [];
 
+// All entries that should are explicitly excluded plus those excluded implicitly
+// because the group they belong to has been excluded.
 const allExcludedEntries = [
     ...excludedEntries,
     ...Object.values(entries)
@@ -50,9 +53,13 @@ const allExcludedEntries = [
         .map(({key}) => key)
 ];
 
-
 const enabledEntries = Object.values(entries)
     .filter(({key}) => !allExcludedEntries.includes(key as any));
+
+enabledGroups.forEach((group) => {
+    group.entries = group.entries
+        .filter(({key}) => !excludedEntries.includes(key as any));
+});
 
 const displayType: "grouped" | "linear" = isPdf.value ? "grouped" : "linear";
 
@@ -136,12 +143,12 @@ onMounted(() => {
                     <template v-else>
                         <template v-for="(group, i) of enabledGroups">
                             <h3 :class="['groupTitle', {intermittent: i !== 0}]">
-                                {{ group.name }}</h3>
+                                {{ group.name }}
+                            </h3>
                             <template
                                 v-for="(entry, j) of group.entries"
                             >
                                 <TimelineEntry
-                                    v-if="!excludedEntries.includes(entry.key)"
                                     v-bind="entry"
                                     :class="[
                                     'groupedTimeLineEntry',
@@ -200,6 +207,8 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
         margin-top: 24px;
         margin-bottom: 80px;
 
+        user-select: none;
+
         @include screenWidthAboveCriticalPoint {
             flex-direction: row;
             gap: 16px;
@@ -233,6 +242,10 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
             max-width: 900px;
             height: fit-content;
 
+            // Remove border spacing from layout
+            margin-left: -16px;
+            margin-right: -16px;
+
             :global(td) {
                 padding: 0;
             }
@@ -242,8 +255,9 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
                 position: absolute;
                 left: 0;
                 right: 0;
-                text-align: left;
+                text-align: start;
                 z-index: 2;
+                margin-left: 16px;
 
                 // Even though alpha is 0, the color is important for PDF generation
                 $transparent: rgba(var(--timeline-background-rgb), 0);
@@ -254,17 +268,17 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
                     background: linear-gradient(
                             $transparent, $background, $background, $transparent
                     );
-                    line-height: 4;
+                    line-height: 4.5;
                 }
             }
 
             .groupedTimeLineEntry {
                 &.marginTop:deep(.acceptsMargin) {
-                    @include timeline.responsiveVerticalMargin($top: 16px);
+                    @include timeline.responsiveVerticalMargin($top: 28px);
                 }
 
                 &.marginBottom:deep(.acceptsMargin) {
-                    @include timeline.responsiveVerticalMargin($bottom: 16px);
+                    @include timeline.responsiveVerticalMargin($bottom: 28px);
                 }
             }
         }
