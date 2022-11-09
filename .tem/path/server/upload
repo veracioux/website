@@ -3,6 +3,11 @@
 # Build and upload the web image to the VPS
 # Usage: upload ["prod"]
 
+echo_and_notify() {
+    echo "$*"
+    command -v notify-send && notify-send "veracioux:local" "$*"
+}
+
 cd "$(tem find -b website)"
 
 if [ "$#" -gt "1" ] || { [ "$#" = "1" ] && [ "$1" != "prod" ]; }; then
@@ -27,7 +32,7 @@ code="$?"
 
 if [ "$code" != 0 ]; then
     # Docker registry not running
-    echo "Registry not running. Pushing manually as tar.gz file..."
+    echo_and_notify "Registry not running. Pushing manually as tar.gz file..."
     images=(docker.veracioux.me/{web,worker_dotfiles,mail}:"$tag")
     docker save "${images[@]}" | gzip > /tmp/veracioux-images.tar.gz
     rsync --update --verbose --progress {,"$VPS_IP:"}/tmp/veracioux-images.tar.gz
