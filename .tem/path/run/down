@@ -4,6 +4,13 @@
 
 cd "$(tem find -b website)"
 
+if tem var env:prod; then
+    read -n 1 -p "You are on production. Proceed? [y:N]: " confirmation
+    if [ "$confirmation" != "y" -a "$confirmation" != "Y" ]; then
+        exit 1
+    fi
+fi
+
 for arg in "$@"; do
     if ! [[ "$arg" == -* ]]; then
         positional_args=("${positional_args[@]}" "$arg")

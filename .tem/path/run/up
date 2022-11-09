@@ -12,7 +12,9 @@ for arg in "$@"; do
     fi
 done
 
+set -e
 down "${positional_args[@]}"
+set +e
 
 build_arg='--build'
 if tem var -q device:public; then

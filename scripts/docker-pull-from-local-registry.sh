@@ -9,9 +9,7 @@ else
 fi
 
 for image in {web,worker_dotfiles,mail}:"$tag"; do
-    echo "Pulling image localhost:5000/$image from local registry into daemon..."
-    docker pull localhost:5000/"$image"
-    echo "Re-tagging image as docker.veracioux.me/$image"
-    docker tag localhost:5000/"$image" docker.veracioux.me/"$image"
+    echo "Pulling image docker.veracioux.me/$image from registry into daemon..."
+    docker pull docker.veracioux.me/"$image"
 done
 
