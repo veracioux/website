@@ -2,6 +2,9 @@
 import mugshot from "@/assets/mugshot.webp";
 import SocialIcon from "@/components/generic/SocialIcon.vue";
 import Icon from "@/components/generic/Icon.vue";
+import {CvContext} from "~/inject";
+
+const {variant} = CvContext.inject();
 </script>
 
 <template>

@@ -24,4 +24,5 @@ worker/worker.js
 blog
 mail
 
+host
 nginx.host.conf.in
