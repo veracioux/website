@@ -4,7 +4,7 @@ import useSWRV from "swrv";
 import "@/assets/home.scss";
 import type {Project} from "@/models";
 import ProjectModal from "@/components/projects/ProjectModal.vue";
-import {reactive, ref, toRaw, watch} from "vue";
+import {reactive, ref} from "vue";
 import Img from "@/components/generic/Img.vue";
 import SectionTitle from "@/components/SectionTitle.vue";
 import api from "@/api";
@@ -143,6 +143,12 @@ function onMouseLeaveProjectCard() {
             &.preview-image-fade-leave-to {
                 opacity: 0;
             }
+        }
+
+        &::after {
+            @include c.fillParent;
+            background: linear-gradient(transparent 60%, var(--color-background-1));
+            content: "";
         }
     }
 
