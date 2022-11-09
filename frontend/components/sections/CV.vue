@@ -1,24 +1,33 @@
 <script setup lang="ts">
 import SectionTitle from "@/components/SectionTitle.vue";
 import CV from "@/components/cv/CV.vue";
-import {computed} from "vue";
+import CVMenu from '@/components/cv/CVMenu.vue';
+import {computed, ref} from "vue";
+import {CvContext} from "~/inject";
+import {DisplayMode} from "~/cv";
+import * as utils from "@/utils";
 
-const props = defineProps<{
-    resume?: boolean;
-    variant?: string;
-}>();
+const {variant, resume} = CvContext.inject();
+const isMobile = utils.isMobile();
 
-const title = computed(() => props.resume ? "Resume" : "Curriculum Vitae");
+const title = computed(() => resume ? "Resume" : "Curriculum Vitae");
+const displayMode = ref<DisplayMode>("timeline");
 
+function onDisplayModeChanged(value) {
+    displayMode.value = value;
+}
 </script>
 
 <template>
     <div class="section">
         <SectionTitle class="sectionTitle" :text="title" slug="cv" />
-        <CV :variant="variant" />
+        <CV class="cv" :display-mode="displayMode" />
         <div class="overlayContainer">
             <div class="overlay top" />
-            <div class="overlay bottom" />
+            <div class="overlay bottom">
+                <CVMenu v-if="!isMobile" class="cvMenu"
+                        @displayModeChanged="onDisplayModeChanged" />
+            </div>
         </div>
     </div>
 </template>
@@ -47,6 +56,11 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
     :deep(.titleDecoration) {
         fill: var(--color-background-1);
     }
+
+    .cv {
+        margin-top: 1.4em;
+        margin-bottom: 7.5em;
+    }
 }
 
 .overlayContainer {
@@ -63,29 +77,23 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
         width: 100%;
         pointer-events: auto;
 
+        $color: var(--color-background-2);
+
         &.top {
             top: 0;
-            height: 100px;
-            background: linear-gradient(
-                    var(--color-background-2) 60%,
-                    #00000000
-            );
-
-            @include screenWidthAbove($xlarge) {
-                height: 120px;
-            }
+            height: 6.2em;
+            background: linear-gradient($color 60%, transparent);
         }
 
         &.bottom {
-            bottom: 26px;
-            height: 100px;
-            background: linear-gradient(
-                    #00000000,
-                    var(--color-background-2) 40%
-            );
+            // This is equal to the navbar height and is determined empirically
+            bottom: $navbarHeight;
+            height: 5em;
+            background: linear-gradient(transparent, $color 44%);
             // On mobile browsers we need to stretch this element downwards because
             // the element may not perfectly hug the bottom of the viewport while
             // scrolling, leaving parts of the underlying text visible.
+            /* TODO: temporarily disabled
             &::after {
                 display: block;
                 content: "";
@@ -94,8 +102,17 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
                 width: 100%;
                 background: var(--color-background-2);
             }
+             */
         }
     }
+}
+
+.cvMenu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
 }
 
 .sectionTitle {

@@ -69,3 +69,7 @@ export function logChanges(ref: Ref, ...consoleLogPrefixArgs: any[]) {
         console.debug(...consoleLogPrefixArgs, value);
     });
 }
+
+export function isMobile() {
+    return process.client && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+}

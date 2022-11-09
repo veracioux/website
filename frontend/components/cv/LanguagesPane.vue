@@ -38,7 +38,7 @@
         align-items: center;
         gap: 12px;
 
-        @include c.beveledFrame(16px, 2px, #aaa, #f7f7f7);
+        @include c.beveledFrame(16px, 2px, #ccc, #f7f7f7);
     }
 
     .languageTable {

@@ -3,12 +3,13 @@ import TimelineEntry from "@/components/cv/TimelineEntry.vue";
 import SkillsPane from "@/components/cv/SkillsPane.vue";
 import CVHeader from "./CVHeader.vue";
 import LanguagesPane from "@/components/cv/LanguagesPane.vue";
-import {ContextIsPdf} from "@/inject";
-import {groups, entries, Entry, Skill, skills} from "@/cv";
-import {onMounted, onUnmounted, ref, toRaw, watch} from "vue";
+import {ContextIsPdf, CvContext} from "@/inject";
+import {groups, entries, Entry, Skill, skills, DisplayMode} from "@/cv";
+import {onMounted, ref, watch} from "vue";
+import {isMobile as _isMobile} from "~/utils";
 
 const props = defineProps<{
-    variant: string;
+    displayMode: DisplayMode;
 }>();
 
 // NOTE: Skills and Entries are tethered. Whenever you hover over a skill, an
@@ -28,10 +29,13 @@ const selectedEntry = ref<Entry>(null);
 const selectedSkill = ref<Skill>(null);
 const activeSkills = ref<Skill[]>([]);
 
+const isMobile = _isMobile();
 const isPdf = ContextIsPdf.inject();
 
+const {variant} = CvContext.inject();
+
 // TODO Devise a method to define variants in external files.
-const excludedGroups = props.variant ? ([
+const excludedGroups = variant ? ([
     "extraCurricular",
 ] as (keyof typeof groups)[]) : [];
 
@@ -39,7 +43,7 @@ const enabledGroups = Object.values(groups)
     .filter(({key}) => !excludedGroups.includes(key as any))
 
 // All entries that should are explicitly excluded
-const excludedEntries = props.variant ? ([
+const excludedEntries = variant ? ([
     "renovation",
     "demosTP",
     "demosPMS",
@@ -61,8 +65,6 @@ enabledGroups.forEach((group) => {
     group.entries = group.entries
         .filter(({key}) => !excludedEntries.includes(key as any));
 });
-
-const displayType: "grouped" | "linear" = isPdf.value ? "grouped" : "linear";
 
 function onHoverEntry(entry: Entry) {
     if (!selectedEntry.value && !selectedSkill.value) {
@@ -123,12 +125,12 @@ onMounted(() => {
 
 <template>
     <div class="cvRoot">
-        <CVHeader v-if="isPdf" :variant="variant" />
+        <CVHeader v-if="isPdf" />
         <div class="content" @click="onDeselect">
             <div class="timelineWrapper">
                 <table class="timeline">
                     <template
-                        v-if="displayType === 'linear'"
+                        v-if="displayMode === 'timeline'"
                         v-for="entry of enabledEntries.sort((a, b) => a.startDate < b.startDate )"
                     >
                         <TimelineEntry
@@ -137,7 +139,7 @@ onMounted(() => {
                             :selected="selectedEntry?.key === entry.key"
                             :active="selectedEntry?.key !== entry.key && !!entry.skills?.find(s => s.key === (selectedSkill ?? hoveredSkill)?.key)"
                             @mouseover="onHoverEntry(entry)"
-                            @mouseleave="onLeaveEntry(entry)"
+                            @mouseleave="onLeaveEntry()"
                             @click.stop="onToggleSelectEntry(entry)"
                         />
                     </template>
@@ -166,8 +168,6 @@ onMounted(() => {
             </div>
             <aside class="sidePane">
                 <SkillsPane
-                    class="skillsPane"
-                    :variant="variant"
                     :hovered-skill="hoveredSkill"
                     :selected-skill="selectedSkill"
                     :active-skills="activeSkills"
@@ -205,24 +205,22 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
         flex-direction: column;
         justify-content: flex-start;
         gap: 48px;
-        margin-top: 24px;
-        margin-bottom: 80px;
 
         user-select: none;
 
         @include screenWidthAboveCriticalPoint {
             flex-direction: row;
             gap: 16px;
-            margin-top: 32px;
         }
 
         @media print {
             align-items: stretch;
-            margin-top: 0;
-            margin-bottom: 0;
         }
 
         .timelineWrapper {
+            --timeline-background: var(--color-background-2);
+            --timeline-background-rgb: var(--color-background-2-rgb);
+
             @media print {
                 position: relative;
                 padding: 24px;
@@ -232,7 +230,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
                 --timeline-background-rgb: 247, 247, 247;
 
                 @include common.beveledEdges(16px);
-                @include common.beveledFrame(16px, 2px, #aaa, var(--timeline-background));
+                @include common.beveledFrame(16px, 2px, #ccc, var(--timeline-background));
             }
         }
 
@@ -243,9 +241,13 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
             max-width: 900px;
             height: fit-content;
 
+            margin-left: 32px;
+
             // Remove border spacing from layout
-            margin-left: -16px;
-            margin-right: -16px;
+            @media print {
+                margin-left: -16px;
+                margin-right: -16px;
+            }
 
             :global(td) {
                 padding: 0;
@@ -257,7 +259,8 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
                 left: 0;
                 right: 0;
                 text-align: start;
-                z-index: 2;
+                z-index: 1;
+                pointer-events: none;
                 margin-left: 16px;
 
                 // Even though alpha is 0, the color is important for PDF generation
@@ -291,14 +294,12 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
             gap: inherit;
 
             @media print {
-                // TODO verify
-                align-items: start;
                 gap: 24px !important;
                 flex: 1 1 0;
             }
 
             @include screenWidthAboveCriticalPoint {
-                gap: 32px;
+                gap: 48px;
                 position: sticky;
                 top: 100px;
                 bottom: 80px;

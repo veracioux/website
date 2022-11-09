@@ -57,21 +57,7 @@ const props = defineProps<{
 
     cursor: pointer;
 
-    .dot, .timeSpan, .description {
-        transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
-    }
-
-    .dot {
-        transform-origin: 50%;
-    }
-
-    .timeSpan {
-        transform-origin: 100%;
-    }
-
-    .description {
-        transform-origin: 0;
-    }
+    pointer-events: none;
 
     @mixin scaleAll($base) {
         .description {
@@ -85,38 +71,57 @@ const props = defineProps<{
         }
     }
 
-    &:hover, &.active, &.selected {
+    @include screenSizeAbove($small) {
+        pointer-events: revert;
+
         .dot, .timeSpan, .description {
-            text-shadow: 2px 2px 6px rgba(var(--color-text-rgb), 0.4);
+            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
         }
 
         .dot {
-            background: var(--color-secondary) !important;
+            transform-origin: 50%;
         }
-    }
 
-    &:hover {
-        @include scaleAll(1.015);
-    }
-
-    &.active {
-        @include scaleAll(1.02);
-    }
-
-    &:hover.active {
-        @include scaleAll(1.025);
-    }
-
-    &.selected, &.active {
-        @include scaleAll(1.035);
-
-        .dot {
-            background: var(--color-tertiary) !important;
+        .timeSpan {
+            transform-origin: 100%;
         }
-    }
 
-    &:hover.selected {
-        @include scaleAll(1.04);
+        .description {
+            transform-origin: 0;
+        }
+        &:hover, &.active, &.selected {
+            .dot, .timeSpan, .description {
+                text-shadow: 2px 2px 6px rgba(var(--color-text-rgb), 0.4);
+            }
+
+            .dot {
+                background: var(--color-secondary) !important;
+            }
+        }
+
+        &:hover {
+            @include scaleAll(1.015);
+        }
+
+        &.active {
+            @include scaleAll(1.02);
+        }
+
+        &:hover.active {
+            @include scaleAll(1.025);
+        }
+
+        &.selected, &.active {
+            @include scaleAll(1.035);
+
+            .dot {
+                background: var(--color-tertiary) !important;
+            }
+        }
+
+        &:hover.selected {
+            @include scaleAll(1.04);
+        }
     }
 
     &::before {

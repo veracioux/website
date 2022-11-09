@@ -11,6 +11,7 @@ import {
     faMobile,
     faLocationDot,
     faCircleInfo,
+    faFileArrowDown,
 } from "@fortawesome/free-solid-svg-icons";
 import {
     faGithub,
@@ -39,6 +40,7 @@ library.add(
     faLinkedin,
     faMonero,
     faMobile,
+    faFileArrowDown,
 );
 
 const iconNameToFontAwesomeMap = {
@@ -52,6 +54,7 @@ const iconNameToFontAwesomeMap = {
     location: "location-dot",
     info: "circle-info",
     PR: "code-pull-request",
+    download: "file-arrow-down",
     github: ["fab", "github"],
     gitlab: ["fab", "gitlab"],
     linkedin: ["fab", "linkedin"],
@@ -103,25 +106,23 @@ onMounted(() => {
 
 <template>
     <span class="icon" ref="root">
-        <span class="iconWrapper">
-            <FontAwesomeIcon
-                v-if="props.name && iconNameToFontAwesomeMap[props.name]"
-                :icon="iconNameToFontAwesomeMap[name]"
-                class="internalIcon faIcon"
-            />
-            <Img
-                v-else-if="isPdf"
-                :src="imageSrc"
-                :alt="alt"
-                :class="imgClass"
-            />
-            <Img
-                v-else
-                v-lazy="imageSrc"
-                :alt="alt"
-                :class="imgClass"
-            />
-        </span>
+        <FontAwesomeIcon
+            v-if="props.name && iconNameToFontAwesomeMap[props.name]"
+            :icon="iconNameToFontAwesomeMap[name]"
+            class="internalIcon faIcon"
+        />
+        <Img
+            v-else-if="isPdf"
+            :src="imageSrc"
+            :alt="alt"
+            :class="imgClass"
+        />
+        <Img
+            v-else
+            v-lazy="imageSrc"
+            :alt="alt"
+            :class="imgClass"
+        />
     </span>
 </template>
 

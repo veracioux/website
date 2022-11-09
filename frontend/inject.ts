@@ -1,8 +1,16 @@
 /**
  * @file A registry of all values that can be provided/injected.
  */
-import {inject as _inject, onMounted, provide as _provide, Ref, ref} from "vue";
+import {
+    inject as _inject,
+    onMounted,
+    provide as _provide,
+    reactive,
+    Ref,
+    ref
+} from "vue";
 import * as utils from "@/utils";
+import {useRoute} from "#app";
 
 export class ScrollData {
     /* The document scroll amount expressed as a number of sections. */
@@ -55,6 +63,7 @@ export class ScrollData {
     }
 }
 
+// TODO: move into CvContext
 export class ContextIsPdf {
     static inject(): Ref<boolean> {
         return _inject("isPdf") ?? ref(false);
@@ -62,5 +71,16 @@ export class ContextIsPdf {
 
     static provide(value: Ref<boolean>) {
         _provide("isPdf", value);
+    }
+}
+
+export class CvContext {
+    static inject() {
+        const {variant, resume, render} = useRoute().query;
+        return reactive({
+            variant,
+            resume: resume === "true",
+            render: render as "pdf" | "html" | undefined,
+        });
     }
 }

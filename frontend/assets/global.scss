@@ -31,6 +31,7 @@ $large: 1024px;
 $xlarge: 1280px;
 
 $monospace: "Roboto Mono";
+$navbarHeight: 3.2rem;
 
 :root {
   // Font settings
@@ -67,8 +68,8 @@ $monospace: "Roboto Mono";
   --color-background-2-rgb: 14, 15, 23;
   --color-text: #d2dcf9;
   --color-text-rgb: 210, 220, 249;
-  --color-text-pale: #b7b7b7;
-  --color-text-pale-rgb: 183, 183, 183;
+  --color-text-pale: #999;
+  --color-text-pale-rgb: 153, 153, 153;
 
   &[data-theme="light"] {
     --color-primary: #303F9F;
@@ -95,6 +96,7 @@ a {
   color: rgba(var(--color-secondary-rgb), 0.9);
   text-decoration: none;
   transition: transform ease-in-out 0.2s;
+  pointer-events: auto;
 
   &:hover {
     transform: scale(1.02);

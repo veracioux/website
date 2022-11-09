@@ -106,6 +106,7 @@ const _skills = {
         name: "Django",
         icon: iconDjango,
         group: skillGroups.frameworksAndTechnologies,
+        disabled: true,
     },
     ethereum: {
         name: "Ethereum",
@@ -430,3 +431,5 @@ const userHints = {
     clickEntryToSelect: "Click the timeline entry to select it.",
     clickSkillToSelect: "Click the skill to select it.",
 }
+
+export type DisplayMode = "timeline" | "byCategory";

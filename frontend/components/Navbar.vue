@@ -94,7 +94,9 @@ a.veracioux {
 
 .navbar {
     position: relative;
-    padding: 8px;
+    display: flex;
+    align-items: center;
+    height: $navbarHeight;
 
     font-family: $monospace;
     font-size: 2em;

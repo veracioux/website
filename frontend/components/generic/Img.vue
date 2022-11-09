@@ -1,6 +1,5 @@
-<!-- <img> that fades in when loaded. -->
 <template>
-    <img v-bind="$props" onload="this.style.opacity = 1" :class="s.image" />
+    <img v-bind="$props" onload="this.style.opacity = 1" :class="[s.image, s.transparentAlt]" />
 </template>
 
 <style lang="scss" module="s">
@@ -9,5 +8,9 @@
 .image {
     opacity: 0;
     transition: opacity 1s;
+}
+
+.transparentAlt {
+    color: transparent;
 }
 </style>

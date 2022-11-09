@@ -2,14 +2,10 @@
 import PageWithNavbar from "@/components/PageWithNavbar.vue";
 import CVSection from "@/components/sections/CV.vue";
 import CV from '@/components/cv/CV.vue';
-import {ContextIsPdf, ScrollData} from "@/inject";
+import {ContextIsPdf, CvContext, ScrollData} from "@/inject";
 import {computed} from "vue";
-import {useRoute} from "#app";
 
-const {query} = useRoute();
-const render = query.render as "pdf" | "html" | undefined;
-const variant = query.variant;
-const resume = query.resume === "true";
+const {render} = CvContext.inject();
 
 const isPdf = computed(() => render === "pdf");
 
@@ -24,11 +20,11 @@ if (process.client && isPdf.value) {
 
 <template>
     <PageWithNavbar v-if="!isPdf">
-        <CVSection :resume="resume" :variant="variant" />
+        <CVSection />
     </PageWithNavbar>
     <div v-else class="outsideOfPage">
         <div class="page">
-            <CV class="cv" :variant="variant" />
+            <CV class="cv" display-mode="byCategory" />
         </div>
     </div>
 </template>

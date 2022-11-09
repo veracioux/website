@@ -19,7 +19,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: "hoverSkill", skill: Skill): void;
-    (e: "leaveSkill", skill: Skill): void;
+    (e: "leaveSkill"): void;
     (e: "selectSkill", skill: Skill): void;
 }>();
 
@@ -65,7 +65,7 @@ function shouldHighlight(skill: Skill) {
                         v-for="skill of Object.values(skills).filter(skill => skill.group === group && !skill.disabled)"
                         :class="['skill', {active: isActive(skill), selected: isSelected(skill)}]"
                         @mouseover="emit('hoverSkill', skill)"
-                        @mouseleave="emit('leaveSkill', skill)"
+                        @mouseleave="emit('leaveSkill')"
                         @click.stop="emit('selectSkill', skill)"
                     >
                         <Icon
@@ -106,7 +106,7 @@ function shouldHighlight(skill: Skill) {
 
         --icon-scale-multiplier: 0.8;
 
-        @include common.beveledFrame(16px, 2px, rgba(black, 0.3), #f7f7f7);
+        @include common.beveledFrame(16px, 2px, #ccc, #f7f7f7);
     }
 }
 
@@ -132,29 +132,35 @@ function shouldHighlight(skill: Skill) {
     transition: transform 0.1s ease-in-out;
     cursor: pointer;
 
+    pointer-events: none;
+
     @mixin scaleAndShadow($scale) {
         transform: scale($scale);
         filter: drop-shadow(0 0 calc($scale * 8px) var(--color-secondary));
     }
 
-    &:hover {
-        @include scaleAndShadow(1.04);
-    }
+    @include screenSizeAbove($small) {
+        pointer-events: all;
 
-    &.active {
-        @include scaleAndShadow(1.08);
-    }
+        &:hover {
+            @include scaleAndShadow(1.04);
+        }
 
-    &:hover.active {
-        @include scaleAndShadow(1.1);
-    }
+        &.active {
+            @include scaleAndShadow(1.08);
+        }
 
-    &.selected {
-        @include scaleAndShadow(1.14);
-    }
+        &:hover.active {
+            @include scaleAndShadow(1.1);
+        }
 
-    &:hover.selected {
-        @include scaleAndShadow(1.16);
+        &.selected {
+            @include scaleAndShadow(1.14);
+        }
+
+        &:hover.selected {
+            @include scaleAndShadow(1.16);
+        }
     }
 }
 

@@ -2,10 +2,6 @@
 import mugshot from "@/assets/mugshot.webp";
 import SocialIcon from "@/components/generic/SocialIcon.vue";
 import Icon from "@/components/generic/Icon.vue";
-
-const props = defineProps<{
-    variant?: string;
-}>();
 </script>
 
 <template>
@@ -49,7 +45,7 @@ const props = defineProps<{
                     <div class="footer">
                         <Icon name="info" />
                         <span class="text">
-                            An interactive version of this resume is available <a
+                            An interactive online version of this resume is available <a
                             :href="`https://veracioux.me/cv?variant=${variant}&resume=true`"
                             target="_blank">here</a>.
                     </span>
@@ -76,7 +72,7 @@ const props = defineProps<{
     align-items: flex-start;
     gap: 20px;
     overflow: visible;
-    margin-bottom: 32px;
+    margin-bottom: 16px;
 
     padding: 24px 32px;
 
