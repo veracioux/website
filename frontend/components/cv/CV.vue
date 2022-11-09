@@ -153,13 +153,17 @@ onMounted(() => {
                             >
                                 <TimelineEntry
                                     v-bind="entry"
-                                    :class="[
-                                    'groupedTimeLineEntry',
-                                    {
+                                    class="groupedTimeLineEntry"
+                                    :class="{
                                         marginTop: j === 0,
                                         marginBottom: j === group.entries.length - 1 && i !== enabledGroups.length - 1,
-                                    }
-                                ]"
+                                    }"
+                                    :hovered="hoveredEntry?.key === entry.key"
+                                    :selected="selectedEntry?.key === entry.key"
+                                    :active="selectedEntry?.key !== entry.key && !!entry.skills?.find(s => s.key === (selectedSkill ?? hoveredSkill)?.key)"
+                                    @mouseover="onHoverEntry(entry)"
+                                    @mouseleave="onLeaveEntry()"
+                                    @click.stop="onToggleSelectEntry(entry)"
                                 />
                             </template>
                         </template>

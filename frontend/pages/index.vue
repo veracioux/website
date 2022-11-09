@@ -97,6 +97,12 @@ function onAnimatableVeraciouxTextElementMounted(element: HTMLElement) {
 onMounted(() => {
     // Avoid the mugshot flashing to the user on initial load
     showCover.value = false;
+    // TODO temporary fix for a strange behavior: when the page is not scrolled
+    //  to the top and is then reloaded, the Intro section misbehaves.
+    scrollContainer.value.scrollTo({
+        top: 0,
+        behavior: "instant" as any,
+    });
 });
 
 </script>
