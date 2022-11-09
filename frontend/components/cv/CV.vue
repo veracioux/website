@@ -145,7 +145,8 @@ onMounted(() => {
                     </template>
                     <template v-else>
                         <template v-for="(group, i) of enabledGroups">
-                            <h3 class="groupTitle subsectionTitle" :class="{intermittent: i !== 0}">
+                            <h3 class="groupTitle subsectionTitle"
+                                :class="{intermittent: i !== 0}">
                                 {{ group.name }}
                             </h3>
                             <template
@@ -205,13 +206,13 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        gap: 48px;
+        gap: 3em;
 
         user-select: none;
 
         @include screenWidthAboveCriticalPoint {
             flex-direction: row;
-            gap: 16px;
+            gap: 1.5em;
         }
 
         @media print {
@@ -297,22 +298,31 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: inherit;
-            flex: 1 2 auto;
+            gap: 3em;
+            flex: 2 0 30%;
 
             @media print {
                 gap: 24px !important;
-                flex: 1 1 0;
+                flex: 2 1 0;
             }
 
             @include screenWidthAboveCriticalPoint {
-                gap: 48px;
                 position: sticky;
-                top: 100px;
-                bottom: 80px;
+                top: 5.8em;
+                bottom: 4.6em;
                 height: 100%;
+                flex: 2 0 40%;
                 align-items: start;
             }
+
+            @include screenWidthAbove($large) {
+                @include screenHeightBelow($small) {
+                    flex-direction: row;
+                    gap: 1em;
+                    flex: 2 0 50%;
+                }
+            }
+
             :deep(.subsubsectionTitle) {
                 text-align: left;
                 margin: 0 12px;

@@ -90,19 +90,6 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
             bottom: $navbarHeight;
             height: 5em;
             background: linear-gradient(transparent, $color 44%);
-            // On mobile browsers we need to stretch this element downwards because
-            // the element may not perfectly hug the bottom of the viewport while
-            // scrolling, leaving parts of the underlying text visible.
-            /* TODO: temporarily disabled
-            &::after {
-                display: block;
-                content: "";
-                transform: translate(0, 70px);
-                height: 100%;
-                width: 100%;
-                background: var(--color-background-2);
-            }
-             */
         }
     }
 }

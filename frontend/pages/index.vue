@@ -131,7 +131,7 @@ onMounted(() => {
                 class="%home-section-space-occupant"
                 :style="styleWithRelativeHeight(0.6)"
             />
-            <div class="introSectionContainer" v-if="relativeScrollY <= 2">
+            <div class="introSectionContainer">
                 <Shutter
                     class="shutter"
                     :style="styleStickyUntilThreshold(1)"

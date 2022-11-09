@@ -102,7 +102,7 @@ function shouldHighlight(skill: Skill) {
     display: flex;
     flex-direction: column;
     align-items: inherit;
-    gap: 16px;
+    gap: 1em;
 
     @media print {
         gap: 12px;
@@ -123,7 +123,7 @@ function shouldHighlight(skill: Skill) {
 
 .labelContainer {
     @include common.labelContainer;
-    column-gap: 20px;
+    column-gap: 0.8em;
     row-gap: 10px;
     justify-content: center;
 
@@ -155,7 +155,7 @@ function shouldHighlight(skill: Skill) {
         filter: drop-shadow(0 0 calc($scale * 8px) var(--color-secondary));
     }
 
-    @include screenSizeAbove($small) {
+    @include screenWidthAbove($small) {
         pointer-events: all;
 
         &:hover {
@@ -186,7 +186,7 @@ function shouldHighlight(skill: Skill) {
     }
 }
 
-$iconSize: 32px;
+$iconSize: 2.1em;
 
 .icon {
     width: $iconSize;

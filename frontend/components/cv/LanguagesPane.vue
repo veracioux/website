@@ -33,7 +33,7 @@
     display: flex;
     flex-direction: column;
     align-items: inherit;
-    gap: 16px;
+    gap: 1em;
 
     @media print {
         position: relative;
@@ -54,7 +54,7 @@
         }
 
         td:last-child {
-            font-size: 0.7em;
+            font-size: 0.9em;
         }
     }
 

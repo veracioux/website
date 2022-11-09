@@ -16,6 +16,13 @@
   }
 }
 
+@mixin screenHeightBelow($height) {
+  @media (max-height: $height) {
+    @content;
+  }
+}
+
+
 @mixin screenSizeAbove($width, $height: null) {
   @if $height == null {
     $height: $width;
@@ -29,6 +36,11 @@ $tablet: 480px;
 $small: 768px;
 $large: 1024px;
 $xlarge: 1280px;
+
+$tabletHeight: 360px;
+$smallHeight: 480px;
+$largeHeight: 768px;
+$xlargeHeight: 1024px;
 
 $monospace: "Roboto Mono";
 $navbarHeight: 3.2rem;
@@ -124,11 +136,11 @@ h1 {
 }
 
 h2 {
-  font-size: 1.6em;
+  font-size: 1.4em;
 }
 
 h3 {
-  font-size: 1.2em;
+  font-size: 1.1em;
 }
 
 pre {

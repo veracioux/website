@@ -71,7 +71,7 @@ const props = defineProps<{
         }
     }
 
-    @include screenSizeAbove($small) {
+    @include screenWidthAbove($small) {
         pointer-events: revert;
 
         .dot, .timeSpan, .description {
@@ -99,6 +99,12 @@ const props = defineProps<{
             }
         }
 
+        &.selected, &.active {
+            .dot {
+                background: var(--color-tertiary) !important;
+            }
+        }
+
         &:hover {
             @include scaleAll(1.015);
         }
@@ -111,16 +117,12 @@ const props = defineProps<{
             @include scaleAll(1.025);
         }
 
-        &.selected, &.active {
+        &.selected {
             @include scaleAll(1.035);
-
-            .dot {
-                background: var(--color-tertiary) !important;
-            }
         }
 
         &:hover.selected {
-            @include scaleAll(1.04);
+            @include scaleAll(1.045);
         }
     }
 

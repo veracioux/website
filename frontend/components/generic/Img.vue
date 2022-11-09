@@ -1,5 +1,19 @@
+<script setup lang="ts">
+
+import {onMounted, ref} from "vue";
+
+const img = ref<HTMLElement>();
+
+onMounted(() => {
+    setTimeout(() => {
+        img.value.classList.add("opaque");
+    }, 1000);
+    img.value.classList.add("transition");
+});
+</script>
+
 <template>
-    <img v-bind="$props" onload="this.style.opacity = 1" :class="[s.image, s.transparentAlt]" />
+    <img ref="img" v-bind="$props" :class="[s.image]" />
 </template>
 
 <style lang="scss" module="s">
@@ -7,10 +21,16 @@
 // Corresponding JS code is in App.vue.
 .image {
     opacity: 0;
-    transition: opacity 1s;
+    color: transparent;
 }
 
-.transparentAlt {
-    color: transparent;
+</style>
+
+<style scoped lang="scss">
+.transition {
+    transition: opacity 1s;
+}
+.opaque {
+    opacity: 1;
 }
 </style>
