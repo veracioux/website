@@ -5,6 +5,7 @@ import SocialIcon from "@/components/generic/SocialIcon.vue";
 import Img from "@/components/generic/Img.vue";
 import mugshot from "@/assets/mugshot.webp";
 import {shutterFullyOpenedScrollThreshold} from "@/constants";
+import * as utils from "@/utils";
 
 interface Slice {
     pivotX: number;
@@ -14,6 +15,8 @@ interface Slice {
 
 // Think of the shutter as a sliced pizza
 const numSlices = 10;
+
+const isMobile = utils.isMobile();
 
 const root = ref<HTMLElement>();
 const rotation = ref(0);
@@ -167,33 +170,10 @@ onMounted(() => {
             :style="{
                 filter:
                     'blur(' + 15 * Math.max(1 - 4 * relativeScrollY, 0) + 'px)',
+                ...(isMobile ? {transform: 'translateY(-27px)'} : {})
             }"
             :src="mugshot"
         />
-        <!-- TODO debugging helper
-        <Transition name="indicator">
-            <div :style="{
-            position: 'fixed',
-            padding: '200px 0 0 200px',
-            inset: 0,
-            zIndex: 200,
-            background: '#ff00ff55',
-        }" class="indicator" :key="resizeEvent">Height: {{configKonva.height}}</div>
-        </Transition>
-        <div
-            style="
-                position: fixed;
-                height: 100%;
-                width: 100vw;
-                z-index: 9999;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            "
-        >
-            <div style="background: red; width: 30px; height: 30px" />
-        </div>
-        -->
         <div ref="root">
             <ClientOnly>
                 <v-stage :config="configKonva">
@@ -272,6 +252,13 @@ Classes used temporarily for debugging.
         @include c.fillParent;
         box-shadow: inset 0 0 min(10vw, 10vh) var(--color-background-0);
     }
+}
+
+.shutterRootOnMobile {
+    display: none;
+    position: relative;
+    // TODO temporary dirty fix for mobile address bar bug
+    transform: translateY(300px);
 }
 </style>
 

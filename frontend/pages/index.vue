@@ -12,6 +12,7 @@ import CV from "@/components/sections/CV.vue";
 import About from "@/components/sections/About.vue";
 import Contact from "@/components/sections/Contact.vue";
 import {useRoute} from "#app";
+import * as utils from "@/utils";
 
 const zindex = reactive(_zindex);
 
@@ -20,6 +21,8 @@ const animatableVeraciouxTextElement = ref<HTMLElement>();
 const veraciouxTextFadeable = ref(false);
 const navbarOpaque = ref(useRoute().hash !== '');
 const navbar = ref<HTMLElement>();
+
+const isMobile = utils.isMobile();
 
 const {
     relativeScrollY,
@@ -135,7 +138,7 @@ onMounted(() => {
                 />
                 <Intro
                     class="intro"
-                    :style="styleStickyUntilThreshold(1)"
+                    :style="{...styleStickyUntilThreshold(1), ...(isMobile ? {transform: 'translateY(-30px)'} : {})}"
                     :veracioux-style="veraciouxStyle"
                     :veracioux-text-fadeable="veraciouxTextFadeable"
                     @veraciouxCrossedThreshold="onVeraciouxCrossedThreshold"
