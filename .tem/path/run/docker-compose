@@ -6,10 +6,14 @@
 
 cd "$(tem find -b website)"
 
+has_build_arg=
+
 for arg in "$@"; do
     if [ "$arg" = "--help" ] || [ "$arg" = "-h" ]; then
         tem run --no-tem docker-compose -f nonexistent "$@"
         exit
+    elif [ "$arg" = "--build" ]; then
+        has_build_arg=true
     fi
 done
 
@@ -22,7 +26,7 @@ fi
 # Generate the necessary Dockerfiles
 # NOTE: we are generating all dockerfiles every time because some containers
 # may have dependencies.
-if [ -z "$VERACIOUX_COMPOSE_NO_GEN" ]; then
+if [ -z "$VERACIOUX_COMPOSE_NO_GEN" ] && [ -n "$has_build_arg" ]; then
     dgen
 fi
 
