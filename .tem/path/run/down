@@ -4,9 +4,10 @@
 
 cd "$(tem find -b website)"
 
-if tem var env:prod; then
-    read -n 1 -p "You are on production. Proceed? [y:N]: " confirmation
-    if [ "$confirmation" != "y" -a "$confirmation" != "Y" ]; then
+if tem var -q env:prod; then
+    read -n 1 -p "You are on production. Proceed? [y/N]: " confirmation
+    echo
+    if [ "$confirmation" != "y" ] && [ "$confirmation" != "Y" ]; then
         exit 1
     fi
 fi
