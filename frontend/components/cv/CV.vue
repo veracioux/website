@@ -145,7 +145,7 @@ onMounted(() => {
                     </template>
                     <template v-else>
                         <template v-for="(group, i) of enabledGroups">
-                            <h3 :class="['groupTitle', {intermittent: i !== 0}]">
+                            <h3 class="groupTitle subsectionTitle" :class="{intermittent: i !== 0}">
                                 {{ group.name }}
                             </h3>
                             <template
@@ -192,11 +192,8 @@ onMounted(() => {
 
 $colorDimText: rgba(var(--color-text-rgb), 0.7);
 @mixin screenWidthAboveCriticalPoint {
-    @include screenWidthAbove($xlarge) {
+    @include screenWidthAbove($small) {
         @content;
-    }
-    @media only print and (min-width: $tablet) {
-        @content
     }
 }
 
@@ -224,6 +221,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
         .timelineWrapper {
             --timeline-background: var(--color-background-2);
             --timeline-background-rgb: var(--color-background-2-rgb);
+            flex: 2 1 auto;
 
             @media print {
                 position: relative;
@@ -242,10 +240,14 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
             position: relative;
             border-spacing: 16px 0;
             line-height: 2;
-            max-width: 900px;
+            max-width: 740px;
             height: fit-content;
 
             margin-left: 32px;
+
+            @include screenSizeAbove($large) {
+                max-width: 900px;
+            }
 
             // Remove border spacing from layout
             @media print {
@@ -296,6 +298,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
             flex-direction: column;
             align-items: center;
             gap: inherit;
+            flex: 1 2 auto;
 
             @media print {
                 gap: 24px !important;
@@ -310,12 +313,6 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
                 height: 100%;
                 align-items: start;
             }
-
-            :deep(.subsectionTitle) {
-                text-align: left;
-                color: var(--color-text);
-            }
-
             :deep(.subsubsectionTitle) {
                 text-align: left;
                 margin: 0 12px;

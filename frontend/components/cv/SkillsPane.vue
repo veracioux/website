@@ -132,7 +132,7 @@ function shouldHighlight(skill: Skill) {
         margin-right: 24px;
     }
 
-    @include screenWidthAbove($xlarge) {
+    @include screenWidthAbove($small) {
         justify-content: flex-start;
     }
 

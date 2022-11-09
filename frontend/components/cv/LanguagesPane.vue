@@ -52,10 +52,15 @@
             margin-left: -8px;
             margin-right: -8px;
         }
+
+        td:last-child {
+            font-size: 0.7em;
+        }
     }
 
     .columnDelimiter {
-        width: 2px;
+        min-width: 2px;
+        max-width: 2px;
         background: rgba(var(--color-secondary-rgb), 0.6);
     }
 }
