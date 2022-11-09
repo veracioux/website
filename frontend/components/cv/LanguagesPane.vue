@@ -5,13 +5,16 @@
             <tr>
                 <td>English</td>
                 <td rowspan="0" class="columnDelimiter"></td>
-                <td><b>Advanced</b> (TOEFL iBT score: 109/120, expired)</td>
+                <td><b>Advanced</b><br />
+                    <span style="white-space: nowrap">(TOEFL iBT score: 109/120, expired)</span>
+                </td>
             </tr>
             <tr>
                 <td>German</td>
                 <td>
-                    <b>Reading and Writing</b> (intermediate),
-                    <b>Speaking</b> (basic)
+                    <b>Reading and Writing</b> (intermediate),<br />
+                    <span
+                        style="white-space: nowrap"><b>Speaking</b> (basic)</span>
                 </td>
             </tr>
             <tr>
@@ -34,7 +37,7 @@
 
     @media print {
         position: relative;
-        padding: 16px;
+        padding: 24px;
         align-items: center;
         gap: 12px;
 
@@ -43,6 +46,12 @@
 
     .languageTable {
         border-spacing: 16px;
+
+        @media print {
+            border-spacing: 8px;
+            margin-left: -8px;
+            margin-right: -8px;
+        }
     }
 
     .columnDelimiter {

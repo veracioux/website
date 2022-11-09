@@ -131,7 +131,7 @@ onMounted(() => {
                 <table class="timeline">
                     <template
                         v-if="displayMode === 'timeline'"
-                        v-for="entry of enabledEntries.sort((a, b) => a.startDate < b.startDate )"
+                        v-for="entry of enabledEntries.sort((a, b) => a.startDate < b.startDate)"
                     >
                         <TimelineEntry
                             v-bind="entry"
@@ -149,7 +149,7 @@ onMounted(() => {
                                 {{ group.name }}
                             </h3>
                             <template
-                                v-for="(entry, j) of group.entries"
+                                v-for="(entry, j) of group.entries.sort((a, b) => a.startDate < b.startDate)"
                             >
                                 <TimelineEntry
                                     v-bind="entry"
@@ -278,11 +278,11 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
 
             .groupedTimeLineEntry {
                 &.marginTop:deep(.acceptsMargin) {
-                    @include timeline.responsiveVerticalMargin($top: 28px);
+                    @include timeline.responsiveVerticalMargin($top: 40px);
                 }
 
                 &.marginBottom:deep(.acceptsMargin) {
-                    @include timeline.responsiveVerticalMargin($bottom: 28px);
+                    @include timeline.responsiveVerticalMargin($bottom: 40px);
                 }
             }
         }

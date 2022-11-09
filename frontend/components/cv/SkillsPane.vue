@@ -7,6 +7,7 @@ import iconGit from "@/assets/icons/git-with-text.svg";
 import iconJetBrains from "@/assets/icons/jetbrains.svg";
 import iconLinux from "@/assets/icons/linux.svg";
 import iconEmacs from "@/assets/icons/emacs.svg";
+import {ContextIsPdf} from "~/inject";
 
 const props = defineProps<{
     variant?: string;
@@ -22,6 +23,8 @@ const emit = defineEmits<{
     (e: "leaveSkill"): void;
     (e: "selectSkill", skill: Skill): void;
 }>();
+
+const isPdf = ContextIsPdf.inject();
 
 const extraClasses: Partial<Record<keyof typeof skills, string>> = {
     bash: "iconBash",
@@ -54,6 +57,7 @@ function shouldHighlight(skill: Skill) {
 }
 
 </script>
+
 <template>
     <div class="skillsPaneRoot">
         <h2 class="subsectionTitle" style="margin-top: 0">Skills</h2>
@@ -68,14 +72,21 @@ function shouldHighlight(skill: Skill) {
                         @mouseleave="emit('leaveSkill')"
                         @click.stop="emit('selectSkill', skill)"
                     >
-                        <Icon
-                            v-if="skill.icon"
-                            :src="skill.icon"
-                            :alt="skill.name"
-                            :title="skill.name"
-                            :class="`icon ${extraClasses[skill.key] ?? ''}`"
-                        />
+                        <template v-if="skill.icon">
+                            <Icon
+                                :src="skill.icon"
+                                :alt="skill.name"
+                                :title="skill.name"
+                                :class="`icon ${extraClasses[skill.key] ?? ''}`"
+                            />
+                            <span v-if="isPdf" class="name">
+                                {{ skill.name }}
+                            </span>
+                        </template>
                         <Label v-else :title="skill.name" />
+                        <span v-if="isPdf && skill.experience" class="experience">
+                            {{ skill.experience }}
+                        </span>
                     </span>
                 </div>
             </template>
@@ -104,7 +115,7 @@ function shouldHighlight(skill: Skill) {
         padding: 16px;
         align-items: center;
 
-        --icon-scale-multiplier: 0.8;
+        --icon-scale-multiplier: 0.6;
 
         @include common.beveledFrame(16px, 2px, #ccc, #f7f7f7);
     }
@@ -112,6 +123,8 @@ function shouldHighlight(skill: Skill) {
 
 .labelContainer {
     @include common.labelContainer;
+    column-gap: 20px;
+    row-gap: 10px;
     justify-content: center;
 
     @media not print {
@@ -129,9 +142,12 @@ function shouldHighlight(skill: Skill) {
 }
 
 .skill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
     transition: transform 0.1s ease-in-out;
     cursor: pointer;
-
     pointer-events: none;
 
     @mixin scaleAndShadow($scale) {
@@ -161,6 +177,12 @@ function shouldHighlight(skill: Skill) {
         &:hover.selected {
             @include scaleAndShadow(1.16);
         }
+    }
+
+    color: var(--color-text-pale);
+
+    .experience {
+        font-size: 0.7em;
     }
 }
 

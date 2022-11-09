@@ -25,6 +25,7 @@ export interface Skill {
     icon?: string;
     disabled?: boolean;
     group?: SkillGroup;
+    experience?: string;
 }
 
 export interface SkillGroup {
@@ -61,46 +62,55 @@ const _skills = {
         name: "JavaScript",
         icon: iconJS,
         group: skillGroups.programmingLanguages,
+        experience: "1 year",
     },
     typescript: {
         name: "TypeScript",
         icon: iconTS,
         group: skillGroups.programmingLanguages,
+        experience: "1 year",
     },
     c: {
         name: "C",
         icon: iconC,
         group: skillGroups.programmingLanguages,
+        experience: "1 year",
     },
     cpp: {
         name: "C++",
         icon: iconCpp,
         group: skillGroups.programmingLanguages,
+        experience: "3 years"
     },
     python: {
         name: "Python",
         icon: iconPython,
         group: skillGroups.programmingLanguages,
+        experience: "2 years",
     },
     bash: {
         name: "Bash",
         icon: iconBash,
         group: skillGroups.programmingLanguages,
+        experience: "2 years",
     },
     qt: {
         name: "Qt",
         icon: iconQt,
         group: skillGroups.frameworksAndTechnologies,
+        experience: "1 year",
     },
     react: {
         name: "ReactJS",
         icon: iconReact,
         group: skillGroups.frameworksAndTechnologies,
+        experience: "1 year",
     },
     vue: {
         name: "Vue.js",
         icon: iconVue,
         group: skillGroups.frameworksAndTechnologies,
+        experience: "6 months",
     },
     django: {
         name: "Django",
@@ -112,6 +122,7 @@ const _skills = {
         name: "Ethereum",
         icon: iconEthereum,
         group: skillGroups.frameworksAndTechnologies,
+        experience: "6 months",
     },
     solana: {
         name: "Solana",
@@ -123,35 +134,44 @@ const _skills = {
         name: "Nginx",
         icon: iconNginx,
         group: skillGroups.frameworksAndTechnologies,
+        experience: "6 months",
     },
     docker: {
         name: "Docker",
         icon: iconDocker,
         group: skillGroups.otherTools,
+        experience: "1 year",
     },
     git: {
         name: "Git",
         icon: iconGit,
         group: skillGroups.otherTools,
+        experience: "3 years",
     },
     jetbrains: {
         name: "JetBrains",
         icon: iconJetBrains,
         group: skillGroups.otherTools,
+        experience: "1 year",
+        disabled: true,
     },
     linux: {
         name: "Linux",
         icon: iconLinux,
         group: skillGroups.otherTools,
+        experience: "3 years",
     },
     emacs: {
         name: "Emacs",
         icon: iconEmacs,
         group: skillGroups.otherTools,
+        experience: "2 years",
+        disabled: true,
     },
     plc: {
         name: "PLC programming",
         group: skillGroups.automation,
+        experience: "6 months",
     },
     tiaPortal: {
         name: "TIA Portal",
