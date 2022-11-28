@@ -250,7 +250,7 @@ export const groups = _groups as Record<keyof typeof _groups, Group>;
 let _entries = {
     evoltSoftwareEngineer: {
         node: () => <span><a href="https://www.linkedin.com/company/evolt-dev/"
-                             target="_blank"><b>Evolt</b></a>, Software Engineer</span>,
+                             target="_blank"><b>Evolt</b></a>, Software Engineer, Full-Time</span>,
         startDate: "2022-01",
         displayDate: "Jan 2022 - present",
         skills: [skills.javascript, skills.typescript, skills.react, skills.git, skills.docker, skills.ethereum, skills.docker, skills.jetbrains, skills.docker],
