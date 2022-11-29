@@ -9,6 +9,15 @@ through tem, this is done automatically.
 {%- endset %}
 {%- set suffix -%}{% if env == 'prod' %}-prod{% endif %}{% endset %}
 
+{%- set worker_env_files %}
+      - worker/.env/common
+  {%- if env == 'staging' %}
+      - worker/.env/staging.secret
+  {%- elif env == 'prod' %}
+      - worker/.env/prod.secret
+  {%- endif %}
+{%- endset %}
+
 version: '3.4'
 
 services:
@@ -33,10 +42,7 @@ services:
       - ./.env/prod
       - ./.env/prod.secret
       {%- endif %}
-      - worker/.env/common
-      {%- if env == 'prod' %}
-      - worker/.env/prod.secret
-      {%- endif %}
+      {{worker_env_files}}
 
   rabbitmq:
     image: rabbitmq:3.7
@@ -45,10 +51,7 @@ services:
     ports: ["$RABBITMQ_PORT:5672"]
     {%- endif %}
     env_file:
-      - worker/.env/common
-      {%- if env == 'prod' %}
-      - worker/.env/prod.secret
-      {%- endif %}
+      {{worker_env_files}}
 
   web:
     # Image
@@ -60,7 +63,7 @@ services:
     # Container
     container_name: veracioux-web{{suffix}}
     restart: always
-    depends_on: [db, rabbitmq]
+    depends_on: [db, worker]
     ports:
       {%- if env == "staging" and device == "public" %}
       - "$WEB_PORT_STAGING:$WEB_PORT"
@@ -69,15 +72,14 @@ services:
       {%- endif %}
       {%- if env == 'dev' or env == 'staging' %}
       - "$BACKEND_PORT:$BACKEND_PORT"
-      - "$WORKER_SERVER_PORT:$WORKER_SERVER_PORT"
       {%- endif %}
     env_file: *env_file
     environment: &env
       {%- if env == 'dev' %}
       - PYTHONDONTWRITEBYTECODE=true
       {%- endif %}
-      - RABBITMQ_HOST=rabbitmq
       - DB_HOST=db
+      - RABBITMQ_HOST=rabbitmq
     {%- if env == 'dev' %}
     volumes:
       - .:/app:rw
@@ -88,6 +90,26 @@ services:
     {%- if env == 'dev' %}
     user: {{uid}}:{{gid}}
     {%- endif %}
+
+  worker:
+    # Image
+    image: docker.veracioux.me/worker:{{tag}}
+    build:
+      context: worker
+      dockerfile: _docker/Dockerfile.worker.{{env}}
+
+    # Container
+    container_name: veracioux-worker{{suffix}}
+    restart: always
+    depends_on: [rabbitmq]
+    ports:
+      {%- if env == 'dev' or env == 'staging' %}
+      - "$WORKER_SERVER_PORT:$WORKER_SERVER_PORT"
+      {%- endif %}
+    env_file:
+      - ./.env/common
+      {{worker_env_files}}
+    environment: *env
 
   worker_dotfiles:
     # Image
@@ -100,12 +122,7 @@ services:
     container_name: veracioux-worker_dotfiles{{suffix}}
     env_file:
       - ./.env/common
-      - worker/.env/common
-      {%- if env == 'staging' %}
-      - worker/.env/staging.secret
-      {%- elif env == 'prod' %}
-      - worker/.env/prod.secret
-      {%- endif %}
+      {{worker_env_files}}
     environment: *env
 
   mail:

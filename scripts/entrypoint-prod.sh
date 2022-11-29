@@ -11,10 +11,6 @@ echo -n "Running production web server on port $WEB_PORT"
 set -e
 scripts/wait-for-it.sh -h "$DB_HOST" -p "$DB_PORT" -t 180
 
-cd worker/
-pnpm run server &
-cd ..
-
 scripts/collectstatic.sh
 python3 manage.py migrate
 if [ "$ENVIRONMENT" = "staging" ]; then

@@ -5,7 +5,7 @@ if tem var -q env:prod; then
     prod="prod"
 fi
 
-containers=(veracioux-{web,db,worker_dotfiles,rabbitmq}"$prod")
+containers=(veracioux-{web,db,worker,worker_dotfiles,rabbitmq}"$prod")
 
 inspect() {
     docker inspect --format '{{.State.Running}}' "${containers[@]}" 2>/dev/null

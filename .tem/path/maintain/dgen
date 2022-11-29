@@ -7,17 +7,21 @@ project_root="$(tem find -b website)"
 process_types=("$@")
 
 if [ -z "$process_types" ]; then
-    process_types=(web worker_dotfiles mail)
+    process_types=(web worker worker_dotfiles mail)
 fi
 
 export ENVIRONMENT="$(tem var env)"
 export DEVICE="$(tem var device)"
 
-mkdir -p _docker
+mkdir -p _docker worker/_docker
 
 for process_type in "${process_types[@]}"; do
-    echo "Generating _docker/Dockerfile.$process_type.$ENVIRONMENT ..."
+    prefix=""
+    if [ "$process_type" = "worker" ]; then
+        prefix=worker/
+    fi
+    echo "Generating ${prefix}_docker/Dockerfile.$process_type.$ENVIRONMENT ..."
     shdocker \
         -s "$project_root/docker/shDockerfile.$process_type" \
-        -d "$project_root/_docker/Dockerfile.$process_type.$ENVIRONMENT"
+        -d "$project_root/${prefix}_docker/Dockerfile.$process_type.$ENVIRONMENT"
 done

@@ -5,7 +5,7 @@
 
 # Docker
 docker
-Dockerfile*
+_docker
 docker-compose.*yaml*
 
 .pylintrc
@@ -18,8 +18,7 @@ Pipfile
 **/node_modules
 frontend/dist
 
-worker/server.js
-worker/worker.js
+worker
 
 blog
 mail

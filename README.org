@@ -36,7 +36,7 @@ The plan is to have them organized in the following docker containers
 - =worker_<name>= :: Each individual worker is its own docker container. It
   consumes a message from the MQ and runs its task.
 
-/NOTE: Currently, the =web= service runs both the API backend and worker server, and proxies them internally through nginx and also serves the static frontend via nginx./
+/NOTE: Currently, the =web= service runs nginx and the API backend. The frontend is served statically, while the API backend is proxied through nginx./
 
 /NOTE: All config files ending with =.in= are preprocessed by jinja2. Scripts ending with =.in= are meant to be sourced instead of executed./
 

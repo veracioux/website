@@ -1,0 +1,21 @@
+# Context: $PROJECT/worker
+
+alpine_version=3.15
+node_version=16.18
+
+FROM "node:$node_version-alpine$alpine_version"
+
+RUN apk add --no-cache curl bash
+
+RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
+
+WORKDIR /worker
+COPY package.json pnpm-lock.yaml entrypoint.sh ./
+COPY scripts/wait-for-it.sh scripts/
+RUN pnpm install --frozen-lockfile
+
+COPY . .
+
+CMD ./entrypoint.sh
+
+# vim: filetype=dockerfile

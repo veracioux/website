@@ -3,6 +3,7 @@
 
 alpine_version=3.15
 python_version=3.9
+node_version=16.18
 
 node_canvas_deps=(
     build-base
@@ -15,15 +16,13 @@ node_canvas_deps=(
 
 # Separate frontend build stage; reduces final image size
 if [ "$ENVIRONMENT" != "dev" ]; then
-    FROM node:16.15-alpine"$alpine_version" as frontend
+    FROM "node:$node_version-alpine$alpine_version" as frontend
 
     ## Install deps for "canvas" node package
     RUN apk add --no-cache curl "${node_canvas_deps[@]}"
 
     # Install pnpm
     RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
-    RUN curl -L https://unpkg.com/@pnpm/self-installer
-    RUN which pnpm
 
     WORKDIR /frontend
     COPY frontend/{package.json,pnpm-lock.yaml} ./
@@ -88,19 +87,13 @@ if [ "$ENVIRONMENT" = "dev" ]; then
     RUN apk add --no-cache "${node_canvas_deps[@]}"
 fi
 
-## Required by 'heroku ps:exec' and wait-for-it.sh
+## Required by wait-for-it.sh
 RUN apk add --no-cache bash
 RUN ln -sf /bin/bash /bin/sh
 
 #  --------------------------
 ## Install local dependencies
 #  --------------------------
-
-## Worker server
-
-WORKDIR /app/worker
-COPY worker/{package.json,pnpm-lock.yaml} ./
-RUN pnpm install --frozen-lockfile
 
 ## Backend dependencies
 

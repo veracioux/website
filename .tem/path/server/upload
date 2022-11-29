@@ -33,7 +33,7 @@ code="$?"
 if [ "$code" != 0 ]; then
     # Docker registry not running
     echo_and_notify "Registry not running. Pushing manually as tar.gz file..."
-    images=(docker.veracioux.me/{web,worker_dotfiles,mail}:"$tag")
+    images=(docker.veracioux.me/{web,worker,worker_dotfiles,mail}:"$tag")
     docker save "${images[@]}" | gzip > /tmp/veracioux-images.tar.gz
     rsync --update --verbose --progress {,"$VPS_IP:"}/tmp/veracioux-images.tar.gz
     ssh "$VPS_IP" bash -c "gunzip /tmp/veracioux-images.tar.gz | docker load"
