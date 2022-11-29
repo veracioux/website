@@ -1,5 +1,0 @@
-#!/usr/bin/env sh
-
-cd "$(tem find -b website)"
-
-docker run --volume "$PWD/frontend:/app/frontend:rw" alpine rm -rf /app/frontend/dist
