@@ -63,7 +63,7 @@ services:
     # Container
     container_name: veracioux-web{{suffix}}
     restart: always
-    depends_on: [db, worker]
+    depends_on: [api, worker]
     ports:
       {%- if env == "staging" and device == "public" %}
       - "$WEB_PORT_STAGING:$WEB_PORT"
@@ -83,13 +83,39 @@ services:
     {%- if env == 'dev' %}
     volumes:
       - .:/app:rw
+      - web_static:/var/static_root:rw
     {%- elif env == 'staging' and device == 'public' %}
     volumes:
       - $HOME/auth:/var/www/auth
+      - web_static:/var/static_root:rw
     {%- endif %}
     {%- if env == 'dev' %}
     user: {{uid}}:{{gid}}
     {%- endif %}
+
+  api:
+    # Image
+    image: docker.veracioux.me/api:{{tag}}
+    build:
+      context: api
+      dockerfile: _docker/Dockerfile.api.{{env}}
+
+    # Container
+    container_name: veracioux-api{{suffix}}
+    restart: always
+    depends_on: [db]
+    ports:
+      {%- if env == 'dev' or env == 'staging' %}
+      - "$BACKEND_PORT:$BACKEND_PORT"
+      {%- endif %}
+    environment:
+      - DB_HOST=db
+    env_file: *env_file
+    {%- if env == 'dev' %}
+    user: {{uid}}:{{gid}}
+    {%- endif %}
+    volumes:
+      - web_static:/var/static_root:rw
 
   worker:
     # Image
@@ -151,5 +177,8 @@ services:
       - "${HOME}/auth:/auth"
       - "${HOME}/docker-registry:/var/lib/registry"
   {%- endif %}
+
+volumes:
+  web_static:
 
 # vim: filetype=yaml

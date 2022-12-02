@@ -75,9 +75,6 @@ FROM python:"$python_version"-alpine"$alpine_version"
 
 RUN apk add --no-cache nodejs curl
 
-# Required by Pillow
-RUN apk add --no-cache zlib jpeg linux-headers
-
 # Install pnpm
 RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
 # Install web server dependencies
@@ -87,23 +84,9 @@ if [ "$ENVIRONMENT" = "dev" ]; then
     RUN apk add --no-cache "${node_canvas_deps[@]}"
 fi
 
-## Required by wait-for-it.sh
-RUN apk add --no-cache bash
-RUN ln -sf /bin/bash /bin/sh
-
 #  --------------------------
 ## Install local dependencies
 #  --------------------------
-
-## Backend dependencies
-
-# See 'python' build stage
-
-COPY --from=python /usr/local/lib/python"$python_version"{,}
-COPY --from=python /usr/local/bin{,}
-SHDOCKER quote off
-ENV 'PATH=/usr/local/bin:${PATH}'
-SHDOCKER quote on
 
 ## Frontend
 

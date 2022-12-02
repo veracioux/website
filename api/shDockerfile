@@ -1,0 +1,30 @@
+alpine_version=3.15
+python_version=3.9
+
+FROM python:"$python_version"-alpine"$alpine_version"
+
+## Dependencies for psycopg2
+RUN apk add --no-cache libpq libpq-dev
+## Dependencies for pillow
+RUN apk add --no-cache python3-dev gcc musl-dev zlib-dev jpeg-dev
+RUN apk add --no-cache zlib jpeg linux-headers
+## Install pipenv
+RUN pip install --no-cache-dir pipenv
+
+## Required by wait-for-it.sh
+RUN apk add --no-cache bash
+RUN ln -sf /bin/bash /bin/sh
+
+WORKDIR /app
+COPY Pipfile.lock ./
+
+RUN pipenv sync
+
+SHDOCKER quote off
+ENV 'PATH=/usr/local/bin:${PATH}'
+SHDOCKER quote on
+
+COPY . .
+CMD pipenv run scripts/entrypoint.sh
+
+# vim: filetype=dockerfile

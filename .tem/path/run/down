@@ -16,7 +16,7 @@ for arg in "$@"; do
     if ! [[ "$arg" == -* ]]; then
         positional_args=("${positional_args[@]}" "$arg")
     fi
-    if [ "$arg" = "web" ] && command -v yq >/dev/null; then
+    if [ "$arg" = "web" -o "$arg" = "api" ] && command -v yq >/dev/null; then
         _gen_docker_compose
         positional_args=(
             "${positional_args[@]}"

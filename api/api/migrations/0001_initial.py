@@ -3,7 +3,7 @@
 import django.db.models.deletion
 from django.db import migrations, models
 
-import backend.api.models
+import api.models
 
 
 class Migration(migrations.Migration):
@@ -77,7 +77,7 @@ class Migration(migrations.Migration):
                     "image",
                     models.ImageField(
                         null=True,
-                        upload_to=backend.api.models.image_storage_path,
+                        upload_to=api.models.image_storage_path,
                     ),
                 ),
                 ("email", models.EmailField(max_length=254, null=True)),
@@ -91,7 +91,7 @@ class Migration(migrations.Migration):
                 (
                     "gpg_public_key",
                     models.FileField(
-                        upload_to=backend.api.models.gpg_key_storage_path
+                        upload_to=api.models.gpg_key_storage_path
                     ),
                 ),
                 ("gpg_signature", models.TextField(default=str)),

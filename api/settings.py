@@ -1,4 +1,4 @@
-"""Django settings for backend project."""
+"""Django settings for API backend project."""
 
 import os
 from pathlib import Path
@@ -30,7 +30,7 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # Application definition
 
 INSTALLED_APPS = [
-    "backend.api",
+    "api",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -50,7 +50,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "backend.urls"
+ROOT_URLCONF = "urls"
 
 TEMPLATES = [
     {
@@ -119,7 +119,7 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = "/var/static_root/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "frontend/dist/static")]
+STATICFILES_DIRS = []
 
 # File storage
 if env("ENVIRONMENT") != "dev":

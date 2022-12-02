@@ -1,10 +1,10 @@
-"""backend URL configuration"""
+"""API backend URL configuration"""
 from django.contrib import admin
 from django.http import HttpRequest, HttpResponse
 from django.urls import include, path, re_path
 from django.conf import settings
 
-from backend.views import dotfiles
+from views import dotfiles
 
 
 def echo(request: HttpRequest):
@@ -14,8 +14,8 @@ def echo(request: HttpRequest):
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include("backend.api.urls")),
+    path("api/", include("api.urls")),
     path("dotfiles", dotfiles),
     # Utility endpoint for debugging request headers received from proxy
-    re_path("^backend/echo/?$", echo),
+    re_path("^api/echo/?$", echo),
 ]

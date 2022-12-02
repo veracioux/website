@@ -7,21 +7,56 @@ project_root="$(tem find -b website)"
 process_types=("$@")
 
 if [ -z "$process_types" ]; then
-    process_types=(web worker worker_dotfiles mail)
+    process_types=(web api worker worker_dotfiles mail)
 fi
+
+# Variables indicating if Dockerfile for corresponding process should be generated
+web=
+api=
+worker=
+worker_dotfiles=
+mail=
+
+for process_type in "${process_types[@]}"; do
+    declare "$process_type"=true
+done
 
 export ENVIRONMENT="$(tem var env)"
 export DEVICE="$(tem var device)"
 
-mkdir -p _docker worker/_docker
+mkdir -p _docker {worker,api}/_docker
 
-for process_type in "${process_types[@]}"; do
-    prefix=""
-    if [ "$process_type" = "worker" ]; then
-        prefix=worker/
-    fi
-    echo "Generating ${prefix}_docker/Dockerfile.$process_type.$ENVIRONMENT ..."
+# Usage: generate process_type shDockerfile dockerfile_dest_dir
+generate() {
+    process_type="$1"
+    shDockerfile="$2"
+    dest_dir="$3"
+    dest_file="$project_root/$dest_dir/Dockerfile.$process_type.$ENVIRONMENT"
+    echo "Generating $dest_file ..."
+
     shdocker \
-        -s "$project_root/docker/shDockerfile.$process_type" \
-        -d "$project_root/${prefix}_docker/Dockerfile.$process_type.$ENVIRONMENT"
-done
+        -s "$project_root/$shDockerfile" \
+        -d "$dest_file"
+}
+
+[ -n "$web" ]             && generate web docker/shDockerfile.web _docker
+[ -n "$api" ]             && generate api api/shDockerfile api/_docker
+[ -n "$worker" ]          && generate worker docker/shDockerfile.worker worker/_docker
+[ -n "$worker_dotfiles" ] && generate worker_dotfiles docker/shDockerfile.worker_dotfiles _docker
+[ -n "$mail" ]            && generate mail docker/shDockerfile.mail _docker
+
+exit
+
+# TODO remove
+#for process_type in "${process_types[@]}"; do
+#    prefix=""
+#    if [ "$process_type" = "worker" ]; then
+#        prefix=worker/
+#    elif [ "$process_type" = "api" ]; then
+#        prefix=api/
+#    fi
+#    echo "Generating ${prefix}_docker/Dockerfile.$process_type.$ENVIRONMENT ..."
+#    shdocker \
+#        -s "$project_root/docker/shDockerfile.$process_type" \
+#        -d "$project_root/${prefix}_docker/Dockerfile.$process_type.$ENVIRONMENT"
+#done

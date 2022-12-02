@@ -13,13 +13,3 @@ rm -rf /app/frontend/node_modules
 pnpm install --shamefully-hoist --frozen-lockfile --no-verify-store-integrity --dir frontend
 
 pnpm --dir frontend run dev &
-
-# Wait for database
-scripts/wait-for-it.sh -h db -p "$DB_PORT" -t 15
-
-scripts/collectstatic.sh
-python3 manage.py migrate
-python3 manage.py createsuperuser --noinput
-python3 manage.py loaddata projects.json
-
-python3 manage.py runserver $BACKEND_HOST:$BACKEND_PORT
