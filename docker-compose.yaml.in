@@ -111,11 +111,14 @@ services:
     environment:
       - DB_HOST=db
     env_file: *env_file
+    volumes:
+      - web_static:/var/static_root:rw
+      {%- if env == 'dev' %}
+      - ./:/var/testson/booboo
+      {%- endif %}
     {%- if env == 'dev' %}
     user: {{uid}}:{{gid}}
     {%- endif %}
-    volumes:
-      - web_static:/var/static_root:rw
 
   worker:
     # Image

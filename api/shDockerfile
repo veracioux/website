@@ -18,13 +18,21 @@ RUN ln -sf /bin/bash /bin/sh
 WORKDIR /app
 COPY Pipfile.lock ./
 
-RUN pipenv sync
+RUN pipenv requirements '>' requirements.txt
+RUN pip install -r requirements.txt
 
 SHDOCKER quote off
 ENV 'PATH=/usr/local/bin:${PATH}'
 SHDOCKER quote on
 
 COPY . .
-CMD pipenv run scripts/entrypoint.sh
+
+if [ "$ENVIRONMENT" = "dev" ]; then
+    RUN adduser -u "$(id -u)" -D user
+    RUN mkdir -p /var/static_root '&&' chown -R user . /var/static_root
+    USER user
+fi
+
+CMD scripts/entrypoint.sh
 
 # vim: filetype=dockerfile

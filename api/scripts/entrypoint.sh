@@ -11,7 +11,14 @@ if [ "$ENVIRONMENT" = "dev" ]; then
 fi
 scripts/wait-for-it.sh -h db -p "$DB_PORT" -t "$db_timeout"
 
+set +e
 python3 manage.py collectstatic --noinput
+if [ "$?" != "0" ]; then
+    echo "TIP: Try removing the web_static docker volume..."
+    exit 1
+fi
+set -e
+
 python3 manage.py migrate
 
 if [ "$ENVIRONMENT" != "prod" ]; then

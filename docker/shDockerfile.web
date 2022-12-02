@@ -40,34 +40,11 @@ if [ "$ENVIRONMENT" != "dev" ]; then
     RUN pnpm svgo -f assets/icons -o dist/static/icons
 fi
 
-# Separate python dependencies build stage; reduces final image size
-{
-    FROM python:"$python_version"-alpine"$alpine_version" as python
-
-    ## Dependencies for psycopg2
-    RUN apk add --no-cache libpq
-    RUN apk add --no-cache libpq-dev
-    ## Dependencies for pillow
-    RUN apk add --no-cache python3-dev gcc musl-dev zlib-dev jpeg-dev
-    RUN apk add --no-cache zlib jpeg linux-headers
-    ## Install pipenv
-    RUN pip install --no-cache-dir pipenv pipfile-requirements
-
-    WORKDIR /python
-    COPY Pipfile.lock ./
-    RUN pipfile2req '>' requirements.txt
-
-    RUN pip install --no-cache-dir -r requirements.txt
-
-    # Remove unnecessary packages
-    RUN pip uninstall --yes pipenv pipfile-requirements
-}
-
 #  ==========
 ## Main stage
 #  ==========
 
-FROM python:"$python_version"-alpine"$alpine_version"
+FROM "alpine:$alpine_version"
 
 #  ---------------------------
 ## Install global dependencies
