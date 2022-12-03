@@ -2,7 +2,6 @@
 # Dockerfile used by docker-compose
 
 alpine_version=3.15
-python_version=3.9
 node_version=16.18
 
 node_canvas_deps=(
@@ -44,34 +43,23 @@ fi
 ## Main stage
 #  ==========
 
-FROM "alpine:$alpine_version"
+# Using edge for now because it provides jinja2-cli
+FROM "alpine:edge"
 
 #  ---------------------------
 ## Install global dependencies
 #  ---------------------------
 
-RUN apk add --no-cache nodejs curl
+RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+    nginx gettext php81-fpm php81-session apache2-utils jinja2-cli
 
-# Install pnpm
-RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
-# Install web server dependencies
-RUN apk add --no-cache nginx gettext php8-fpm php8-session apache2-utils
 if [ "$ENVIRONMENT" = "dev" ]; then
+    RUN apk add --no-cache nodejs curl
+    # Install pnpm
+    RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
     ## Install deps for "canvas" node package
     RUN apk add --no-cache "${node_canvas_deps[@]}"
 fi
-
-#  --------------------------
-## Install local dependencies
-#  --------------------------
-
-## Frontend
-
-if [ "$ENVIRONMENT" != "dev" ]; then
-    COPY --from=frontend /frontend/dist /app/frontend/dist
-fi
-
-# NOTE: the development container will run a build at runtime
 
 #  ------------
 ## The rest...
@@ -82,21 +70,20 @@ COPY . /app
 
 # Set up reverse proxy
 if [ "$ENVIRONMENT" = "staging" ]; then
-    COPY proxy/php-fpm.conf /etc/php8/php-fpm.d/www.conf
-    COPY proxy/php.ini /etc/php8/php.ini
+    COPY proxy/php-fpm.conf /etc/php81/php-fpm.d/www.conf
+    COPY proxy/php.ini /etc/php81/php.ini
     COPY proxy/dummy.staging.htpasswd /var/www/auth/staging.htpasswd
 fi
 
 if [ "$ENVIRONMENT" = "dev" ]; then
     RUN adduser -u "$(id -u)" -D user
-    RUN mkdir -p /var/static_root '&&' chown -R user /app /var/static_root
+    RUN chown -R user .
     USER user
-fi
 
-if [ "$ENVIRONMENT" = "dev" ]; then
     CMD scripts/entrypoint-dev.sh
 else
     ENV DEVICE="$DEVICE"
+    COPY --from=frontend /frontend/dist /app/frontend/dist
     CMD scripts/entrypoint-prod.sh
 fi
 

@@ -84,6 +84,9 @@ browser via cookie so you don't have to enter it every time.
 
 **5000**: Docker registry
 
+* Setting up the server
+- Bind =docker.veracioux.me= to =localhost= in =/etc/hosts=.
+- TODO more
 * Available commands
 - Deploy locally: =up=
 - Force remove all containers locally: =down=

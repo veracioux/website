@@ -2,13 +2,14 @@
 .tem
 .idea
 .env
+.gitignore
 
 # Docker
 docker
 _docker
 docker-compose.*yaml*
 
-.pylintrc
+# Python
 pyproject.toml
 Pipfile
 
@@ -18,10 +19,13 @@ Pipfile
 **/node_modules
 frontend/dist
 
+# Services - they use separate dockerfiles
+api
 worker
-
 blog
 mail
-
 host
+
+# Misc
 nginx.host.conf.in
+*.org

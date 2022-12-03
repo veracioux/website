@@ -70,14 +70,12 @@ services:
       {%- else %}
       - "$WEB_PORT:$WEB_PORT"
       {%- endif %}
-      {%- if env == 'dev' or env == 'staging' %}
-      - "$BACKEND_PORT:$BACKEND_PORT"
-      {%- endif %}
     env_file: *env_file
     environment: &env
       {%- if env == 'dev' %}
       - PYTHONDONTWRITEBYTECODE=true
       {%- endif %}
+      - BACKEND_HOST=api
       - DB_HOST=db
       - RABBITMQ_HOST=rabbitmq
     {%- if env == 'dev' %}
@@ -114,7 +112,7 @@ services:
     volumes:
       - web_static:/var/static_root:rw
       {%- if env == 'dev' %}
-      - ./:/var/testson/booboo
+      - ./api:/app:rw
       {%- endif %}
     {%- if env == 'dev' %}
     user: {{uid}}:{{gid}}

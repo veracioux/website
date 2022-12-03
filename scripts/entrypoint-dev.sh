@@ -12,4 +12,4 @@ set -e
 rm -rf /app/frontend/node_modules
 pnpm install --shamefully-hoist --frozen-lockfile --no-verify-store-integrity --dir frontend
 
-pnpm --dir frontend run dev &
+pnpm --dir frontend run dev
