@@ -1,5 +1,3 @@
-# Context: $PROJECT/worker
-
 alpine_version=3.15
 node_version=16.18
 

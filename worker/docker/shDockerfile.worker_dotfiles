@@ -11,7 +11,7 @@ fi
 # ------------------------------------------------------------------------------
 ## Stage: build /worker/worker.js
 
-source shDockerfile.worker_common.in
+source shDockerfile.common.in
 RUN pnpm run build_worker
 
 # ------------------------------------------------------------------------------

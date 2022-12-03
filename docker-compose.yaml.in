@@ -42,7 +42,6 @@ services:
       - ./.env/prod
       - ./.env/prod.secret
       {%- endif %}
-      {{worker_env_files}}
 
   rabbitmq:
     image: rabbitmq:3.7
@@ -161,7 +160,7 @@ services:
     # Image
     image: docker.veracioux.me/worker_dotfiles:{{tag}}
     build:
-      context: .
+      context: worker
       dockerfile: _docker/Dockerfile.worker_dotfiles.{{env}}
 
     # Container
@@ -169,7 +168,8 @@ services:
     env_file:
       - ./.env/common
       {{worker_env_files}}
-    environment: *env
+    environment:
+      - RABBITMQ_HOST=rabbitmq
 
   mail:
     # Image

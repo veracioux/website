@@ -8,9 +8,9 @@ RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
 
 WORKDIR /worker
 
-COPY worker/package.json worker/pnpm-lock.yaml /worker/
+COPY package.json pnpm-lock.yaml /worker/
 RUN pnpm install
 
-COPY worker /worker
+COPY . /worker
 
 # vim: filetype=dockerfile

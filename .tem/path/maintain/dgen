@@ -45,8 +45,8 @@ generate() {
 
 [ -n "$web" ]             && generate web shDockerfile _docker
 [ -n "$api" ]             && generate api api/shDockerfile api/_docker
-[ -n "$worker" ]          && generate worker docker/shDockerfile.worker worker/_docker
-[ -n "$worker_dotfiles" ] && generate worker_dotfiles docker/shDockerfile.worker_dotfiles _docker
+[ -n "$worker" ]          && generate worker worker/docker/shDockerfile.worker worker/_docker
+[ -n "$worker_dotfiles" ] && generate worker_dotfiles worker/docker/shDockerfile.worker_dotfiles worker/_docker
 [ -n "$mail" ]            && generate mail docker/shDockerfile.mail _docker
 [ -n "$frontend_dev" ]    && generate frontend_dev frontend/docker/shDockerfile frontend/_docker
 
