@@ -15,7 +15,7 @@ Run the following commands on your local machine:
 * Infrastructure
 The website comprises the following components:
 - Frontend :: =frontend/=, Vue 3, Nuxt 3
-- API backend :: =backend/=, Django 3
+- API backend :: =api/=, Django 3
 - Worker server :: =worker/=, node http server, rabbitmq
 - Staging proxy :: =proxy/=, PHP, provides password auth for staging
 - Docker registry :: Facilitates efficient image uploads (runs only on production)
@@ -27,16 +27,17 @@ The plan is to have them organized in the following docker containers
   static frontend and acts as a reverse proxy for all the other services. In a
   staging environment, it also proxies all requests through a password auth PHP
   script located in =proxy/=.
-- =backend= :: Runs the Django API backend.
+- =frontend_dev= :: Runs a development frontend server with HMR, and using a
+  volume to share data with the host and watch for file changes. Exists only
+  when =env = dev=.
+- =api= :: Runs the Django API backend.
 - =mail= :: My private mail server, placeholder for now
 - =docker-registry= :: Runs a docker registry using the =registry= image.
 - =worker= :: The main worker server. It schedules tasks for individual workers via
   message queue. It also serves a simple API that can be used to request that a
   task be performed.
-- =worker_<name>= :: Each individual worker is its own docker container. It
-  consumes a message from the MQ and runs its task.
-
-/NOTE: Currently, the =web= service runs nginx and the API backend. The frontend is served statically, while the API backend is proxied through nginx./
+- =worker_<name>= :: Each individual worker run in its own docker container. It
+  consumes a message from the MQ and performs its task.
 
 /NOTE: All config files ending with =.in= are preprocessed by jinja2. Scripts ending with =.in= are meant to be sourced instead of executed./
 
@@ -72,31 +73,39 @@ whether it is served locally or on a server. The password is saved in the
 browser via cookie so you don't have to enter it every time.
 
 ** =DEVICE=
-** TODO Ports
-| Env variable | Value | Description   |
-| =WEB_PORT=     |  3000 | Main web port |
+** TODO Hostnames and ports
+| *Env variable*         | *Value*   | *Description*                       |
+| =WEB_HOST=             | =0.0.0.0= | Main web host                     |
+| =WEB_PORT=             | =3000=    | Main web port                     |
+| =WEB_PORT_STAGING=     | =13000=   | Staging web port[fn:port_staging] |
+| =FRONTEND_DEV_HOST=    | =0.0.0.0= | Development frontend server host  |
+| =FRONTEND_DEV_PORT=    | =8080=    | Development frontend server port  |
+| =API_HOST=             | =0.0.0.0= | API backend host                  |
+| =API_PORT=             | =8000=    | API backend port                  |
+| =DB_HOST=              | =0.0.0.0= | Database host                     |
+| =DB_PORT=              | =5432=    | Database port                     |
+| =DOCKER_REGISTRY_PORT= | =5000=    | Docker registry port              |
+| =WORKER_SERVER_HOST=   | =0.0.0.0= | Worker orchestration server host  |
+| =WORKER_SERVER_PORT=   | =8001=    | Worker orchestration server port  |
+#+TBLFM: $1=FRONTEND_DEV_HOST
 
-**3000**: main web port
+/NOTE: Within =docker-compose.yaml=, some of these hosts are changed to their coresponding service names, so that different services can communicate with each other./
 
-**5432**: postgres database
-
-**8000**: backend app
-
-**5000**: Docker registry
+[fn:port_staging] This port is used by the staging container when both the production
+and staging containers are expected to run on the same host.
 
 * Setting up the server
 - Bind =docker.veracioux.me= to =localhost= in =/etc/hosts=.
 - TODO more
 * Available commands
 - Deploy locally: =up=
-- Force remove all containers locally: =down=
+- Force remove all service containers locally: =down=
 - Serve production server: =serve=
-  This command should be run on a VPS.
+  This command should be run on the dedicated hosting server.
 - Manage local secrets: =lpass= - a wrapper around GNU =pass=
 - Upload local secrets to the server: =upload-secrets=
 
 * Some things that should be kept in mind
-
 - For greater maintainability and migratability, ports are not hardcoded in
   files (where possible). Instead they are taken from the environment. The
   most notable example is =nginx.conf= where variables are baked into the
@@ -136,7 +145,3 @@ Password: =test=
 The =web= container (if run with a staging configuration) also allows you to
 access the website at =/=, without password protection for convenience, just
 like in =dev= or =prod=.
-
-* Known errors and workarounds
-- The nuxt config doesn't respect the =devServer.port= option, so the frontend port is
-  hardcoded as 3000.

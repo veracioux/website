@@ -81,9 +81,9 @@ services:
       - PYTHONDONTWRITEBYTECODE=true
       - FRONTEND_DEV_HOST=frontend_dev
       {%- endif %}
-      - BACKEND_HOST=api
+      - API_HOST=api
       - DB_HOST=db
-      - RABBITMQ_HOST=rabbitmq
+      - WORKER_SERVER_HOST=worker
     volumes:
       - web_static:/var/static_root:rw
     {%- if env == 'staging' and device == 'public' %}
@@ -103,7 +103,7 @@ services:
     depends_on: [db]
     ports:
       {%- if env == 'dev' or env == 'staging' %}
-      - "$BACKEND_PORT:$BACKEND_PORT"
+      - "$API_PORT:$API_PORT"
       {%- endif %}
     environment:
       - DB_HOST=db
@@ -154,7 +154,8 @@ services:
     env_file:
       - ./.env/common
       {{worker_env_files}}
-    environment: *env
+    environment:
+      - RABBITMQ_HOST=rabbitmq
 
   worker_dotfiles:
     # Image

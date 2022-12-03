@@ -95,7 +95,7 @@ http {
         }
 
         location @api {
-            proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT};
+            proxy_pass http://${API_HOST}:${API_PORT};
             proxy_intercept_errors on;
         }
 
@@ -149,7 +149,7 @@ http {
         listen ${WEB_PORT};
 
         location / {
-            proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT}/api/;
+            proxy_pass http://${API_HOST}:${API_PORT}/api/;
         }
 
         {{ location_status() }}

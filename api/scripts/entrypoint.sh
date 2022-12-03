@@ -2,7 +2,7 @@
 
 [ -z "$ENVIRONMENT" ] && export ENVIRONMENT=prod
 
-echo "Running production API server on port $BACKEND_PORT"
+echo "Running production API server on port $API_PORT"
 
 set -e
 db_timeout=180
@@ -31,7 +31,7 @@ python3 manage.py loaddata projects.json
 
 
 if [ "$ENVIRONMENT" = "dev" ]; then
-    python3 manage.py runserver "$BACKEND_HOST:$BACKEND_PORT"
+    python3 manage.py runserver "$API_HOST:$API_PORT"
 else
-    uvicorn asgi:application --host $BACKEND_HOST --port $BACKEND_PORT
+    uvicorn asgi:application --host $API_HOST --port $API_PORT
 fi
