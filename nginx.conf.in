@@ -51,6 +51,8 @@ http {
         location / {
             return 404;
         }
+
+        {{ location_status() }}
     }
 
     # This block is defined as a macro because, in a staging configuration on a
@@ -67,24 +69,38 @@ http {
 
         listen ${WEB_PORT};
 
-        # Error page is handled by vue-router
         error_page 404 /404.html;
+        recursive_error_pages on;
 
-        # Make sure the routes matched by this rule match those configured in
+        {%- if env == "dev" %}
+        # Dev needs this to prevent a recursion
+        location = /404.html {
+            proxy_pass http://${FRONTEND_DEV_HOST}:${FRONTEND_DEV_PORT}/404;
+        }
+        {%- endif %}
+
         location @ {
+            {%- if env == "dev" %}
+            proxy_pass http://${FRONTEND_DEV_HOST}:${FRONTEND_DEV_PORT};
+            proxy_intercept_errors on;
+            error_page 404 @api;
+            {%- else %}
             root /app/frontend/dist;
-            try_files $uri $uri/index.html @backend;
+            try_files $uri $uri/index.html @api;
+            # The frontend bundler uses cache-busting, this is just to satisfy
+            # web performance metrics
             expires 1M;
             add_header Cache-Control "public";
+            {%- endif %}
         }
 
-        location @backend {
+        location @api {
             proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT};
             proxy_intercept_errors on;
         }
 
-        # If accessed regularly (unprotected), this will just serve the website.
-        # If accessed via a 'stg.*' subdomain, this redirects to / after successful auth
+        # If accessed via apex domain (unprotected), this will just serve the website.
+        # If accessed via 'stg.*' subdomain, this redirects to / after successful auth.
         location / {
             {%- if protected %}
             auth_request /stg-auth;
@@ -93,7 +109,6 @@ http {
             # NOTE: can't use a simple rewrite, it would override auth_request
             try_files _ @;
         }
-
 
         {%- if protected %}
         # Returns 204 for successful staging auth, 401 otherwise
