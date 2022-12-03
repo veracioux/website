@@ -12,7 +12,7 @@ for arg in "$@"; do
     if [ "$arg" = "--help" ] || [ "$arg" = "-h" ]; then
         tem run --no-tem docker-compose -f nonexistent "$@"
         exit
-    elif [ "$arg" = "--build" ]; then
+    elif [ "$arg" = "--build" ] || [ "$arg" = "build" ]; then
         has_build_arg=true
     fi
 done
