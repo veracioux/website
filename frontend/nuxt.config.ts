@@ -26,11 +26,6 @@ export default defineNuxtConfig({
         },
     },
      */
-    devServer: {
-        // NOTE: a nuxt bug causes this to be ignored
-        port: Number(process.env.WEB_PORT ?? 3000),
-        hostname: "0.0.0.0",
-    },
     css: ["@/assets/global.scss"],
     vite: {
         plugins: [

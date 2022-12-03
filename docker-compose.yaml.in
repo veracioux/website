@@ -1,6 +1,6 @@
 {#
 This is a Jinja2 template. It should be processed into docker-compose.yaml using
-the _gen_docker_compose command provided by tem. When running `docker-compose`
+the _gen_docker_compose command managed using tem. When running `docker-compose`
 through tem, this is done automatically.
 #}
 
@@ -63,7 +63,12 @@ services:
     # Container
     container_name: veracioux-web{{suffix}}
     restart: always
-    depends_on: [api, worker]
+    depends_on:
+      - api
+      - worker
+      {%- if env == "dev" %}
+      - frontend_dev
+      {%- endif %}
     ports:
       {%- if env == "staging" and device == "public" %}
       - "$WEB_PORT_STAGING:$WEB_PORT"
@@ -74,21 +79,15 @@ services:
     environment: &env
       {%- if env == 'dev' %}
       - PYTHONDONTWRITEBYTECODE=true
+      - FRONTEND_DEV_HOST=frontend_dev
       {%- endif %}
       - BACKEND_HOST=api
       - DB_HOST=db
       - RABBITMQ_HOST=rabbitmq
-    {%- if env == 'dev' %}
     volumes:
-      - .:/app:rw
       - web_static:/var/static_root:rw
-    {%- elif env == 'staging' and device == 'public' %}
-    volumes:
+    {%- if env == 'staging' and device == 'public' %}
       - $HOME/auth:/var/www/auth
-      - web_static:/var/static_root:rw
-    {%- endif %}
-    {%- if env == 'dev' %}
-    user: {{uid}}:{{gid}}
     {%- endif %}
 
   api:
@@ -117,6 +116,25 @@ services:
     {%- if env == 'dev' %}
     user: {{uid}}:{{gid}}
     {%- endif %}
+
+  {%- if env == 'dev' %}
+  frontend_dev:
+    # Image
+    image: docker.veracioux.me/frontend_dev:dev
+    build:
+      context: frontend
+      dockerfile: _docker/Dockerfile.frontend_dev.dev
+
+    # Container
+    container_name: veracioux-frontend_dev
+    restart: always
+    ports:
+      - "$FRONTEND_DEV_PORT:$FRONTEND_DEV_PORT"
+    env_file: *env_file
+    volumes:
+      - .:/app:rw
+    user: {{uid}}:{{gid}}
+  {%- endif %}
 
   worker:
     # Image

@@ -1,0 +1,16 @@
+FROM "node:16.18-alpine3.15" as frontend
+
+node_canvas_deps=(
+    build-base
+    g++
+    cairo-dev
+    jpeg-dev
+    pango-dev
+    giflib-dev
+)
+
+## Install deps for "canvas" node package
+RUN apk add --no-cache curl "${node_canvas_deps[@]}"
+
+# Install pnpm
+RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node

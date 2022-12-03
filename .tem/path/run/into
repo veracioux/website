@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # Shell into a project-related docker container.
 # If the container doesn't already exist, we'll try to start it, running bash as
@@ -11,10 +11,16 @@ if tem var -q env:prod; then
     prod_suffix="-prod"
 fi
 
+cmd=(sh -c 'command -v bash && bash || sh')
+
+if [ -n "$2" ]; then
+    cmd=("${@:2}")
+fi
+
 if docker container inspect veracioux-"$1" >/dev/null 2>&1; then
-    docker exec --interactive --tty "veracioux-$1$prod_suffix" bash
+    docker exec --interactive --tty "veracioux-$1$prod_suffix" "${cmd[@]}"
 else
     tag="$([ "$(tem var env)" = "dev" ] && echo dev || [ "$(tem var env)" = "staging" ] && echo staging || echo latest)"
-    echo "Container is not running. Trying to start it from image veracioux-me/$1:$tag ..." >&2
-    docker run --interactive --tty docker.veracioux.me/"$1":"$tag" bash
+    echo "Container is not running. Trying to start it from image docker.veracioux.me/$1:$tag ..." >&2
+    docker run --interactive --tty docker.veracioux.me/"$1":"$tag" sh -c "${cmd[@]}"
 fi

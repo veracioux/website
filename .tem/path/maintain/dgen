@@ -8,6 +8,9 @@ process_types=("$@")
 
 if [ -z "$process_types" ]; then
     process_types=(web api worker worker_dotfiles mail)
+    if tem var -q env:dev; then
+        process_types=("${process_types[@]}" frontend_dev)
+    fi
 fi
 
 # Variables indicating if Dockerfile for corresponding process should be generated
@@ -16,6 +19,7 @@ api=
 worker=
 worker_dotfiles=
 mail=
+frontend_dev=
 
 for process_type in "${process_types[@]}"; do
     declare "$process_type"=true
@@ -24,7 +28,7 @@ done
 export ENVIRONMENT="$(tem var env)"
 export DEVICE="$(tem var device)"
 
-mkdir -p _docker {worker,api}/_docker
+mkdir -p _docker {worker,api,frontend}/_docker
 
 # Usage: generate process_type shDockerfile dockerfile_dest_dir
 generate() {
@@ -39,24 +43,11 @@ generate() {
         -d "$dest_file"
 }
 
-[ -n "$web" ]             && generate web docker/shDockerfile.web _docker
+[ -n "$web" ]             && generate web shDockerfile _docker
 [ -n "$api" ]             && generate api api/shDockerfile api/_docker
 [ -n "$worker" ]          && generate worker docker/shDockerfile.worker worker/_docker
 [ -n "$worker_dotfiles" ] && generate worker_dotfiles docker/shDockerfile.worker_dotfiles _docker
 [ -n "$mail" ]            && generate mail docker/shDockerfile.mail _docker
+[ -n "$frontend_dev" ]    && generate frontend_dev frontend/docker/shDockerfile frontend/_docker
 
 exit
-
-# TODO remove
-#for process_type in "${process_types[@]}"; do
-#    prefix=""
-#    if [ "$process_type" = "worker" ]; then
-#        prefix=worker/
-#    elif [ "$process_type" = "api" ]; then
-#        prefix=api/
-#    fi
-#    echo "Generating ${prefix}_docker/Dockerfile.$process_type.$ENVIRONMENT ..."
-#    shdocker \
-#        -s "$project_root/docker/shDockerfile.$process_type" \
-#        -d "$project_root/${prefix}_docker/Dockerfile.$process_type.$ENVIRONMENT"
-#done

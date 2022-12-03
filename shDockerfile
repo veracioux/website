@@ -1,27 +1,9 @@
 # NOTE: You can run 'dgen' to generate the production Dockerfile and the
 # Dockerfile used by docker-compose
 
-alpine_version=3.15
-node_version=16.18
-
-node_canvas_deps=(
-    build-base
-    g++
-    cairo-dev
-    jpeg-dev
-    pango-dev
-    giflib-dev
-)
-
 # Separate frontend build stage; reduces final image size
 if [ "$ENVIRONMENT" != "dev" ]; then
-    FROM "node:$node_version-alpine$alpine_version" as frontend
-
-    ## Install deps for "canvas" node package
-    RUN apk add --no-cache curl "${node_canvas_deps[@]}"
-
-    # Install pnpm
-    RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
+    source frontend/docker/shDockerfile.common.in
 
     WORKDIR /frontend
     COPY frontend/{package.json,pnpm-lock.yaml} ./
@@ -53,14 +35,6 @@ FROM "alpine:edge"
 RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
     nginx gettext php81-fpm php81-session apache2-utils jinja2-cli
 
-if [ "$ENVIRONMENT" = "dev" ]; then
-    RUN apk add --no-cache nodejs curl
-    # Install pnpm
-    RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
-    ## Install deps for "canvas" node package
-    RUN apk add --no-cache "${node_canvas_deps[@]}"
-fi
-
 #  ------------
 ## The rest...
 #  ------------
@@ -76,15 +50,11 @@ if [ "$ENVIRONMENT" = "staging" ]; then
 fi
 
 if [ "$ENVIRONMENT" = "dev" ]; then
-    RUN adduser -u "$(id -u)" -D user
-    RUN chown -R user .
-    USER user
-
-    CMD scripts/entrypoint-dev.sh
+    CMD scripts/entrypoint.sh
 else
     ENV DEVICE="$DEVICE"
     COPY --from=frontend /frontend/dist /app/frontend/dist
-    CMD scripts/entrypoint-prod.sh
+    CMD scripts/entrypoint.sh
 fi
 
 # vim: filetype=dockerfile
