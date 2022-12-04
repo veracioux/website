@@ -21,17 +21,17 @@ if tem var -q machine:public; then
     build=''
 fi
 
-dgen
-
-# On 'prod' and 'staging', the 'web' service uses frontend as a base image.
-# We have to build it here because docker-compose builds images in parallel and
-# therefore doesn't ensure this dependency.
 env="$(tem var env)"
-if [ -n "$build" ] && [ "$env" != "dev" ]; then
-    shdocker \
-        -s frontend/shDockerfile \
-        -d frontend/_docker/Dockerfile.frontend."$env" \
-        -- --tag docker.veracioux.me/frontend:"$env" frontend
+
+if [ -n "$build" ]; then
+    dgen
+
+    # On 'prod' and 'staging', the 'web' service uses frontend as a base image.
+    # We have to build it here because docker-compose builds images in parallel
+    # and doesn't ensure this dependency is satisfied.
+    if [ "$env" != "dev" ]; then
+        tem run util/_build_frontend_image
+    fi
 fi
 
 export VERACIOUX_COMPOSE_NO_GEN=true

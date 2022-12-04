@@ -25,6 +25,9 @@ fi
 export MACHINE=public
 
 echo "Building images..."
+# The frontend image needs to be built first because it doesn't exist as a
+# docker-compose service and it is used as a base for other images.
+tem run util/_build_frontend_image
 docker-compose build
 
 curl --fail --insecure "https://docker.veracioux.me/"

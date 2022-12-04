@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+env="$(tem var env)"
+
+shdocker \
+    -s frontend/shDockerfile \
+    -d frontend/_docker/Dockerfile.frontend."$env" \
+    -- --tag docker.veracioux.me/frontend:"$env" frontend
