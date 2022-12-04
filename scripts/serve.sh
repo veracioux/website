@@ -18,7 +18,7 @@ if nginx -t 2>/dev/null; then
     cp /etc/nginx/nginx.conf{,.bak}
 fi
 
-cat nginx.host.conf.in | envsubst '$WEB_PORT,$WEB_PORT_STAGING,$USER_HOME,$DOCKER_REGISTRY_PORT' > /etc/nginx/nginx.conf
+cat host/nginx.conf.in | envsubst '$WEB_PORT,$WEB_PORT_STAGING,$USER_HOME,$DOCKER_REGISTRY_PORT' > /etc/nginx/nginx.conf
 # Create file in case it doesn't exist, so nginx doesn't complain
 cp nginx.tmp.conf /etc/nginx/nginx.tmp.conf 2>/dev/null
 touch /etc/nginx/nginx.tmp.conf

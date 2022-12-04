@@ -27,5 +27,4 @@ mail
 host
 
 # Misc
-nginx.host.conf.in
 *.org
