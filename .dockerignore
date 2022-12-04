@@ -17,10 +17,10 @@ Pipfile
 # to the container via a volume
 .pnpm-store
 **/node_modules
-frontend/dist
 
 # Services - they use separate dockerfiles
 api
+frontend
 worker
 blog
 mail

@@ -7,10 +7,7 @@ project_root="$(tem find -b website)"
 process_types=("$@")
 
 if [ -z "$process_types" ]; then
-    process_types=(web api worker worker_dotfiles mail)
-    if tem var -q env:dev; then
-        process_types=("${process_types[@]}" frontend_dev)
-    fi
+    process_types=(web frontend api worker worker_dotfiles mail)
 fi
 
 # Variables indicating if Dockerfile for corresponding process should be generated
@@ -19,7 +16,7 @@ api=
 worker=
 worker_dotfiles=
 mail=
-frontend_dev=
+frontend=
 
 for process_type in "${process_types[@]}"; do
     declare "$process_type"=true
@@ -48,6 +45,6 @@ generate() {
 [ -n "$worker" ]          && generate worker worker/docker/shDockerfile.worker worker/_docker
 [ -n "$worker_dotfiles" ] && generate worker_dotfiles worker/docker/shDockerfile.worker_dotfiles worker/_docker
 [ -n "$mail" ]            && generate mail docker/shDockerfile.mail _docker
-[ -n "$frontend_dev" ]    && generate frontend_dev frontend/docker/shDockerfile frontend/_docker
+[ -n "$frontend" ]        && generate frontend frontend/shDockerfile frontend/_docker
 
 exit

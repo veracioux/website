@@ -4,8 +4,8 @@
 
 cd "$(tem find -b website)"
 
+# Read all positional arguments from the command line (it's a bit heuristic)
 positional_args=()
-
 for arg in "$@"; do
     if ! [[ "$arg" == -* ]]; then
         positional_args=("${positional_args[@]}" "$arg")
@@ -16,13 +16,24 @@ set -e
 down "${positional_args[@]}"
 set +e
 
-build_arg='--build'
-if tem var -q device:public; then
-    build_arg=''
+build='--build'
+if tem var -q machine:public; then
+    build=''
 fi
 
 dgen
 
+# On 'prod' and 'staging', the 'web' service uses frontend as a base image.
+# We have to build it here because docker-compose builds images in parallel and
+# therefore doesn't ensure this dependency.
+env="$(tem var env)"
+if [ -n "$build" ] && [ "$env" != "dev" ]; then
+    shdocker \
+        -s frontend/shDockerfile \
+        -d frontend/_docker/Dockerfile.frontend."$env" \
+        -- --tag docker.veracioux.me/frontend:"$env" frontend
+fi
+
 export VERACIOUX_COMPOSE_NO_GEN=true
-docker-compose up $build_arg "$@"
+docker-compose up $build "$@"
 

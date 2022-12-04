@@ -5,7 +5,7 @@
 #+LINK: upload-secrets ./.tem/path/upload-secrets
 
 * Deployment
-Deployment is controlled using =tem=
+Deployment is controlled using =tem=.
 
 ** TODO Production
 Run the following commands on your local machine:
@@ -27,7 +27,7 @@ The plan is to have them organized in the following docker containers
   static frontend and acts as a reverse proxy for all the other services. In a
   staging environment, it also proxies all requests through a password auth PHP
   script located in =proxy/=.
-- =frontend_dev= :: Runs a development frontend server with HMR, and using a
+- =frontend= :: Runs a development frontend server with HMR, and using a
   volume to share data with the host and watch for file changes. Exists only
   when =env = dev=.
 - =api= :: Runs the Django API backend.
@@ -78,8 +78,8 @@ browser via cookie so you don't have to enter it every time.
 | =WEB_HOST=             | =0.0.0.0= | Main web host                     |
 | =WEB_PORT=             | =3000=    | Main web port                     |
 | =WEB_PORT_STAGING=     | =13000=   | Staging web port[fn:port_staging] |
-| =FRONTEND_DEV_HOST=    | =0.0.0.0= | Development frontend server host  |
-| =FRONTEND_DEV_PORT=    | =8080=    | Development frontend server port  |
+| =FRONTEND_HOST=        | =0.0.0.0= | Development frontend server host  |
+| =FRONTEND_PORT=        | =8080=    | Development frontend server port  |
 | =API_HOST=             | =0.0.0.0= | API backend host                  |
 | =API_PORT=             | =8000=    | API backend port                  |
 | =DB_HOST=              | =0.0.0.0= | Database host                     |
@@ -87,7 +87,6 @@ browser via cookie so you don't have to enter it every time.
 | =DOCKER_REGISTRY_PORT= | =5000=    | Docker registry port              |
 | =WORKER_SERVER_HOST=   | =0.0.0.0= | Worker orchestration server host  |
 | =WORKER_SERVER_PORT=   | =8001=    | Worker orchestration server port  |
-#+TBLFM: $1=FRONTEND_DEV_HOST
 
 /NOTE: Within =docker-compose.yaml=, some of these hosts are changed to their coresponding service names, so that different services can communicate with each other./
 
@@ -128,7 +127,8 @@ and staging containers are expected to run on the same host.
   explicitly specified as arguments. So, if you want to add a new variable in
   =nginx.conf=, you will have to specify the variable inside
   =scripts/entrypoint-prod.sh= where the =envsubst= command is invoked.
-
+- If the dev frontend HMR gives you any headache, try removing
+  =frontend/.pnpm-store= and restarting the frontend service.
 * Static assets
 
 Static assets are collected by the django =manage.py= script into

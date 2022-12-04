@@ -1,8 +1,0 @@
-source shDockerfile.common.in
-
-WORKDIR /app/frontend
-COPY . .
-
-CMD scripts/entrypoint-dev.sh
-
-# vim: filetype=dockerfile

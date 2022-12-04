@@ -9,7 +9,7 @@ RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
 WORKDIR /worker
 
 COPY package.json pnpm-lock.yaml /worker/
-RUN pnpm install
+RUN pnpm install --frozen-lockfile --prod
 
 COPY . /worker
 

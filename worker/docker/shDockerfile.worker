@@ -8,12 +8,12 @@ RUN apk add --no-cache curl bash
 RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
 
 WORKDIR /worker
-COPY package.json pnpm-lock.yaml entrypoint.sh ./
+COPY package.json pnpm-lock.yaml ./
 COPY scripts/wait-for-it.sh scripts/
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --prod --frozen-lockfile
 
 COPY . .
 
-CMD ./entrypoint.sh
+CMD pnpm run server
 
 # vim: filetype=dockerfile

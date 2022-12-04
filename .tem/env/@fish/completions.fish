@@ -1,4 +1,4 @@
-set -l services web api worker db frontend_dev rabbitmq worker_dotfiles mail docker-registry
+set -l services web api worker db frontend rabbitmq worker_dotfiles mail docker-registry
 
 complete -c up   -f -a "$services"
 complete -c down -f -a "$services"

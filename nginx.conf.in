@@ -75,13 +75,13 @@ http {
         {%- if env == "dev" %}
         # Dev needs this to prevent a recursion
         location = /404.html {
-            proxy_pass http://${FRONTEND_DEV_HOST}:${FRONTEND_DEV_PORT}/404;
+            proxy_pass http://${FRONTEND_HOST}:${FRONTEND_PORT}/404;
         }
         {%- endif %}
 
         location @ {
             {%- if env == "dev" %}
-            proxy_pass http://${FRONTEND_DEV_HOST}:${FRONTEND_DEV_PORT};
+            proxy_pass http://${FRONTEND_HOST}:${FRONTEND_PORT};
             proxy_intercept_errors on;
             error_page 404 @api;
             {%- else %}

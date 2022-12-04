@@ -32,11 +32,15 @@ code="$?"
 
 if [ "$code" != 0 ]; then
     # Docker registry not running
-    echo_and_notify "Registry not running. Pushing manually as tar.gz file..."
-    images=(docker.veracioux.me/{web,worker,worker_dotfiles,mail}:"$tag")
-    docker save "${images[@]}" | gzip > /tmp/veracioux-images.tar.gz
-    rsync --update --verbose --progress {,"$VPS_IP:"}/tmp/veracioux-images.tar.gz
-    ssh "$VPS_IP" bash -c "gunzip /tmp/veracioux-images.tar.gz | docker load"
+    echo_and_notify "Registry not running. Aborting..."
+    exit 1
+    # NOTE: keeping this here because I might use it in the future, and I'm too
+    # lazy to move it elsewhere.
+    # echo_and_notify "Pushing manually as tar.gz file"
+    # images=(docker.veracioux.me/{web,api,worker,worker_dotfiles,mail}:"$tag")
+    # docker save "${images[@]}" | gzip > /tmp/veracioux-images.tar.gz
+    # rsync --update --verbose --progress {,"$VPS_IP:"}/tmp/veracioux-images.tar.gz
+    # ssh "$VPS_IP" bash -c "gunzip /tmp/veracioux-images.tar.gz | docker load"
 else
     echo "Pushing images to custom registry..."
     VERACIOUX_COMPOSE_NO_GEN=true docker-compose push

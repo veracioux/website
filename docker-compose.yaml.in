@@ -66,7 +66,7 @@ services:
       - api
       - worker
       {%- if env == "dev" %}
-      - frontend_dev
+      - frontend
       {%- endif %}
     ports:
       {%- if env == "staging" and machine == "public" %}
@@ -78,7 +78,7 @@ services:
     environment: &env
       {%- if env == 'dev' %}
       - PYTHONDONTWRITEBYTECODE=true
-      - FRONTEND_DEV_HOST=frontend_dev
+      - FRONTEND_HOST=frontend
       {%- endif %}
       - API_HOST=api
       - DB_HOST=db
@@ -88,6 +88,25 @@ services:
     {%- if env == 'staging' and machine == 'public' %}
       - $HOME/auth:/var/www/auth
     {%- endif %}
+
+  {%- if env == "dev" %}
+  frontend:
+    # Image
+    image: docker.veracioux.me/frontend:{{env}}
+    build:
+      context: frontend
+      dockerfile: _docker/Dockerfile.frontend.{{env}}
+
+    # Container
+    container_name: veracioux-frontend{{suffix}}
+    restart: always
+    ports:
+      - "$FRONTEND_PORT:$FRONTEND_PORT"
+    env_file: *env_file
+    volumes:
+      - ./frontend:/app:rw
+    user: {{uid}}:{{gid}}
+  {%- endif %}
 
   api:
     # Image
@@ -115,25 +134,6 @@ services:
     {%- if env == 'dev' %}
     user: {{uid}}:{{gid}}
     {%- endif %}
-
-  {%- if env == 'dev' %}
-  frontend_dev:
-    # Image
-    image: docker.veracioux.me/frontend_dev:dev
-    build:
-      context: frontend
-      dockerfile: _docker/Dockerfile.frontend_dev.dev
-
-    # Container
-    container_name: veracioux-frontend_dev
-    restart: always
-    ports:
-      - "$FRONTEND_DEV_PORT:$FRONTEND_DEV_PORT"
-    env_file: *env_file
-    volumes:
-      - .:/app:rw
-    user: {{uid}}:{{gid}}
-  {%- endif %}
 
   worker:
     # Image

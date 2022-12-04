@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "nuxt dev --host 0.0.0.0 --port 8080",
-    "dev-container": "nuxt dev --host $FRONTEND_DEV_HOST --port $FRONTEND_DEV_PORT",
+    "dev-container": "nuxt dev --host $FRONTEND_HOST --port $FRONTEND_PORT",
     "generate": "nuxt generate",
     "postinstall": "nuxt prepare",
     "generate-pdf-cv": "node scripts/generate-pdf-cv.js"
