@@ -72,7 +72,7 @@ also be served on a dedicated server. It is password protected regardless of
 whether it is served locally or on a server. The password is saved in the
 browser via cookie so you don't have to enter it every time.
 
-** =DEVICE=
+** =MACHINE=
 ** TODO Hostnames and ports
 | *Env variable*         | *Value*   | *Description*                       |
 | =WEB_HOST=             | =0.0.0.0= | Main web host                     |

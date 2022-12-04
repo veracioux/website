@@ -7,7 +7,7 @@ if tem var -q env:dev; then
     exit
 fi
 
-if tem var -q device:public; then
+if tem var -q machine:public; then
     echo docker-compose."$(tem var env)".yaml
 else
     echo docker-compose.yaml

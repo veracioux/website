@@ -26,7 +26,7 @@ for process_type in "${process_types[@]}"; do
 done
 
 export ENVIRONMENT="$(tem var env)"
-export DEVICE="$(tem var device)"
+export MACHINE="$(tem var machine)"
 
 mkdir -p _docker {worker,api,frontend}/_docker
 

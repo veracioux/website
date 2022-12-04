@@ -17,7 +17,7 @@ for arg in "$@"; do
     fi
 done
 
-if tem var -q device:public; then
+if tem var -q machine:public; then
     project_name="veracioux-website-$(tem var env)"
 else
     project_name="veracioux-website"

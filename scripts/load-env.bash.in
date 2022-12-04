@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 [ -z "$ENVIRONMENT" ] && ENVIRONMENT="$(tem var env)"
-[ -z "$DEVICE" ] && DEVICE="$(tem var device)"
+[ -z "$MACHINE" ] && MACHINE="$(tem var machine)"
 
 print_and_eval() {
     echo "$1"

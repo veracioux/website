@@ -56,7 +56,7 @@ http {
     }
 
     # This block is defined as a macro because, in a staging configuration on a
-    # development device, it is replicated a couple of times: once without protection
+    # development machine, it is replicated a couple of times: once without protection
     # and once with protection accessed through a 'stg.*' subdomain
     {%- macro server_root_domain(protected=False, stg_subdomain=False) %}
     server {
@@ -133,7 +133,7 @@ http {
     }
     {%- endmacro %}
 
-    {%- if device == 'dev' %}
+    {%- if machine == 'dev' %}
         {{ server_root_domain(protected=False, stg_subdomain=False) }}
         {%- if env == 'staging' %}
             {{ server_root_domain(protected=True, stg_subdomain=True) }}

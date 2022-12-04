@@ -69,7 +69,7 @@ services:
       - frontend_dev
       {%- endif %}
     ports:
-      {%- if env == "staging" and device == "public" %}
+      {%- if env == "staging" and machine == "public" %}
       - "$WEB_PORT_STAGING:$WEB_PORT"
       {%- else %}
       - "$WEB_PORT:$WEB_PORT"
@@ -85,7 +85,7 @@ services:
       - WORKER_SERVER_HOST=worker
     volumes:
       - web_static:/var/static_root:rw
-    {%- if env == 'staging' and device == 'public' %}
+    {%- if env == 'staging' and machine == 'public' %}
       - $HOME/auth:/var/www/auth
     {%- endif %}
 
