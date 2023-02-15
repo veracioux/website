@@ -9,7 +9,7 @@ else
 fi
 
 if [ "$#" = 0 ]; then
-    ssh "$host"
+    ssh -t "$host" fish
 else
     ssh "$host" "bash -lc \"$(printf '%q ' "$@")\""
 fi
