@@ -1,6 +1,8 @@
 #+TITLE: veracioux website
 #+LINK: tem https://github.com/tem-cli/tem
 #+LINK: shdocker https://github.com/veracioux/shdocker
+#+LINK: gh-dotfiles https://github.com/veracioux/dotfiles
+#+LINK: gl-dotfiles https://gitlab.com/veracioux/dotfiles
 #+LINK: upload ./.tem/path/upload
 #+LINK: upload-secrets ./.tem/path/upload-secrets
 
@@ -156,3 +158,38 @@ Password: =test=
 The =web= container (if run with a staging configuration) also allows you to
 access the website at =/=, without password protection for convenience, just
 like in =dev= or =prod=.
+
+* Git server
+I host my dotfiles on [[gh-dotfiles][GitHub]] and mirror them on [[gl-dotfiles][GitLab]] as well. I have a =master=
+branch which contains the configs that I want to always use, and there are other
+branches for different (specialized) users. The different users can be either
+users on other machines (e.g. my separate work laptop) or users created for
+testing.
+
+My main user =haris= is the only one I want to trust completely, so that's the
+only one that I want to be able to modify all branches. And I want other users to
+be able to push changes to their own branches, both as a backup option and so
+that the =haris= user can merge those changes into =master=. One option would be to
+create another GitHub user, restrict its permissions and reconcile changes using
+PRs. But I don't want to create another user and I don't need PRs (simple git
+merge is fine), so I do this:
+
+- I create a user named =git= on my personal server.
+- I add the dotfiles repo at =/home/git/dotfiles=
+- I allow all my alternative users to SSH to the =git= user using their SSH keys.
+
+That way each user can push to any branch of the repo, and when I want to merge
+any branch into the =master= branch of the repo hosted on GitHub and GitLab, I can
+do that with the =haris= user. I always keep the =master= branch checked out on
+=git@veracioux.me= so no one can push to that branch.
+
+** Setup
+On the server run:
+#+begin_src shell
+  sudo useradd --create-home git
+  sudo passwd git
+#+end_src
+On the client run:
+#+begin_src shell
+  ssh-copy-id ~/.ssh/<ID-FILE> git@veracioux.me
+#+end_src
