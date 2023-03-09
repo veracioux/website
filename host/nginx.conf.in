@@ -41,6 +41,10 @@ http {
         location /documents {
             alias ${USER_HOME}/documents;
         }
+
+        location /dotfiles/bootstrap.sh {
+            proxy_pass https://raw.githubusercontent.com/veracioux/dotfiles/master/.haris/bootstrap/bootstrap.sh;
+        }
     }
 
     server {
@@ -76,3 +80,5 @@ http {
     # NOTE: [.] prevents nginx from complaining if the file doesn't exist
     include /etc/nginx/nginx[.]tmp.conf;
 }
+
+# -*- mode: nginx-mode; -*- vim: filetype=nginx
