@@ -43,7 +43,7 @@ http {
         }
 
         location /dotfiles/bootstrap.sh {
-            proxy_pass https://raw.githubusercontent.com/veracioux/dotfiles/master/.haris/bootstrap/bootstrap.sh;
+            proxy_pass https://raw.githubusercontent.com/veracioux/dotfiles/master/bootstrap/bootstrap.sh;
         }
     }
 
