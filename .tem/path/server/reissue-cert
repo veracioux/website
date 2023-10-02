@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 if ! tem var -q machine:public; then
     echo "This should only be run on a public-facing server" >&2
     exit 1
@@ -11,14 +9,23 @@ curl https://get.acme.sh | sh -s email=me@veracioux.me
 
 mkdir -p ~/cert
 cd ~/.acme.sh
+rm -rf veracioux.me_ecc
 
-./acme.sh --issue -d veracioux.me -d '*.veracioux.me' --dns --yes-I-know-dns-manual-mode-enough-go-ahead-please --debug
+options=(
+    -d veracioux.me -d '*.veracioux.me'
+    --dns --yes-I-know-dns-manual-mode-enough-go-ahead-please --debug
+)
 
-read -p "Press any key when you have done that..." -n 1
+./acme.sh --issue "${options[@]}" "$@"
 
-./acme.sh --renew -d veracioux.me -d '*.veracioux.me' \
-    --dns --yes-I-know-dns-manual-mode-enough-go-ahead-please --debug \
-    --fullchain-file ~/cert/server.crt
-    --key-file       ~/cert/server.key
+read -p "Press any key when you have set up the DNS records..." -n 1
+
+set -e
+
+./acme.sh --renew "${options[@]}" "$@"
+
+cp ~/.acme.sh/veracioux.me_ecc/veracioux.me.csr ~/cert/server.csr
+cp ~/.acme.sh/veracioux.me_ecc/veracioux.me.key ~/cert/server.key
+cp ~/.acme.sh/veracioux.me_ecc/fullchain.cer    ~/cert/server.crt
 
 echo Certificates generated in ~/cert/.
