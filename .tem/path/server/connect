@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export TERM=vt100
+export TERM=xterm-256colors
 
 if [ -n "$VPS_IP" ]; then
     host="$VPS_IP"
