@@ -35,9 +35,9 @@ The plan is to have them organized in the following docker containers
 - =api= :: Runs the Django API backend.
 - =mail= :: My private mail server, placeholder for now
 - =docker-registry= :: Runs a docker registry using the =registry= image.
-- =worker= :: The main worker server. It schedules tasks for individual workers via
-  message queue. It also serves a simple API that can be used to request that a
-  task be performed.
+- =worker_server= :: The main worker server. It schedules tasks for individual
+  workers via message queue. It also serves a simple API that can be used to
+  request that a task be performed.
 - =worker_<name>= :: Each individual worker run in its own docker container. It
   consumes a message from the MQ and performs its task.
 
@@ -79,7 +79,6 @@ browser via cookie so you don't have to enter it every time.
 | *Env variable*         | *Value*   | *Description*                       |
 | =WEB_HOST=             | =0.0.0.0= | Main web host                     |
 | =WEB_PORT=             | =3000=    | Main web port                     |
-| =WEB_PORT_STAGING=     | =13000=   | Staging web port[fn:port_staging] |
 | =FRONTEND_HOST=        | =0.0.0.0= | Development frontend server host  |
 | =FRONTEND_PORT=        | =8080=    | Development frontend server port  |
 | =API_HOST=             | =0.0.0.0= | API backend host                  |
@@ -91,9 +90,6 @@ browser via cookie so you don't have to enter it every time.
 | =WORKER_SERVER_PORT=   | =8001=    | Worker orchestration server port  |
 
 /NOTE: Within =docker-compose.yaml=, some of these hosts are changed to their coresponding service names, so that different services can communicate with each other./
-
-[fn:port_staging] This port is used by the staging container when both the production
-and staging containers are expected to run on the same host.
 
 * Conventions
 - For each service, a =shDockerfile= exists either in the service's dedicated

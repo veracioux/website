@@ -1,16 +1,20 @@
-# Common stage for all workers. Source this file from another shDockerfile.
+# -*- mode: dockerfile; -*- vim: filetype=dockerfile
 
-FROM alpine:3.15
-
-RUN apk add --no-cache nodejs curl
-# Install pnpm
-RUN curl -L https://unpkg.com/@pnpm/self-installer '|' node
-
+FROM node:18.20.7-alpine3.20 AS prod-base
+# Required by wait-for-it.sh
+RUN apk add --no-cache bash
 WORKDIR /worker
-
+COPY scripts/wait-for-it.sh scripts/
+# ------------------------------------------------------------------------------
+FROM guergeiro/pnpm:18-10-alpine AS pnpm-base
+WORKDIR /worker
 COPY package.json pnpm-lock.yaml /worker/
-RUN pnpm install --frozen-lockfile --prod
-
-COPY . /worker
-
-# vim: filetype=dockerfile
+# ------------------------------------------------------------------------------
+FROM pnpm-base AS prod-deps
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    pnpm install --frozen-lockfile --prod
+# ------------------------------------------------------------------------------
+FROM pnpm-base AS build-base
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    pnpm install --frozen-lockfile
+COPY . .

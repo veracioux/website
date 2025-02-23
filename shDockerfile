@@ -1,5 +1,4 @@
-# NOTE: You can run 'dgen' to generate the production Dockerfile and the
-# Dockerfile used by docker-compose
+# -*- mode: dockerfile; -*- vim: filetype=dockerfile
 
 # Separate frontend build stage; reduces final image size
 if [ "$ENVIRONMENT" != "dev" ]; then
@@ -11,7 +10,7 @@ fi
 #  ==========
 
 # Using edge for now because it provides jinja2-cli
-FROM "alpine:edge"
+FROM alpine:edge
 
 #  ---------------------------
 ## Install global dependencies
@@ -38,8 +37,6 @@ if [ "$ENVIRONMENT" = "dev" ]; then
     CMD scripts/entrypoint.sh
 else
     ENV MACHINE="$MACHINE"
-    COPY --from=frontend /app/dist /app/frontend/dist
+    COPY --from=frontend /frontend/dist /app/frontend/dist
     CMD scripts/entrypoint.sh
 fi
-
-# vim: filetype=dockerfile

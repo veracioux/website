@@ -4,10 +4,10 @@
   "description": "Worker for my website",
   "main": "index.js",
   "scripts": {
-    "build_server": "esbuild server.ts --bundle --platform=node --outfile=server.js",
-    "build_worker": "esbuild worker.ts --bundle --platform=node --outfile=worker.js",
-    "server": "pnpm build_server && node server.js @",
-    "worker": "pnpm build_worker && node worker.js @"
+    "server:build": "esbuild server.ts --bundle --platform=node --outfile=server.js",
+    "worker:build": "esbuild worker.ts --bundle --platform=node --outfile=worker.js",
+    "server": "pnpm build:server && node server.js @",
+    "worker": "pnpm build:worker && node worker.js @"
   },
   "repository": {
     "type": "git",

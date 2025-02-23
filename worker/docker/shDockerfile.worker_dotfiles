@@ -1,41 +1,29 @@
+# -*- mode: dockerfile; -*- vim: filetype=dockerfile
+
 # Dockerfile for generating the dotfiles using emacs org-babel-tangle
 
-if [ "$ENVIRONMENT" = "dev" ]; then
-    tag="dev"
-elif [ "$ENVIRONMENT" = "staging" ]; then
-    tag="staging"
-else
-    tag="latest"
-fi
-
 # ------------------------------------------------------------------------------
-## Stage: build /worker/worker.js
 
 source shDockerfile.common.in
-RUN pnpm run build_worker
 
 # ------------------------------------------------------------------------------
-## Stage: dotfiles-specific build
+FROM build-base as build
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    pnpm run worker:build
+# ------------------------------------------------------------------------------
+FROM prod-base
 
-FROM alpine:3.15.0
-
-RUN apk add --no-cache emacs git nodejs bash curl
+RUN apk add --no-cache emacs git nodejs curl
 RUN adduser -D user
 
-WORKDIR /home/user
+COPY scripts/worker_dotfiles.sh /usr/bin/work
+COPY --from=build /worker/worker.js ./
+COPY --from=prod-deps /worker/node_modules ./
 RUN chown -R user .
-
-COPY --from=0 /worker /worker
-RUN chmod o+x /worker/scripts/*
-
-# Create work executable that can be called by /worker/worker.js
-RUN ln -s /worker/scripts/worker_dotfiles.sh /usr/bin/work
 
 USER user
 
 # Set message queue name
 ENV WORKER_QUEUE=dotfiles
 
-CMD cd /worker '&&' node ./worker.js
-
-# vim: filetype=dockerfile
+CMD node ./worker.js

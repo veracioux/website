@@ -7,7 +7,7 @@ dist
 /var
 
 # secret env file
-.env/*.secret
+.env.d/*.secret
 
 # Docker and build process (I use shdocker to generate Dockerfiles)
 _docker

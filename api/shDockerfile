@@ -1,3 +1,5 @@
+# -*- mode: dockerfile; -*- vim: filetype=dockerfile
+
 alpine_version=3.15
 python_version=3.9
 
@@ -28,11 +30,9 @@ SHDOCKER quote on
 COPY . .
 
 if [ "$ENVIRONMENT" = "dev" ]; then
-    RUN adduser -u "$(id -u)" -D user
+    RUN adduser -D user
     RUN mkdir -p /var/static_root '&&' chown -R user . /var/static_root
     USER user
 fi
 
 CMD scripts/entrypoint.sh
-
-# vim: filetype=dockerfile

@@ -1,9 +1,0 @@
-# This env file is used only for development testing.
-
-ENVIRONMENT=dev
-WEB_PORT=3000
-
-# For database container
-POSTGRES_PASSWORD=1234
-
-SECRET_KEY=1234

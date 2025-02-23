@@ -4,22 +4,22 @@
 
 project_root="$(tem find -b website)"
 
-process_types=("$@")
+services=("$@")
 
-if [ -z "$process_types" ]; then
-    process_types=(web frontend api worker worker_dotfiles mail)
+if [ -z "$services" ]; then
+    services=(web frontend api worker_server worker_dotfiles mail)
 fi
 
 # Variables indicating if Dockerfile for corresponding process should be generated
 web=
 api=
-worker=
+worker_server=
 worker_dotfiles=
 mail=
 frontend=
 
-for process_type in "${process_types[@]}"; do
-    declare "$process_type"=true
+for service in "${services[@]}"; do
+    declare "$service"=true
 done
 
 export ENVIRONMENT="$(tem var env)"
@@ -29,10 +29,10 @@ mkdir -p _docker {worker,api,frontend}/_docker
 
 # Usage: generate process_type shDockerfile dockerfile_dest_dir
 generate() {
-    process_type="$1"
+    service="$1"
     shDockerfile="$2"
     dest_dir="$3"
-    dest_file="$project_root/$dest_dir/Dockerfile.$process_type.$ENVIRONMENT"
+    dest_file="$project_root/$dest_dir/Dockerfile.$service.$ENVIRONMENT"
     echo "Generating $dest_file ..."
 
     shdocker \
@@ -42,7 +42,7 @@ generate() {
 
 [ -n "$web" ]             && generate web shDockerfile _docker
 [ -n "$api" ]             && generate api api/shDockerfile api/_docker
-[ -n "$worker" ]          && generate worker worker/docker/shDockerfile.worker worker/_docker
+[ -n "$worker_server" ]   && generate worker_server worker/docker/shDockerfile.worker_server worker/_docker
 [ -n "$worker_dotfiles" ] && generate worker_dotfiles worker/docker/shDockerfile.worker_dotfiles worker/_docker
 [ -n "$mail" ]            && generate mail docker/shDockerfile.mail _docker
 [ -n "$frontend" ]        && generate frontend frontend/shDockerfile frontend/_docker
