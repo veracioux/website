@@ -22,8 +22,9 @@ for service in "${services[@]}"; do
     declare "$service"=true
 done
 
-export ENVIRONMENT="$(tem var env)"
-export MACHINE="$(tem var machine)"
+# export ENVIRONMENT="$(tem var env)"
+# export MACHINE="$(tem var machine)"
+export MACHINE=dev
 
 mkdir -p _docker {worker,api,frontend}/_docker
 
