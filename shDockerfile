@@ -33,10 +33,13 @@ if [ "$ENVIRONMENT" = "staging" ]; then
     COPY proxy/dummy.staging.htpasswd /var/www/auth/staging.htpasswd
 fi
 
-if [ "$ENVIRONMENT" = "dev" ]; then
-    CMD scripts/entrypoint.sh
-else
+SHDOCKER quote off
+ENTRYPOINT '["/app/scripts/entrypoint.sh"]'
+CMD '["nginx", "-g", "daemon off;"]'
+SHDOCKER quote on
+
+if [ "$ENVIRONMENT" != "dev" ]; then
     ENV MACHINE="$MACHINE"
     COPY --from=frontend /frontend/dist /app/frontend/dist
-    CMD scripts/entrypoint.sh
+    CMD nginx -g "daemon off;"
 fi

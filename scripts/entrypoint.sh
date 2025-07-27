@@ -9,4 +9,5 @@ jinja2 -D env="$ENVIRONMENT" -D machine="$MACHINE" nginx.conf.in \
     > /etc/nginx/nginx.conf
 
 php-fpm81
-nginx -g "daemon off;"
+
+exec "$@"

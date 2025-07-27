@@ -1,6 +1,7 @@
 # -*- mode: dockerfile; -*- vim: filetype=dockerfile
 
-FROM node:16.20-alpine3.18 AS pnpm-base
+node_image="node:16.20-alpine3.18"
+FROM "$node_image" AS pnpm-base
 
 node_canvas_deps=(
     build-base
@@ -37,7 +38,7 @@ else
     # TODO: integrate into "pnpm run generate" or as a vite plugin
     RUN pnpm svgo -f assets/icons -o dist/static/icons
 
-    FROM node:18.20.7-alpine3.20 AS prod-base
-    COPY --from=build /frontend/dist /frontend/frontend/dist
+    FROM "$node_image" AS prod-base
+    COPY --from=build /frontend/dist/* /frontend/dist/
     CMD echo "INFO: The frontend image on '$ENVIRONMENT' serves only as a base image; when run as a container, it does nothing. Exiting..."
 fi
