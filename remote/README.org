@@ -1,0 +1,1 @@
+Mount the remote's =/= filesystem at [[./root/][./root/]] for easier access from a development machine. The directory [[./s][./s/]] contains some handy shortcuts for common directories and files.
