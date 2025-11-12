@@ -141,17 +141,6 @@ http {
         {{ location_status() }}
         {{ location_static() }}
     }
-
-    server {
-        server_name worker.veracioux.me worker.localhost;
-        listen 3000;
-
-        location / {
-            proxy_pass http://${WORKER_SERVER_HOST}:${WORKER_SERVER_PORT}/;
-        }
-
-        {{ location_status() }}
-    }
 }
 
 # -*- mode: nginx-mode; -*- vim: filetype=nginx

@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     buildModules: ["@nuxtjs/google-fonts"],
     runtimeConfig: {
         public: {
-            env: process.env.ENVIRONMENT,
+            env: process.env.ENV,
         },
     },
     googleFonts: {
@@ -35,7 +35,7 @@ export default defineNuxtConfig({
         build: {
             write: true,
             assetsDir:
-                process.env.ENVIRONMENT === "staging" ? "stg/static" : "static",
+                process.env.ENV === "staging" ? "stg/static" : "static",
         },
         css: {
             modules: {

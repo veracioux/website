@@ -18,10 +18,8 @@ Run the following commands on your local machine:
 The website comprises the following components:
 - Frontend :: =frontend/=, Vue 3, Nuxt 3
 - API backend :: =api/=, Django 3
-- Worker server :: =worker/=, node http server, rabbitmq
 - Staging proxy :: =proxy/=, PHP, provides password auth for staging
 - Docker registry :: Facilitates efficient image uploads (runs only on production)
-- Mail server :: =mail/=, planned, will probably use iRedMail
 
 The plan is to have them organized in the following docker containers
 (services), managed by =docker compose=:
@@ -33,13 +31,7 @@ The plan is to have them organized in the following docker containers
   volume to share data with the host and watch for file changes. Exists only
   when =env = dev=.
 - =api= :: Runs the Django API backend.
-- =mail= :: My private mail server, placeholder for now
 - =docker-registry= :: Runs a docker registry using the =registry= image.
-- =worker_server= :: The main worker server. It schedules tasks for individual
-  workers via message queue. It also serves a simple API that can be used to
-  request that a task be performed.
-- =worker_<name>= :: Each individual worker run in its own docker container. It
-  consumes a message from the MQ and performs its task.
 
 /NOTE: All config files ending with =.in= are preprocessed by jinja2. Scripts ending with =.in= are meant to be sourced instead of executed./
 
@@ -60,7 +52,7 @@ workflow of my website:
   yourself in [[./shDockerfile]].
 
 * Environment variables
-** =ENVIRONMENT=
+** =ENV=
 The environment that the server is running in. Can be one of: =dev=, =staging=,
 =prod=.
 
@@ -86,8 +78,6 @@ browser via cookie so you don't have to enter it every time.
 | =DB_HOST=              | =0.0.0.0= | Database host                     |
 | =DB_PORT=              | =5432=    | Database port                     |
 | =DOCKER_REGISTRY_PORT= | =5000=    | Docker registry port              |
-| =WORKER_SERVER_HOST=   | =0.0.0.0= | Worker orchestration server host  |
-| =WORKER_SERVER_PORT=   | =8001=    | Worker orchestration server port  |
 
 /NOTE: Within =docker-compose.yaml=, some of these hosts are changed to their coresponding service names, so that different services can communicate with each other./
 

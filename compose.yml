@@ -1,13 +1,9 @@
 x-environment: &environment
-  ENVIRONMENT: "${ENVIRONMENT:?one of prod, staging, dev}"
+  ENV: "${ENV:?one of prod, staging, dev}"
 
 x-env_file: &env_file
   - ./.env.d/common
-  - ./.env.d/${ENVIRONMENT}
-
-x-worker-env_file: &workers_env_file
-  - worker/.env.d/common
-  - ${VERACIOUX_SECRET_ENV_FILE:-./.env.d/common}
+  - ./.env.d/${ENV}
 
 services:
   db:
@@ -28,16 +24,15 @@ services:
 
   web:
     # Image
-    image: docker.veracioux.me/web:${ENVIRONMENT}
+    image: docker.veracioux.me/web:${ENV}
     build:
       context: .
-      dockerfile: _docker/Dockerfile.web.${ENVIRONMENT}
+      dockerfile: _docker/Dockerfile.web.${ENV}
 
     # Container
     restart: always
     depends_on:
       - api
-      - worker_server
       - frontend
     ports:
       - "${EXPOSED_IP:-127.0.0.1}:${WEB_PORT}:3000"
@@ -46,36 +41,16 @@ services:
       <<: *environment
       API_HOST: api
       DB_HOST: db
-      WORKER_SERVER_HOST: worker_server
       FRONTEND_HOST: frontend
-    volumes:
-      - web_static:/var/static_root:rw
-
-  api:
-    # Image
-    image: docker.veracioux.me/api:${ENVIRONMENT}
-    build:
-      context: api
-      dockerfile: _docker/Dockerfile.api.${ENVIRONMENT}
-
-    # Container
-    restart: always
-    depends_on: [db]
-    ports:
-      - "${EXPOSED_IP:-127.0.0.1}:${API_PORT}:${API_PORT}"
-    environment:
-      <<: *environment
-      DB_HOST: db
-    env_file: *env_file
     volumes:
       - web_static:/var/static_root:rw
 
   frontend:
     # Image
-    image: docker.veracioux.me/frontend:${ENVIRONMENT}
+    image: docker.veracioux.me/frontend:${ENV}
     build:
       context: frontend
-      dockerfile: _docker/Dockerfile.frontend.${ENVIRONMENT}
+      dockerfile: _docker/Dockerfile.frontend.${ENV}
 
     # Container
     restart: always
@@ -87,44 +62,6 @@ services:
       - frontend_dotnuxt:/frontend/.nuxt
       - frontend_node_modules:/frontend/node_modules
       - frontend_gimmicks_ascii_mugshot_node_modules:/frontend/gimmicks/ascii-mugshot/node_modules
-
-  worker_server:
-    # Image
-    image: docker.veracioux.me/worker:${ENVIRONMENT}
-    build:
-      context: worker
-      dockerfile: _docker/Dockerfile.worker_server.${ENVIRONMENT}
-
-    # Container
-    restart: always
-    depends_on:
-      - rabbitmq
-    ports:
-      - "${EXPOSED_IP:-127.0.0.1}:${WORKER_SERVER_PORT}:${WORKER_SERVER_PORT}"
-    env_file: *workers_env_file
-    environment:
-      RABBITMQ_HOST: rabbitmq
-      RABBITMQ_PORT: 5672
-
-  worker_dotfiles:
-    # Image
-    image: docker.veracioux.me/worker_dotfiles:${ENVIRONMENT}
-    build:
-      context: worker
-      dockerfile: _docker/Dockerfile.worker_dotfiles.${ENVIRONMENT}
-
-    # Container
-    env_file: *workers_env_file
-    environment:
-      RABBITMQ_HOST: rabbitmq
-      RABBITMQ_PORT: 5672
-
-  mail:
-    # Image
-    image: docker.veracioux.me/mail:${ENVIRONMENT}
-    build:
-      context: mail
-      dockerfile: ../_docker/Dockerfile.mail.${ENVIRONMENT}
 
   docker-registry:
     image: registry:2

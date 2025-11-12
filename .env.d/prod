@@ -1,2 +1,2 @@
 # Must exist to make docker compose happy
-ENVIRONMENT=prod
+ENV=prod

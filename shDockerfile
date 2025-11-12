@@ -1,8 +1,8 @@
 # -*- mode: dockerfile; -*- vim: filetype=dockerfile
 
 # Separate frontend build stage; reduces final image size
-if [ "$ENVIRONMENT" != "dev" ]; then
-    FROM docker.veracioux.me/frontend:"$ENVIRONMENT" as frontend
+if [ "$ENV" != "dev" ]; then
+    FROM docker.veracioux.me/frontend:"$ENV" as frontend
 fi
 
 #  ==========
@@ -27,7 +27,7 @@ WORKDIR /app
 COPY . /app
 
 # Set up reverse proxy
-if [ "$ENVIRONMENT" = "staging" ]; then
+if [ "$ENV" = "staging" ]; then
     COPY proxy/php-fpm.conf /etc/php81/php-fpm.d/www.conf
     COPY proxy/php.ini /etc/php81/php.ini
     COPY proxy/dummy.staging.htpasswd /var/www/auth/staging.htpasswd
@@ -38,7 +38,7 @@ ENTRYPOINT '["/app/scripts/entrypoint.sh"]'
 CMD '["nginx", "-g", "daemon off;"]'
 SHDOCKER quote on
 
-if [ "$ENVIRONMENT" != "dev" ]; then
+if [ "$ENV" != "dev" ]; then
     ENV MACHINE="$MACHINE"
     COPY --from=frontend /frontend/dist /app/frontend/dist
     CMD nginx -g "daemon off;"

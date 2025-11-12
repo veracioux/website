@@ -7,7 +7,7 @@
 # Do not run this script directly, unless you know what you are doing. Note that
 # you need to set $USER_HOME to $HOME of the non-root user invoking the script.
 
-[ -z "$ENVIRONMENT" ] && ENVIRONMENT=staging
+[ -z "$ENV" ] && ENV=staging
 
 kill "$(cat /run/nginx.pid)"
 

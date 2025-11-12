@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-[ -z "$ENVIRONMENT" ] && ENVIRONMENT="$(tem var env)"
+[ -z "$ENV" ] && ENV="$(tem var env)"
 [ -z "$MACHINE" ] && MACHINE="$(tem var machine)"
 
 print_and_eval() {
@@ -17,9 +17,7 @@ load_envvars_from_file() {
 for file in \
     .env/common \
     .env/staging \
-    .env/"$ENVIRONMENT"{,.secret} \
-    worker/.env/common \
-    worker/.env/"$ENVIRONMENT"{,.secret}
+    .env/"$ENV"{,.secret}
 do
     [ -f "$file" ] && load_envvars_from_file "$file"
 done
