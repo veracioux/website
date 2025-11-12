@@ -9,5 +9,3 @@ services:
       pull: true
     volumes: !reset []
     entrypoint: 'true'
-  api:
-    volumes: !reset []
