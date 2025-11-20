@@ -7,6 +7,7 @@ import {defineNuxtConfig, NuxtConfig} from "nuxt/config";
 export default defineNuxtConfig({
     modules: ["@nuxtjs/proxy"],
     buildModules: ["@nuxtjs/google-fonts"],
+    srcDir: "src/",
     runtimeConfig: {
         public: {
             env: process.env.ENV,
@@ -18,14 +19,6 @@ export default defineNuxtConfig({
             "Roboto Mono": true,
         }
     },
-    /* TODO investigate: causes an error when running `nuxt dev`
-    proxy: {
-        "/api": {
-            target: `http://0.0.0.0:${process.env.BACKEND_PORT ?? 8000}`,
-            changeOrigin: true,
-        },
-    },
-     */
     css: ["@/assets/global.scss"],
     vite: {
         plugins: [
