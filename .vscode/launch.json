@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "firefox",
+      "request": "launch",
+      "name": "Launch Firefox",
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}",
+      "profile": "debug",
+      "keepProfileChanges": true,
+      "pathMappings": [
+        {
+          "url": "http://localhost:8080/_nuxt",
+          "path": "${workspaceFolder}/frontend/src"
+        }
+      ]
+    }
+  ]
+}
