@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import _zindex from "@/zindex";
-import {reactive} from "vue";
+import {ref} from "vue";
 import {NuxtPage} from "#components";
 import { useHead } from "nuxt/app";
+import { ContextIsPdf } from "./inject";
 
-const zindex = reactive(_zindex);
 useHead({
     title: "veracioux | Haris Gušić",
     htmlAttrs: {
         lang: "en",
     }
 });
+
+ContextIsPdf.provide(ref(false));
+
 </script>
 
 <template>
