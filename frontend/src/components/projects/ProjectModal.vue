@@ -1,14 +1,14 @@
 <!-- A regular <script> tag (without setup) is needed so I can export `plugin` from this file -->
 <script lang="tsx">
-import type {App, PropType} from "vue";
-import {defineComponent} from "vue";
-import type {Project} from "@/models";
+import type { App, PropType } from "vue";
+import { defineComponent } from "vue";
+import type { Project } from "@/models";
 import Img from "@/components/generic/Img.vue";
 import Icon from "@/components/generic/Icon.vue";
 import Label from "@/components/generic/Label.vue";
 import Button from "@/components/generic/Button.vue";
-import type {IconProps} from "@/components/generic/Icon.vue";
-import type {IconName} from "@fortawesome/fontawesome-svg-core";
+import type { IconProps } from "@/components/generic/Icon.vue";
+import type { IconName } from "@fortawesome/fontawesome-svg-core";
 
 // Types
 interface URLEntryProps {
@@ -31,7 +31,7 @@ function getCenterPoint(element: HTMLElement) {
 }
 
 function getPopupAnimation(element: HTMLElement) {
-  const {x, y} = mousePosAtLastMouseUpEvent;
+  const { x, y } = mousePosAtLastMouseUpEvent;
   const center = getCenterPoint(element);
   return [
     {
@@ -58,7 +58,7 @@ const component = defineComponent({
     Button,
     UrlEntry: defineComponent({
       props: ["href", "iconProps"],
-      render({href, iconProps}: URLEntryProps) {
+      render({ href, iconProps }: URLEntryProps) {
         return (
           <a class="urlEntry" href={href} target="_blank">
             {iconProps && <Icon {...iconProps} className="icon" />}
@@ -146,7 +146,7 @@ export default component;
 <script setup lang="tsx">
 // TODO: for some reason if I leave this import out I get an error in the browser console.
 import _zindex from "@/zindex";
-import {reactive} from "vue";
+import { reactive } from "vue";
 const zindex = reactive(_zindex);
 </script>
 
@@ -175,7 +175,7 @@ const zindex = reactive(_zindex);
           <div :class="p.description">{{ project?.desc }}</div>
         </div>
         <div :class="s.urls">
-          <UrlEntry :href="project?.url" :iconProps="{name: 'web'}"
+          <UrlEntry :href="project?.url" :iconProps="{ name: 'web' }"
             >Project website
           </UrlEntry>
           <UrlEntry
@@ -190,7 +190,7 @@ const zindex = reactive(_zindex);
           <UrlEntry
             v-if="project?.my_contributions_url"
             :href="project?.my_contributions_url"
-            :iconProps="{name: 'PR'}"
+            :iconProps="{ name: 'PR' }"
           >
             My contributions
           </UrlEntry>

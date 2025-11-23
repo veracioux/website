@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import {library} from "@fortawesome/fontawesome-svg-core";
+import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faArrowUpRightFromSquare,
   faCircleDollarToSlot,
@@ -20,10 +20,10 @@ import {
   faLinkedin,
   faMonero,
 } from "@fortawesome/free-brands-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Img from "@/components/generic/Img.vue";
-import {defineProps, onMounted, ref} from "vue";
-import {CvContext} from "~/inject";
+import { defineProps, onMounted, ref } from "vue";
+import { CvContext } from "~/inject";
 
 library.add(
   faArrowUpRightFromSquare,
@@ -80,7 +80,7 @@ const root = ref<HTMLElement>();
 
 const imageSrc = props.src;
 
-const {isPdf} = CvContext.inject();
+const { isPdf } = CvContext.inject();
 
 onMounted(() => {
   if ((props.name !== undefined) == (props.src !== undefined)) {

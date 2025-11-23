@@ -1,3 +1,3 @@
 trailingComma: "es5"
 tabWidth: 2
-bracketSpacing: false
+bracketSpacing: true

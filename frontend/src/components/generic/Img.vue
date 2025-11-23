@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import {onMounted, onUnmounted, ref} from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 
 let timeout: NodeJS.Timeout;
 
@@ -18,7 +18,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <img v-bind="$props" :class="[s.image]" :style="{opacity: opaque ? 1 : 0}" />
+  <img
+    v-bind="$props"
+    :class="[s.image]"
+    :style="{ opacity: opaque ? 1 : 0 }"
+  />
 </template>
 
 <style lang="scss" module="s">

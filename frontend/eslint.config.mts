@@ -6,7 +6,7 @@ import vueEslintParser from "vue-eslint-parser";
 import json from "@eslint/json";
 import markdown from "@eslint/markdown";
 import css from "@eslint/css";
-import {defineConfig} from "eslint/config";
+import { defineConfig } from "eslint/config";
 
 export default defineConfig([
   {
@@ -14,9 +14,9 @@ export default defineConfig([
   },
   {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
-    plugins: {js},
+    plugins: { js },
     extends: ["js/recommended"],
-    languageOptions: {globals: globals.browser},
+    languageOptions: { globals: globals.browser },
   },
   tseslint.configs.recommended,
   {
@@ -24,36 +24,36 @@ export default defineConfig([
     extends: [pluginVue.configs["flat/essential"]],
     languageOptions: {
       parser: vueEslintParser,
-      parserOptions: {parser: tseslint.parser},
+      parserOptions: { parser: tseslint.parser },
     },
   },
   {
     files: ["**/*.json"],
-    plugins: {json},
+    plugins: { json },
     language: "json/json",
     extends: ["json/recommended"],
   },
   {
     files: ["**/*.jsonc"],
-    plugins: {json},
+    plugins: { json },
     language: "json/jsonc",
     extends: ["json/recommended"],
   },
   {
     files: ["**/*.json5"],
-    plugins: {json},
+    plugins: { json },
     language: "json/json5",
     extends: ["json/recommended"],
   },
   {
     files: ["**/*.md"],
-    plugins: {markdown},
+    plugins: { markdown },
     language: "markdown/gfm",
     extends: ["markdown/recommended"],
   },
   {
     files: ["**/*.css"],
-    plugins: {css},
+    plugins: { css },
     language: "css/css",
     extends: ["css/recommended"],
   },

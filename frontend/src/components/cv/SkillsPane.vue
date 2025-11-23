@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import Label from "@/components/generic/Label.vue";
 import Icon from "@/components/generic/Icon.vue";
-import {skills, skillGroups, type Skill, type Entry} from "@/cv";
+import { skills, skillGroups, type Skill, type Entry } from "@/cv";
 import iconDocker from "@/assets/icons/docker.svg";
 import iconGit from "@/assets/icons/git-with-text.svg";
 import iconJetBrains from "@/assets/icons/jetbrains.svg";
 import iconLinux from "@/assets/icons/linux.svg";
 import iconEmacs from "@/assets/icons/emacs.svg";
-import {CvContext} from "~/inject";
+import { CvContext } from "~/inject";
 
 const props = defineProps<{
   variant?: string;
@@ -24,7 +24,7 @@ const emit = defineEmits<{
   (e: "selectSkill", skill: Skill): void;
 }>();
 
-const {isPdf} = CvContext.inject();
+const { isPdf } = CvContext.inject();
 
 const extraClasses: Partial<Record<keyof typeof skills, string>> = {
   bash: "iconBash",
@@ -70,7 +70,7 @@ function shouldHighlight(skill: Skill) {
             )"
             :class="[
               'skill',
-              {active: isActive(skill), selected: isSelected(skill)},
+              { active: isActive(skill), selected: isSelected(skill) },
             ]"
             @mouseover="emit('hoverSkill', skill)"
             @mouseleave="emit('leaveSkill')"

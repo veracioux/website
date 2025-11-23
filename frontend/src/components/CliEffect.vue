@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {computed} from "vue";
-import {clip} from "@/utils";
+import { computed } from "vue";
+import { clip } from "@/utils";
 
 const props = withDefaults(
   defineProps<{
@@ -31,7 +31,7 @@ const prompt = computed(() =>
 
 <template>
   <div style="position: relative">
-    <div :style="end <= text.length + 1 && {opacity: 0}">
+    <div :style="end <= text.length + 1 && { opacity: 0 }">
       <slot />
     </div>
     <div

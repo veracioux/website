@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref, watch} from "vue";
-import {ScrollData} from "@/inject";
+import { onMounted, reactive, ref, watch } from "vue";
+import { ScrollData } from "@/inject";
 import SelfPraiseManager from "@/components/intro/SelfPraiseManager.vue";
-import type {SelfPraiseProps} from "@/components/intro/SelfPraiseCard.vue";
-import type {CSSProperties} from "vue";
-import {shutterFullyOpenedScrollThreshold} from "@/constants";
+import type { SelfPraiseProps } from "@/components/intro/SelfPraiseCard.vue";
+import type { CSSProperties } from "vue";
+import { shutterFullyOpenedScrollThreshold } from "@/constants";
 
 defineProps<{
   /** Style of the 'veracioux' text. */
@@ -71,7 +71,7 @@ const root = ref<HTMLElement>();
 const helloStyle = reactive<CSSProperties>({});
 const traitsStyle = reactive<CSSProperties>({});
 
-const {relativeScrollY} = ScrollData.inject();
+const { relativeScrollY } = ScrollData.inject();
 
 let intervalId: number | undefined = undefined;
 

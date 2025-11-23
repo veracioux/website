@@ -9,7 +9,7 @@ import {
   watch,
 } from "vue";
 import useSWRV from "swrv";
-import {mapRangeClipped} from "@/utils";
+import { mapRangeClipped } from "@/utils";
 
 const props = defineProps<{
   progress: number;
@@ -19,7 +19,7 @@ const photo = ref<HTMLElement>();
 const asciiArtContainers = ref<HTMLElement[]>();
 const asciiArtStyle = reactive<CSSProperties>({});
 
-const {data: htmlSources} = useSWRV("ascii-mugshots", async () =>
+const { data: htmlSources } = useSWRV("ascii-mugshots", async () =>
   (
     await Promise.all([
       // @ts-expect-error TODO
@@ -87,7 +87,7 @@ onMounted(() => {
       @load="updateAsciiArtSize"
       class="photo"
       ref="photo"
-      :style="{opacity: photoOpacity}"
+      :style="{ opacity: photoOpacity }"
     />
     <div
       v-for="(htmlContent, i) of htmlSources"

@@ -1,13 +1,13 @@
 const asciify = require("asciify-image");
 const Convert = require("ansi-to-html");
 const path = require("path");
-const {minify} = require("html-minifier");
+const { minify } = require("html-minifier");
 
 async function convert(imagePath, outputColumns) {
   return new Promise((resolve, reject) => {
     asciify(
       imagePath,
-      {fit: "width", width: outputColumns},
+      { fit: "width", width: outputColumns },
       (err, asciified) => {
         if (err) {
           return reject(err);

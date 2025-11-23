@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import Icon from "@/components/generic/Icon.vue";
 import ToggleSwitch from "~/components/generic/ToggleSwitch.vue";
-import {ref} from "vue";
-import {useRoute} from "#app";
-import {type DisplayMode} from "@/cv";
+import { ref } from "vue";
+import { useRoute } from "#app";
+import { type DisplayMode } from "@/cv";
 
-const {resume, variant} = useRoute().query;
+const { resume, variant } = useRoute().query;
 
 const emit = defineEmits<{
   (e: "displayModeChanged", value: DisplayMode): void;

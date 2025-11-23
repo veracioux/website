@@ -1,9 +1,9 @@
 /**
  * Wrapper around window.addEventListener("scroll", ...).
  */
-import {ScrollData} from "@/inject";
-import {ref, watch} from "vue";
-import type {Ref} from "vue";
+import { ScrollData } from "@/inject";
+import { ref, watch } from "vue";
+import type { Ref } from "vue";
 
 export function onScroll(
   callback: (event?: Event) => void,
@@ -31,12 +31,12 @@ export function onScroll(
  * the difference is greater than `threshold`.
  */
 export function useFastScrollingDetector(threshold = 0.05) {
-  const {relativeScrollY} = ScrollData.inject();
+  const { relativeScrollY } = ScrollData.inject();
   const scrollingFast = ref<boolean>(false);
   watch(relativeScrollY, (value, oldValue) => {
     scrollingFast.value = Math.abs(value - oldValue) > threshold;
   });
-  return {scrollingFast};
+  return { scrollingFast };
 }
 
 /** Map `value` linearly from `sourceRange` to `targetRange`. */

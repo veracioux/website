@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref, watch} from "vue";
-import {ScrollData} from "@/inject";
+import { onMounted, reactive, ref, watch } from "vue";
+import { ScrollData } from "@/inject";
 import SocialIcon from "@/components/generic/SocialIcon.vue";
 import Img from "@/components/generic/Img.vue";
 import mugshot from "@/assets/mugshot.webp";
-import {shutterFullyOpenedScrollThreshold} from "@/constants";
+import { shutterFullyOpenedScrollThreshold } from "@/constants";
 import * as utils from "@/utils";
 
 interface Slice {
@@ -31,7 +31,7 @@ const configKonva = reactive({
 let relativeApertureSize = 0;
 const relativeScrollAtMaxAperture = 1 / 3.5;
 
-const {relativeScrollY, scrollContainer} = ScrollData.inject();
+const { relativeScrollY, scrollContainer } = ScrollData.inject();
 
 function getShutterRadius() {
   return Math.max(window.innerWidth, window.innerHeight);
@@ -167,7 +167,7 @@ onMounted(() => {
       class="mugshot"
       :style="{
         filter: 'blur(' + 15 * Math.max(1 - 4 * relativeScrollY, 0) + 'px)',
-        ...(isMobile ? {transform: 'translateY(-27px)'} : {}),
+        ...(isMobile ? { transform: 'translateY(-27px)' } : {}),
       }"
       :src="mugshot"
     />

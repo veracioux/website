@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {NuxtPage} from "#components";
-import {useHead} from "nuxt/app";
+import { NuxtPage } from "#components";
+import { useHead } from "nuxt/app";
 
 useHead({
   title: "veracioux | Haris Gušić",

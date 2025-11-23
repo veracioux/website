@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import {computed, type CSSProperties, onMounted, reactive, ref} from "vue";
-import {ScrollData} from "@/inject";
-import {mapRange, mapRangeClipped, clip} from "@/utils";
+import { computed, type CSSProperties, onMounted, reactive, ref } from "vue";
+import { ScrollData } from "@/inject";
+import { mapRange, mapRangeClipped, clip } from "@/utils";
 import CliEffect from "@/components/CliEffect.vue";
-import {useRoute} from "#app";
+import { useRoute } from "#app";
 
 const props = defineProps<{
   text: string;
@@ -59,7 +59,7 @@ onMounted(() => {
   <div
     ref="root"
     class="sectionTitleContainer"
-    :style="{transform: `scaleY(${checkpoints.textDecorationScaleY})`}"
+    :style="{ transform: `scaleY(${checkpoints.textDecorationScaleY})` }"
   >
     <svg
       class="titleDecorationContainer"

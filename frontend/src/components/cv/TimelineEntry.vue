@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {defineProps, type VNode} from "vue";
+import { defineProps, type VNode } from "vue";
 import Label from "@/components/generic/Label.vue";
 
 defineProps<{
@@ -16,7 +16,7 @@ defineProps<{
 </script>
 
 <template>
-  <tr :class="['timeLineItem', {active, selected}]">
+  <tr :class="['timeLineItem', { active, selected }]">
     <td>
       <div class="acceptsMargin">
         <div class="timeSpan">

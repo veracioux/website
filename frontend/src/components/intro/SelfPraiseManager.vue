@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type {SelfPraiseProps} from "@/components/intro/SelfPraiseCard.vue";
+import type { SelfPraiseProps } from "@/components/intro/SelfPraiseCard.vue";
 import SelfPraiseCard from "@/components/intro/SelfPraiseCard.vue";
-import {ScrollData} from "@/inject";
-import {ref, watch} from "vue";
-import {useFastScrollingDetector} from "@/utils";
+import { ScrollData } from "@/inject";
+import { ref, watch } from "vue";
+import { useFastScrollingDetector } from "@/utils";
 
-const {selfPraiseItems, appearRelativeScrollY} = defineProps<{
+const { selfPraiseItems, appearRelativeScrollY } = defineProps<{
   selfPraiseItems: SelfPraiseProps[];
   /* The relativeScrollY value at which the self praise should appear. */
   appearRelativeScrollY: number;
@@ -21,14 +21,14 @@ const scrollMaxValue = 0.5;
 // Let's call each scroll level at which a card is exchanged a step. The stepSize is the
 // scroll amount between two consecutive steps.
 
-const {relativeScrollY} = ScrollData.inject();
+const { relativeScrollY } = ScrollData.inject();
 const progress = ref(-1);
 
 const numSteps = Math.ceil(selfPraiseItems.length / 2);
 const currentStep = ref(-1);
 const cardInSlot1 = ref(0);
 const cardInSlot2 = ref(1);
-const {scrollingFast} = useFastScrollingDetector(0.03);
+const { scrollingFast } = useFastScrollingDetector(0.03);
 
 watch(relativeScrollY, (value) => {
   if (progress.value < 0 && value < appearRelativeScrollY) return;

@@ -3,11 +3,11 @@ import SectionTitle from "@/components/SectionTitle.vue";
 import SocialIcon from "@/components/generic/SocialIcon.vue";
 import AnimatedPhoto from "@/components/about/AnimatedPhoto.vue";
 import Workflow from "@/components/about/Workflow.vue";
-import {ScrollData} from "@/inject";
-import {computed, onMounted, ref} from "vue";
+import { ScrollData } from "@/inject";
+import { computed, onMounted, ref } from "vue";
 import CliEffect from "@/components/CliEffect.vue";
 import Bio from "@/components/about/Bio.vue";
-import {mapRange} from "@/utils";
+import { mapRange } from "@/utils";
 
 const scrollData = ScrollData.inject();
 
@@ -103,7 +103,7 @@ onMounted(() => {
             prompt="> "
             text="JSON.stringify(workflow)"
           >
-            <Workflow :style="checkpoints.showWorkflow || {opacity: 0}" />
+            <Workflow :style="checkpoints.showWorkflow || { opacity: 0 }" />
           </CliEffect>
         </div>
       </div>

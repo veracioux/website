@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Icon, {type IconProps} from "@/components/generic/Icon.vue";
-import type {CSSProperties} from "vue";
+import Icon, { type IconProps } from "@/components/generic/Icon.vue";
+import type { CSSProperties } from "vue";
 import urls from "@/urls.json";
 
 export interface SocialIconProps {

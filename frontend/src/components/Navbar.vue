@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, ref, reactive} from "vue";
+import { onMounted, ref, reactive } from "vue";
 import _zindex from "@/zindex";
 
 const zindex = reactive(_zindex);

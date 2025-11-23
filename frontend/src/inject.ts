@@ -10,7 +10,7 @@ import {
   ref,
 } from "vue";
 import * as utils from "@/utils";
-import {useRoute} from "#app";
+import { useRoute } from "#app";
 
 export class ScrollData {
   /* The document scroll amount expressed as a number of sections. */
@@ -26,7 +26,7 @@ export class ScrollData {
     element: HTMLElement,
     scrollData: ScrollData
   ): number {
-    const {relativeScrollY, scrollContainer} = scrollData;
+    const { relativeScrollY, scrollContainer } = scrollData;
     const height =
       scrollContainer.value instanceof Window
         ? scrollContainer.value.innerHeight
@@ -57,7 +57,7 @@ export class ScrollData {
       window.addEventListener("resize", onScroll);
     });
 
-    const value = {scrollContainer, relativeScrollY};
+    const value = { scrollContainer, relativeScrollY };
     _provide("scrollData", value);
     return value;
   }
@@ -65,7 +65,7 @@ export class ScrollData {
 
 export class CvContext {
   static inject() {
-    const {variant, resume, render} = useRoute().query;
+    const { variant, resume, render } = useRoute().query;
     return reactive({
       variant,
       resume: resume === "true",

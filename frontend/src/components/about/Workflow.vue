@@ -11,7 +11,7 @@ import iconEmacs from "@/assets/icons/emacs.svg";
 import iconJetBrains from "@/assets/icons/jetbrains.svg";
 import iconDocker from "@/assets/icons/docker.svg";
 
-function Icon(props: {src: string; alt?: string; href?: string}) {
+function Icon(props: { src: string; alt?: string; href?: string }) {
   const icon = <_Icon class="icon" {...props} />;
   return props.href ? (
     <a href={props.href} target="_blank">

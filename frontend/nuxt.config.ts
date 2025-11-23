@@ -1,7 +1,7 @@
 import vueJsx from "@vitejs/plugin-vue-jsx";
-import {rollupPlugin} from "ascii-mugshot";
+import { rollupPlugin } from "ascii-mugshot";
 
-import {defineNuxtConfig, type NuxtConfig} from "nuxt/config";
+import { defineNuxtConfig, type NuxtConfig } from "nuxt/config";
 
 export default defineNuxtConfig({
   compatibilityDate: "2025-11-23",

@@ -1,9 +1,9 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import Intro from "@/components/sections/Intro.vue";
-import {onMounted, reactive, ref} from "vue";
-import type {CSSProperties} from "vue";
-import {ScrollData} from "@/inject";
+import { onMounted, reactive, ref } from "vue";
+import type { CSSProperties } from "vue";
+import { ScrollData } from "@/inject";
 import _zindex from "@/zindex";
 import Navbar from "@/components/Navbar.vue";
 import PageWithNavbar from "@/components/PageWithNavbar.vue";
@@ -12,7 +12,7 @@ import Projects from "@/components/sections/Projects.vue";
 import CV from "@/components/sections/CV.vue";
 import About from "@/components/sections/About.vue";
 import Contact from "@/components/sections/Contact.vue";
-import {useRoute} from "#app";
+import { useRoute } from "#app";
 import * as utils from "@/utils";
 
 const zindex = reactive(_zindex);
@@ -25,7 +25,7 @@ const navbar = ref<HTMLElement>();
 
 const isMobile = utils.isMobile();
 
-const {relativeScrollY, scrollContainer} = ScrollData.provide();
+const { relativeScrollY, scrollContainer } = ScrollData.provide();
 
 const showCover = ref(true);
 
@@ -35,9 +35,9 @@ const showCover = ref(true);
  */
 function styleStickyUntilThreshold(relativeScrollThreshold: number) {
   if (relativeScrollY.value >= relativeScrollThreshold) {
-    return {position: "absolute", top: `-${navbar.value!.clientHeight}px`};
+    return { position: "absolute", top: `-${navbar.value!.clientHeight}px` };
   }
-  return {position: "fixed"};
+  return { position: "fixed" };
 }
 
 let veraciouxTextAnimation: Animation | undefined = undefined;
@@ -74,7 +74,7 @@ function onVeraciouxCrossedThreshold(
             left: `${targetRect.x}px`,
           },
         ],
-        {duration: 300, easing: "ease-in-out"}
+        { duration: 300, easing: "ease-in-out" }
       );
     }
   } else {
@@ -103,7 +103,7 @@ onMounted(() => {
     <template #navbar>
       <div ref="navbar" class="navbar">
         <Navbar
-          :class="{opaque: navbarOpaque}"
+          :class="{ opaque: navbarOpaque }"
           @animatableVeraciouxTextElementMounted="
             onAnimatableVeraciouxTextElementMounted
           "
@@ -123,7 +123,7 @@ onMounted(() => {
           class="intro"
           :style="{
             ...styleStickyUntilThreshold(1),
-            ...(isMobile ? {transform: 'translateY(-30px)'} : {}),
+            ...(isMobile ? { transform: 'translateY(-30px)' } : {}),
           }"
           :veracioux-style="veraciouxStyle"
           :veracioux-text-fadeable="veraciouxTextFadeable"

@@ -1,14 +1,14 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import ProjectCard from "@/components/projects/ProjectCard.vue";
-import type {Project} from "@/models";
+import type { Project } from "@/models";
 import ProjectModal from "@/components/projects/ProjectModal.vue";
-import {reactive, ref} from "vue";
+import { reactive, ref } from "vue";
 import projects from "@/projects.json";
 
 import SectionTitle from "@/components/SectionTitle.vue";
 
-const modal = reactive<{show: boolean; project: Partial<Project> | null}>({
+const modal = reactive<{ show: boolean; project: Partial<Project> | null }>({
   show: false,
   project: null,
 });

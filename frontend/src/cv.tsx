@@ -18,7 +18,7 @@ import iconEthereum from "@/assets/icons/ethereum.svg";
 import iconSolana from "@/assets/icons/solana.svg";
 import iconJava from "@/assets/icons/java.svg";
 import iconCSharp from "@/assets/icons/csharp.svg";
-import type {JSX} from "vue/jsx-runtime";
+import type { JSX } from "vue/jsx-runtime";
 
 export interface Skill {
   key?: string;

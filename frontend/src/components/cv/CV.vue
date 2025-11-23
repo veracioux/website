@@ -3,7 +3,7 @@ import TimelineEntry from "@/components/cv/TimelineEntry.vue";
 import SkillsPane from "@/components/cv/SkillsPane.vue";
 import CVHeader from "./CVHeader.vue";
 import LanguagesPane from "@/components/cv/LanguagesPane.vue";
-import {CvContext} from "@/inject";
+import { CvContext } from "@/inject";
 import {
   groups,
   entries,
@@ -12,7 +12,7 @@ import {
   skills,
   type DisplayMode,
 } from "@/cv";
-import {onMounted, ref, watch} from "vue";
+import { onMounted, ref, watch } from "vue";
 
 defineProps<{
   displayMode: DisplayMode;
@@ -35,7 +35,7 @@ const selectedEntry = ref<Entry | null>(null);
 const selectedSkill = ref<Skill | null>(null);
 const activeSkills = ref<Skill[]>([]);
 
-const {variant, isPdf} = CvContext.inject();
+const { variant, isPdf } = CvContext.inject();
 
 // TODO Devise a method to define variants in external files.
 const excludedGroups = variant
@@ -43,7 +43,7 @@ const excludedGroups = variant
   : [];
 
 const enabledGroups = Object.values(groups).filter(
-  ({key}) => !excludedGroups.includes(key as keyof typeof groups)
+  ({ key }) => !excludedGroups.includes(key as keyof typeof groups)
 );
 
 // All entries that should are explicitly excluded
@@ -57,16 +57,16 @@ const allExcludedEntries = [
   ...excludedEntries,
   ...Object.values(entries)
     .filter((entry) => excludedGroups.find((key) => key === entry.group?.key))
-    .map(({key}) => key),
+    .map(({ key }) => key),
 ];
 
 const enabledEntries = Object.values(entries).filter(
-  ({key}) => !allExcludedEntries.includes(key)
+  ({ key }) => !allExcludedEntries.includes(key)
 );
 
 enabledGroups.forEach((group) => {
   group.entries = group.entries?.filter(
-    ({key}) => !excludedEntries.includes(key as keyof typeof entries)
+    ({ key }) => !excludedEntries.includes(key as keyof typeof entries)
   );
 });
 
@@ -163,7 +163,7 @@ onMounted(() => {
             >
               <h3
                 class="groupTitle subsectionTitle"
-                :class="{intermittent: i !== 0}"
+                :class="{ intermittent: i !== 0 }"
               >
                 {{ group.name }}
               </h3>
@@ -217,6 +217,7 @@ onMounted(() => {
 @use "@/assets/global.scss";
 
 $colorDimText: rgba(var(--color-text-rgb), 0.7);
+
 @mixin screenWidthAboveCriticalPoint {
   @include global.screenWidthAbove(global.$small) {
     @content;

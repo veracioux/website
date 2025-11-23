@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, ref} from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps<{
   // When true, both states are treated uniformly.
@@ -16,7 +16,7 @@ const checked = ref(false);
   <label
     :class="[
       s.switch,
-      {[s.checked]: checked, [s.uniformStates]: uniformStates},
+      { [s.checked]: checked, [s.uniformStates]: uniformStates },
     ]"
   >
     <input
@@ -28,7 +28,7 @@ const checked = ref(false);
     <span
       :class="[
         s.slider,
-        {[s.checked]: checked, [s.uniformStates]: uniformStates},
+        { [s.checked]: checked, [s.uniformStates]: uniformStates },
       ]"
     />
   </label>

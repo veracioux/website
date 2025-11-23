@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import GlitchedWriter from "vue-glitched-writer";
-import {ref} from "vue";
+import { ref } from "vue";
 import Navbar from "@/components/Navbar.vue";
 
 const phrases = [
@@ -26,7 +26,7 @@ function incrementActivePhrase() {
       <GlitchedWriter
         class="number"
         text="404"
-        :queue="{steps: 2, interval: 10, delay: 10}"
+        :queue="{ steps: 2, interval: 10, delay: 10 }"
         appear
       />
       <div style="height: 64px">
@@ -35,7 +35,7 @@ function incrementActivePhrase() {
             v-if="activePhraseId === i"
             class="notFound"
             :text="phrase"
-            :queue="{interval: 100}"
+            :queue="{ interval: 100 }"
             @finish="incrementActivePhrase"
             appear
           />

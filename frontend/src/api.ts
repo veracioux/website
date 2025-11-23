@@ -1,4 +1,4 @@
-import {useRuntimeConfig} from "#app";
+import { useRuntimeConfig } from "#app";
 
 export default function api(resourceName: "base" | "projects") {
   const runtimeConfig = useRuntimeConfig();

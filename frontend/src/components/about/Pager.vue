@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {computed, onMounted, ref, watch} from "vue";
-import {clip, logChanges} from "@/utils";
+import { computed, onMounted, ref, watch } from "vue";
+import { clip, logChanges } from "@/utils";
 
 const props = defineProps<{
   progress: number;
@@ -25,7 +25,7 @@ watch(progress, (value) => {
       scrollBox.value.getBoundingClientRect().height);
   const discretizedScrollTop =
     Math.ceil(naturalScrollTop / lineHeight.value) * lineHeight.value;
-  scrollBox.value.scrollTo({top: discretizedScrollTop});
+  scrollBox.value.scrollTo({ top: discretizedScrollTop });
 });
 
 onMounted(() => {
