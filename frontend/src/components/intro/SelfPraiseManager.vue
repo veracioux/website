@@ -88,7 +88,7 @@ watch(currentStep, (value, oldValue) => {
 
 <style module="s" lang="scss">
 @use "@/assets/common.module.scss" as c;
-@import "@/assets/global.scss";
+@use "@/assets/global.scss" as global;
 
 .wrapper {
     @include c.fillParent;
@@ -97,7 +97,7 @@ watch(currentStep, (value, oldValue) => {
     align-items: center;
     justify-content: space-between;
 
-    @include screenWidthAbove($large) {
+    @include global.screenWidthAbove(global.$large) {
         flex-direction: row;
     }
 }
@@ -110,7 +110,7 @@ watch(currentStep, (value, oldValue) => {
     width: auto;
     height: 100%;
 
-    @include screenWidthAbove($large) {
+    @include global.screenWidthAbove(global.$large) {
         width: 100%;
         height: auto;
     }
@@ -119,12 +119,12 @@ watch(currentStep, (value, oldValue) => {
         align-items: end;
         padding-bottom: 50px;
 
-        @include screenWidthAbove($large) {
+        @include global.screenWidthAbove(global.$large) {
             align-items: center;
             justify-content: center;
             padding: 0;
         }
-        @include screenWidthAbove($xlarge) {
+        @include global.screenWidthAbove(global.$xlarge) {
             justify-content: end;
             padding: 0 50px 0 0;
         }
@@ -134,12 +134,12 @@ watch(currentStep, (value, oldValue) => {
         align-items: start;
         padding-top: 50px;
 
-        @include screenWidthAbove($large) {
+        @include global.screenWidthAbove(global.$large) {
             align-items: center;
             justify-content: center;
             padding: 0;
         }
-        @include screenWidthAbove($xlarge) {
+        @include global.screenWidthAbove(global.$xlarge) {
             justify-content: flex-start;
             padding: 0 0 0 50px;
         }
@@ -150,7 +150,7 @@ watch(currentStep, (value, oldValue) => {
 .spacer {
     --size: 240px;
 
-    @include screenSizeAbove(768px) {
+    @include global.screenSizeAbove(768px) {
         --size: 350px;
     }
 
@@ -162,7 +162,7 @@ watch(currentStep, (value, oldValue) => {
 </style>
 
 <style scoped lang="scss">
-@import "@/assets/global.scss";
+@use "@/assets/global.scss" as global;
 
 .fastTransition {
     --transition-duration: 0.2s;
@@ -171,14 +171,14 @@ watch(currentStep, (value, oldValue) => {
 
 @mixin translateLeftOrUp {
     transform: translateX(-0.5em);
-    @include screenWidthAbove($large) {
+    @include global.screenWidthAbove(global.$large) {
         transform: translateY(-0.5em);
     }
 }
 
 @mixin translateRightOrDown {
     transform: translateX(0.5em);
-    @include screenWidthAbove($large) {
+    @include global.screenWidthAbove(global.$large) {
         transform: translateY(0.5em);
     }
 }
