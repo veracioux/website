@@ -36,7 +36,7 @@ function rollupPlugin() {
             if (!match) return null;
             const mugshotColumnWidth = Number(regex1.exec(id)[1]);
             const html = await convert(
-                path.resolve(__dirname, "../../assets/mugshot.jpg"),
+                path.resolve(__dirname, "../../src/assets/mugshot.jpg"),
                 mugshotColumnWidth
             );
             return "export default " + JSON.stringify(minify(html)) + ";";
