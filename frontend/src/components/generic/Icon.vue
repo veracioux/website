@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {
@@ -21,7 +22,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import Img from "@/components/generic/Img.vue";
-import {computed, defineProps, onMounted, ref} from "vue";
+import {defineProps, onMounted, ref} from "vue";
 import {ContextIsPdf} from "@/inject";
 
 library.add(
@@ -58,15 +59,10 @@ const iconNameToFontAwesomeMap = {
     github: ["fab", "github"],
     gitlab: ["fab", "gitlab"],
     linkedin: ["fab", "linkedin"],
-};
-
-// NOTE: I created this and the required functionality, but it turned out
-// I don't need it (yet). I'm keeping it in case I need it in the future.
-const iconNameToSrcMap = {};
+} as const;
 
 type IconName =
-    | keyof typeof iconNameToFontAwesomeMap
-    | keyof typeof iconNameToSrcMap;
+    | keyof typeof iconNameToFontAwesomeMap;
 
 export interface IconProps {
     /** Name of a FontAwesome icon. */
@@ -83,16 +79,9 @@ const props = defineProps<IconProps>();
 
 const root = ref<HTMLElement>();
 
-const imageSrc = computed(() =>
-    props.name ? iconNameToSrcMap[props.name]?.src ??
-        iconNameToSrcMap[props.name] ??
-        props.src
-        : props.src
-);
+const imageSrc = props.src;
 
 const isPdf = ContextIsPdf.inject();
-const className = iconNameToSrcMap[props.name]?.className;
-const imgClass = ['customIcon', className];
 
 onMounted(() => {
     if ((props.name !== undefined) == (props.src !== undefined)) {
@@ -108,20 +97,20 @@ onMounted(() => {
     <span class="icon" ref="root">
         <FontAwesomeIcon
             v-if="props.name && iconNameToFontAwesomeMap[props.name]"
-            :icon="iconNameToFontAwesomeMap[name]"
+            :icon="iconNameToFontAwesomeMap[props.name as keyof typeof iconNameToFontAwesomeMap]"
             class="internalIcon faIcon"
         />
         <Img
             v-else-if="isPdf"
             :src="imageSrc"
             :alt="alt"
-            :class="imgClass"
+            class="customIcon"
         />
         <Img
             v-else
             v-lazy="imageSrc"
             :alt="alt"
-            :class="imgClass"
+            class="customIcon"
         />
     </span>
 </template>

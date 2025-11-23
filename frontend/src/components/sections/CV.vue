@@ -7,7 +7,7 @@ import {CvContext} from "@/inject";
 import {type DisplayMode} from "@/cv";
 import * as utils from "@/utils";
 
-const {variant, resume} = CvContext.inject();
+const {resume} = CvContext.inject();
 const isMobile = utils.isMobile();
 
 const title = computed(() => resume ? "Resume" : "Curriculum Vitae");

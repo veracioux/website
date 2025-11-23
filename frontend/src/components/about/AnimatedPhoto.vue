@@ -15,23 +15,23 @@ const asciiArtStyle = reactive<CSSProperties>({});
 const {data: htmlSources} = useSWRV("ascii-mugshots", async () =>
     (
         await Promise.all([
-            // @ts-ignore
+            // @ts-expect-error TODO
             import(`virtual:ascii-mugshot/6`),
-            // @ts-ignore
+            // @ts-expect-error TODO
             import(`virtual:ascii-mugshot/7`),
-            // @ts-ignore
+            // @ts-expect-error TODO
             import(`virtual:ascii-mugshot/8`),
-            // @ts-ignore
+            // @ts-expect-error TODO
             import(`virtual:ascii-mugshot/10`),
-            // @ts-ignore
+            // @ts-expect-error TODO
             import(`virtual:ascii-mugshot/13`),
-            // @ts-ignore
+            // @ts-expect-error TODO
             import(`virtual:ascii-mugshot/17`),
-            // @ts-ignore
+            // @ts-expect-error TODO
             import(`virtual:ascii-mugshot/22`),
-            // @ts-ignore
+            // @ts-expect-error TODO
             import(`virtual:ascii-mugshot/28`),
-            // @ts-ignore
+            // @ts-expect-error TODO
             import(`virtual:ascii-mugshot/35`),
         ])
     ).map((s) => s.default)
@@ -84,6 +84,7 @@ onMounted(() => {
         />
         <div
             v-for="(htmlContent, i) of htmlSources"
+            v-bind:key="i"
             class="asciiArtContainer"
             :style="asciiArtStyle"
         >
@@ -93,7 +94,7 @@ onMounted(() => {
                     opacity: activeAsciiArtIndex === i ? 1 - photoOpacity : 0,
                 }"
                 v-html="htmlContent"
-            />
+            ></span>
         </div>
     </div>
 </template>
