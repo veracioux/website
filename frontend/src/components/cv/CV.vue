@@ -6,9 +6,8 @@ import LanguagesPane from "@/components/cv/LanguagesPane.vue";
 import {ContextIsPdf, CvContext} from "@/inject";
 import {groups, entries, type Entry, type Skill, skills, type DisplayMode} from "@/cv";
 import {onMounted, ref, watch} from "vue";
-import {isMobile as _isMobile} from "@/utils";
 
-const props = defineProps<{
+defineProps<{
     displayMode: DisplayMode;
 }>();
 
@@ -29,7 +28,6 @@ const selectedEntry = ref<Entry | null>(null);
 const selectedSkill = ref<Skill | null>(null);
 const activeSkills = ref<Skill[]>([]);
 
-const isMobile = _isMobile();
 const isPdf = ContextIsPdf.inject();
 
 const {variant} = CvContext.inject();
@@ -40,7 +38,7 @@ const excludedGroups = variant ? ([
 ] as (keyof typeof groups)[]) : [];
 
 const enabledGroups = Object.values(groups)
-    .filter(({key}) => !excludedGroups.includes(key as any))
+    .filter(({key}) => !excludedGroups.includes(key as keyof typeof groups))
 
 // All entries that should are explicitly excluded
 const excludedEntries = variant ? ([
@@ -59,10 +57,10 @@ const allExcludedEntries = [
 ];
 
 const enabledEntries = Object.values(entries)
-    .filter(({key}) => !allExcludedEntries.includes(key as any));
+    .filter(({key}) => !allExcludedEntries.includes(key));
 
 enabledGroups.forEach((group) => {
-    group.entries = group.entries?.filter(({key}) => !excludedEntries.includes(key as any));
+    group.entries = group.entries?.filter(({key}) => !excludedEntries.includes(key as keyof typeof entries));
 });
 
 function onHoverEntry(entry: Entry) {
@@ -116,7 +114,7 @@ watch([hoveredEntry, selectedEntry], ([h, s]) => {
 
 onMounted(() => {
     // On click outside of any entity
-    document.addEventListener("click", e => {
+    document.addEventListener("click", () => {
         selectedEntry.value = selectedSkill.value = null;
     });
 });
@@ -128,10 +126,8 @@ onMounted(() => {
         <div class="content" @click="onDeselect">
             <div class="timelineWrapper">
                 <table class="timeline">
-                    <template
-                        v-if="displayMode === 'timeline'"
-                        v-for="entry of enabledEntries.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())"
-                    >
+                    <template v-if="displayMode === 'timeline'">
+                    <template v-bind:key="entry.key" v-for="entry of enabledEntries.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())">
                         <TimelineEntry
                             v-bind="entry"
                             :hovered="hoveredEntry?.key === entry.key"
@@ -142,13 +138,15 @@ onMounted(() => {
                             @click.stop="onToggleSelectEntry(entry)"
                         />
                     </template>
+                </template>
                     <template v-else>
-                        <template v-for="(group, i) of enabledGroups">
+                        <template v-bind:key="i" v-for="(group, i) of enabledGroups">
                             <h3 class="groupTitle subsectionTitle"
                                 :class="{intermittent: i !== 0}">
                                 {{ group.name }}
                             </h3>
                             <template
+                                v-bind:key="j"
                                 v-for="(entry, j) of group.entries?.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())"
                             >
                                 <TimelineEntry

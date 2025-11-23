@@ -2,7 +2,7 @@
 import {defineProps, type VNode} from "vue";
 import Label from '@/components/generic/Label.vue';
 
-const props = defineProps<{
+defineProps<{
     name?: string,
     node?: () => VNode;
     startDate?: string | number;
@@ -38,7 +38,8 @@ const props = defineProps<{
                         <component v-if="node" :is="node" />
                     </slot>
                     <div v-if="labels" class="labelContainer">
-                        <Label v-for="label of labels" :title="label" />
+                        <!-- TODO: Check if key is appropriate -->
+                        <Label v-bind:key="label" v-for="label of labels" :title="label"></Label>
                     </div>
                 </div>
             </div>

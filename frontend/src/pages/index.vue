@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import Intro from "@/components/sections/Intro.vue";
 import {onMounted, reactive, ref} from "vue";
@@ -19,15 +20,12 @@ const zindex = reactive(_zindex);
 const veraciouxStyle = reactive<CSSProperties>({});
 const animatableVeraciouxTextElement = ref<HTMLElement>();
 const veraciouxTextFadeable = ref(false);
-const navbarOpaque = ref(useRoute().hash !== '');
+const navbarOpaque = ref(useRoute().hash !== "");
 const navbar = ref<HTMLElement>();
 
 const isMobile = utils.isMobile();
 
-const {
-    relativeScrollY,
-    scrollContainer,
-} = ScrollData.provide();
+const {relativeScrollY, scrollContainer} = ScrollData.provide();
 
 const showCover = ref(true);
 
@@ -101,7 +99,6 @@ onMounted(() => {
         behavior: "instant" as any,
     });
 });
-
 </script>
 <template>
     <PageWithNavbar>
@@ -132,7 +129,10 @@ onMounted(() => {
                 />
                 <Intro
                     class="intro"
-                    :style="{...styleStickyUntilThreshold(1), ...(isMobile ? {transform: 'translateY(-30px)'} : {})}"
+                    :style="{
+                        ...styleStickyUntilThreshold(1),
+                        ...(isMobile ? {transform: 'translateY(-30px)'} : {}),
+                    }"
                     :veracioux-style="veraciouxStyle"
                     :veracioux-text-fadeable="veraciouxTextFadeable"
                     @veraciouxCrossedThreshold="onVeraciouxCrossedThreshold"
