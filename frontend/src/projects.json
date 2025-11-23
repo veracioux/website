@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "slug": "flameshot",
+    "title": "Flameshot",
+    "desc": "Powerful yet simple to use screenshot software.",
+    "url": "https://flameshot.org",
+    "repo_url": "https://github.com/flameshot-org/flameshot",
+    "image_url": "https://github.com/flameshot-org/flameshot/raw/master/data/img/app/org.flameshot.Flameshot.svg",
+    "extra_image_url": "https://raw.githubusercontent.com/flameshot-org/flameshot/master/data/img/preview/animatedUsage.gif",
+    "organization": "Flameshot org",
+    "organization_url": "https://github.com/flameshot-org",
+    "my_contributions_url": "https://github.com/search?q=repo%3Aflameshot-org%2Fflameshot+author%3Averacioux",
+    "roles": ["Developer", "Co-maintainer"],
+    "languages": ["C++", "Qt"]
+  },
+  {
+    "id": 2,
+    "slug": "tuterm",
+    "title": "Tuterm",
+    "desc": "A better way to learn CLI programs.",
+    "url": "https://github.com/veracioux/tuterm",
+    "repo_url": "https://github.com/veracioux/tuterm",
+    "extra_image_url": "https://gist.github.com/veracioux/66336d488e8d87c7b3fb696c5dbd93d1/raw/4b8bc0b043faf166abc92e12fc0bfb5acea55345/tuterm-demo.svg",
+    "roles": ["Original creator", "Maintainer"],
+    "languages": ["Shell", "Python"]
+  },
+  {
+    "id": 3,
+    "slug": "shdocker",
+    "title": "Shdocker",
+    "desc": "Dockerfiles with shell superpowers",
+    "url": "https://github.com/veracioux/shdocker",
+    "repo_url": "https://github.com/veracioux/shdocker",
+    "roles": ["Original creator", "Maintainer"],
+    "languages": ["Shell"]
+  }
+]
