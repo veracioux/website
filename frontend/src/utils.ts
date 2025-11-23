@@ -64,12 +64,21 @@ export function mapRangeClipped(
 }
 
 /** Log changes to a ref to the debug channel. */
-export function logChanges(ref: Ref, ...consoleLogPrefixArgs: Parameters<typeof console.debug>) {
+export function logChanges(
+    ref: Ref,
+    ...consoleLogPrefixArgs: Parameters<typeof console.debug>
+) {
     watch(ref, (value) => {
         console.debug(...consoleLogPrefixArgs, value);
     });
 }
 
 export function isMobile() {
-    return process.client && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+    return (
+        process.client && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+    );
+}
+
+export function iife<T>(fn: () => T): T {
+    return fn();
 }

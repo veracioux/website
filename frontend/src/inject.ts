@@ -7,7 +7,7 @@ import {
     provide as _provide,
     reactive,
     type Ref,
-    ref
+    ref,
 } from "vue";
 import * as utils from "@/utils";
 import {useRoute} from "#app";
@@ -48,7 +48,8 @@ export class ScrollData {
         function onScroll() {
             if (scrollContainer.value) {
                 relativeScrollY.value =
-                    scrollContainer.value.scrollTop / scrollContainer.value.clientHeight;
+                    scrollContainer.value.scrollTop /
+                    scrollContainer.value.clientHeight;
             }
         }
 
@@ -59,7 +60,7 @@ export class ScrollData {
 
         const value = {scrollContainer, relativeScrollY};
         _provide("scrollData", value);
-        return value
+        return value;
     }
 }
 
@@ -72,7 +73,7 @@ export class CvContext {
             render: render as "pdf" | "html" | undefined,
             get isPdf() {
                 return this.render === "pdf";
-            }
+            },
         });
     }
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PageWithNavbar from "@/components/PageWithNavbar.vue";
 import CVSection from "@/components/sections/CV.vue";
-import CV from '@/components/cv/CV.vue';
+import CV from "@/components/cv/CV.vue";
 import {CvContext, ScrollData} from "@/inject";
 
 const {isPdf} = CvContext.inject();
@@ -9,8 +9,7 @@ const {isPdf} = CvContext.inject();
 ScrollData.provide();
 
 if (process.client && isPdf) {
-    document.querySelector(":root")
-        ?.setAttribute("data-theme", "light");
+    document.querySelector(":root")?.setAttribute("data-theme", "light");
 }
 </script>
 

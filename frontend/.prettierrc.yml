@@ -1,8 +1,3 @@
 trailingComma: "es5"
-tabWidth: 4
+tabWidth: 2
 bracketSpacing: false
-
-overrides:
-  - files: ["**/*.*css", "**/*.json", "**/*.yml", "**/*.yaml"]
-    options:
-      tabWidth: 2

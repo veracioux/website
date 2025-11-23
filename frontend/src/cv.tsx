@@ -18,7 +18,7 @@ import iconEthereum from "@/assets/icons/ethereum.svg";
 import iconSolana from "@/assets/icons/solana.svg";
 import iconJava from "@/assets/icons/java.svg";
 import iconCSharp from "@/assets/icons/csharp.svg";
-import type { JSX } from "vue/jsx-runtime";
+import type {JSX} from "vue/jsx-runtime";
 
 export interface Skill {
     key?: string;
@@ -46,7 +46,7 @@ const _skillGroups = {
         name: "Other Tools",
     },
     automation: {
-        name: "Automation Industry"
+        name: "Automation Industry",
     },
     others: {
         name: "Others",
@@ -55,8 +55,11 @@ const _skillGroups = {
         name: "Stale",
         disabled: true,
     },
-}
-export const skillGroups = _skillGroups as Record<keyof typeof _skillGroups, SkillGroup>;
+};
+export const skillGroups = _skillGroups as Record<
+    keyof typeof _skillGroups,
+    SkillGroup
+>;
 
 const _skills = {
     javascript: {
@@ -81,7 +84,7 @@ const _skills = {
         name: "C++",
         icon: iconCpp,
         group: skillGroups.programmingLanguages,
-        experience: "3 years"
+        experience: "3 years",
     },
     python: {
         name: "Python",
@@ -235,7 +238,7 @@ const _groups = {
         name: "Education",
     },
     professionalExperience: {
-        name: "Professional Experience"
+        name: "Professional Experience",
     },
     otherExperience: {
         name: "Other experience",
@@ -243,24 +246,52 @@ const _groups = {
     extraCurricular: {
         name: "Extra-curricular",
         disabled: true,
-    }
-} as const
+    },
+} as const;
 
 export const groups = _groups as Record<keyof typeof _groups, Group>;
 
 let _entries = {
     evoltSoftwareEngineer: {
-        node: () => <span><a href="https://www.linkedin.com/company/evolt-dev/"
-                             target="_blank"><b>Evolt</b></a>, Software Engineer, Full-Time</span>,
+        node: () => (
+            <span>
+                <a
+                    href="https://www.linkedin.com/company/evolt-dev/"
+                    target="_blank"
+                >
+                    <b>Evolt</b>
+                </a>
+                , Software Engineer, Full-Time
+            </span>
+        ),
         startDate: "2022-01",
         displayDate: "Jan 2022 - present",
-        skills: [skills.javascript, skills.typescript, skills.react, skills.git, skills.docker, skills.ethereum, skills.docker, skills.jetbrains, skills.docker],
+        skills: [
+            skills.javascript,
+            skills.typescript,
+            skills.react,
+            skills.git,
+            skills.docker,
+            skills.ethereum,
+            skills.docker,
+            skills.jetbrains,
+            skills.docker,
+        ],
         labels: ["Backend", "Frontend", "Blockchain"],
         group: groups.professionalExperience,
     },
     evoltInternship: {
-        node: () => <span><a href="https://www.linkedin.com/company/evolt-dev/"
-                             target="_blank"><b>Evolt</b></a>, one month internship</span>,
+        node: () => (
+            <span>
+                <a
+                    href="https://www.linkedin.com/company/evolt-dev/"
+                    target="_blank"
+                >
+                    <b>Evolt</b>
+                </a>
+                , one month internship
+            </span>
+        ),
         startDate: "2021-12",
         displayDate: "Dec 2021",
         skills: [skills.python, skills.django, skills.docker, skills.jetbrains],
@@ -268,10 +299,26 @@ let _entries = {
         group: groups.professionalExperience,
     },
     personalWebsite: {
-        node: () => <span><a href="https://github.com/veracioux/website" target="_blank">Personal website and webserver</a></span>,
+        node: () => (
+            <span>
+                <a href="https://github.com/veracioux/website" target="_blank">
+                    Personal website and webserver
+                </a>
+            </span>
+        ),
         startDate: "2021-11",
         displayDate: "Nov 2021 - present",
-        skills: [skills.python, skills.django, skills.typescript, skills.javascript, skills.docker, skills.vue, skills.nginx, skills.linux, skills.bash],
+        skills: [
+            skills.python,
+            skills.django,
+            skills.typescript,
+            skills.javascript,
+            skills.docker,
+            skills.vue,
+            skills.nginx,
+            skills.linux,
+            skills.bash,
+        ],
         labels: ["Backend", "Frontend", "Google Cloud"],
         group: groups.otherExperience,
     },
@@ -280,8 +327,8 @@ let _entries = {
             <span>
                 <a href="https://flameshot.org" target="_blank">
                     <b>Flameshot</b>
-                </a>,
-                A Free & Open Source Screenshot Program <br />
+                </a>
+                , A Free & Open Source Screenshot Program <br />
             </span>
         ),
         startDate: "2021",
@@ -294,8 +341,8 @@ let _entries = {
         node: () => (
             <span>
                 <b>Bachelor of Electrical Engineering</b>, Department of
-                Automation and Electronics, Faculty of Electrical
-                Engineering, University of Sarajevo
+                Automation and Electronics, Faculty of Electrical Engineering,
+                University of Sarajevo
                 <br />
                 <pre>- GPA 9.19/10.00</pre>
             </span>
@@ -313,8 +360,8 @@ let _entries = {
                     target="_blank"
                 >
                     <b>Rotating LED Display</b>
-                </a>,
-                High School Project Festival, Hadžići, Bosnia and Herzegovina
+                </a>
+                , High School Project Festival, Hadžići, Bosnia and Herzegovina
                 <br />
             </span>
         ),
@@ -332,8 +379,8 @@ let _entries = {
                     target="_blank"
                 >
                     <b>Wood Fall</b>
-                </a>,
-                video game, solo project
+                </a>
+                , video game, solo project
             </span>
         ),
         startDate: "2016",
@@ -343,7 +390,11 @@ let _entries = {
         group: groups.otherExperience,
     },
     renovation: {
-        node: () => <span><b>Renovation of sports grounds</b>, Kamberovića polje Zenica</span>,
+        node: () => (
+            <span>
+                <b>Renovation of sports grounds</b>, Kamberovića polje Zenica
+            </span>
+        ),
         startDate: "2016-03",
         endDate: "2016-11",
         displayDate: "Mar - Nov 2016",
@@ -353,10 +404,9 @@ let _entries = {
     demosPMS: {
         node: () => (
             <span>
-                <b>Undergraduate Teaching Assistant</b>,
-                Faculty of Electrical Engineering,
-                University of Sarajevo,
-                Course: <i>Design of Microprocessor Systems</i>
+                <b>Undergraduate Teaching Assistant</b>, Faculty of Electrical
+                Engineering, University of Sarajevo, Course:{" "}
+                <i>Design of Microprocessor Systems</i>
             </span>
         ),
         startDate: "2021-03",
@@ -369,10 +419,11 @@ let _entries = {
     elektromatik: {
         node: () => (
             <span>
-                Internship, <a
-                href="https://search.bisnode.ba/ba/367191/elektromatik-d-o-o-zenica/"
-                target="_blank"
-            >
+                Internship,{" "}
+                <a
+                    href="https://search.bisnode.ba/ba/367191/elektromatik-d-o-o-zenica/"
+                    target="_blank"
+                >
                     Elektromatik d.o.o. Zenica
                 </a>
             </span>
@@ -381,16 +432,20 @@ let _entries = {
         endDate: "2020",
         displayDate: "Summer 2019, Summer 2020",
         skills: [skills.plc, skills.tiaPortal, skills.abbVFD],
-        labels: ["PLC programming", "Industrial sensors", "Motor control", "Industrial schematic design"],
+        labels: [
+            "PLC programming",
+            "Industrial sensors",
+            "Motor control",
+            "Industrial schematic design",
+        ],
         group: groups.professionalExperience,
     },
     demosTP: {
         node: () => (
             <span>
-                <b>Undergraduate Teaching Assistant</b>,
-                Faculty of Electrical Engineering,
-                University of Sarajevo,
-                Course: <i>Programming Techniques</i>
+                <b>Undergraduate Teaching Assistant</b>, Faculty of Electrical
+                Engineering, University of Sarajevo, Course:{" "}
+                <i>Programming Techniques</i>
             </span>
         ),
         startDate: "2019-03",
@@ -403,10 +458,11 @@ let _entries = {
     stackExchange: {
         node: () => (
             <span>
-                <b>Answering community questions</b>, <a
-                href="https://math.stackexchange.com/users/450231"
-                target="_blank"
-            >
+                <b>Answering community questions</b>,{" "}
+                <a
+                    href="https://math.stackexchange.com/users/450231"
+                    target="_blank"
+                >
                     Mathematics StackExchange
                 </a>
             </span>
@@ -420,10 +476,8 @@ let _entries = {
         node: () => (
             <span>
                 <b>
-                    Various personal projects on <a
-                    href="https://github.com/veracioux"
-                    target="_blank"
-                >
+                    Various personal projects on{" "}
+                    <a href="https://github.com/veracioux" target="_blank">
                         GitHub
                     </a>
                 </b>
@@ -431,19 +485,37 @@ let _entries = {
         ),
         startDate: "2018",
         endDate: "present",
-        skills: [skills.jetbrains, skills.git, skills.nginx, skills.c, skills.cpp, skills.docker, skills.typescript, skills.javascript, skills.django, skills.qt, skills.bash, skills.technicalWriting, skills.emacs],
+        skills: [
+            skills.jetbrains,
+            skills.git,
+            skills.nginx,
+            skills.c,
+            skills.cpp,
+            skills.docker,
+            skills.typescript,
+            skills.javascript,
+            skills.django,
+            skills.qt,
+            skills.bash,
+            skills.technicalWriting,
+            skills.emacs,
+        ],
         group: groups.otherExperience,
     },
-}
+};
 
 export const entries = _entries as Record<keyof typeof _entries, Entry>;
 
-Object.entries(skills).forEach(([key, skill]) => skill.key = key);
-Object.entries(skillGroups).forEach(([key, skillGroup]) => skillGroup.key = key);
-Object.entries(entries).forEach(([key, entry]) => entry.key = key);
+Object.entries(skills).forEach(([key, skill]) => (skill.key = key));
+Object.entries(skillGroups).forEach(
+    ([key, skillGroup]) => (skillGroup.key = key)
+);
+Object.entries(entries).forEach(([key, entry]) => (entry.key = key));
 Object.entries(groups).forEach(([key, group]) => {
     group.key = key;
-    group.entries = Object.values(entries).filter((entry) => entry.group === group);
+    group.entries = Object.values(entries).filter(
+        (entry) => entry.group === group
+    );
 });
 
 const userHints = {
@@ -451,6 +523,6 @@ const userHints = {
     hoverEntry: "Place y",
     clickEntryToSelect: "Click the timeline entry to select it.",
     clickSkillToSelect: "Click the skill to select it.",
-}
+};
 
 export type DisplayMode = "timeline" | "byCategory";

@@ -10,4 +10,3 @@ export default defineNuxtPlugin((app) => {
     app.vueApp.use(VueLazyload);
     app.vueApp.use(modalPlugin);
 });
-
