@@ -6,7 +6,7 @@ import {
     onMounted,
     provide as _provide,
     reactive,
-    Ref,
+    type Ref,
     ref
 } from "vue";
 import * as utils from "@/utils";

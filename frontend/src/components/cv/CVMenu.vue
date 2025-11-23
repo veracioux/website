@@ -3,7 +3,7 @@ import Icon from '@/components/generic/Icon.vue';
 import ToggleSwitch from "~/components/generic/ToggleSwitch.vue";
 import {ref} from "vue";
 import {useRoute} from "#app";
-import {DisplayMode} from "~/cv";
+import {type DisplayMode} from "@/cv";
 
 const {resume, variant} = useRoute().query;
 
@@ -13,7 +13,7 @@ const emit = defineEmits<{
 
 const displayMode = ref<DisplayMode>("timeline");
 
-function onChanged(value) {
+function onToggleChanged(value: boolean) {
     displayMode.value = value ? "byCategory" : "timeline";
     emit("displayModeChanged", displayMode.value);
 }
@@ -35,7 +35,7 @@ function onChanged(value) {
                 Download
             </a>
             <span class="displayMode" @click="">
-                <ToggleSwitch uniform-states @valueChanged="onChanged"
+                <ToggleSwitch uniform-states @valueChanged="onToggleChanged"
                               class="switch" />
                 Display mode:
                 <span class="displayModeValue">

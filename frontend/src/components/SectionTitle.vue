@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, CSSProperties, onMounted, reactive, ref, watch} from "vue";
+import {computed, type CSSProperties, onMounted, reactive, ref} from "vue";
 import {ScrollData} from "@/inject";
 import {mapRange, mapRangeClipped, clip} from "@/utils";
 import CliEffect from "@/components/CliEffect.vue";

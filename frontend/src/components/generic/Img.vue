@@ -6,9 +6,9 @@ const img = ref<HTMLElement>();
 
 onMounted(() => {
     setTimeout(() => {
-        img.value.classList.add("opaque");
+        img.value!.classList.add("opaque");
     }, 1000);
-    img.value.classList.add("transition");
+    img.value!.classList.add("transition");
 });
 </script>
 

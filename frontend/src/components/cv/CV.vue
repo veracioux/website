@@ -4,9 +4,9 @@ import SkillsPane from "@/components/cv/SkillsPane.vue";
 import CVHeader from "./CVHeader.vue";
 import LanguagesPane from "@/components/cv/LanguagesPane.vue";
 import {ContextIsPdf, CvContext} from "@/inject";
-import {groups, entries, Entry, Skill, skills, DisplayMode} from "@/cv";
+import {groups, entries, type Entry, type Skill, skills, type DisplayMode} from "@/cv";
 import {onMounted, ref, watch} from "vue";
-import {isMobile as _isMobile} from "~/utils";
+import {isMobile as _isMobile} from "@/utils";
 
 const props = defineProps<{
     displayMode: DisplayMode;
@@ -23,10 +23,10 @@ const props = defineProps<{
 
 // This will help you understand the meaning of the following variables.
 
-const hoveredEntry = ref<Entry>(null);
-const hoveredSkill = ref<Skill>(null);
-const selectedEntry = ref<Entry>(null);
-const selectedSkill = ref<Skill>(null);
+const hoveredEntry = ref<Entry | null>(null);
+const hoveredSkill = ref<Skill | null>(null);
+const selectedEntry = ref<Entry | null>(null);
+const selectedSkill = ref<Skill | null>(null);
 const activeSkills = ref<Skill[]>([]);
 
 const isMobile = _isMobile();
@@ -62,8 +62,7 @@ const enabledEntries = Object.values(entries)
     .filter(({key}) => !allExcludedEntries.includes(key as any));
 
 enabledGroups.forEach((group) => {
-    group.entries = group.entries
-        .filter(({key}) => !excludedEntries.includes(key as any));
+    group.entries = group.entries?.filter(({key}) => !excludedEntries.includes(key as any));
 });
 
 function onHoverEntry(entry: Entry) {
@@ -112,7 +111,7 @@ function onDeselect() {
 // Update the activeSkills array whenever a hovered or selected entry changes
 watch([hoveredEntry, selectedEntry], ([h, s]) => {
     const entry = s ?? h;
-    activeSkills.value = Object.values(entry?.skills ?? []).map((skillOrKey: any) => skills[skillOrKey?.key ?? skillOrKey])
+    activeSkills.value = Object.values(entry?.skills ?? []).map((skillOrKey) => skills[((skillOrKey as Skill).key ?? skillOrKey) as keyof typeof skills])
 });
 
 onMounted(() => {
@@ -131,13 +130,13 @@ onMounted(() => {
                 <table class="timeline">
                     <template
                         v-if="displayMode === 'timeline'"
-                        v-for="entry of enabledEntries.sort((a, b) => a.startDate < b.startDate)"
+                        v-for="entry of enabledEntries.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())"
                     >
                         <TimelineEntry
                             v-bind="entry"
                             :hovered="hoveredEntry?.key === entry.key"
                             :selected="selectedEntry?.key === entry.key"
-                            :active="selectedEntry?.key !== entry.key && !!entry.skills?.find(s => s.key === (selectedSkill ?? hoveredSkill)?.key)"
+                            :active="selectedEntry?.key !== entry.key && !!entry.skills?.find(s => (s as Skill).key === (selectedSkill ?? hoveredSkill)?.key)"
                             @mouseover="onHoverEntry(entry)"
                             @mouseleave="onLeaveEntry()"
                             @click.stop="onToggleSelectEntry(entry)"
@@ -150,18 +149,18 @@ onMounted(() => {
                                 {{ group.name }}
                             </h3>
                             <template
-                                v-for="(entry, j) of group.entries.sort((a, b) => a.startDate < b.startDate)"
+                                v-for="(entry, j) of group.entries?.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())"
                             >
                                 <TimelineEntry
                                     v-bind="entry"
                                     class="groupedTimeLineEntry"
                                     :class="{
                                         marginTop: j === 0,
-                                        marginBottom: j === group.entries.length - 1 && i !== enabledGroups.length - 1,
+                                        marginBottom: j === (group.entries?.length ?? 0) - 1 && i !== enabledGroups.length - 1,
                                     }"
                                     :hovered="hoveredEntry?.key === entry.key"
                                     :selected="selectedEntry?.key === entry.key"
-                                    :active="selectedEntry?.key !== entry.key && !!entry.skills?.find(s => s.key === (selectedSkill ?? hoveredSkill)?.key)"
+                                    :active="selectedEntry?.key !== entry.key && !!entry.skills?.find(s => (s as Skill).key === (selectedSkill ?? hoveredSkill)?.key)"
                                     @mouseover="onHoverEntry(entry)"
                                     @mouseleave="onLeaveEntry()"
                                     @click.stop="onToggleSelectEntry(entry)"

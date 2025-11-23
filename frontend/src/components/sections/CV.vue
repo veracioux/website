@@ -3,8 +3,8 @@ import SectionTitle from "@/components/SectionTitle.vue";
 import CV from "@/components/cv/CV.vue";
 import CVMenu from '@/components/cv/CVMenu.vue';
 import {computed, ref} from "vue";
-import {CvContext} from "~/inject";
-import {DisplayMode} from "~/cv";
+import {CvContext} from "@/inject";
+import {type DisplayMode} from "@/cv";
 import * as utils from "@/utils";
 
 const {variant, resume} = CvContext.inject();
@@ -13,7 +13,7 @@ const isMobile = utils.isMobile();
 const title = computed(() => resume ? "Resume" : "Curriculum Vitae");
 const displayMode = ref<DisplayMode>("timeline");
 
-function onDisplayModeChanged(value) {
+function onDisplayModeChanged(value: DisplayMode) {
     displayMode.value = value;
 }
 </script>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import {computed, defineProps, VNode} from "vue";
-import {ContextIsPdf} from "@/inject";
+import {defineProps, type VNode} from "vue";
 import Label from '@/components/generic/Label.vue';
 
 const props = defineProps<{

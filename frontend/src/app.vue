@@ -2,7 +2,7 @@
 import _zindex from "@/zindex";
 import {reactive} from "vue";
 import {NuxtPage} from "#components";
-import {useHead} from "#head";
+import { useHead } from "nuxt/app";
 
 const zindex = reactive(_zindex);
 useHead({

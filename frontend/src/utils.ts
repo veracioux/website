@@ -9,7 +9,7 @@ export function onScroll(
     callback: (event?: Event) => void,
     element?: HTMLElement
 ) {
-    let residualScrollTimerId: any;
+    let residualScrollTimerId: NodeJS.Timeout;
     (element ?? window).addEventListener(
         "scroll",
         (ev) => {
@@ -64,7 +64,7 @@ export function mapRangeClipped(
 }
 
 /** Log changes to a ref to the debug channel. */
-export function logChanges(ref: Ref, ...consoleLogPrefixArgs: any[]) {
+export function logChanges(ref: Ref, ...consoleLogPrefixArgs: Parameters<typeof console.debug>) {
     watch(ref, (value) => {
         console.debug(...consoleLogPrefixArgs, value);
     });

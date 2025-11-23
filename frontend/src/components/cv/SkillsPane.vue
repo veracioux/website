@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Label from "@/components/generic/Label.vue";
 import Icon from "@/components/generic/Icon.vue";
-import {skills, skillGroups, Skill, Entry} from "@/cv";
+import {skills, skillGroups, type Skill, type Entry} from "@/cv";
 import iconDocker from "@/assets/icons/docker.svg";
 import iconGit from "@/assets/icons/git-with-text.svg";
 import iconJetBrains from "@/assets/icons/jetbrains.svg";
@@ -77,13 +77,13 @@ function shouldHighlight(skill: Skill) {
                                 :src="skill.icon"
                                 :alt="skill.name"
                                 :title="skill.name"
-                                :class="`icon ${extraClasses[skill.key] ?? ''}`"
+                                :class="`icon ${extraClasses[skill.key as keyof typeof skills] ?? ''}`"
                             />
                             <span v-if="isPdf" class="name">
                                 {{ skill.name }}
                             </span>
                         </template>
-                        <Label v-else :title="skill.name" />
+                        <Label v-else :title="skill.name"></Label>
                         <span v-if="isPdf && skill.experience" class="experience">
                             {{ skill.experience }}
                         </span>

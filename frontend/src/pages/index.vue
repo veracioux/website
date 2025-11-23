@@ -26,7 +26,7 @@ const isMobile = utils.isMobile();
 
 const {
     relativeScrollY,
-    scrollContainer: scrollContainer,
+    scrollContainer,
 } = ScrollData.provide();
 
 const showCover = ref(true);
@@ -40,12 +40,6 @@ function styleStickyUntilThreshold(relativeScrollThreshold: number) {
         return {position: "absolute", top: `-${navbar.value!.clientHeight}px`};
     }
     return {position: "fixed"};
-}
-
-function styleWithRelativeHeight(relativeHeight: number) {
-    return {
-        minHeight: `${relativeHeight * 100}vh`,
-    };
 }
 
 let veraciouxTextAnimation: Animation | undefined = undefined;
@@ -102,7 +96,7 @@ onMounted(() => {
     showCover.value = false;
     // TODO temporary fix for a strange behavior: when the page is not scrolled
     //  to the top and is then reloaded, the Intro section misbehaves.
-    scrollContainer.value.scrollTo({
+    scrollContainer.value?.scrollTo({
         top: 0,
         behavior: "instant" as any,
     });
@@ -124,12 +118,12 @@ onMounted(() => {
         <div class="container" ref="scrollContainer">
             <div
                 class="%home-section-space-occupant"
-                :style="styleWithRelativeHeight(0.4)"
+                style="min-height: 40vh"
             />
             <div
                 id="home"
                 class="%home-section-space-occupant"
-                :style="styleWithRelativeHeight(0.6)"
+                style="min-height: 60vh"
             />
             <div class="introSectionContainer">
                 <Shutter

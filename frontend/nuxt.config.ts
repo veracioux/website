@@ -1,18 +1,18 @@
 import vueJsx from "@vitejs/plugin-vue-jsx";
-// @ts-ignore
 import {rollupPlugin} from "ascii-mugshot";
 
-import {defineNuxtConfig, NuxtConfig} from "nuxt/config";
+import {defineNuxtConfig, type NuxtConfig} from "nuxt/config";
 
 export default defineNuxtConfig({
-    modules: ["@nuxtjs/proxy"],
-    buildModules: ["@nuxtjs/google-fonts"],
+    // buildModules: ["@nuxtjs/google-fonts"],
+    modules: ["@nuxtjs/google-fonts"],
     srcDir: "src/",
     runtimeConfig: {
         public: {
             env: process.env.ENV,
         },
     },
+    // @ts-expect-error FIXME
     googleFonts: {
         families: {
             "Secular One": true,
