@@ -91,7 +91,7 @@ function updateRotation() {
     }
 }
 
-let stopScrollingDetectorId: number | undefined = undefined;
+let stopScrollingDetectorId: NodeJS.Timeout | undefined = undefined;
 
 /**
  * Use a timeout to detect if scrolling has stopped and fully open/close the

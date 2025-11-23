@@ -2,7 +2,7 @@
   "name": "veracioux-website",
   "version": "0.1.0",
   "scripts": {
-    "dev": "nuxt dev --host localhost --port 8080",
+    "dev": "nuxt dev",
     "lint": "eslint",
     "dev:container": "nuxt dev --host 0.0.0.0 --port $FRONTEND_PORT",
     "generate": "nuxt generate",
