@@ -6,9 +6,9 @@ import {ref, watch} from "vue";
 import {useFastScrollingDetector} from "@/utils";
 
 const {selfPraiseItems, appearRelativeScrollY} = defineProps<{
-    selfPraiseItems: SelfPraiseProps[];
-    /* The relativeScrollY value at which the self praise should appear. */
-    appearRelativeScrollY: number;
+  selfPraiseItems: SelfPraiseProps[];
+  /* The relativeScrollY value at which the self praise should appear. */
+  appearRelativeScrollY: number;
 }>();
 
 const scrollMaxValue = 0.5;
@@ -31,59 +31,59 @@ const cardInSlot2 = ref(1);
 const {scrollingFast} = useFastScrollingDetector(0.03);
 
 watch(relativeScrollY, (value) => {
-    if (progress.value < 0 && value < appearRelativeScrollY) return;
-    progress.value =
-        (relativeScrollY.value - appearRelativeScrollY) / scrollMaxValue;
+  if (progress.value < 0 && value < appearRelativeScrollY) return;
+  progress.value =
+    (relativeScrollY.value - appearRelativeScrollY) / scrollMaxValue;
 });
 
 watch(progress, () => {
-    currentStep.value = Math.floor(progress.value * numSteps);
+  currentStep.value = Math.floor(progress.value * numSteps);
 });
 
 watch(currentStep, (value, oldValue) => {
-    // After numSteps have passed, keep the cards as they are
-    if (oldValue > numSteps) return;
-    if (value > numSteps) value = numSteps;
+  // After numSteps have passed, keep the cards as they are
+  if (oldValue > numSteps) return;
+  if (value > numSteps) value = numSteps;
 
-    cardInSlot1.value = Math.floor((value + 1) / 2) * 2;
-    cardInSlot2.value = Math.floor(value / 2) * 2 + 1;
+  cardInSlot1.value = Math.floor((value + 1) / 2) * 2;
+  cardInSlot2.value = Math.floor(value / 2) * 2 + 1;
 });
 </script>
 <template>
-    <div class="container">
-        <div
-            :class="{
-                [s.wrapper]: true,
-                fastTransition: scrollingFast || progress < 0,
-            }"
-        >
-            <div :class="[s.slot, s.slot1]">
-                <Transition name="slide-fade-1">
-                    <SelfPraiseCard
-                        v-if="currentStep >= 0"
-                        v-bind="selfPraiseItems[cardInSlot1]"
-                        :key="cardInSlot1"
-                    />
-                </Transition>
-            </div>
-            <div :class="s.spacer">
-                <!--
+  <div class="container">
+    <div
+      :class="{
+        [s.wrapper]: true,
+        fastTransition: scrollingFast || progress < 0,
+      }"
+    >
+      <div :class="[s.slot, s.slot1]">
+        <Transition name="slide-fade-1">
+          <SelfPraiseCard
+            v-if="currentStep >= 0"
+            v-bind="selfPraiseItems[cardInSlot1]"
+            :key="cardInSlot1"
+          />
+        </Transition>
+      </div>
+      <div :class="s.spacer">
+        <!--
                     Item that occupies approximately the same space as the mugshot,
                     thereby making sure that the slots do not overlap with the mugshot
                     and can be centered between the mugshot and the window boundary.
                 -->
-            </div>
-            <div :class="[s.slot, s.slot2]">
-                <Transition name="slide-fade-2">
-                    <SelfPraiseCard
-                        v-if="currentStep >= 0"
-                        v-bind="selfPraiseItems[cardInSlot2]"
-                        :key="cardInSlot2"
-                    />
-                </Transition>
-            </div>
-        </div>
+      </div>
+      <div :class="[s.slot, s.slot2]">
+        <Transition name="slide-fade-2">
+          <SelfPraiseCard
+            v-if="currentStep >= 0"
+            v-bind="selfPraiseItems[cardInSlot2]"
+            :key="cardInSlot2"
+          />
+        </Transition>
+      </div>
     </div>
+  </div>
 </template>
 
 <style module="s" lang="scss">
@@ -91,73 +91,73 @@ watch(currentStep, (value, oldValue) => {
 @use "@/assets/global.scss" as global;
 
 .wrapper {
-    @include c.fillParent;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
+  @include c.fillParent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 
-    @include global.screenWidthAbove(global.$large) {
-        flex-direction: row;
-    }
+  @include global.screenWidthAbove(global.$large) {
+    flex-direction: row;
+  }
 }
 
 .slot {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    width: auto;
-    height: 100%;
+  width: auto;
+  height: 100%;
+
+  @include global.screenWidthAbove(global.$large) {
+    width: 100%;
+    height: auto;
+  }
+
+  &.slot1 {
+    align-items: end;
+    padding-bottom: 50px;
 
     @include global.screenWidthAbove(global.$large) {
-        width: 100%;
-        height: auto;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
     }
-
-    &.slot1 {
-        align-items: end;
-        padding-bottom: 50px;
-
-        @include global.screenWidthAbove(global.$large) {
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-        }
-        @include global.screenWidthAbove(global.$xlarge) {
-            justify-content: end;
-            padding: 0 50px 0 0;
-        }
+    @include global.screenWidthAbove(global.$xlarge) {
+      justify-content: end;
+      padding: 0 50px 0 0;
     }
+  }
 
-    &.slot2 {
-        align-items: start;
-        padding-top: 50px;
+  &.slot2 {
+    align-items: start;
+    padding-top: 50px;
 
-        @include global.screenWidthAbove(global.$large) {
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-        }
-        @include global.screenWidthAbove(global.$xlarge) {
-            justify-content: flex-start;
-            padding: 0 0 0 50px;
-        }
+    @include global.screenWidthAbove(global.$large) {
+      align-items: center;
+      justify-content: center;
+      padding: 0;
     }
+    @include global.screenWidthAbove(global.$xlarge) {
+      justify-content: flex-start;
+      padding: 0 0 0 50px;
+    }
+  }
 }
 
 /* Occupies approximately the same size as the mugshot exposed by the shutter. */
 .spacer {
-    --size: 240px;
+  --size: 240px;
 
-    @include global.screenSizeAbove(768px) {
-        --size: 350px;
-    }
+  @include global.screenSizeAbove(768px) {
+    --size: 350px;
+  }
 
-    max-width: var(--size);
-    min-width: var(--size);
-    max-height: var(--size);
-    min-height: var(--size);
+  max-width: var(--size);
+  min-width: var(--size);
+  max-height: var(--size);
+  min-height: var(--size);
 }
 </style>
 
@@ -165,55 +165,55 @@ watch(currentStep, (value, oldValue) => {
 @use "@/assets/global.scss" as global;
 
 .fastTransition {
-    --transition-duration: 0.2s;
-    color: red;
+  --transition-duration: 0.2s;
+  color: red;
 }
 
 @mixin translateLeftOrUp {
-    transform: translateX(-0.5em);
-    @include global.screenWidthAbove(global.$large) {
-        transform: translateY(-0.5em);
-    }
+  transform: translateX(-0.5em);
+  @include global.screenWidthAbove(global.$large) {
+    transform: translateY(-0.5em);
+  }
 }
 
 @mixin translateRightOrDown {
-    transform: translateX(0.5em);
-    @include global.screenWidthAbove(global.$large) {
-        transform: translateY(0.5em);
-    }
+  transform: translateX(0.5em);
+  @include global.screenWidthAbove(global.$large) {
+    transform: translateY(0.5em);
+  }
 }
 
 .slide-fade-1-enter-from {
-    opacity: 0;
-    @include translateLeftOrUp;
+  opacity: 0;
+  @include translateLeftOrUp;
 }
 
 .slide-fade-1-leave-to {
-    opacity: 0;
-    @include translateRightOrDown;
+  opacity: 0;
+  @include translateRightOrDown;
 }
 
 .slide-fade-2-enter-from {
-    opacity: 0;
-    @include translateRightOrDown;
+  opacity: 0;
+  @include translateRightOrDown;
 }
 
 .slide-fade-2-leave-to {
-    opacity: 0;
-    @include translateLeftOrUp;
+  opacity: 0;
+  @include translateLeftOrUp;
 }
 
 .slide-fade-1-leave-active,
 .slide-fade-2-leave-active {
-    position: absolute;
+  position: absolute;
 }
 
 .slide-fade-1-enter-active,
 .slide-fade-1-leave-active,
 .slide-fade-2-enter-active,
 .slide-fade-2-leave-active {
-    // If I don't use a Sass variable here, I get an error.
-    $transition-duration: var(--transition-duration, 0.7s);
-    transition: all $transition-duration ease-in-out;
+  // If I don't use a Sass variable here, I get an error.
+  $transition-duration: var(--transition-duration, 0.7s);
+  transition: all $transition-duration ease-in-out;
 }
 </style>

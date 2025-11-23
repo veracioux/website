@@ -5,7 +5,7 @@ import About from "@/components/sections/About.vue";
 </script>
 
 <template>
-    <PageWithNavbar>
-        <About />
-    </PageWithNavbar>
+  <PageWithNavbar>
+    <About />
+  </PageWithNavbar>
 </template>

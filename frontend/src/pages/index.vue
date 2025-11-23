@@ -34,144 +34,136 @@ const showCover = ref(true);
  * After that, they will scroll normally.
  */
 function styleStickyUntilThreshold(relativeScrollThreshold: number) {
-    if (relativeScrollY.value >= relativeScrollThreshold) {
-        return {position: "absolute", top: `-${navbar.value!.clientHeight}px`};
-    }
-    return {position: "fixed"};
+  if (relativeScrollY.value >= relativeScrollThreshold) {
+    return {position: "absolute", top: `-${navbar.value!.clientHeight}px`};
+  }
+  return {position: "fixed"};
 }
 
 let veraciouxTextAnimation: Animation | undefined = undefined;
 
 function onVeraciouxCrossedThreshold(
-    where: "above" | "below",
-    boundingRect: DOMRect
+  where: "above" | "below",
+  boundingRect: DOMRect
 ) {
-    if (!animatableVeraciouxTextElement.value) return;
+  if (!animatableVeraciouxTextElement.value) return;
 
-    const sourceRect = boundingRect,
-        targetRect =
-            animatableVeraciouxTextElement.value!.getBoundingClientRect();
-    if (where === "above") {
-        if (navbarOpaque.value)
-            // Navbar is already fully visible. The animation is not needed anymore.
-            return;
-        navbarOpaque.value = true;
-        veraciouxStyle.visibility = "hidden";
-        veraciouxTextAnimation?.cancel();
-        if (
-            sourceRect.y >= sourceRect.height &&
-            sourceRect.y <= 0.3 * window.innerHeight
-        ) {
-            veraciouxTextAnimation =
-                animatableVeraciouxTextElement.value!.animate(
-                    [
-                        {
-                            position: "fixed",
-                            top: `${sourceRect.y}px`,
-                            left: `${sourceRect.x}px`,
-                        },
-                        {
-                            position: "fixed",
-                            top: `${targetRect.y}px`,
-                            left: `${targetRect.x}px`,
-                        },
-                    ],
-                    {duration: 300, easing: "ease-in-out"}
-                );
-        }
-    } else {
-        veraciouxTextFadeable.value = true;
-        veraciouxStyle.visibility = undefined;
+  const sourceRect = boundingRect,
+    targetRect = animatableVeraciouxTextElement.value!.getBoundingClientRect();
+  if (where === "above") {
+    if (navbarOpaque.value)
+      // Navbar is already fully visible. The animation is not needed anymore.
+      return;
+    navbarOpaque.value = true;
+    veraciouxStyle.visibility = "hidden";
+    veraciouxTextAnimation?.cancel();
+    if (
+      sourceRect.y >= sourceRect.height &&
+      sourceRect.y <= 0.3 * window.innerHeight
+    ) {
+      veraciouxTextAnimation = animatableVeraciouxTextElement.value!.animate(
+        [
+          {
+            position: "fixed",
+            top: `${sourceRect.y}px`,
+            left: `${sourceRect.x}px`,
+          },
+          {
+            position: "fixed",
+            top: `${targetRect.y}px`,
+            left: `${targetRect.x}px`,
+          },
+        ],
+        {duration: 300, easing: "ease-in-out"}
+      );
     }
+  } else {
+    veraciouxTextFadeable.value = true;
+    veraciouxStyle.visibility = undefined;
+  }
 }
 
 function onAnimatableVeraciouxTextElementMounted(element: HTMLElement) {
-    animatableVeraciouxTextElement.value = element;
+  animatableVeraciouxTextElement.value = element;
 }
 
 onMounted(() => {
-    // Avoid the mugshot flashing to the user on initial load
-    showCover.value = false;
-    // TODO temporary fix for a strange behavior: when the page is not scrolled
-    //  to the top and is then reloaded, the Intro section misbehaves.
-    scrollContainer.value?.scrollTo({
-        top: 0,
-        behavior: "instant" as any,
-    });
+  // Avoid the mugshot flashing to the user on initial load
+  showCover.value = false;
+  // TODO temporary fix for a strange behavior: when the page is not scrolled
+  //  to the top and is then reloaded, the Intro section misbehaves.
+  scrollContainer.value?.scrollTo({
+    top: 0,
+    behavior: "instant" as any,
+  });
 });
 </script>
 <template>
-    <PageWithNavbar>
-        <template #navbar>
-            <div ref="navbar" class="navbar">
-                <Navbar
-                    :class="{opaque: navbarOpaque}"
-                    @animatableVeraciouxTextElementMounted="
-                        onAnimatableVeraciouxTextElementMounted
-                    "
-                />
-            </div>
-        </template>
-        <div class="container" ref="scrollContainer">
-            <div
-                class="%home-section-space-occupant"
-                style="min-height: 40vh"
-            />
-            <div
-                id="home"
-                class="%home-section-space-occupant"
-                style="min-height: 60vh"
-            />
-            <div class="introSectionContainer">
-                <Shutter
-                    class="shutter"
-                    :style="styleStickyUntilThreshold(1)"
-                />
-                <Intro
-                    class="intro"
-                    :style="{
-                        ...styleStickyUntilThreshold(1),
-                        ...(isMobile ? {transform: 'translateY(-30px)'} : {}),
-                    }"
-                    :veracioux-style="veraciouxStyle"
-                    :veracioux-text-fadeable="veraciouxTextFadeable"
-                    @veraciouxCrossedThreshold="onVeraciouxCrossedThreshold"
-                />
-                <div v-if="showCover" class="mugshotCover"></div>
-            </div>
-            <div class="-home-section-space-occupant fullWindow" />
-            <Projects id="projects" class="projects" />
-            <CV id="cv" class="cv" />
-            <!--            <About id="about" class="about" />-->
-            <!--            <Contact id="contact" class="contact" />-->
-        </div>
-    </PageWithNavbar>
+  <PageWithNavbar>
+    <template #navbar>
+      <div ref="navbar" class="navbar">
+        <Navbar
+          :class="{opaque: navbarOpaque}"
+          @animatableVeraciouxTextElementMounted="
+            onAnimatableVeraciouxTextElementMounted
+          "
+        />
+      </div>
+    </template>
+    <div class="container" ref="scrollContainer">
+      <div class="%home-section-space-occupant" style="min-height: 40vh" />
+      <div
+        id="home"
+        class="%home-section-space-occupant"
+        style="min-height: 60vh"
+      />
+      <div class="introSectionContainer">
+        <Shutter class="shutter" :style="styleStickyUntilThreshold(1)" />
+        <Intro
+          class="intro"
+          :style="{
+            ...styleStickyUntilThreshold(1),
+            ...(isMobile ? {transform: 'translateY(-30px)'} : {}),
+          }"
+          :veracioux-style="veraciouxStyle"
+          :veracioux-text-fadeable="veraciouxTextFadeable"
+          @veraciouxCrossedThreshold="onVeraciouxCrossedThreshold"
+        />
+        <div v-if="showCover" class="mugshotCover"></div>
+      </div>
+      <div class="-home-section-space-occupant fullWindow" />
+      <Projects id="projects" class="projects" />
+      <CV id="cv" class="cv" />
+      <!--            <About id="about" class="about" />-->
+      <!--            <Contact id="contact" class="contact" />-->
+    </div>
+  </PageWithNavbar>
 </template>
 
 <style scoped lang="scss">
 .navbar :deep(.navbar) {
-    position: sticky;
+  position: sticky;
 
+  .background,
+  .contentLeft,
+  .contentRight {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s;
+  }
+
+  &:not(.opaque) .veracioux {
+    visibility: hidden;
+  }
+
+  &.opaque {
     .background,
     .contentLeft,
     .contentRight {
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.6s;
+      opacity: 1;
+      pointer-events: unset;
     }
-
-    &:not(.opaque) .veracioux {
-        visibility: hidden;
-    }
-
-    &.opaque {
-        .background,
-        .contentLeft,
-        .contentRight {
-            opacity: 1;
-            pointer-events: unset;
-        }
-    }
+  }
 }
 </style>
 
@@ -179,37 +171,37 @@ onMounted(() => {
 @use "@/assets/common.module.scss" as c;
 
 .container {
-    @include c.scrollContainer;
+  @include c.scrollContainer;
 }
 
 .introSectionContainer {
-    position: relative;
+  position: relative;
 }
 
 .intro,
 .shutter {
-    @include c.fillParent;
+  @include c.fillParent;
 }
 
 .shutter {
-    z-index: v-bind("zindex.shutter");
+  z-index: v-bind("zindex.shutter");
 }
 
 .mugshotCover {
-    position: fixed;
-    inset: 0;
-    background: var(--color-background-0);
-    z-index: v-bind("zindex.mugshotCover");
+  position: fixed;
+  inset: 0;
+  background: var(--color-background-0);
+  z-index: v-bind("zindex.mugshotCover");
 }
 
 .intro {
-    z-index: v-bind("zindex.introSection");
+  z-index: v-bind("zindex.introSection");
 }
 
 .projects,
 .cv,
 .about,
 .contact {
-    z-index: v-bind("zindex.section");
+  z-index: v-bind("zindex.section");
 }
 </style>

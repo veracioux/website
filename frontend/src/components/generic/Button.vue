@@ -1,13 +1,13 @@
 <!-- TODO -->
 
 <template>
-    <button>
-        <slot />
-    </button>
+  <button>
+    <slot />
+  </button>
 </template>
 
 <style module="s" lang="scss">
 root {
-    cursor: pointer;
+  cursor: pointer;
 }
 </style>

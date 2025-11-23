@@ -7,12 +7,12 @@ import PageWithNavbar from "@/components/PageWithNavbar.vue";
 const addresses = {};
 
 const AddressComponent = defineComponent({
-    functional: true,
-    render: () => <div></div>,
+  functional: true,
+  render: () => <div></div>,
 });
 
 onMounted(() => {
-    /*
+  /*
     // @ts-ignore
     import("https://latest.cactus.chat/cactus.js");
     // @ts-ignore
@@ -30,18 +30,18 @@ onMounted(() => {
 </script>
 
 <template>
-    <PageWithNavbar>
-        <AddressComponent>
-            <div>0xDEADBEEF</div>
-        </AddressComponent>
-        <AddressComponent />
-        <AddressComponent />
-        <AddressComponent />
-        <AddressComponent />
-        <AddressComponent />
-        <AddressComponent />
-        <AddressComponent />
-    </PageWithNavbar>
+  <PageWithNavbar>
+    <AddressComponent>
+      <div>0xDEADBEEF</div>
+    </AddressComponent>
+    <AddressComponent />
+    <AddressComponent />
+    <AddressComponent />
+    <AddressComponent />
+    <AddressComponent />
+    <AddressComponent />
+    <AddressComponent />
+  </PageWithNavbar>
 </template>
 
 <style scoped lang="scss"></style>

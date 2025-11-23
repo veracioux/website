@@ -6,7 +6,7 @@ import {plugin as modalPlugin} from "@/components/projects/ProjectModal.vue";
 import {defineNuxtPlugin} from "#app";
 
 export default defineNuxtPlugin((app) => {
-    app.vueApp.use(VueKonva);
-    app.vueApp.use(VueLazyload);
-    app.vueApp.use(modalPlugin);
+  app.vueApp.use(VueKonva);
+  app.vueApp.use(VueLazyload);
+  app.vueApp.use(modalPlugin);
 });

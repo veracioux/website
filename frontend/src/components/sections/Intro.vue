@@ -7,43 +7,43 @@ import type {CSSProperties} from "vue";
 import {shutterFullyOpenedScrollThreshold} from "@/constants";
 
 defineProps<{
-    /** Style of the 'veracioux' text. */
-    veraciouxStyle?: CSSProperties;
-    /** Controls whether the 'veracioux' part should fade along with the rest of the greeting.  */
-    veraciouxTextFadeable?: boolean;
+  /** Style of the 'veracioux' text. */
+  veraciouxStyle?: CSSProperties;
+  /** Controls whether the 'veracioux' part should fade along with the rest of the greeting.  */
+  veraciouxTextFadeable?: boolean;
 }>();
 
 const emit = defineEmits<{
-    (e: "veraciouxMounted", element: HTMLElement): void;
-    (
-        e: "veraciouxCrossedThreshold",
-        where: "above" | "below",
-        boundingRect: DOMRect
-    ): void;
+  (e: "veraciouxMounted", element: HTMLElement): void;
+  (
+    e: "veraciouxCrossedThreshold",
+    where: "above" | "below",
+    boundingRect: DOMRect
+  ): void;
 }>();
 
 const hi = "Hi, I'm veracioux.";
 const selfPraiseItems: SelfPraiseProps[] = [
-    {
-        title: "A principled programmer",
-        content:
-            "I don't just code. I respect the art. I write quality documentation. I study best practices, and create my own.",
-    },
-    {
-        title: "On-demand perfectionist",
-        content:
-            "I have a tendency towards precision and diligence, but I can work under pressure too.",
-    },
-    {
-        title: "Constantly evolving",
-        content:
-            "I have touched a lot of technologies during my lifetime. I improve my workflow with new tools all the time.",
-    },
-    {
-        title: "Problem solver by nature and nurture",
-        content:
-            "I have been programming since age 12. It's my profession, hobby, way of life.",
-    },
+  {
+    title: "A principled programmer",
+    content:
+      "I don't just code. I respect the art. I write quality documentation. I study best practices, and create my own.",
+  },
+  {
+    title: "On-demand perfectionist",
+    content:
+      "I have a tendency towards precision and diligence, but I can work under pressure too.",
+  },
+  {
+    title: "Constantly evolving",
+    content:
+      "I have touched a lot of technologies during my lifetime. I improve my workflow with new tools all the time.",
+  },
+  {
+    title: "Problem solver by nature and nurture",
+    content:
+      "I have been programming since age 12. It's my profession, hobby, way of life.",
+  },
 ];
 
 // Config
@@ -58,7 +58,7 @@ const veraciouxThresholdScroll = 0.2;
 // Refs
 const typedOutLength = ref(0);
 const fadeableStyle = reactive<CSSProperties>({
-    opacity: 1,
+  opacity: 1,
 });
 const hello = ref<HTMLElement>();
 const helloStatic = ref<HTMLElement>();
@@ -76,13 +76,13 @@ const {relativeScrollY} = ScrollData.inject();
 let intervalId: number | undefined = undefined;
 
 function typeOut() {
-    ++typedOutLength.value;
-    // The RHS value is the length of all typed out characters combined. It can be calculated,
-    // but I just hardcoded it since it won't change often (maybe never).
-    if (typedOutLength.value === 30) {
-        clearInterval(intervalId);
-        intervalId = undefined;
-    }
+  ++typedOutLength.value;
+  // The RHS value is the length of all typed out characters combined. It can be calculated,
+  // but I just hardcoded it since it won't change often (maybe never).
+  if (typedOutLength.value === 30) {
+    clearInterval(intervalId);
+    intervalId = undefined;
+  }
 }
 
 /**
@@ -93,16 +93,16 @@ function typeOut() {
  * purely aesthetic reasons.
  */
 function calculateTypingInterval() {
-    return Math.min(
-        Math.max(
-            defaultTypingInterval -
-                ((defaultTypingInterval - minTypingInterval) /
-                    shutterFullyOpenedScrollThreshold) *
-                    relativeScrollY.value,
-            minTypingInterval
-        ),
-        defaultTypingInterval
-    );
+  return Math.min(
+    Math.max(
+      defaultTypingInterval -
+        ((defaultTypingInterval - minTypingInterval) /
+          shutterFullyOpenedScrollThreshold) *
+          relativeScrollY.value,
+      minTypingInterval
+    ),
+    defaultTypingInterval
+  );
 }
 
 /**
@@ -111,173 +111,150 @@ function calculateTypingInterval() {
  * them as necessary.
  */
 function positionGreetingAndTraits() {
-    console.assert(
-        hello.value !== undefined,
-        "`hello.value` is expected to be defined."
-    );
-    if (!helloStatic.value) return;
-    const helloTopY = helloStatic.value.offsetTop;
-    const traitsBottomY =
-        traitsStatic.value!.offsetTop + traitsStatic.value!.offsetHeight;
-    Object.assign(helloStyle, {
-        transform: `translate(0, ${
-            -helloTopY *
-            Math.max(
-                relativeScrollY.value / shutterFullyOpenedScrollThreshold,
-                0
-            )
-        }px)`,
-        top: -1.5 * window.scrollY + "px",
-    });
-    Object.assign(traitsStyle, {
-        transform: `translate(0, ${
-            (window.innerHeight - traitsBottomY) *
-            Math.min(
-                relativeScrollY.value / shutterFullyOpenedScrollThreshold,
-                1
-            )
-        }px)`,
-    });
+  console.assert(
+    hello.value !== undefined,
+    "`hello.value` is expected to be defined."
+  );
+  if (!helloStatic.value) return;
+  const helloTopY = helloStatic.value.offsetTop;
+  const traitsBottomY =
+    traitsStatic.value!.offsetTop + traitsStatic.value!.offsetHeight;
+  Object.assign(helloStyle, {
+    transform: `translate(0, ${
+      -helloTopY *
+      Math.max(relativeScrollY.value / shutterFullyOpenedScrollThreshold, 0)
+    }px)`,
+    top: -1.5 * window.scrollY + "px",
+  });
+  Object.assign(traitsStyle, {
+    transform: `translate(0, ${
+      (window.innerHeight - traitsBottomY) *
+      Math.min(relativeScrollY.value / shutterFullyOpenedScrollThreshold, 1)
+    }px)`,
+  });
 }
 
 let relativeScrollYAtLastIntervalUpdate = 0;
 let veraciouxPosition: "above" | "below" = "below";
 
 function onScroll(value: number) {
-    // Update opacity of fade-able part of the greeting text
-    fadeableStyle.opacity = Math.max(1 - value / veraciouxThresholdScroll, 0);
+  // Update opacity of fade-able part of the greeting text
+  fadeableStyle.opacity = Math.max(1 - value / veraciouxThresholdScroll, 0);
 
-    // As the user scrolls down, the typing interval must reduce proportionally.
-    if (
-        Math.abs(value - relativeScrollYAtLastIntervalUpdate) > 0.1 &&
-        intervalId
-    ) {
-        clearInterval(intervalId);
-        intervalId = setInterval(typeOut, calculateTypingInterval());
-        relativeScrollYAtLastIntervalUpdate = value;
-    }
+  // As the user scrolls down, the typing interval must reduce proportionally.
+  if (
+    Math.abs(value - relativeScrollYAtLastIntervalUpdate) > 0.1 &&
+    intervalId
+  ) {
+    clearInterval(intervalId);
+    intervalId = setInterval(typeOut, calculateTypingInterval());
+    relativeScrollYAtLastIntervalUpdate = value;
+  }
 
-    /* Ensure proper positioning of greeting and traits based on scroll. */
-    if (relativeScrollY.value < shutterFullyOpenedScrollThreshold) {
-        // Using a `watch` here ensures that positionGreetingAndTraits will be
-        // called even the first time after the condition is false.
-        const unwatch = watch(relativeScrollY, () => {
-            positionGreetingAndTraits();
-            unwatch();
-        });
-    }
+  /* Ensure proper positioning of greeting and traits based on scroll. */
+  if (relativeScrollY.value < shutterFullyOpenedScrollThreshold) {
+    // Using a `watch` here ensures that positionGreetingAndTraits will be
+    // called even the first time after the condition is false.
+    const unwatch = watch(relativeScrollY, () => {
+      positionGreetingAndTraits();
+      unwatch();
+    });
+  }
 
-    if (value > veraciouxThresholdScroll && veraciouxPosition === "below") {
-        emit(
-            "veraciouxCrossedThreshold",
-            "above",
-            veracioux.value!.getBoundingClientRect()
-        );
-        veraciouxPosition = "above";
-    } else if (
-        value < veraciouxThresholdScroll &&
-        veraciouxPosition === "above"
-    ) {
-        emit(
-            "veraciouxCrossedThreshold",
-            "below",
-            veracioux.value!.getBoundingClientRect()
-        );
-        veraciouxPosition = "below";
-    }
+  if (value > veraciouxThresholdScroll && veraciouxPosition === "below") {
+    emit(
+      "veraciouxCrossedThreshold",
+      "above",
+      veracioux.value!.getBoundingClientRect()
+    );
+    veraciouxPosition = "above";
+  } else if (
+    value < veraciouxThresholdScroll &&
+    veraciouxPosition === "above"
+  ) {
+    emit(
+      "veraciouxCrossedThreshold",
+      "below",
+      veracioux.value!.getBoundingClientRect()
+    );
+    veraciouxPosition = "below";
+  }
 }
 
 watch(relativeScrollY, onScroll);
 
 onMounted(() => {
-    setTimeout(() => {
-        intervalId = setInterval(typeOut, calculateTypingInterval());
-        typeOut();
-    }, 300);
-    emit("veraciouxMounted", veracioux.value!);
-    // TODO for some reason, `traitsStatic` initially doesn't have the proper
-    //  offset. This is a temporary fix.
-    setTimeout(positionGreetingAndTraits, 400);
+  setTimeout(() => {
+    intervalId = setInterval(typeOut, calculateTypingInterval());
+    typeOut();
+  }, 300);
+  emit("veraciouxMounted", veracioux.value!);
+  // TODO for some reason, `traitsStatic` initially doesn't have the proper
+  //  offset. This is a temporary fix.
+  setTimeout(positionGreetingAndTraits, 400);
 });
 </script>
 
 <template>
-    <div class="intro section" ref="root">
-        <!-- TODO this is an indicator for testing mugshot centering
+  <div class="intro section" ref="root">
+    <!-- TODO this is an indicator for testing mugshot centering
         <div style="display: flex; position: fixed; height: 100%; align-items: center; justify-content: center">
             <div style="width: 20px; height: 20px; background: red; border-radius: 50%;"></div>
         </div>
         -->
-        <div ref="helloStatic">
-            <div class="hello" :style="helloStyle" ref="hello">
-                <span :style="fadeableStyle">{{
-                    hi.slice(0, typedOutLength).slice(0, 8)
-                }}</span>
-                <span
-                    ref="veracioux"
-                    class="veracioux"
-                    :style="{
-                        ...veraciouxStyle,
-                        ...(veraciouxTextFadeable && fadeableStyle),
-                    }"
-                >
-                    {{ hi.slice(8, typedOutLength).slice(0, 9) }}
-                </span>
-                <span :style="fadeableStyle">{{
-                    hi.slice(-1, typedOutLength)
-                }}</span>
-            </div>
-        </div>
-        <div ref="traitsStatic">
-            <div
-                ref="traits"
-                :class="{
-                    traits,
-                    makeRoomForSelfPraise:
-                        relativeScrollY > selfPraiseAppearRelativeScrollY,
-                }"
-                :style="traitsStyle"
-            >
-                <div class="trait" style="align-items: flex-start">
-                    <div class="dummy" data-nosnippet>Programmer</div>
-                    <div>
-                        {{
-                            "Programmer".slice(
-                                0,
-                                Math.max(typedOutLength - hi.length, 0)
-                            )
-                        }}
-                    </div>
-                </div>
-                <div class="trait" style="align-items: flex-end">
-                    <div class="dummy" data-nosnippet>Engineer</div>
-                    <div>
-                        {{
-                            "Engineer".slice(
-                                0,
-                                Math.max(typedOutLength - hi.length, 0)
-                            )
-                        }}
-                    </div>
-                </div>
-                <div class="trait" style="align-items: flex-start">
-                    <div class="dummy" data-nosnippet>Tinkerer</div>
-                    <div>
-                        {{
-                            "Tinkerer".slice(
-                                0,
-                                Math.max(typedOutLength - hi.length, 0)
-                            )
-                        }}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <SelfPraiseManager
-            :appear-relative-scroll-y="selfPraiseAppearRelativeScrollY"
-            :self-praise-items="selfPraiseItems"
-        />
+    <div ref="helloStatic">
+      <div class="hello" :style="helloStyle" ref="hello">
+        <span :style="fadeableStyle">{{
+          hi.slice(0, typedOutLength).slice(0, 8)
+        }}</span>
+        <span
+          ref="veracioux"
+          class="veracioux"
+          :style="{
+            ...veraciouxStyle,
+            ...(veraciouxTextFadeable && fadeableStyle),
+          }"
+        >
+          {{ hi.slice(8, typedOutLength).slice(0, 9) }}
+        </span>
+        <span :style="fadeableStyle">{{ hi.slice(-1, typedOutLength) }}</span>
+      </div>
     </div>
+    <div ref="traitsStatic">
+      <div
+        ref="traits"
+        :class="{
+          traits,
+          makeRoomForSelfPraise:
+            relativeScrollY > selfPraiseAppearRelativeScrollY,
+        }"
+        :style="traitsStyle"
+      >
+        <div class="trait" style="align-items: flex-start">
+          <div class="dummy" data-nosnippet>Programmer</div>
+          <div>
+            {{ "Programmer".slice(0, Math.max(typedOutLength - hi.length, 0)) }}
+          </div>
+        </div>
+        <div class="trait" style="align-items: flex-end">
+          <div class="dummy" data-nosnippet>Engineer</div>
+          <div>
+            {{ "Engineer".slice(0, Math.max(typedOutLength - hi.length, 0)) }}
+          </div>
+        </div>
+        <div class="trait" style="align-items: flex-start">
+          <div class="dummy" data-nosnippet>Tinkerer</div>
+          <div>
+            {{ "Tinkerer".slice(0, Math.max(typedOutLength - hi.length, 0)) }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <SelfPraiseManager
+      :appear-relative-scroll-y="selfPraiseAppearRelativeScrollY"
+      :self-praise-items="selfPraiseItems"
+    />
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -285,59 +262,59 @@ onMounted(() => {
 @use "@/assets/global.scss";
 
 .hello {
-    @include common.veracioux;
-    position: relative;
-    text-align: center;
-    margin-bottom: 3em;
+  @include common.veracioux;
+  position: relative;
+  text-align: center;
+  margin-bottom: 3em;
 }
 
 .traits {
-    position: relative;
-    bottom: 0;
-    margin-bottom: 1em;
+  position: relative;
+  bottom: 0;
+  margin-bottom: 1em;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
 
-    opacity: 0.5;
+  opacity: 0.5;
 
-    /**
+  /**
      * When the screen size is such that the traits and self-praise cards would
      * overlap, hide the traits.
      */
-    &.makeRoomForSelfPraise {
-        @include global.screenWidthBelow(global.$large) {
-            opacity: 0;
-        }
+  &.makeRoomForSelfPraise {
+    @include global.screenWidthBelow(global.$large) {
+      opacity: 0;
     }
+  }
 
-    transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .trait {
-    display: flex;
-    flex-direction: column;
-    min-height: 1em;
-    max-height: 1em;
-    font-size: 1.4em;
+  display: flex;
+  flex-direction: column;
+  min-height: 1em;
+  max-height: 1em;
+  font-size: 1.4em;
 }
 
 .dummy {
-    opacity: 0;
-    height: 0;
+  opacity: 0;
+  height: 0;
 }
 
 .intro {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-    color: var(--color-primary);
-    font-family: global.$monospace;
+  color: var(--color-primary);
+  font-family: global.$monospace;
 
-    pointer-events: none;
+  pointer-events: none;
 }
 </style>
