@@ -23,7 +23,7 @@ import {
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import Img from "@/components/generic/Img.vue";
 import {defineProps, onMounted, ref} from "vue";
-import {ContextIsPdf} from "@/inject";
+import { CvContext } from "~/inject";
 
 library.add(
     faArrowUpRightFromSquare,
@@ -81,7 +81,7 @@ const root = ref<HTMLElement>();
 
 const imageSrc = props.src;
 
-const isPdf = ContextIsPdf.inject();
+const {isPdf} = CvContext.inject();
 
 onMounted(() => {
     if ((props.name !== undefined) == (props.src !== undefined)) {

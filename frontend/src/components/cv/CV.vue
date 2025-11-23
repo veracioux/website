@@ -3,7 +3,7 @@ import TimelineEntry from "@/components/cv/TimelineEntry.vue";
 import SkillsPane from "@/components/cv/SkillsPane.vue";
 import CVHeader from "./CVHeader.vue";
 import LanguagesPane from "@/components/cv/LanguagesPane.vue";
-import {ContextIsPdf, CvContext} from "@/inject";
+import {CvContext} from "@/inject";
 import {groups, entries, type Entry, type Skill, skills, type DisplayMode} from "@/cv";
 import {onMounted, ref, watch} from "vue";
 
@@ -28,9 +28,7 @@ const selectedEntry = ref<Entry | null>(null);
 const selectedSkill = ref<Skill | null>(null);
 const activeSkills = ref<Skill[]>([]);
 
-const isPdf = ContextIsPdf.inject();
-
-const {variant} = CvContext.inject();
+const {variant, isPdf} = CvContext.inject();
 
 // TODO Devise a method to define variants in external files.
 const excludedGroups = variant ? ([

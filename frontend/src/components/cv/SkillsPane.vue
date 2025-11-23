@@ -7,7 +7,7 @@ import iconGit from "@/assets/icons/git-with-text.svg";
 import iconJetBrains from "@/assets/icons/jetbrains.svg";
 import iconLinux from "@/assets/icons/linux.svg";
 import iconEmacs from "@/assets/icons/emacs.svg";
-import {ContextIsPdf} from "~/inject";
+import { CvContext } from "~/inject";
 
 const props = defineProps<{
     variant?: string;
@@ -24,7 +24,7 @@ const emit = defineEmits<{
     (e: "selectSkill", skill: Skill): void;
 }>();
 
-const isPdf = ContextIsPdf.inject();
+const {isPdf} = CvContext.inject();
 
 const extraClasses: Partial<Record<keyof typeof skills, string>> = {
     bash: "iconBash",

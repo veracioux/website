@@ -2,17 +2,13 @@
 import PageWithNavbar from "@/components/PageWithNavbar.vue";
 import CVSection from "@/components/sections/CV.vue";
 import CV from '@/components/cv/CV.vue';
-import {ContextIsPdf, CvContext, ScrollData} from "@/inject";
-import {computed} from "vue";
+import {CvContext, ScrollData} from "@/inject";
 
-const {render} = CvContext.inject();
-
-const isPdf = computed(() => render === "pdf");
+const {isPdf} = CvContext.inject();
 
 ScrollData.provide();
-ContextIsPdf.provide(isPdf);
 
-if (process.client && isPdf.value) {
+if (process.client && isPdf) {
     document.querySelector(":root")
         ?.setAttribute("data-theme", "light");
 }

@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import {ref} from "vue";
 import {NuxtPage} from "#components";
 import { useHead } from "nuxt/app";
-import { ContextIsPdf } from "./inject";
 
 useHead({
     title: "veracioux | Haris Gušić",
@@ -10,8 +8,6 @@ useHead({
         lang: "en",
     }
 });
-
-ContextIsPdf.provide(ref(false));
 
 </script>
 

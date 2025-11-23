@@ -63,17 +63,6 @@ export class ScrollData {
     }
 }
 
-// TODO: move into CvContext
-export class ContextIsPdf {
-    static inject(): Ref<boolean> {
-        return _inject("isPdf") ?? ref(false);
-    }
-
-    static provide(value: Ref<boolean>) {
-        _provide("isPdf", value);
-    }
-}
-
 export class CvContext {
     static inject() {
         const {variant, resume, render} = useRoute().query;
@@ -81,6 +70,9 @@ export class CvContext {
             variant,
             resume: resume === "true",
             render: render as "pdf" | "html" | undefined,
+            get isPdf() {
+                return this.render === "pdf";
+            }
         });
     }
 }
