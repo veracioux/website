@@ -1,6 +1,6 @@
 {
   "extends": "./.nuxt/tsconfig.json",
-  "include": ["*.ts", "**/*.ts", "*.tsx", "**/*.tsx", "*.vue" ,"**/*.vue"],
+  "include": ["*.ts", "**/*.ts", "*.tsx", "**/*.tsx", "*.vue", "**/*.vue"],
   "compilerOptions": {
     "composite": true,
     "lib": ["es2020", "dom"]

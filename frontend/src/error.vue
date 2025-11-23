@@ -5,73 +5,73 @@ import {ref} from "vue";
 import Navbar from "@/components/Navbar.vue";
 
 const phrases = [
-    "Not Found",
-    "Are you lost?",
-    "Why are you still here?",
-    "Not Found",
+  "Not Found",
+  "Are you lost?",
+  "Why are you still here?",
+  "Not Found",
 ];
 const activePhraseId = ref(0);
 
 function incrementActivePhrase() {
-    setTimeout(() => {
-        if (activePhraseId.value != phrases.length - 1) activePhraseId.value++;
-    }, 3000);
+  setTimeout(() => {
+    if (activePhraseId.value != phrases.length - 1) activePhraseId.value++;
+  }, 3000);
 }
 </script>
 
 <template>
-    <Navbar />
-    <div class="container">
-        <div class="content">
-            <GlitchedWriter
-                class="number"
-                text="404"
-                :queue="{steps: 2, interval: 10, delay: 10}"
-                appear
-            />
-            <div style="height: 64px">
-                <div v-for="(phrase, i) of phrases" :key="i">
-                    <GlitchedWriter
-                        v-if="activePhraseId === i"
-                        class="notFound"
-                        :text="phrase"
-                        :queue="{interval: 100}"
-                        @finish="incrementActivePhrase"
-                        appear
-                    />
-                </div>
-            </div>
+  <Navbar />
+  <div class="container">
+    <div class="content">
+      <GlitchedWriter
+        class="number"
+        text="404"
+        :queue="{steps: 2, interval: 10, delay: 10}"
+        appear
+      />
+      <div style="height: 64px">
+        <div v-for="(phrase, i) of phrases" :key="i">
+          <GlitchedWriter
+            v-if="activePhraseId === i"
+            class="notFound"
+            :text="phrase"
+            :queue="{interval: 100}"
+            @finish="incrementActivePhrase"
+            appear
+          />
         </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
 @use "@/assets/global.scss";
 .container {
-    position: fixed;
-    inset: 0;
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .content {
+    position: relative;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
 
-    .content {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    font-family: global.$monospace;
+    color: var(--color-secondary);
 
-        font-family: global.$monospace;
-        color: var(--color-secondary);
-
-        .number {
-            font-size: 4em;
-        }
-
-        .notFound {
-            font-size: 2em;
-            height: 64px;
-            vertical-align: middle;
-        }
+    .number {
+      font-size: 4em;
     }
+
+    .notFound {
+      font-size: 2em;
+      height: 64px;
+      vertical-align: middle;
+    }
+  }
 }
 </style>

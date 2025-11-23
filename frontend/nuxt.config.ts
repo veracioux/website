@@ -4,36 +4,36 @@ import {rollupPlugin} from "ascii-mugshot";
 import {defineNuxtConfig, type NuxtConfig} from "nuxt/config";
 
 export default defineNuxtConfig({
-    compatibilityDate: "2025-11-23",
-    // buildModules: ["@nuxtjs/google-fonts"],
-    modules: ["@nuxtjs/google-fonts"],
-    srcDir: "src/",
-    runtimeConfig: {
-        public: {
-            env: process.env.ENV,
-        },
+  compatibilityDate: "2025-11-23",
+  // buildModules: ["@nuxtjs/google-fonts"],
+  modules: ["@nuxtjs/google-fonts"],
+  srcDir: "src/",
+  runtimeConfig: {
+    public: {
+      env: process.env.ENV,
     },
-    devServer: {
-        port: 8080,
+  },
+  devServer: {
+    port: 8080,
+  },
+  // @ts-expect-error FIXME
+  googleFonts: {
+    families: {
+      "Secular One": true,
+      "Roboto Mono": true,
     },
-    // @ts-expect-error FIXME
-    googleFonts: {
-        families: {
-            "Secular One": true,
-            "Roboto Mono": true,
-        },
+  },
+  css: ["@/assets/global.scss"],
+  vite: {
+    plugins: [vueJsx(), rollupPlugin()],
+    build: {
+      write: true,
+      assetsDir: process.env.ENV === "staging" ? "stg/static" : "static",
     },
-    css: ["@/assets/global.scss"],
-    vite: {
-        plugins: [vueJsx(), rollupPlugin()],
-        build: {
-            write: true,
-            assetsDir: process.env.ENV === "staging" ? "stg/static" : "static",
-        },
-        css: {
-            modules: {
-                localsConvention: "camelCaseOnly",
-            },
-        },
+    css: {
+      modules: {
+        localsConvention: "camelCaseOnly",
+      },
     },
+  },
 }) as NuxtConfig;

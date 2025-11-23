@@ -23,7 +23,6 @@
   }
 }
 
-
 @mixin screenSizeAbove($width, $height: null) {
   @if $height == null {
     $height: $width;
@@ -52,7 +51,7 @@ $navbarHeight: 3.2rem;
 
   // All these fonts are here so I can switch when I get bored of the current one
   font-family: "Secular One", "Kanit", "Play", "Mitr", "Hammersmith One",
-  "Roboto Mono", Helvetica, sans-serif;
+    "Roboto Mono", Helvetica, sans-serif;
 
   @include screenSizeAbove($small) {
     font-size: 14px;
@@ -72,7 +71,7 @@ $navbarHeight: 3.2rem;
   --color-primary-rgb: 95, 88, 255;
   --color-secondary: #99a3ff;
   --color-secondary-rgb: 153, 163, 255;
-  --color-tertiary: #C2185B; // TODO -rgb variant
+  --color-tertiary: #c2185b; // TODO -rgb variant
   --color-background-0: black;
   --color-background-0-rgb: 0, 0, 0;
   --color-background-1: #0a0b12;
@@ -85,9 +84,9 @@ $navbarHeight: 3.2rem;
   --color-text-pale-rgb: 153, 153, 153;
 
   &[data-theme="light"] {
-    --color-primary: #303F9F;
+    --color-primary: #303f9f;
     --color-primary-rgb: 48, 63, 159;
-    --color-secondary: #673AB7;
+    --color-secondary: #673ab7;
     --color-secondary-rgb: 103, 58, 183;
     --color-background-0: white;
     --color-background-0-rgb: 255, 255, 255;
@@ -116,7 +115,6 @@ a {
     color: var(--color-primary);
   }
 }
-
 
 h1,
 h2,

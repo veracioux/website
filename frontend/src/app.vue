@@ -1,27 +1,26 @@
 <script setup lang="ts">
 import {NuxtPage} from "#components";
-import { useHead } from "nuxt/app";
+import {useHead} from "nuxt/app";
 
 useHead({
-    title: "veracioux | Haris Gušić",
-    htmlAttrs: {
-        lang: "en",
-    }
+  title: "veracioux | Haris Gušić",
+  htmlAttrs: {
+    lang: "en",
+  },
 });
-
 </script>
 
 <template>
-    <NuxtPage />
+  <NuxtPage />
 </template>
 
 <style>
 html,
 body {
-    background: var(--color-background-0);
-    margin: 0;
-    padding: 0;
-    scroll-behavior: smooth;
+  background: var(--color-background-0);
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
 }
 </style>
 
