@@ -1,4 +1,4 @@
-@import "./global.scss";
+@use "./global.scss";
 
 @mixin _verticalMargin($top: null, $bottom: null, $multiplier: 1) {
   @if $top != null {
@@ -12,15 +12,15 @@
 @mixin responsiveVerticalMargin($top: null, $bottom: null) {
   @include _verticalMargin($top, $bottom);
 
-  @include screenSizeAbove($tablet) {
+  @include global.screenSizeAbove(global.$tablet) {
     @include _verticalMargin($top, $bottom, 1.2);
   }
 
-  @include screenSizeAbove($small) {
+  @include global.screenSizeAbove(global.$small) {
     @include _verticalMargin($top, $bottom, 1.4);
   }
 
-  @include screenSizeAbove($large, $small) {
+  @include global.screenSizeAbove(global.$large, global.$small) {
     @include _verticalMargin($top, $bottom, 1.6);
   }
 }

@@ -136,7 +136,6 @@ onMounted(() => {
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as c;
 @use "@/assets/global.scss" as g;
-@import "@/assets/global.scss";
 
 .section {
     position: relative;
@@ -167,7 +166,7 @@ onMounted(() => {
                 @include c.centerFlex;
                 flex-direction: column;
                 gap: 48px;
-                font-family: $monospace;
+                font-family: g.$monospace;
 
                 @include g.screenWidthAbove(g.$small) {
                     flex-direction: row;
@@ -281,5 +280,6 @@ onMounted(() => {
 
 <!-- Standard fade transition style -->
 <style scoped lang="scss">
-@import "@/assets/standard-fade-transition.module.scss";
+// TODO: Works?
+@forward "@/assets/standard-fade-transition.module.scss";
 </style>

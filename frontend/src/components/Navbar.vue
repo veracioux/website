@@ -21,7 +21,7 @@ onMounted(() => {
 
 <template>
     <div class="navbar">
-        <div class="background" />
+        <div class="background"></div>
         <div class="content">
             <div class="contentLeft"></div>
             <div style="position: relative">
@@ -42,7 +42,7 @@ onMounted(() => {
 
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as c;
-@import "@/assets/global.scss";
+@use "@/assets/global.scss";
 
 .background {
     @include c.fillParent;
@@ -96,9 +96,8 @@ a.veracioux {
     position: relative;
     display: flex;
     align-items: center;
-    height: $navbarHeight;
-
-    font-family: $monospace;
+    height: global.$navbarHeight;
+    font-family: global.$monospace;
     font-size: 2em;
     text-align: center;
     z-index: v-bind("zindex.navbar");

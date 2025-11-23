@@ -40,7 +40,7 @@ defineEmits<{
 </template>
 
 <style module="p" lang="scss">
-@import "@/assets/project.module.scss";
+@forward "@/assets/project.module.scss";
 </style>
 
 <style module="s" lang="scss">

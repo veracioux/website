@@ -34,8 +34,7 @@ function onDisplayModeChanged(value: DisplayMode) {
 
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as common;
-@import "@/assets/global.scss";
-@import "@/assets/home.scss";
+@use "@/assets/global.scss";
 
 $colorDimText: rgba(var(--color-text-rgb), 0.7);
 
@@ -87,7 +86,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
 
         &.bottom {
             // This is equal to the navbar height and is determined empirically
-            bottom: $navbarHeight;
+            bottom: global.$navbarHeight;
             height: 5em;
             background: linear-gradient(transparent, $color 44%);
         }

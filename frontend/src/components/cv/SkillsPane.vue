@@ -96,7 +96,7 @@ function shouldHighlight(skill: Skill) {
 
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as common;
-@import "@/assets/global.scss";
+@use "@/assets/global.scss";
 
 .skillsPaneRoot {
     display: flex;
@@ -132,7 +132,7 @@ function shouldHighlight(skill: Skill) {
         margin-right: 24px;
     }
 
-    @include screenWidthAbove($small) {
+    @include global.screenWidthAbove(global.$small) {
         justify-content: flex-start;
     }
 
@@ -155,7 +155,7 @@ function shouldHighlight(skill: Skill) {
         filter: drop-shadow(0 0 calc($scale * 8px) var(--color-secondary));
     }
 
-    @include screenWidthAbove($small) {
+    @include global.screenWidthAbove(global.$small) {
         pointer-events: all;
 
         &:hover {

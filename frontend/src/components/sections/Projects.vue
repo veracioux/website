@@ -80,7 +80,6 @@ function onMouseLeaveProjectCard() {
 
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as c;
-@import "@/assets/home.scss";
 
 .section {
     position: relative;

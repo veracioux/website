@@ -101,7 +101,7 @@ onMounted(() => {
 
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as c;
-@import "@/assets/global.scss";
+@use "@/assets/global.scss";
 
 .root {
     // If omitted, there is some weird padding between this and <img>
@@ -116,7 +116,7 @@ onMounted(() => {
 .asciiArtContainer {
     position: absolute;
     inset: 0;
-    font-family: $monospace;
+    font-family: global.$monospace;
 
     transform-origin: 0 0;
 }

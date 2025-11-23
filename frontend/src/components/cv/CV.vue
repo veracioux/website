@@ -186,11 +186,11 @@ onMounted(() => {
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as common;
 @use "@/assets/timeline-entry.module.scss" as timeline;
-@import "@/assets/global.scss";
+@use "@/assets/global.scss";
 
 $colorDimText: rgba(var(--color-text-rgb), 0.7);
 @mixin screenWidthAboveCriticalPoint {
-    @include screenWidthAbove($small) {
+    @include global.screenWidthAbove(global.$small) {
         @content;
     }
 }
@@ -243,7 +243,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
 
             margin-left: 32px;
 
-            @include screenSizeAbove($large) {
+            @include global.screenSizeAbove(global.$large) {
                 max-width: 900px;
             }
 
@@ -312,8 +312,8 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
                 align-items: start;
             }
 
-            @include screenWidthAbove($large) {
-                @include screenHeightBelow($small) {
+            @include global.screenWidthAbove(global.$large) {
+                @include global.screenHeightBelow(global.$small) {
                     flex-direction: row;
                     gap: 1em;
                     flex: 2 0 50%;

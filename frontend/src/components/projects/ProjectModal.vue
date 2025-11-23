@@ -316,9 +316,9 @@ const zindex = reactive(_zindex)
 </style>
 
 <style module="p" lang="scss">
-@import "@/assets/project.module.scss";
+@forward "@/assets/project.module.scss";
 </style>
 
 <style module="c" lang="scss">
-@import "@/assets/common.module.scss";
+@forward "@/assets/common.module.scss";
 </style>

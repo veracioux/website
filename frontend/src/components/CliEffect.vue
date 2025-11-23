@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, watch} from "vue";
+import {computed} from "vue";
 import {clip} from "@/utils";
 
 const props = withDefaults(
@@ -83,5 +83,6 @@ const prompt = computed(() =>
 
 <!-- Standard fade transition style -->
 <style scoped lang="scss">
-@import "@/assets/standard-fade-transition.module.scss";
+// TODO: Works?
+@forward "@/assets/standard-fade-transition.module.scss";
 </style>

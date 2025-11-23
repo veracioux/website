@@ -50,7 +50,7 @@ defineProps<{
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as c;
 @use "@/assets/timeline-entry.module.scss" as timeline;
-@import "@/assets/global.scss";
+@use "@/assets/global.scss";
 
 .timeLineItem {
     position: relative;
@@ -71,7 +71,7 @@ defineProps<{
         }
     }
 
-    @include screenWidthAbove($small) {
+    @include global.screenWidthAbove(global.$small) {
         pointer-events: revert;
 
         .dot, .timeSpan, .description {
@@ -143,10 +143,10 @@ defineProps<{
     .lineCell {
         position: relative;
         --width: 12px;
-        @include screenSizeAbove($tablet) {
+        @include global.screenSizeAbove(global.$tablet) {
             --width: 14px;
         }
-        @include screenWidthAbove($small) {
+        @include global.screenWidthAbove(global.$small) {
             --width: 16px;
         }
         width: var(--width);

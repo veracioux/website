@@ -282,7 +282,7 @@ onMounted(() => {
 
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as common;
-@import "@/assets/global.scss";
+@use "@/assets/global.scss";
 
 .hello {
     @include common.veracioux;
@@ -308,7 +308,7 @@ onMounted(() => {
      * overlap, hide the traits.
      */
     &.makeRoomForSelfPraise {
-        @include screenWidthBelow($large) {
+        @include global.screenWidthBelow(global.$large) {
             opacity: 0;
         }
     }
@@ -336,7 +336,7 @@ onMounted(() => {
     justify-content: center;
 
     color: var(--color-primary);
-    font-family: $monospace;
+    font-family: global.$monospace;
 
     pointer-events: none;
 }
