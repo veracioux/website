@@ -50,7 +50,7 @@ const nameToDataMap: Record<string, IconData> = {
 
 const props = defineProps<SocialIconProps>();
 
-const href = props.href ?? nameToDataMap[props.name as keyof typeof nameToDataMap].href;
+const href = props.href ?? nameToDataMap[props.name as keyof typeof nameToDataMap]?.href;
 </script>
 
 <template>

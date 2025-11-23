@@ -140,14 +140,14 @@ onMounted(() => {
                     </template>
                 </template>
                     <template v-else>
-                        <template v-bind:key="i" v-for="(group, i) of enabledGroups">
+                        <template v-bind:key="group.key" v-for="(group, i) of enabledGroups">
                             <h3 class="groupTitle subsectionTitle"
                                 :class="{intermittent: i !== 0}">
                                 {{ group.name }}
                             </h3>
                             <template
-                                v-bind:key="j"
                                 v-for="(entry, j) of group.entries?.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())"
+                                v-bind:key="entry.key"
                             >
                                 <TimelineEntry
                                     v-bind="entry"

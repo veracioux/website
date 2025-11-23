@@ -1,37 +1,30 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 
-import {onMounted, ref} from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 
-const img = ref<HTMLElement>();
+let timeout: NodeJS.Timeout;
+
+const opaque = ref(false);
 
 onMounted(() => {
-    setTimeout(() => {
-        img.value!.classList.add("opaque");
+    timeout = setTimeout(() => {
+        opaque.value = true;
     }, 1000);
-    img.value!.classList.add("transition");
+});
+
+onUnmounted(() => {
+    clearTimeout(timeout);
 });
 </script>
 
 <template>
-    <img ref="img" v-bind="$props" :class="[s.image]" />
+    <img v-bind="$props" :class="[s.image]" :style="{ opacity: opaque ? 1 : 0 }" />
 </template>
 
 <style lang="scss" module="s">
-// When an <img> loads, we want its opacity to transition to 1.
-// Corresponding JS code is in App.vue.
 .image {
-    opacity: 0;
     color: transparent;
-}
-
-</style>
-
-<style scoped lang="scss">
-.transition {
     transition: opacity 1s;
-}
-.opaque {
-    opacity: 1;
 }
 </style>
