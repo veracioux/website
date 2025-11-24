@@ -9,7 +9,8 @@
     "dev:container": "nuxt dev --host 0.0.0.0 --port $FRONTEND_PORT",
     "generate": "nuxt generate",
     "postinstall": "nuxt prepare",
-    "generate-pdf-cv": "node scripts/generate-pdf-cv.js"
+    "generate-pdf-cv": "bun run scripts/generate-pdf-cv.ts",
+    "typecheck": "nuxt typecheck"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
