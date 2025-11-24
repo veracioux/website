@@ -194,13 +194,21 @@ export default component;
         <div>
           <h4>Roles</h4>
           <div :class="s.tags">
-            <Label v-for="label in project?.roles" :title="label" />
+            <Label
+              v-bind:key="label"
+              v-for="label in project?.roles"
+              :title="label"
+            ></Label>
           </div>
         </div>
         <div>
           <h4>Tools & Languages</h4>
           <div :class="s.tags">
-            <Label v-for="label in project?.languages" :title="label" />
+            <Label
+              v-bind:key="label"
+              v-for="label in project?.languages"
+              :title="label"
+            ></Label>
           </div>
         </div>
         <!--                <Button>Contribute</Button>-->
@@ -229,6 +237,7 @@ export default component;
   &.poppingOut {
     @include c.opacityFadeIn(0.2s ease-in-out reverse);
   }
+
   pointer-events: all;
 }
 
