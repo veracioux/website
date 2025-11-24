@@ -1,12 +1,10 @@
-<script setup lang="tsx">
-import { defineComponent, onMounted } from "vue";
+<script setup lang="ts">
+import { defineComponent, onMounted, h } from "vue";
 import PageWithNavbar from "@/components/PageWithNavbar.vue";
-
-const addresses = {};
 
 const AddressComponent = defineComponent({
   functional: true,
-  render: () => <div></div>,
+  render: () => h("div"),
 });
 
 onMounted(() => {

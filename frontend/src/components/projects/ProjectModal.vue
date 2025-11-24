@@ -1,12 +1,10 @@
 <!-- A regular <script> tag (without setup) is needed so I can export `plugin` from this file -->
-<script lang="tsx">
+<script lang="ts">
 import type { App, PropType } from "vue";
-import { defineComponent } from "vue";
+import { defineComponent, h } from "vue";
 import type { Project } from "@/models";
-import Img from "@/components/generic/Img.vue";
 import Icon from "@/components/generic/Icon.vue";
 import Label from "@/components/generic/Label.vue";
-import Button from "@/components/generic/Button.vue";
 import type { IconProps } from "@/components/generic/Icon.vue";
 import type { IconName } from "@fortawesome/fontawesome-svg-core";
 
@@ -52,20 +50,21 @@ function getRepoUrlIconName(url: string | undefined): IconName | undefined {
 
 const component = defineComponent({
   components: {
-    Img,
     Icon,
     Label,
-    Button,
+    // TODO: Extract into .vue component
     UrlEntry: defineComponent({
       props: ["href", "iconProps"],
       render({ href, iconProps }: URLEntryProps) {
-        return (
-          <a class="urlEntry" href={href} target="_blank">
-            {iconProps && <Icon {...iconProps} className="icon" />}
-            <div>{this.$slots.default?.()}</div>
-            <Icon name="externalLink" className="icon externalLink" center />
-          </a>
-        );
+        return h("a", { class: "urlEntry", href, target: "_blank" }, [
+          iconProps ? h(Icon, { ...iconProps, className: "icon" }) : null,
+          h("div", {}, this.$slots.default?.()),
+          h(Icon, {
+            name: "externalLink",
+            className: "icon externalLink",
+            center: true,
+          }),
+        ]);
       },
     }),
   },
@@ -143,11 +142,8 @@ export const plugin = {
 export default component;
 </script>
 
-<script setup lang="tsx">
+<script setup lang="ts">
 // TODO: for some reason if I leave this import out I get an error in the browser console.
-import _zindex from "@/zindex";
-import { reactive } from "vue";
-const zindex = reactive(_zindex);
 </script>
 
 <template>

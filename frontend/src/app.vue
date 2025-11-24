@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { NuxtPage } from "#components";
 import { useHead } from "nuxt/app";
+import { ScrollData } from "./inject";
 
 useHead({
   title: "veracioux | Haris Gušić",
@@ -8,6 +9,8 @@ useHead({
     lang: "en",
   },
 });
+
+ScrollData.provide();
 </script>
 
 <template>
