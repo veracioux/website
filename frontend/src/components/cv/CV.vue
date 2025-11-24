@@ -136,54 +136,18 @@ onMounted(() => {
     <div class="content" @click="onDeselect">
       <div class="timelineWrapper">
         <table class="timeline">
-          <template v-if="displayMode === 'timeline'">
-            <template
-              v-bind:key="entry.key"
-              v-for="entry of enabledEntries.sort(
-                (a, b) =>
-                  new Date(b.startDate).getTime() -
-                  new Date(a.startDate).getTime()
-              )"
-            >
-              <TimelineEntry
-                v-bind="entry"
-                :hovered="hoveredEntry?.key === entry.key"
-                :selected="selectedEntry?.key === entry.key"
-                :active="selectedEntry?.key !== entry.key && !!entry.skills?.find(s => (s as Skill).key === (selectedSkill ?? hoveredSkill)?.key)"
-                @mouseover="onHoverEntry(entry)"
-                @mouseleave="onLeaveEntry()"
-                @click.stop="onToggleSelectEntry(entry)"
-              />
-            </template>
-          </template>
-          <template v-else>
-            <template
-              v-bind:key="group.key"
-              v-for="(group, i) of enabledGroups"
-            >
-              <h3
-                class="groupTitle subsectionTitle"
-                :class="{ intermittent: i !== 0 }"
-              >
-                {{ group.name }}
-              </h3>
+          <tbody>
+            <template v-if="displayMode === 'timeline'">
               <template
-                v-for="(entry, j) of group.entries?.sort(
+                v-bind:key="entry.key"
+                v-for="entry of enabledEntries.sort(
                   (a, b) =>
                     new Date(b.startDate).getTime() -
                     new Date(a.startDate).getTime()
                 )"
-                v-bind:key="entry.key"
               >
                 <TimelineEntry
                   v-bind="entry"
-                  class="groupedTimeLineEntry"
-                  :class="{
-                    marginTop: j === 0,
-                    marginBottom:
-                      j === (group.entries?.length ?? 0) - 1 &&
-                      i !== enabledGroups.length - 1,
-                  }"
                   :hovered="hoveredEntry?.key === entry.key"
                   :selected="selectedEntry?.key === entry.key"
                   :active="selectedEntry?.key !== entry.key && !!entry.skills?.find(s => (s as Skill).key === (selectedSkill ?? hoveredSkill)?.key)"
@@ -193,7 +157,45 @@ onMounted(() => {
                 />
               </template>
             </template>
-          </template>
+            <template v-else>
+              <template
+                v-bind:key="group.key"
+                v-for="(group, i) of enabledGroups"
+              >
+                <h3
+                  class="groupTitle subsectionTitle"
+                  :class="{ intermittent: i !== 0 }"
+                >
+                  {{ group.name }}
+                </h3>
+                <template
+                  v-for="(entry, j) of group.entries?.sort(
+                    (a, b) =>
+                      new Date(b.startDate).getTime() -
+                      new Date(a.startDate).getTime()
+                  )"
+                  v-bind:key="entry.key"
+                >
+                  <TimelineEntry
+                    v-bind="entry"
+                    class="groupedTimeLineEntry"
+                    :class="{
+                      marginTop: j === 0,
+                      marginBottom:
+                        j === (group.entries?.length ?? 0) - 1 &&
+                        i !== enabledGroups.length - 1,
+                    }"
+                    :hovered="hoveredEntry?.key === entry.key"
+                    :selected="selectedEntry?.key === entry.key"
+                    :active="selectedEntry?.key !== entry.key && !!entry.skills?.find(s => (s as Skill).key === (selectedSkill ?? hoveredSkill)?.key)"
+                    @mouseover="onHoverEntry(entry)"
+                    @mouseleave="onLeaveEntry()"
+                    @click.stop="onToggleSelectEntry(entry)"
+                  />
+                </template>
+              </template>
+            </template>
+          </tbody>
         </table>
       </div>
       <aside class="sidePane">
@@ -270,6 +272,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
 
     .timeline {
       position: relative;
+      border-collapse: separate;
       border-spacing: 16px 0;
       line-height: 2;
       max-width: 740px;

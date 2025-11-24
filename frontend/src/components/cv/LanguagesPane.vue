@@ -2,27 +2,29 @@
   <div class="languagesPaneContainer">
     <h2 class="subsectionTitle">Languages</h2>
     <table class="languageTable">
-      <tr>
-        <td>English</td>
-        <td rowspan="0" class="columnDelimiter"></td>
-        <td>
-          <b>Advanced</b><br />
-          <span style="white-space: nowrap"
-            >(TOEFL iBT score: 109/120, expired)</span
-          >
-        </td>
-      </tr>
-      <tr>
-        <td>German</td>
-        <td>
-          <b>Reading and Writing</b> (intermediate),<br />
-          <span style="white-space: nowrap"><b>Speaking</b> (basic)</span>
-        </td>
-      </tr>
-      <tr>
-        <td>Bosnian</td>
-        <td><b>Native language</b></td>
-      </tr>
+      <tbody>
+        <tr>
+          <td>English</td>
+          <td rowspan="0" class="columnDelimiter"></td>
+          <td>
+            <b>Advanced</b><br />
+            <span style="white-space: nowrap"
+              >(TOEFL iBT score: 109/120, expired)</span
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>German</td>
+          <td>
+            <b>Reading and Writing</b> (intermediate),<br />
+            <span style="white-space: nowrap"><b>Speaking</b> (basic)</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Bosnian</td>
+          <td><b>Native language</b></td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </template>
@@ -47,6 +49,7 @@
   }
 
   .languageTable {
+    border-collapse: separate;
     border-spacing: 16px;
 
     @media print {

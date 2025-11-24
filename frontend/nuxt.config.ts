@@ -5,7 +5,6 @@ import { defineNuxtConfig, type NuxtConfig } from "nuxt/config";
 
 export default defineNuxtConfig({
   compatibilityDate: "2025-11-23",
-  // buildModules: ["@nuxtjs/google-fonts"],
   modules: ["@nuxtjs/google-fonts", "@nuxtjs/tailwindcss"],
   srcDir: "src/",
   runtimeConfig: {
