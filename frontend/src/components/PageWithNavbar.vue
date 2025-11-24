@@ -3,26 +3,14 @@ import Navbar from "@/components/Navbar.vue";
 </script>
 
 <template>
-  <div :class="s.viewportContainer">
-    <slot name="navbar" :class="s.navbar">
+  <div class="fixed inset-0 h-screen w-full">
+    <slot name="navbar">
       <Navbar />
     </slot>
-    <div :class="s.content">
+    <div
+      class="relative h-full overflow-y-auto overflow-x-hidden scroll-smooth"
+    >
       <slot></slot>
     </div>
   </div>
 </template>
-
-<style module="s" lang="scss">
-@use "@/assets/common.module.scss" as c;
-.viewportContainer {
-  position: fixed;
-  inset: 0;
-  height: 100vh;
-  width: 100%;
-
-  .content {
-    @include c.scrollContainer;
-  }
-}
-</style>
