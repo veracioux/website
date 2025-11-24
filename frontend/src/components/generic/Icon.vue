@@ -22,8 +22,8 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Img from "@/components/generic/Img.vue";
-import { defineProps, onMounted, ref } from "vue";
-import { CvContext } from "~/inject";
+import { onMounted, ref } from "vue";
+import { CvContext } from "@/inject";
 
 library.add(
   faArrowUpRightFromSquare,

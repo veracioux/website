@@ -2,7 +2,7 @@
 import Label from "@/components/generic/Label.vue";
 import Icon from "@/components/generic/Icon.vue";
 import { skills, skillGroups, type Skill, type Entry } from "@/cv";
-import { CvContext } from "~/inject";
+import { CvContext } from "@/inject";
 
 const props = defineProps<{
   variant?: string;

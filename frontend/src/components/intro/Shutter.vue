@@ -249,13 +249,6 @@ Classes used temporarily for debugging.
     box-shadow: inset 0 0 min(10vw, 10vh) var(--color-background-0);
   }
 }
-
-.shutterRootOnMobile {
-  display: none;
-  position: relative;
-  // TODO temporary dirty fix for mobile address bar bug
-  transform: translateY(300px);
-}
 </style>
 
 <style module="s" lang="scss">

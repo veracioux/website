@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, type VNode } from "vue";
+import { type VNode } from "vue";
 import Label from "@/components/generic/Label.vue";
 
 defineProps<{

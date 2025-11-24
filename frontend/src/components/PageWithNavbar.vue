@@ -8,7 +8,7 @@ import Navbar from "@/components/Navbar.vue";
       <Navbar />
     </slot>
     <div :class="s.content">
-      <slot />
+      <slot></slot>
     </div>
   </div>
 </template>
