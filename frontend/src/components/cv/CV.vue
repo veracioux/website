@@ -158,18 +158,16 @@ onMounted(() => {
               </template>
             </template>
             <template v-else>
-              <template
-                v-bind:key="group.key"
-                v-for="(group, i) of enabledGroups"
-              >
-                <h3
-                  class="groupTitle subsectionTitle"
-                  :class="{ intermittent: i !== 0 }"
-                >
-                  {{ group.name }}
-                </h3>
+              <template v-bind:key="group.key" v-for="group of enabledGroups">
+                <div class="h-16 relative [&:first-child]:-mb-4">
+                  <div class="groupTitle">
+                    <div class="h-full inset-0 flex items-center">
+                      {{ group.name }}
+                    </div>
+                  </div>
+                </div>
                 <template
-                  v-for="(entry, j) of group.entries?.sort(
+                  v-for="entry of group.entries?.sort(
                     (a, b) =>
                       new Date(b.startDate).getTime() -
                       new Date(a.startDate).getTime()
@@ -178,13 +176,6 @@ onMounted(() => {
                 >
                   <TimelineEntry
                     v-bind="entry"
-                    class="groupedTimeLineEntry"
-                    :class="{
-                      marginTop: j === 0,
-                      marginBottom:
-                        j === (group.entries?.length ?? 0) - 1 &&
-                        i !== enabledGroups.length - 1,
-                    }"
                     :hovered="hoveredEntry?.key === entry.key"
                     :selected="selectedEntry?.key === entry.key"
                     :active="selectedEntry?.key !== entry.key && !!entry.skills?.find(s => (s as Skill).key === (selectedSkill ?? hoveredSkill)?.key)"
@@ -254,7 +245,6 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
 
       @media print {
         position: relative;
-        padding: 16px 24px;
         width: 440px;
 
         --timeline-background: #f7f7f7;
@@ -278,14 +268,13 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
 
       margin-left: 32px;
 
-      @include global.screenSizeAbove(global.$large) {
-        max-width: 900px;
+      @media print {
+        margin: 24px;
+        margin-top: 0px;
       }
 
-      // Remove border spacing from layout
-      @media print {
-        margin-left: -16px;
-        margin-right: -16px;
+      @include global.screenSizeAbove(global.$large) {
+        max-width: 900px;
       }
 
       :global(td) {
@@ -293,39 +282,26 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
       }
 
       .groupTitle {
-        font-size: 1.8em;
+        font-size: 1.6em;
         position: absolute;
         left: 0;
-        right: 0;
+        height: inherit;
+        width: fit-content;
         text-align: start;
         z-index: 1;
         pointer-events: none;
-        margin-left: 8px;
+        white-space: nowrap;
 
         // Even though alpha is 0, the color is important for PDF generation
         $transparent: rgba(var(--timeline-background-rgb), 0);
         $background: var(--timeline-background);
 
-        &.intermittent {
-          transform: translateY(-50%);
-          background: linear-gradient(
-            $transparent,
-            $background,
-            $background,
-            $transparent
-          );
-          line-height: 4.5;
-        }
-      }
-
-      .groupedTimeLineEntry {
-        &.marginTop:deep(.acceptsMargin) {
-          @include timeline.responsiveVerticalMargin($top: 40px);
-        }
-
-        &.marginBottom:deep(.acceptsMargin) {
-          @include timeline.responsiveVerticalMargin($bottom: 40px);
-        }
+        background: linear-gradient(
+          $transparent,
+          $background,
+          $background,
+          $transparent
+        );
       }
     }
 

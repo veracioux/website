@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { type VNode } from "vue";
 import Label from "@/components/generic/Label.vue";
+import zindex from "@/zindex";
 
 defineProps<{
   name?: string;
@@ -18,20 +19,23 @@ defineProps<{
 <template>
   <tr :class="['timeLineItem', { active, selected }]">
     <td>
-      <div class="acceptsMargin">
-        <div class="timeSpan">
-          {{ displayDate ?? `${startDate} - ${endDate}` }}
-        </div>
+      <div class="timeSpan">
+        {{ displayDate ?? `${startDate} - ${endDate}` }}
       </div>
     </td>
-    <td class="lineCell">
-      <div class="acceptsMargin">
-        <div class="line" />
-        <div class="dot" />
+    <td class="relative w-[40px]">
+      <div class="absolute inset-0">
+        <div
+          class="line absolute inset-0 -top-8 -bottom-8 mx-auto w-[4px] z-0"
+        ></div>
+        <div
+          class="dot absolute inset-0 m-auto w-[16px] aspect-square rounded-full"
+          :style="{ zIndex: zindex.cvTimelineEntryDot }"
+        ></div>
       </div>
     </td>
     <td>
-      <div class="acceptsMargin">
+      <div class="py-2">
         <div class="description">
           <slot>
             <component v-if="node" :is="node" />
@@ -57,18 +61,18 @@ defineProps<{
 
 .timeLineItem {
   position: relative;
-
   cursor: pointer;
-
   pointer-events: none;
 
   @mixin scaleAll($base) {
     .description {
       transform: scale(calc($base));
     }
+
     .timeSpan {
       transform: scale(calc(1.03 * $base));
     }
+
     .dot {
       transform: scale(calc(1.26 * $base));
     }
@@ -95,6 +99,7 @@ defineProps<{
     .description {
       transform-origin: 0;
     }
+
     &:hover,
     &.active,
     &.selected {
@@ -143,67 +148,28 @@ defineProps<{
     content: "";
   }
 
-  &:first-of-type .lineCell .line {
+  &:first-of-type .line {
     top: 50%;
   }
 
-  &:last-of-type .lineCell .line {
+  &:last-of-type .line {
     bottom: 50%;
   }
 
-  .lineCell {
-    position: relative;
-    --width: 12px;
-    @include global.screenSizeAbove(global.$tablet) {
-      --width: 14px;
+  .line {
+    background: #545a8e;
+
+    @media print {
+      background: #b19bd9;
     }
-    @include global.screenWidthAbove(global.$small) {
-      --width: 16px;
-    }
-    width: var(--width);
+  }
 
-    .line {
-      @include c.fillParent;
-      width: var(--width);
-      z-index: 0;
-
-      &::after {
-        display: block;
-        width: 4px;
-        height: 100%;
-        margin: auto;
-        background: rgba(var(--color-secondary-rgb), 0.3);
-        content: "";
-      }
-    }
-
-    .dot {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      width: 100%;
-      aspect-ratio: 1;
-      border-radius: 50%;
-
-      background: var(--color-primary);
-      z-index: 1;
-    }
+  .dot {
+    background: var(--color-primary);
   }
 
   .timeSpan {
     text-align: right;
-  }
-
-  .acceptsMargin {
-    margin-left: 0;
-    margin-right: 0;
-    @include timeline.responsiveVerticalMargin(10px, 10px);
-
-    @media print {
-      @include timeline.responsiveVerticalMargin(4px, 4px);
-    }
   }
 }
 

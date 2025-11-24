@@ -4,6 +4,7 @@ import ToggleSwitch from "@/components/generic/ToggleSwitch.vue";
 import { ref } from "vue";
 import { useRoute } from "#app";
 import { type DisplayMode } from "@/cv";
+import zindex from "@/zindex";
 
 const { resume, variant } = useRoute().query;
 
@@ -83,6 +84,7 @@ function onToggleChanged(value: boolean) {
   background: rgba(var(--color-secondary-rgb), 0.06);
   border-radius: 0.5em;
   padding: 0.3em 0.6em;
+  z-index: v-bind("zindex.cvMenu");
 
   display: inline-flex;
   gap: 8px;

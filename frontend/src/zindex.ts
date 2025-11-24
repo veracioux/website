@@ -14,7 +14,9 @@ export default {
   navbar: 5,
   navbarBackground: 6,
   navbarContent: 7,
+  cvTimelineEntryDot: 1,
+  cvMenu: 2,
   // NOTE: The modal is wrapped by a <Teleport>, hence v-bind("zindex.modal") doesn't work.
   // Therefore, this value is unused, but is kept here as documentation of that fact.
-  modal: 100,
-};
+  modal: null,
+} as const;
