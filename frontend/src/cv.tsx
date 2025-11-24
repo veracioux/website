@@ -46,9 +46,6 @@ const _skillGroups = {
   otherTools: {
     name: "Other Tools",
   },
-  automation: {
-    name: "Automation Industry",
-  },
   others: {
     name: "Others",
   },
@@ -175,22 +172,22 @@ const _skills = {
   },
   plc: {
     name: "PLC programming",
-    group: skillGroups.automation,
+    group: skillGroups.others,
     experience: "6 months",
   },
   tiaPortal: {
     name: "TIA Portal",
-    group: skillGroups.automation,
+    group: skillGroups.others,
     disabled: true,
   },
   soMachine: {
     name: "SoMachine",
-    group: skillGroups.automation,
+    group: skillGroups.others,
     disabled: true,
   },
   abbVFD: {
     name: "ABB VFDs (basic)",
-    group: skillGroups.automation,
+    group: skillGroups.others,
     disabled: true,
   },
   java: {

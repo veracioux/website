@@ -254,7 +254,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
 
       @media print {
         position: relative;
-        padding: 24px;
+        padding: 16px 24px;
         width: 440px;
 
         --timeline-background: #f7f7f7;
@@ -272,8 +272,6 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
 
     .timeline {
       position: relative;
-      border-collapse: separate;
-      border-spacing: 16px 0;
       line-height: 2;
       max-width: 740px;
       height: fit-content;
@@ -302,7 +300,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
         text-align: start;
         z-index: 1;
         pointer-events: none;
-        margin-left: 16px;
+        margin-left: 8px;
 
         // Even though alpha is 0, the color is important for PDF generation
         $transparent: rgba(var(--timeline-background-rgb), 0);

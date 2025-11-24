@@ -15,30 +15,52 @@ if (process.client && isPdf) {
   <PageWithNavbar v-if="!isPdf">
     <CVSection />
   </PageWithNavbar>
-  <div v-else class="outsideOfPage">
+  <div v-else class="relative bg-[var(--color-background-1)]">
     <div class="page">
       <CV class="cv" display-mode="byCategory" />
     </div>
+    <ClientOnly>
+      <div class="warning">
+        Warning: this page should be viewed with print mode enabled in developer
+        tools.
+      </div>
+    </ClientOnly>
   </div>
 </template>
 
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as common;
 
-.outsideOfPage {
-  background: var(--color-background-1);
+body {
+  background-color: red;
+}
 
-  .page {
-    width: 210mm;
-    height: 297mm;
+.page {
+  aspect-ratio: 210 / 297;
+  height: 100vh;
+  overflow: scroll;
 
-    padding: 64px;
-    margin: auto;
-    background: var(--color-background-0);
+  padding: 32px;
+  margin: 0 auto;
+  background: var(--color-background-0);
 
-    .cv {
-      font-size: 11px;
-    }
+  .cv {
+    font-size: 11px;
+  }
+}
+
+.warning {
+  color: #ef5350;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  text-align: center;
+  margin-top: 8px;
+  line-height: 16px;
+
+  @media print {
+    display: none;
   }
 }
 </style>

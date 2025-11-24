@@ -89,6 +89,7 @@ defineProps<{
 
     .timeSpan {
       transform-origin: 100%;
+      font-size: 0.9em;
     }
 
     .description {
@@ -201,7 +202,7 @@ defineProps<{
     @include timeline.responsiveVerticalMargin(10px, 10px);
 
     @media print {
-      @include timeline.responsiveVerticalMargin(7px, 7px);
+      @include timeline.responsiveVerticalMargin(4px, 4px);
     }
   }
 }
