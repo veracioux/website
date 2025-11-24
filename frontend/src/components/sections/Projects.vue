@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import ProjectCard from "@/components/projects/ProjectCard.vue";
 import type { Project } from "@/models";

@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import Intro from "@/components/sections/Intro.vue";
 import { onMounted, reactive, ref } from "vue";

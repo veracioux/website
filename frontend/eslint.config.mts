@@ -26,6 +26,9 @@ export default defineConfig([
       parser: vueEslintParser,
       parserOptions: { parser: tseslint.parser },
     },
+    rules: {
+      "vue/multi-word-component-names": "off",
+    },
   },
   {
     files: ["**/*.json"],

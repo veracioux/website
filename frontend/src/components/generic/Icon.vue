@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {

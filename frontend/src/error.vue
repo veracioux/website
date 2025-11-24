@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import GlitchedWriter from "vue-glitched-writer";
 import { ref } from "vue";

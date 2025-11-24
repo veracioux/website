@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { onMounted, reactive, ref, watch } from "vue";
 import { ScrollData } from "@/inject";
