@@ -1,7 +1,5 @@
 <script setup lang="tsx">
 import { defineComponent, onMounted } from "vue";
-import SocialIcon from "@/components/generic/SocialIcon.vue";
-import Icon from "@/components/generic/Icon.vue";
 import PageWithNavbar from "@/components/PageWithNavbar.vue";
 
 const addresses = {};

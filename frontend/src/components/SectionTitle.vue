@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { computed, type CSSProperties, onMounted, reactive, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { ScrollData } from "@/inject";
 import { mapRange, mapRangeClipped, clip } from "@/utils";
 import CliEffect from "@/components/CliEffect.vue";
-import { useRoute } from "#app";
 
-const props = defineProps<{
+defineProps<{
   text: string;
   slug?: string;
 }>();
@@ -15,10 +14,6 @@ const edgeCoordinatesX = ref([20, 80]);
 const scrollData = ScrollData.inject();
 const progress = ref(0);
 const root = ref<HTMLElement>();
-const style = reactive<CSSProperties>({});
-
-const anchor =
-  props.slug && useRoute().path === "/" ? `#${props.slug}` : undefined;
 
 const checkpoints = computed(() => {
   const _cliTextUnclipped = mapRange(progress.value, [-1.1, -0.5], [0, 1]);
