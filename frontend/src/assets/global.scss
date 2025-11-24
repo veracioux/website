@@ -1,4 +1,8 @@
 // TODO: Reconcile with common.module.scss
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @mixin screenWidthAbove($width) {
   @media (min-width: $width) {
     @content;
