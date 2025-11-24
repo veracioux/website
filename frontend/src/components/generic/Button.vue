@@ -1,8 +1,6 @@
-<!-- TODO -->
-
 <template>
   <button>
-    <slot />
+    <slot></slot>
   </button>
 </template>
 

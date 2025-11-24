@@ -33,7 +33,7 @@ function onToggleChanged(value: boolean) {
         <Icon name="download" class="icon" />
         Download
       </a>
-      <span class="displayMode" @click="">
+      <span class="displayMode">
         <ToggleSwitch
           uniform-states
           @valueChanged="onToggleChanged"

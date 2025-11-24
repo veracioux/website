@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { onMounted, reactive, ref, watch } from "vue";
 import { ScrollData } from "@/inject";
@@ -73,15 +74,15 @@ const traitsStyle = reactive<CSSProperties>({});
 
 const { relativeScrollY } = ScrollData.inject();
 
-let intervalId: number | undefined = undefined;
+let typingIntervalId: NodeJS.Timeout | undefined = undefined;
 
 function typeOut() {
   ++typedOutLength.value;
   // The RHS value is the length of all typed out characters combined. It can be calculated,
   // but I just hardcoded it since it won't change often (maybe never).
   if (typedOutLength.value === 30) {
-    clearInterval(intervalId);
-    intervalId = undefined;
+    clearInterval(typingIntervalId);
+    typingIntervalId = undefined;
   }
 }
 
@@ -144,10 +145,10 @@ function onScroll(value: number) {
   // As the user scrolls down, the typing interval must reduce proportionally.
   if (
     Math.abs(value - relativeScrollYAtLastIntervalUpdate) > 0.1 &&
-    intervalId
+    typingIntervalId
   ) {
-    clearInterval(intervalId);
-    intervalId = setInterval(typeOut, calculateTypingInterval());
+    clearInterval(typingIntervalId);
+    typingIntervalId = setInterval(typeOut, calculateTypingInterval());
     relativeScrollYAtLastIntervalUpdate = value;
   }
 
@@ -185,7 +186,7 @@ watch(relativeScrollY, onScroll);
 
 onMounted(() => {
   setTimeout(() => {
-    intervalId = setInterval(typeOut, calculateTypingInterval());
+    typingIntervalId = setInterval(typeOut, calculateTypingInterval());
     typeOut();
   }, 300);
   emit("veraciouxMounted", veracioux.value!);

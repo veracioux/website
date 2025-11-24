@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import PageWithNavbar from "@/components/PageWithNavbar.vue";
 import CVSection from "@/components/sections/CV.vue";

@@ -10,8 +10,6 @@ import PageWithNavbar from "@/components/PageWithNavbar.vue";
 import Shutter from "@/components/intro/Shutter.vue";
 import Projects from "@/components/sections/Projects.vue";
 import CV from "@/components/sections/CV.vue";
-import About from "@/components/sections/About.vue";
-import Contact from "@/components/sections/Contact.vue";
 import { useRoute } from "#app";
 import * as utils from "@/utils";
 
@@ -94,7 +92,7 @@ onMounted(() => {
   //  to the top and is then reloaded, the Intro section misbehaves.
   scrollContainer.value?.scrollTo({
     top: 0,
-    behavior: "instant" as any,
+    behavior: "instant",
   });
 });
 </script>

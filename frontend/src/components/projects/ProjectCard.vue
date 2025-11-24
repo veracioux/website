@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import Label from "@/components/generic/Label.vue";
 import Icon from "@/components/generic/Icon.vue";
-import c from "@/assets/common.module.scss";
 
 defineProps<{
   title?: string;
@@ -34,13 +33,17 @@ defineEmits<{
     <div :class="p.title">{{ title }}</div>
     <div :class="p.description">{{ desc }}</div>
     <div :class="c.labelContainer">
-      <Label v-for="role in roles" :title="role" />
+      <Label v-for="role in roles" v-bind:key="role" :title="role" />
     </div>
   </div>
 </template>
 
 <style module="p" lang="scss">
 @forward "@/assets/project.module.scss";
+</style>
+
+<style module="c" lang="scss">
+@forward "@/assets/common.module.scss";
 </style>
 
 <style module="s" lang="scss">

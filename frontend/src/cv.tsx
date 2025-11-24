@@ -21,6 +21,7 @@ import iconCSharp from "@/assets/icons/csharp.svg";
 import type { JSX } from "vue/jsx-runtime";
 
 export interface Skill {
+  // TODO: Make required
   key?: string;
   name: string;
   icon?: string;
@@ -251,7 +252,7 @@ const _groups = {
 
 export const groups = _groups as Record<keyof typeof _groups, Group>;
 
-let _entries = {
+const _entries = {
   evoltSoftwareEngineer: {
     node: () => (
       <span>
@@ -504,12 +505,5 @@ Object.entries(groups).forEach(([key, group]) => {
     (entry) => entry.group === group
   );
 });
-
-const userHints = {
-  hoverEntryOrSkill: "Place your cursor over a timeline entry or skill.",
-  hoverEntry: "Place y",
-  clickEntryToSelect: "Click the timeline entry to select it.",
-  clickSkillToSelect: "Click the skill to select it.",
-};
 
 export type DisplayMode = "timeline" | "byCategory";

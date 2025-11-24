@@ -2,11 +2,6 @@
 import Label from "@/components/generic/Label.vue";
 import Icon from "@/components/generic/Icon.vue";
 import { skills, skillGroups, type Skill, type Entry } from "@/cv";
-import iconDocker from "@/assets/icons/docker.svg";
-import iconGit from "@/assets/icons/git-with-text.svg";
-import iconJetBrains from "@/assets/icons/jetbrains.svg";
-import iconLinux from "@/assets/icons/linux.svg";
-import iconEmacs from "@/assets/icons/emacs.svg";
 import { CvContext } from "~/inject";
 
 const props = defineProps<{
@@ -47,20 +42,12 @@ function isActive(skill: Skill) {
 function isSelected(skill: Skill) {
   return skill.key === props.selectedSkill?.key;
 }
-
-function isHovered(skill: Skill) {
-  return skill.key === props.hoveredSkill?.key;
-}
-
-function shouldHighlight(skill: Skill) {
-  return isHovered(skill) || isSelected(skill) || isActive(skill);
-}
 </script>
 
 <template>
   <div class="skillsPaneRoot">
     <h2 class="subsectionTitle" style="margin-top: 0">Skills</h2>
-    <template v-for="group of skillGroups">
+    <template v-for="group of skillGroups" v-bind:key="group.key">
       <template v-if="!group.disabled">
         <h3 class="subsubsectionTitle">{{ group.name }}</h3>
         <div class="labelContainer">
@@ -68,6 +55,7 @@ function shouldHighlight(skill: Skill) {
             v-for="skill of Object.values(skills).filter(
               (skill) => skill.group === group && !skill.disabled
             )"
+            v-bind:key="skill.key"
             :class="[
               'skill',
               { active: isActive(skill), selected: isSelected(skill) },

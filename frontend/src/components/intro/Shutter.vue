@@ -1,8 +1,7 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { onMounted, reactive, ref, watch } from "vue";
 import { ScrollData } from "@/inject";
-import SocialIcon from "@/components/generic/SocialIcon.vue";
-import Img from "@/components/generic/Img.vue";
 import mugshot from "@/assets/mugshot.webp";
 import { shutterFullyOpenedScrollThreshold } from "@/constants";
 import * as utils from "@/utils";
