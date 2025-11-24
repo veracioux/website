@@ -1,5 +1,5 @@
 import vueJsx from "@vitejs/plugin-vue-jsx";
-import { rollupPlugin } from "ascii-mugshot";
+import { rollupPlugin as asciiMugshotRollupPlugin } from "ascii-mugshot";
 
 import { defineNuxtConfig, type NuxtConfig } from "nuxt/config";
 
@@ -25,7 +25,7 @@ export default defineNuxtConfig({
   },
   css: ["@/assets/global.scss"],
   vite: {
-    plugins: [vueJsx(), rollupPlugin()],
+    plugins: [vueJsx(), asciiMugshotRollupPlugin()],
     build: {
       write: true,
       assetsDir: process.env.ENV === "staging" ? "stg/static" : "static",

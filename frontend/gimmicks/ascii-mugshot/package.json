@@ -2,7 +2,13 @@
   "name": "ascii-mugshot",
   "version": "0.1.0",
   "description": "Convert images to ASCII art, rendered as HTML",
-  "main": "index.js",
+  "type": "module",
+  "main": "index.ts",
+  "devDependencies": {
+    "@types/html-minifier": "^4.0.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
   "dependencies": {
     "ansi-to-html": "^0.7.2",
     "asciify-image": "^0.1.8",
