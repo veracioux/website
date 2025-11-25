@@ -1,5 +1,12 @@
 <script setup lang="ts">
 import Navbar from "@/components/Navbar.vue";
+import { ref } from "vue";
+
+const scrollContainer = ref<HTMLElement>();
+
+defineExpose({
+  scrollContainer,
+});
 </script>
 
 <template>
@@ -9,6 +16,7 @@ import Navbar from "@/components/Navbar.vue";
     </slot>
     <div
       class="relative h-full overflow-y-auto overflow-x-hidden scroll-smooth"
+      ref="scrollContainer"
     >
       <slot></slot>
     </div>

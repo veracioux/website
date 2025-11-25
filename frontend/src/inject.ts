@@ -7,6 +7,7 @@ import {
   provide as _provide,
   reactive,
   ref,
+  watch,
 } from "vue";
 import * as utils from "@/utils";
 import { useRoute } from "#app";
@@ -51,8 +52,17 @@ export class ScrollData {
       }
     }
 
+    let dispose: undefined | (() => void) = undefined;
+
+    watch(scrollContainer, () => {
+      dispose?.();
+      dispose = undefined;
+      if (scrollContainer.value) {
+        dispose = utils.registerScrollListener(onScroll, scrollContainer.value);
+      }
+    });
+
     onMounted(() => {
-      utils.onScroll(onScroll, scrollContainer.value);
       window.addEventListener("resize", onScroll);
     });
 

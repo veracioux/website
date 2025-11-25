@@ -19,13 +19,12 @@ const isMobile = utils.isMobile();
 const root = ref<HTMLElement>();
 const rotation = ref(0);
 const shutterEdgeColor = ref("#000");
-// Aperture size relative to its fully opened state
 const slices = reactive(new Array<Slice | null>(numSlices));
 const configKonva = reactive({
   width: 0,
   height: 0,
-  listening: false,
 });
+/** Aperture size relative to its fully opened state */
 let relativeApertureSize = 0;
 const relativeScrollAtMaxAperture = 1 / 3.5;
 

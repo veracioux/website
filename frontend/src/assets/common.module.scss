@@ -32,14 +32,6 @@
   justify-content: center;
 }
 
-@mixin scrollContainer {
-  position: relative;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-}
-
 @mixin paddingSide($size) {
   padding-left: $size;
   padding-right: $size;

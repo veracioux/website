@@ -5,25 +5,28 @@ import { ScrollData } from "@/inject";
 import { ref, watch } from "vue";
 import type { Ref } from "vue";
 
-export function onScroll(
-  callback: (event?: Event) => void,
+export function registerScrollListener(
+  fn: (event?: Event) => void,
   element?: HTMLElement
 ) {
   let residualScrollTimerId: NodeJS.Timeout;
-  (element ?? window).addEventListener(
-    "scroll",
-    (ev) => {
-      // If the user scrolls too fast, we might not get a scroll event fired at the final position.
-      // For example, this can leave a tiny opening in the shutter when the user scrolls to the top.
-      // That's why we call the callback again after a short timeout after the last "scroll" event was fired.
-      callback(ev);
-      clearTimeout(residualScrollTimerId);
-      residualScrollTimerId = setTimeout(() => callback(ev), 80);
-    },
-    {
-      passive: true,
-    }
-  );
+
+  function handler(ev: Event) {
+    fn(ev);
+    // If the user scrolls too fast, we might not get a scroll event fired at the final position.
+    // For example, this can leave a tiny opening in the shutter when the user scrolls to the top.
+    // That's why we call the callback again after a short timeout after the last "scroll" event was fired.
+    clearTimeout(residualScrollTimerId);
+    residualScrollTimerId = setTimeout(() => fn(ev), 80);
+  }
+
+  const target = element ?? window;
+
+  target.addEventListener("scroll", handler, {
+    passive: true,
+  });
+
+  return () => target.removeEventListener("scroll", handler);
 }
 
 /**

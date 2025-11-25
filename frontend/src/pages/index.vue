@@ -19,6 +19,7 @@ const animatableVeraciouxTextElement = ref<HTMLElement>();
 const veraciouxTextFadeable = ref(false);
 const navbarOpaque = ref(useRoute().hash !== "");
 const navbar = ref<HTMLElement>();
+const pageWithNavbar = ref<InstanceType<typeof PageWithNavbar>>();
 
 const isMobile = utils.isMobile();
 
@@ -85,6 +86,7 @@ function onAnimatableVeraciouxTextElementMounted(element: HTMLElement) {
 }
 
 onMounted(() => {
+  scrollContainer.value = pageWithNavbar.value?.scrollContainer;
   // Avoid the mugshot flashing to the user on initial load
   showCover.value = false;
   // TODO temporary fix for a strange behavior: when the page is not scrolled
@@ -96,7 +98,7 @@ onMounted(() => {
 });
 </script>
 <template>
-  <PageWithNavbar>
+  <PageWithNavbar ref="pageWithNavbar">
     <template #navbar>
       <div ref="navbar" class="navbar">
         <Navbar
@@ -107,33 +109,34 @@ onMounted(() => {
         />
       </div>
     </template>
-    <div class="scrollContainer" ref="scrollContainer">
-      <div class="%home-section-space-occupant" style="min-height: 40vh" />
-      <div
-        id="home"
-        class="%home-section-space-occupant"
-        style="min-height: 60vh"
+    <div class="%home-section-space-occupant" style="min-height: 40vh" />
+    <div
+      id="home"
+      class="%home-section-space-occupant"
+      style="min-height: 60vh"
+    ></div>
+    <div class="relative">
+      <Shutter
+        class="shutter absolute inset-0"
+        :style="styleStickyUntilThreshold(1)"
       />
-      <div class="relative">
-        <Shutter class="shutter" :style="styleStickyUntilThreshold(1)" />
-        <Intro
-          class="intro"
-          :style="{
-            ...styleStickyUntilThreshold(1),
-            ...(isMobile ? { transform: 'translateY(-30px)' } : {}),
-          }"
-          :veracioux-style="veraciouxStyle"
-          :veracioux-text-fadeable="veraciouxTextFadeable"
-          @veraciouxCrossedThreshold="onVeraciouxCrossedThreshold"
-        />
-        <div v-if="showCover" class="mugshotCover"></div>
-      </div>
-      <div class="-home-section-space-occupant fullWindow" />
-      <Projects id="projects" class="projects" />
-      <CV id="cv" class="cv" />
-      <!--            <About id="about" class="about" />-->
-      <!--            <Contact id="contact" class="contact" />-->
+      <Intro
+        class="absolute inset-0"
+        :style="{
+          ...styleStickyUntilThreshold(1),
+          ...(isMobile ? { transform: 'translateY(-30px)' } : {}),
+        }"
+        :veracioux-style="veraciouxStyle"
+        :veracioux-text-fadeable="veraciouxTextFadeable"
+        @veraciouxCrossedThreshold="onVeraciouxCrossedThreshold"
+      />
+      <div v-if="showCover" class="mugshotCover"></div>
     </div>
+    <div class="%home-section-space-occupant fullWindow" />
+    <Projects id="projects" class="projects" />
+    <CV id="cv" class="cv" />
+    <!--            <About id="about" class="about" />-->
+    <!--            <Contact id="contact" class="contact" />-->
   </PageWithNavbar>
 </template>
 
@@ -163,15 +166,6 @@ onMounted(() => {
       pointer-events: unset;
     }
   }
-}
-
-.scrollContainer {
-  @include c.scrollContainer;
-}
-
-.intro,
-.shutter {
-  @include c.fillParent;
 }
 
 .shutter {
