@@ -43,6 +43,23 @@ library.add(
   faFileArrowDown
 );
 
+export type IconProps = {
+  /** Explicit URL to the image file. */
+  src?: string;
+  alt?: string;
+} & (
+  | {
+      /** Name of a pre-defined icon. */
+      name: IconName;
+    }
+  | {
+      /** Source URL of a custom icon. */
+      src: string;
+    }
+);
+
+const props = defineProps<IconProps>();
+
 const iconNameToFontAwesomeMap = {
   donate: "circle-dollar-to-slot",
   web: "globe",
@@ -62,19 +79,6 @@ const iconNameToFontAwesomeMap = {
 
 type IconName = keyof typeof iconNameToFontAwesomeMap;
 
-export interface IconProps {
-  /** Name of a FontAwesome icon. */
-  name?: IconName;
-  /** Explicit URL to the image file. */
-  src?: string;
-  alt?: string;
-  // TODO: This is a workaround to an annoying problem where the icon won't
-  //  center properly
-  center?: boolean;
-}
-
-const props = defineProps<IconProps>();
-
 const root = ref<HTMLElement>();
 
 const imageSrc = props.src;
@@ -82,7 +86,10 @@ const imageSrc = props.src;
 const { isPdf } = CvContext.inject();
 
 onMounted(() => {
-  if ((props.name !== undefined) == (props.src !== undefined)) {
+  if (
+    ((props as { name: IconName }).name !== undefined) ==
+    ((props as { src: string }).src !== undefined)
+  ) {
     console.error(
       "Please specify either 'name' or 'src' prop, but not both. The element in question:"
     );
@@ -94,9 +101,9 @@ onMounted(() => {
 <template>
   <span class="icon" ref="root">
     <FontAwesomeIcon
-      v-if="props.name && iconNameToFontAwesomeMap[props.name]"
-      :icon="iconNameToFontAwesomeMap[props.name as keyof typeof iconNameToFontAwesomeMap]"
-      class="internalIcon faIcon"
+      v-if="(props as { name: IconName }).name && iconNameToFontAwesomeMap[(props as { name: IconName }).name]"
+      :icon="iconNameToFontAwesomeMap[(props as { name: IconName }).name]"
+      class="faIcon"
     />
     <Img v-else-if="isPdf" :src="imageSrc" :alt="alt" class="customIcon" />
     <Img v-else v-lazy="imageSrc" :alt="alt" class="customIcon" />
@@ -115,16 +122,13 @@ onMounted(() => {
     vertical-align: middle;
     width: 100%;
     height: 100%;
+    aspect-ratio: 1;
+
+    // NOTE: seems to be the only way to make the FA icon centered in its
+    // container.
+    margin: 50%;
+    transform: translate(-50%, -50%);
   }
-}
-
-.faIcon {
-  aspect-ratio: 1;
-
-  // NOTE: seems to be the only way to make the FA icon centered in its
-  // container.
-  margin: 50%;
-  transform: translate(-50%, -50%);
 }
 
 // NOTE: I tried to use .icon here, but for some reason it messes up
