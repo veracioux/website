@@ -107,14 +107,14 @@ onMounted(() => {
         />
       </div>
     </template>
-    <div class="container" ref="scrollContainer">
+    <div class="scrollContainer" ref="scrollContainer">
       <div class="%home-section-space-occupant" style="min-height: 40vh" />
       <div
         id="home"
         class="%home-section-space-occupant"
         style="min-height: 60vh"
       />
-      <div class="introSectionContainer">
+      <div class="relative">
         <Shutter class="shutter" :style="styleStickyUntilThreshold(1)" />
         <Intro
           class="intro"
@@ -138,6 +138,8 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/common.module.scss" as c;
+
 .navbar :deep(.navbar) {
   position: sticky;
 
@@ -162,17 +164,9 @@ onMounted(() => {
     }
   }
 }
-</style>
 
-<style scoped lang="scss">
-@use "@/assets/common.module.scss" as c;
-
-.container {
+.scrollContainer {
   @include c.scrollContainer;
-}
-
-.introSectionContainer {
-  position: relative;
 }
 
 .intro,
