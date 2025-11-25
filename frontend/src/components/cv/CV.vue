@@ -189,7 +189,7 @@ onMounted(() => {
           </tbody>
         </table>
       </div>
-      <aside class="sidePane">
+      <aside class="sidePane flex flex-col items-center gap-6">
         <SkillsPane
           :hovered-skill="hoveredSkill"
           :selected-skill="selectedSkill"
@@ -332,11 +332,6 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
           gap: 1em;
           flex: 2 0 50%;
         }
-      }
-
-      :deep(.subsubsectionTitle) {
-        text-align: left;
-        margin: 0 12px;
       }
     }
   }

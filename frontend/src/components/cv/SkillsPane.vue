@@ -45,11 +45,13 @@ function isSelected(skill: Skill) {
 </script>
 
 <template>
-  <div class="skillsPaneRoot">
-    <h2 class="subsectionTitle" style="margin-top: 0">Skills</h2>
+  <div
+    class="skillsPaneRoot flex flex-col items-center md:items-start print:items-center gap-4"
+  >
+    <h2>Skills</h2>
     <template v-for="group of skillGroups" v-bind:key="group.key">
       <template v-if="!group.disabled">
-        <h3 class="subsubsectionTitle">{{ group.name }}</h3>
+        <h3>{{ group.name }}</h3>
         <div class="labelContainer">
           <span
             v-for="skill of Object.values(skills).filter(
@@ -91,21 +93,11 @@ function isSelected(skill: Skill) {
 @use "@/assets/global.scss";
 
 .skillsPaneRoot {
-  display: flex;
-  flex-direction: column;
-  align-items: inherit;
-  gap: 1em;
-
-  @media print {
-    gap: 12px;
-  }
-
   --icon-scale-multiplier: 1;
 
   @media print {
     position: relative;
     padding: 16px;
-    align-items: center;
 
     --icon-scale-multiplier: 0.6;
 
