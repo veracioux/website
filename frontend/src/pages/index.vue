@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Intro from "@/components/sections/Intro.vue";
-import { onMounted, reactive, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, reactive, ref } from "vue";
 import type { CSSProperties } from "vue";
 import { ScrollData } from "@/inject";
 import _zindex from "@/zindex";
@@ -11,6 +11,7 @@ import Projects from "@/components/sections/Projects.vue";
 import CV from "@/components/sections/CV.vue";
 import { useRoute } from "#app";
 import * as utils from "@/utils";
+import { ClientOnly } from "#components";
 
 const zindex = reactive(_zindex);
 
@@ -20,23 +21,16 @@ const veraciouxTextFadeable = ref(false);
 const navbarOpaque = ref(useRoute().hash !== "");
 const navbar = ref<HTMLElement>();
 const pageWithNavbar = ref<InstanceType<typeof PageWithNavbar>>();
+const navbarHeight = computed(() => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+  windowHeight.value;
+  return windowHeight.value && navbar.value?.clientHeight;
+});
+const windowHeight = ref(window?.innerHeight);
 
 const isMobile = utils.isMobile();
 
 const { relativeScrollY, scrollContainer } = ScrollData.provide();
-
-const showCover = ref(true);
-
-/**
- * Elements with this style will be sticky until a threshold is passed.
- * After that, they will scroll normally.
- */
-function styleStickyUntilThreshold(relativeScrollThreshold: number) {
-  if (relativeScrollY.value >= relativeScrollThreshold) {
-    return { position: "absolute", top: `-${navbar.value!.clientHeight}px` };
-  }
-  return { position: "fixed" };
-}
 
 let veraciouxTextAnimation: Animation | undefined = undefined;
 
@@ -85,16 +79,23 @@ function onAnimatableVeraciouxTextElementMounted(element: HTMLElement) {
   animatableVeraciouxTextElement.value = element;
 }
 
+function onWindowResize() {
+  windowHeight.value = window?.innerHeight;
+}
+
 onMounted(() => {
-  scrollContainer.value = pageWithNavbar.value?.scrollContainer;
-  // Avoid the mugshot flashing to the user on initial load
-  showCover.value = false;
+  scrollContainer.value = pageWithNavbar.value!.scrollContainer;
   // TODO temporary fix for a strange behavior: when the page is not scrolled
   //  to the top and is then reloaded, the Intro section misbehaves.
   scrollContainer.value?.scrollTo({
     top: 0,
     behavior: "instant",
   });
+
+  window.addEventListener("resize", onWindowResize);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", onWindowResize);
 });
 </script>
 <template>
@@ -109,30 +110,32 @@ onMounted(() => {
         />
       </div>
     </template>
-    <div class="%home-section-space-occupant" style="min-height: 40vh" />
+    <!-- TODO: #home is connected with shutter. Connect them via explicit reference -->
+    <div class="%home-section-space-occupant h-[30%]"></div>
+    <div id="home" class="%home-section-space-occupant h-[70%]"></div>
     <div
-      id="home"
-      class="%home-section-space-occupant"
-      style="min-height: 60vh"
+      class="%home-section-space-occupant h-full"
+      v-if="relativeScrollY <= 1"
     ></div>
-    <div class="relative">
-      <Shutter
-        class="shutter absolute inset-0"
-        :style="styleStickyUntilThreshold(1)"
-      />
+    <div
+      class="relative h-full w-full inset-0 pointer-events-none"
+      :style="
+        relativeScrollY > 1
+          ? {}
+          : { position: 'fixed', height: 'auto', top: navbarHeight + 'px' }
+      "
+    >
+      <Shutter class="shutter absolute inset-0" />
       <Intro
         class="absolute inset-0"
         :style="{
-          ...styleStickyUntilThreshold(1),
           ...(isMobile ? { transform: 'translateY(-30px)' } : {}),
         }"
         :veracioux-style="veraciouxStyle"
         :veracioux-text-fadeable="veraciouxTextFadeable"
         @veraciouxCrossedThreshold="onVeraciouxCrossedThreshold"
       />
-      <div v-if="showCover" class="mugshotCover"></div>
     </div>
-    <div class="%home-section-space-occupant fullWindow" />
     <Projects id="projects" class="projects" />
     <CV id="cv" class="cv" />
     <!--            <About id="about" class="about" />-->
@@ -170,13 +173,6 @@ onMounted(() => {
 
 .shutter {
   z-index: v-bind("zindex.shutter");
-}
-
-.mugshotCover {
-  position: fixed;
-  inset: 0;
-  background: var(--color-background-0);
-  z-index: v-bind("zindex.mugshotCover");
 }
 
 .intro {

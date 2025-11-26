@@ -89,7 +89,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
 
     &.bottom {
       // This is equal to the navbar height and is determined empirically
-      bottom: global.$navbarHeight;
+      bottom: 0;
       height: 5em;
       background: linear-gradient(transparent, $color 44%);
     }

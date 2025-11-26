@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from "vue";
+import { onMounted, onUnmounted, reactive, ref, watch } from "vue";
 import { ScrollData } from "@/inject";
 import mugshot from "@/assets/mugshot.webp";
 import { shutterFullyOpenedScrollThreshold } from "@/constants";
@@ -31,7 +31,11 @@ const relativeScrollAtMaxAperture = 1 / 3.5;
 const { relativeScrollY, scrollContainer } = ScrollData.inject();
 
 function getShutterRadius() {
-  return Math.max(window.innerWidth, window.innerHeight);
+  const win = scrollContainer.value as Window | undefined;
+  const other = scrollContainer.value as HTMLElement | undefined;
+  const w = win?.innerWidth ?? other?.clientWidth ?? 0;
+  const h = win?.innerHeight ?? other?.clientHeight ?? 0;
+  return Math.max(w, h);
 }
 
 function updateShutterGeometry() {
@@ -98,7 +102,7 @@ let stopScrollingDetectorId: NodeJS.Timeout | undefined = undefined;
 function fullyOpenOrCloseShutterWhenStoppedScrolling(
   scrollingDirection: "up" | "down"
 ) {
-  if (stopScrollingDetectorId !== undefined) {
+  if (stopScrollingDetectorId) {
     clearTimeout(stopScrollingDetectorId);
   }
 
@@ -149,25 +153,33 @@ function onWindowResize() {
 
 watch(relativeScrollY, (value, oldValue) => onScroll(value, oldValue));
 
+/** Avoid the mugshot flashing to the user on initial load */
+const hideMugshot = ref(true);
+
 onMounted(() => {
   window.addEventListener("resize", onWindowResize);
-  onScroll();
-  onWindowResize();
+  setTimeout(() => {
+    onScroll();
+    onWindowResize();
+    hideMugshot.value = false;
+  }, 0);
 });
 </script>
 
 <template>
-  <div class="fullWindow" :class="s.shutter">
-    <div class="mugshotBackground" />
-    <img
-      alt="mugshot"
-      class="mugshot"
-      :style="{
-        filter: 'blur(' + 15 * Math.max(1 - 4 * relativeScrollY, 0) + 'px)',
-        ...(isMobile ? { transform: 'translateY(-27px)' } : {}),
-      }"
-      :src="mugshot"
-    />
+  <div class="pointer-events-none">
+    <template v-if="!hideMugshot">
+      <div class="mugshotBackground"></div>
+      <img
+        alt="mugshot"
+        class="mugshot"
+        :style="{
+          filter: 'blur(' + 15 * Math.max(1 - 4 * relativeScrollY, 0) + 'px)',
+          ...(isMobile ? { transform: 'translateY(-27px)' } : {}),
+        }"
+        :src="mugshot"
+      />
+    </template>
     <div ref="root">
       <ClientOnly>
         <v-stage :config="configKonva">
@@ -230,7 +242,7 @@ Classes used temporarily for debugging.
   margin: auto;
 
   width: 200px;
-  transform: translate(0, 3%);
+  transform: translate(0, 8%);
 
   @include g.screenSizeAbove(768px) {
     width: 280px;
@@ -246,11 +258,5 @@ Classes used temporarily for debugging.
     @include c.fillParent;
     box-shadow: inset 0 0 min(10vw, 10vh) var(--color-background-0);
   }
-}
-</style>
-
-<style module="s" lang="scss">
-.shutter {
-  pointer-events: none;
 }
 </style>

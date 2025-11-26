@@ -12,6 +12,7 @@ import {
 import * as utils from "@/utils";
 import { useRoute } from "#app";
 
+// TODO: Add resize observer too
 export class ScrollData {
   /* The document scroll amount expressed as a number of sections. */
   relativeScrollY = ref(0);
