@@ -7,17 +7,19 @@
           <td>English</td>
           <td rowspan="0" class="columnDelimiter"></td>
           <td>
-            <b>Advanced</b><br />
-            <span style="white-space: nowrap"
-              >(TOEFL iBT score: 109/120, expired)</span
-            >
+            <b>Advanced</b>
           </td>
         </tr>
         <tr>
           <td>German</td>
           <td>
-            <b>Reading and Writing</b> (intermediate),<br />
-            <span style="white-space: nowrap"><b>Speaking</b> (basic)</span>
+            <b>Advanced</b>
+          </td>
+        </tr>
+        <tr>
+          <td>Spanish</td>
+          <td>
+            <b>Intermediate</b>
           </td>
         </tr>
         <tr>

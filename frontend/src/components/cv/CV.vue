@@ -35,7 +35,7 @@ const selectedEntry = ref<Entry | null>(null);
 const selectedSkill = ref<Skill | null>(null);
 const activeSkills = ref<Skill[]>([]);
 
-const { variant, isPdf } = CvContext.inject();
+const { variant } = CvContext.inject();
 
 // TODO Devise a method to define variants in external files.
 const excludedGroups = variant
@@ -175,6 +175,7 @@ onMounted(() => {
                   v-bind:key="entry.key"
                 >
                   <TimelineEntry
+                    v-if="!entry.disabled"
                     v-bind="entry"
                     :hovered="hoveredEntry?.key === entry.key"
                     :selected="selectedEntry?.key === entry.key"

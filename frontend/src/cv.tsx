@@ -38,22 +38,28 @@ export interface SkillGroup {
 
 const _skillGroups = {
   programmingLanguages: {
+    key: "programmingLanguages",
     name: "Programming Languages",
   },
   frameworksAndTechnologies: {
+    key: "frameworksAndTechnologies",
     name: "Frameworks & Technologies",
   },
   otherTools: {
+    key: "otherTools",
     name: "Other Tools",
   },
   others: {
+    key: "others",
     name: "Others",
   },
   stale: {
+    key: "stale",
     name: "Stale",
     disabled: true,
   },
-};
+} as const satisfies Record<string, SkillGroup>;
+
 export const skillGroups = _skillGroups as Record<
   keyof typeof _skillGroups,
   SkillGroup
@@ -64,13 +70,13 @@ const _skills = {
     name: "JavaScript",
     icon: iconJS,
     group: skillGroups.programmingLanguages,
-    experience: "1 year",
+    experience: "4 years",
   },
   typescript: {
     name: "TypeScript",
     icon: iconTS,
     group: skillGroups.programmingLanguages,
-    experience: "1 year",
+    experience: "4 years",
   },
   c: {
     name: "C",
@@ -88,7 +94,7 @@ const _skills = {
     name: "Python",
     icon: iconPython,
     group: skillGroups.programmingLanguages,
-    experience: "2 years",
+    experience: "5 years",
   },
   bash: {
     name: "Bash",
@@ -107,6 +113,18 @@ const _skills = {
     icon: iconReact,
     group: skillGroups.frameworksAndTechnologies,
     experience: "1 year",
+  },
+  angular: {
+    name: "Angular",
+    icon: iconReact, // FIXME
+    group: skillGroups.frameworksAndTechnologies,
+    experience: "1 year",
+  },
+  golang: {
+    name: "Go",
+    icon: iconReact, // FIXME
+    group: skillGroups.programmingLanguages,
+    experience: "6 months",
   },
   vue: {
     name: "Vue.js",
@@ -193,7 +211,8 @@ const _skills = {
   java: {
     name: "Java",
     icon: iconJava,
-    group: skillGroups.stale,
+    experience: "1 year",
+    group: skillGroups.programmingLanguages,
   },
   csharp: {
     name: "C#",
@@ -209,7 +228,7 @@ const _skills = {
     name: "Technical writing",
     group: skillGroups.others,
   },
-};
+} as const satisfies Record<string, Skill>;
 
 export const skills = _skills as Record<keyof typeof _skills, Skill>;
 
@@ -229,34 +248,64 @@ export interface Entry {
   skills: Array<Skill | string>;
   labels?: string[];
   group?: Group;
+  disabled?: boolean;
 }
 
 const _groups = {
   education: {
     name: "Education",
+    key: "education",
   },
   professionalExperience: {
     name: "Professional Experience",
+    key: "professionalExperience",
   },
   otherExperience: {
     name: "Other experience",
+    key: "otherExperience",
   },
   extraCurricular: {
     name: "Extra-curricular",
+    key: "extraCurricular",
     disabled: true,
   },
-} as const;
+} as const satisfies Record<string, Group>;
 
 export const groups = _groups as Record<keyof typeof _groups, Group>;
 
 const _entries = {
+  enocean: {
+    node: () => (
+      <span>
+        <a href="https://www.linkedin.com/company/enocean/" target="_blank">
+          <b>EnOcean</b>
+        </a>
+        , Full-Stack Software Engineer, Full-Time
+      </span>
+    ),
+    startDate: "2023-01",
+    displayDate: "Jan 2023 - present",
+    skills: [
+      _skills.typescript,
+      _skills.python,
+      _skills.javascript,
+      _skills.java,
+      _skills.angular,
+      _skills.docker,
+      _skills.golang,
+      _skills.git,
+      _skills.jetbrains,
+    ],
+    labels: ["IoT", "Frontend", "Backend"],
+    group: groups.professionalExperience,
+  },
   evoltSoftwareEngineer: {
     node: () => (
       <span>
         <a href="https://www.linkedin.com/company/evolt-dev/" target="_blank">
           <b>Evolt</b>
         </a>
-        , Software Engineer, Full-Time
+        , Full-Stack Software Engineer, Full-Time
       </span>
     ),
     startDate: "2022-01",
@@ -289,6 +338,7 @@ const _entries = {
     skills: [skills.python, skills.django, skills.docker, skills.jetbrains],
     labels: ["Backend"],
     group: groups.professionalExperience,
+    disabled: true,
   },
   personalWebsite: {
     node: () => (
@@ -314,6 +364,21 @@ const _entries = {
     labels: ["Backend", "Frontend", "Google Cloud"],
     group: groups.otherExperience,
   },
+  opencode: {
+    node: () => (
+      <span>
+        <a href="https://opencode.ai" target="_blank">
+          <b>OpenCode</b>
+        </a>
+        , Open Source Terminal AI Agent
+      </span>
+    ),
+    startDate: "2025-10",
+    displayDate: "Oct 2025 - present",
+    skills: [skills.typescript, skills.git],
+    labels: ["Contributor"],
+    group: groups.otherExperience,
+  },
   flameshot: {
     node: () => (
       <span>
@@ -332,8 +397,8 @@ const _entries = {
   bachelor: {
     node: () => (
       <span>
-        <b>Bachelor of Electrical Engineering</b>, Department of Automation and
-        Electronics, Faculty of Electrical Engineering, University of Sarajevo
+        <b>Bachelor of Electrical Engineering</b>, Automation and Electronics,
+        Faculty of Electrical Engineering, University of Sarajevo
         <br />
         <pre>- GPA 9.19/10.00</pre>
       </span>
@@ -405,17 +470,7 @@ const _entries = {
     group: groups.professionalExperience,
   },
   elektromatik: {
-    node: () => (
-      <span>
-        Internship,{" "}
-        <a
-          href="https://search.bisnode.ba/ba/367191/elektromatik-d-o-o-zenica/"
-          target="_blank"
-        >
-          Elektromatik d.o.o. Zenica
-        </a>
-      </span>
-    ),
+    node: () => <span>Internship, Elektromatik d.o.o. Zenica</span>,
     startDate: "2019",
     endDate: "2020",
     displayDate: "Summer 2019, Summer 2020",
@@ -489,7 +544,9 @@ const _entries = {
   },
 };
 
-export const entries = _entries as Record<keyof typeof _entries, Entry>;
+export const entries = Object.fromEntries(
+  Object.entries(_entries).map(([key, entry]) => [key, { ...entry, key }])
+) as Record<keyof typeof _entries, Entry>;
 
 Object.entries(skills).forEach(([key, skill]) => (skill.key = key));
 Object.entries(skillGroups).forEach(
