@@ -110,8 +110,8 @@ onBeforeUnmount(() => {
       </div>
     </template>
     <!-- TODO: #home is connected with shutter. Connect them via explicit reference -->
-    <div class="%home-section-space-occupant no-print h-[30%]"></div>
-    <div id="home" class="%home-section-space-occupant no-print h-[70%]"></div>
+    <div class="%home-section-space-occupant no-print h-[35%]"></div>
+    <div id="home" class="%home-section-space-occupant no-print h-[65%]"></div>
     <div
       class="%home-section-space-occupant no-print h-full"
       v-if="relativeScrollY <= 1"
