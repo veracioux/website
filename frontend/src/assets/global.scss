@@ -85,7 +85,7 @@ $navbarHeight: 3.2rem;
   --color-text-pale: #999;
   --color-text-pale-rgb: 153, 153, 153;
 
-  &[data-theme="light"] {
+  @mixin lightThemeColors() {
     --color-primary: #303f9f;
     --color-primary-rgb: 48, 63, 159;
     --color-secondary: #673ab7;
@@ -100,6 +100,14 @@ $navbarHeight: 3.2rem;
     --color-text-rgb: 0, 0, 0;
     --color-text-pale: #303030;
     --color-text-pale-rgb: 48, 48, 48;
+  }
+
+  &[data-theme="light"] {
+    @include lightThemeColors();
+  }
+
+  @media print {
+    @include lightThemeColors();
   }
 
   color: var(--color-text);

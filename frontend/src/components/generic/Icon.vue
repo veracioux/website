@@ -46,19 +46,12 @@ library.add(
 );
 
 export type IconProps = {
-  /** Explicit URL to the image file. */
+  /** Name of a pre-defined icon. */
+  name?: IconName;
+  /** Source URL of a custom icon. */
   src?: string;
   alt?: string;
-} & (
-  | {
-      /** Name of a pre-defined icon. */
-      name: IconName;
-    }
-  | {
-      /** Source URL of a custom icon. */
-      src: string;
-    }
-);
+};
 
 const props = defineProps<IconProps>();
 
@@ -89,10 +82,7 @@ const imageSrc = props.src;
 const { isPdf } = CvContext.inject();
 
 onMounted(() => {
-  if (
-    ((props as { name: IconName }).name !== undefined) ==
-    ((props as { src: string }).src !== undefined)
-  ) {
+  if ((props.name !== undefined) == (props.src !== undefined)) {
     console.error(
       "Please specify either 'name' or 'src' prop, but not both. The element in question:"
     );
@@ -104,8 +94,8 @@ onMounted(() => {
 <template>
   <span class="icon" ref="root">
     <FontAwesomeIcon
-      v-if="(props as { name: IconName }).name && iconNameToFontAwesomeMap[(props as { name: IconName }).name]"
-      :icon="iconNameToFontAwesomeMap[(props as { name: IconName }).name]"
+      v-if="props.name && iconNameToFontAwesomeMap[props.name]"
+      :icon="iconNameToFontAwesomeMap[props.name]"
       class="faIcon"
     />
     <Img v-else-if="isPdf" :src="imageSrc" :alt="alt" class="customIcon" />

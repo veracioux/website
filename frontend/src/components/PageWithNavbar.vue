@@ -12,15 +12,13 @@ defineExpose({
 <template>
   <div class="fixed inset-0 h-screen w-full flex flex-col justify-stretch">
     <slot name="navbar">
-      <Navbar class="opacity-0" />
+      <Navbar class="print:[content-visibility:hidden]" />
     </slot>
-    <div class="basis-full relative overflow-hidden">
-      <div
-        class="absolute inset-0 overflow-y-scroll overflow-x-hidden scroll-smooth"
-        ref="scrollContainer"
-      >
-        <slot></slot>
-      </div>
+    <div
+      class="relative basis-full overflow-y-scroll overflow-x-hidden scroll-smooth"
+      ref="scrollContainer"
+    >
+      <slot></slot>
     </div>
   </div>
 </template>

@@ -40,7 +40,7 @@ function print() {
         <Icon name="download" class="icon" />
         Download
       </a>
-      <span class="backdrop">
+      <span class="backdrop" :style="{ zIndex: zindex.cvMenu }">
         <a class="button" @click="print()">
           <Icon name="print" class="icon" />
         </a>
@@ -79,7 +79,6 @@ function print() {
   border-radius: 0.5em;
   padding: 0.3em 0.6em;
   padding-left: 1.5em;
-  z-index: v-bind("zindex.cvMenu");
 
   display: inline-flex;
   gap: 8px;

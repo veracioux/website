@@ -11,7 +11,6 @@ import Projects from "@/components/sections/Projects.vue";
 import CV from "@/components/sections/CV.vue";
 import { useRoute } from "#app";
 import * as utils from "@/utils";
-import { ClientOnly } from "#components";
 
 const zindex = reactive(_zindex);
 
@@ -111,14 +110,19 @@ onBeforeUnmount(() => {
       </div>
     </template>
     <!-- TODO: #home is connected with shutter. Connect them via explicit reference -->
-    <div class="%home-section-space-occupant h-[30%]"></div>
-    <div id="home" class="%home-section-space-occupant h-[70%]"></div>
     <div
-      class="%home-section-space-occupant h-full"
+      class="%home-section-space-occupant print:[content-visibility:hidden] h-[30%]"
+    ></div>
+    <div
+      id="home"
+      class="%home-section-space-occupant print:[content-visibility:hidden] h-[70%]"
+    ></div>
+    <div
+      class="%home-section-space-occupant print:[content-visibility:hidden] h-full"
       v-if="relativeScrollY <= 1"
     ></div>
     <div
-      class="relative h-full w-full inset-0 pointer-events-none"
+      class="relative h-full w-full inset-0 pointer-events-none print:[content-visibility:hidden]"
       :style="
         relativeScrollY > 1
           ? {}

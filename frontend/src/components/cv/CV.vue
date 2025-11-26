@@ -132,7 +132,9 @@ onMounted(() => {
 
 <template>
   <div class="cvRoot">
-    <CVHeader v-if="isPdf" />
+    <CVHeader
+      class="[content-visibility:hidden] print:[content-visibility:visible]"
+    />
     <div class="content" @click="onDeselect">
       <div class="timelineWrapper">
         <table class="timeline">
