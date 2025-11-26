@@ -50,38 +50,36 @@ watch(currentStep, (value, oldValue) => {
 });
 </script>
 <template>
-  <div class="container">
-    <div
-      :class="{
-        [s.wrapper]: true,
-        fastTransition: scrollingFast || progress < 0,
-      }"
-    >
-      <div :class="[s.slot, s.slot1]">
-        <Transition name="slide-fade-1">
-          <SelfPraiseCard
-            v-if="currentStep >= 0"
-            v-bind="selfPraiseItems[cardInSlot1]"
-            :key="cardInSlot1"
-          />
-        </Transition>
-      </div>
-      <div :class="s.spacer">
-        <!--
+  <div
+    :class="{
+      [s.wrapper]: true,
+      fastTransition: scrollingFast || progress < 0,
+    }"
+  >
+    <div :class="[s.slot, s.slot1]">
+      <Transition name="slide-fade-1">
+        <SelfPraiseCard
+          v-if="currentStep >= 0"
+          v-bind="selfPraiseItems[cardInSlot1]"
+          :key="cardInSlot1"
+        />
+      </Transition>
+    </div>
+    <div :class="s.spacer">
+      <!--
                     Item that occupies approximately the same space as the mugshot,
                     thereby making sure that the slots do not overlap with the mugshot
                     and can be centered between the mugshot and the window boundary.
                 -->
-      </div>
-      <div :class="[s.slot, s.slot2]">
-        <Transition name="slide-fade-2">
-          <SelfPraiseCard
-            v-if="currentStep >= 0"
-            v-bind="selfPraiseItems[cardInSlot2]"
-            :key="cardInSlot2"
-          />
-        </Transition>
-      </div>
+    </div>
+    <div :class="[s.slot, s.slot2]">
+      <Transition name="slide-fade-2">
+        <SelfPraiseCard
+          v-if="currentStep >= 0"
+          v-bind="selfPraiseItems[cardInSlot2]"
+          :key="cardInSlot2"
+        />
+      </Transition>
     </div>
   </div>
 </template>

@@ -1,5 +1,20 @@
 // TODO: Reconcile with common.module.scss
 @tailwind base;
+@tailwind components;
+
+@layer components {
+  .only-print {
+    @media not print {
+      display: none !important;
+    }
+  }
+
+  .no-print {
+    @media print {
+      display: none !important;
+    }
+  }
+}
 
 @mixin screenWidthAbove($width) {
   @media (min-width: $width) {

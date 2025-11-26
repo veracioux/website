@@ -132,9 +132,7 @@ onMounted(() => {
 
 <template>
   <div class="cvRoot">
-    <CVHeader
-      class="[content-visibility:hidden] print:[content-visibility:visible]"
-    />
+    <CVHeader class="only-print" />
     <div class="content" @click="onDeselect">
       <div class="timelineWrapper">
         <table class="timeline">

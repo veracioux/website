@@ -5,12 +5,10 @@ import CV from "@/components/cv/CV.vue";
 </script>
 
 <template>
-  <PageWithNavbar class="print:[content-visibility:hidden]">
+  <PageWithNavbar class="no-print">
     <CVSection />
   </PageWithNavbar>
-  <div
-    class="relative bg-[var(--color-background-1)] [content-visibility:hidden] print:[content-visibility:visible]"
-  >
+  <div class="relative bg-[var(--color-background-1)] only-print">
     <div class="page">
       <CV class="cv" display-mode="byCategory" />
     </div>
