@@ -12,6 +12,7 @@ import {
   faLocationDot,
   faCircleInfo,
   faFileArrowDown,
+  faPrint,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faGithub,
@@ -40,7 +41,8 @@ library.add(
   faLinkedin,
   faMonero,
   faMobile,
-  faFileArrowDown
+  faFileArrowDown,
+  faPrint
 );
 
 export type IconProps = {
@@ -75,6 +77,7 @@ const iconNameToFontAwesomeMap = {
   github: ["fab", "github"],
   gitlab: ["fab", "gitlab"],
   linkedin: ["fab", "linkedin"],
+  print: "print",
 } as const;
 
 type IconName = keyof typeof iconNameToFontAwesomeMap;

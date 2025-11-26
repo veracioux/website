@@ -18,11 +18,15 @@ function onToggleChanged(value: boolean) {
   displayMode.value = value ? "byCategory" : "timeline";
   emit("displayModeChanged", displayMode.value);
 }
+
+function print() {
+  window.print();
+}
 </script>
 
 <template>
   <aside
-    class="flex flex-col justify-between items-center pb-1 h-20 select-none"
+    class="flex flex-col justify-between items-center pb-2 h-20 select-none"
   >
     <!-- Ensures that align-items: space-between will take effect. -->
     <div></div>
@@ -31,12 +35,15 @@ function onToggleChanged(value: boolean) {
         v-if="variant"
         :href="`/documents/cv-${variant}.pdf`"
         :download="`Haris_Gusic_${resume ? 'Resume' : 'CV'}.pdf`"
-        class="download"
+        class="button"
       >
         <Icon name="download" class="icon" />
         Download
       </a>
-      <span class="displayMode">
+      <span class="backdrop">
+        <a class="button" @click="print()">
+          <Icon name="print" class="icon" />
+        </a>
         <ToggleSwitch
           uniform-states
           @valueChanged="onToggleChanged"
@@ -52,14 +59,11 @@ function onToggleChanged(value: boolean) {
 </template>
 
 <style scoped lang="scss">
-.footer {
-  display: flex;
+.button {
+  display: inline-flex;
   align-items: center;
-  gap: 24px;
-}
-
-.download {
   color: var(--color-text);
+  cursor: pointer;
 
   &:hover {
     color: var(--color-primary);
@@ -70,10 +74,11 @@ function onToggleChanged(value: boolean) {
   }
 }
 
-.displayMode {
+.backdrop {
   background: rgba(var(--color-secondary-rgb), 0.06);
   border-radius: 0.5em;
   padding: 0.3em 0.6em;
+  padding-left: 1.5em;
   z-index: v-bind("zindex.cvMenu");
 
   display: inline-flex;
@@ -89,9 +94,10 @@ function onToggleChanged(value: boolean) {
 }
 
 .icon {
+  display: inline-flex;
+  align-items: center;
   color: var(--color-secondary);
-  width: 1.6em;
-  height: 1.6em;
-  margin-right: 6px;
+  height: 1.8em;
+  aspect-ratio: 1;
 }
 </style>

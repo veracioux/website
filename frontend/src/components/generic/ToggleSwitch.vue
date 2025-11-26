@@ -30,7 +30,8 @@ const checked = ref(false);
         s.slider,
         { [s.checked]: checked, [s.uniformStates]: uniformStates },
       ]"
-    />
+    >
+    </span>
   </label>
 </template>
 <style module="s" lang="scss">
