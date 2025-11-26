@@ -21,10 +21,12 @@ function onToggleChanged(value: boolean) {
 </script>
 
 <template>
-  <aside class="cvMenuRoot">
+  <aside
+    class="flex flex-col justify-between items-center pb-1 h-20 select-none"
+  >
     <!-- Ensures that align-items: space-between will take effect. -->
     <div></div>
-    <div class="footer">
+    <div class="flex items-center gap-6">
       <a
         v-if="variant"
         :href="`/documents/cv-${variant}.pdf`"
@@ -50,18 +52,6 @@ function onToggleChanged(value: boolean) {
 </template>
 
 <style scoped lang="scss">
-.cvMenuRoot {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-
-  padding-bottom: 0.3em;
-  height: 4em;
-
-  user-select: none;
-}
-
 .footer {
   display: flex;
   align-items: center;
