@@ -142,10 +142,6 @@ export const plugin = {
 export default component;
 </script>
 
-<script setup lang="ts">
-// TODO: for some reason if I leave this import out I get an error in the browser console.
-</script>
-
 <template>
   <Teleport to="body">
     <div
@@ -153,11 +149,15 @@ export default component;
         [s.modalBackground]: true,
         [s.poppingOut]: poppingOut,
       }"
+      class="fixed inset-0 flex items-center justify-center"
       @click="close"
     >
       <div :class="s.container" ref="container" @click.stop>
-        <button :class="s.closeButton" @click="close">
-          <Icon name="x" :class="s.closeIcon" center></Icon>
+        <button class="absolute top-6 right-8" @click="close">
+          <Icon
+            name="x"
+            class="text-[1.75rem] text-[var(--color-secondary)]"
+          ></Icon>
         </button>
         <div :class="s.identity">
           <img
@@ -307,7 +307,6 @@ export default component;
   }
 
   :deep(.externalLink) {
-    height: 13px;
     color: var(--color-secondary);
   }
 }
