@@ -48,12 +48,15 @@ function onMouseLeaveProjectCard() {
       <template v-for="project in projects" :key="project.id">
         <Teleport v-if="includeTeleport" to="#image-container">
           <Transition name="preview-image-fade">
-            <template
-              v-if="
-                previewedProjectId === project.id && project.extra_image_url
-              "
-            >
-              <video v-if="project.video_url"></video>
+            <template v-if="previewedProjectId === project.id">
+              <video
+                v-if="project.video_url"
+                class="previewGraphic"
+                :src="project.video_url"
+                autoplay
+                muted
+                loop
+              ></video>
               <img
                 v-else
                 class="previewGraphic"
@@ -90,25 +93,18 @@ function onMouseLeaveProjectCard() {
 .imageContainer {
   .previewGraphic {
     position: absolute;
+    width: 100%;
+    height: calc(100% - 3.75rem);
+    inset: 0;
+    top: auto;
+    object-fit: cover;
     user-select: none;
     pointer-events: none;
-    inset: 3rem;
-    opacity: 0.15;
+    opacity: 40%;
     transition: opacity 2s;
-    width: auto;
-    height: calc(100% - 8rem);
-    margin: auto;
 
     &.preview-image-fade-enter-from {
       opacity: 0;
-    }
-
-    &.preview-image-fade-enter-to {
-      opacity: 0.15 !important;
-    }
-
-    &.preview-image-fade-leave-from {
-      opacity: 0.15 !important;
     }
 
     &.preview-image-fade-leave-to {

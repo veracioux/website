@@ -8,6 +8,7 @@ export interface Project {
   repo_url: string;
   image_url: string;
   extra_image_url: string;
+  video_url?: string;
   start_date: Date;
   organization: string;
   organization_url: string;
