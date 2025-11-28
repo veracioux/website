@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref, watch } from "vue";
 import { ScrollData } from "@/inject";
-import mugshot from "@/assets/mugshot.webp";
+import avatar from "@/assets/avatar.webp";
 import { shutterFullyOpenedScrollThreshold } from "@/constants";
 import * as utils from "@/utils";
 
@@ -152,30 +152,30 @@ function onWindowResize() {
 
 watch(relativeScrollY, (value, oldValue) => onScroll(value, oldValue));
 
-/** Avoid the mugshot flashing to the user on initial load */
-const hideMugshot = ref(true);
+/** Avoid the avatar flashing to the user on initial load */
+const hideAvatar = ref(true);
 
 onMounted(() => {
   window.addEventListener("resize", onWindowResize);
   setTimeout(() => {
     onScroll();
     onWindowResize();
-    hideMugshot.value = false;
+    hideAvatar.value = false;
   }, 0);
 });
 </script>
 
 <template>
   <div class="pointer-events-none">
-    <template v-if="!hideMugshot">
+    <template v-if="!hideAvatar">
       <img
-        alt="mugshot"
-        class="mugshot"
+        alt="avatar"
+        class="avatar"
         :style="{
           filter: 'blur(' + 15 * Math.max(1 - 4 * relativeScrollY, 0) + 'px)',
           ...(isMobile ? { transform: 'translateY(-27px)' } : {}),
         }"
-        :src="mugshot"
+        :src="avatar"
       />
     </template>
     <div ref="root">
@@ -229,7 +229,7 @@ Classes used temporarily for debugging.
 @use "@/assets/common.module.scss" as c;
 @use "@/assets/global.scss" as g;
 
-.mugshot {
+.avatar {
   @include c.fillParent;
   margin: auto;
 

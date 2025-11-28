@@ -67,9 +67,9 @@ watch(currentStep, (value, oldValue) => {
     </div>
     <div :class="s.spacer">
       <!--
-                    Item that occupies approximately the same space as the mugshot,
-                    thereby making sure that the slots do not overlap with the mugshot
-                    and can be centered between the mugshot and the window boundary.
+                    Item that occupies approximately the same space as the avatar,
+                    thereby making sure that the slots do not overlap with the avatar
+                    and can be centered between the avatar and the window boundary.
                 -->
     </div>
     <div :class="[s.slot, s.slot2]">
@@ -144,7 +144,7 @@ watch(currentStep, (value, oldValue) => {
   }
 }
 
-/* Occupies approximately the same size as the mugshot exposed by the shutter. */
+/* Occupies approximately the same size as the avatar exposed by the shutter. */
 .spacer {
   --size: 240px;
 

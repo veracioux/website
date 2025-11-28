@@ -197,7 +197,7 @@ onMounted(() => {
 
 <template>
   <div class="intro section" ref="root">
-    <!-- TODO this is an indicator for testing mugshot centering
+    <!-- TODO this is an indicator for testing avatar centering
         <div style="display: flex; position: fixed; height: 100%; align-items: center; justify-content: center">
             <div style="width: 20px; height: 20px; background: red; border-radius: 50%;"></div>
         </div>
