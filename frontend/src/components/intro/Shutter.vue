@@ -133,7 +133,6 @@ function onScroll(value?: number, oldValue?: number, forceUpdate = false) {
   updateShutterOutline();
   updateRotation();
 
-  // TODO: move this to Shutter
   if (value != oldValue) {
     fullyOpenOrCloseShutterWhenStoppedScrolling(
       value < oldValue ? "up" : "down"
@@ -169,7 +168,6 @@ onMounted(() => {
 <template>
   <div class="pointer-events-none">
     <template v-if="!hideMugshot">
-      <div class="mugshotBackground"></div>
       <img
         alt="mugshot"
         class="mugshot"
@@ -231,21 +229,15 @@ Classes used temporarily for debugging.
 @use "@/assets/common.module.scss" as c;
 @use "@/assets/global.scss" as g;
 
-.mugshotBackground {
-  position: absolute;
-  inset: 25% 0;
-  background-color: #e1d8d1;
-}
-
 .mugshot {
   @include c.fillParent;
   margin: auto;
 
-  width: 200px;
+  width: 240px;
   transform: translate(0, 8%);
 
   @include g.screenSizeAbove(768px) {
-    width: 280px;
+    width: 350px;
   }
 }
 
