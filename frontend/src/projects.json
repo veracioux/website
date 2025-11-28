@@ -10,7 +10,7 @@
     "extra_image_url": "https://raw.githubusercontent.com/flameshot-org/flameshot/master/data/img/preview/animatedUsage.gif",
     "organization": "Flameshot org",
     "organization_url": "https://github.com/flameshot-org",
-    "my_contributions_url": "https://github.com/search?q=repo%3Aflameshot-org%2Fflameshot+author%3Averacioux",
+    "my_contributions_url": "https://github.com/search?q=repo%3Aflameshot-org%2Fflameshot+author%3Averacioux&type=pullrequests",
     "roles": ["Developer", "Co-maintainer"],
     "languages": ["C++", "Qt"]
   },

@@ -309,7 +309,8 @@ const _entries = {
       </span>
     ),
     startDate: "2022-01",
-    displayDate: "Jan 2022 - present",
+    endDate: "2022-12",
+    displayDate: "Jan - Dec 2022",
     skills: [
       skills.javascript,
       skills.typescript,
