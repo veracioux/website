@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, reactive, ref, watch } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import { ScrollData } from "@/inject";
 import mugshot from "@/assets/mugshot.webp";
 import { shutterFullyOpenedScrollThreshold } from "@/constants";

@@ -1,18 +1,5 @@
-@mixin container {
-}
-
 @mixin containerHighlighted {
   box-shadow: rgba(var(--color-secondary-rgb), 0.4) 0 0 8px;
-}
-
-.title {
-  color: var(--color-primary);
-  font-weight: bold;
-  font-size: 1.4em;
-}
-
-.logo {
-  height: 54px;
 }
 
 .description {

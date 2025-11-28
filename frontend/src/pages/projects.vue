@@ -5,6 +5,6 @@ import Projects from "@/components/sections/Projects.vue";
 
 <template>
   <PageWithNavbar>
-    <Projects />
+    <Projects class="min-h-full" />
   </PageWithNavbar>
 </template>

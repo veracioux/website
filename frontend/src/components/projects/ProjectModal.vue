@@ -164,10 +164,12 @@ export default component;
             v-if="project?.image_url"
             :src="project?.image_url"
             alt="Project image"
-            :class="p.logo"
+            class="h-14 max-w-[60%]"
             loading="lazy"
           />
-          <div :class="p.title">{{ project?.title }}</div>
+          <div v-if="project?.show_title ?? true" class="text-2xl">
+            {{ project?.title }}
+          </div>
           <div :class="p.description">{{ project?.desc }}</div>
         </div>
         <div :class="s.urls">

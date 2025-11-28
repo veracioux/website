@@ -2,6 +2,7 @@ export interface Project {
   id: number;
   slug: string;
   title: string;
+  show_title?: boolean;
   desc: string;
   url: string;
   repo_url: string;

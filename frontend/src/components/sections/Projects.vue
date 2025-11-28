@@ -2,7 +2,7 @@
 import ProjectCard from "@/components/projects/ProjectCard.vue";
 import type { Project } from "@/models";
 import ProjectModal from "@/components/projects/ProjectModal.vue";
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import projects from "@/projects.json";
 
 import SectionTitle from "@/components/SectionTitle.vue";
@@ -15,6 +15,9 @@ const modal = reactive<{ show: boolean; project: Partial<Project> | null }>({
 /** Id of the project whose preview image/animation is shown. */
 const previewedProjectId = ref<number>();
 const imageContainer = ref<HTMLElement>();
+
+/** If the Teleport is not conditioned on this, Vue throws an error */
+const includeTeleport = computed(() => imageContainer.value !== undefined);
 
 function openModal(project: Partial<Project>) {
   modal.show = true;
@@ -31,27 +34,32 @@ function onMouseLeaveProjectCard() {
 </script>
 
 <template>
-  <div class="section">
+  <div class="relative pb-16 bg-[var(--color-background-1)]">
     <div
-      class="imageContainer"
+      class="imageContainer absolute inset-0 flex items-center justify-center overflow-hidden"
       id="image-container"
       ref="imageContainer"
       @mouseenter="previewedProjectId = undefined"
     >
       <!-- Will hold the preview of the project (if it exists) via a <Teleport> -->
     </div>
-    <SectionTitle :class="s.sectionTitle" text="Projects" slug="projects" />
-    <div class="cardContainer">
+    <SectionTitle class="mb-8" text="Projects" slug="projects" />
+    <div class="flex flex-wrap justify-center items-center gap-10 m-8 h-full">
       <template v-for="project in projects" :key="project.id">
-        <Teleport v-if="imageContainer" to="#image-container">
+        <Teleport v-if="includeTeleport" to="#image-container">
           <Transition name="preview-image-fade">
-            <img
-              class="previewImage"
+            <template
               v-if="
-                previewedProjectId === project.id && project?.extra_image_url
+                previewedProjectId === project.id && project.extra_image_url
               "
-              v-lazy="project?.extra_image_url"
-            />
+            >
+              <video v-if="project.video_url"></video>
+              <img
+                v-else
+                class="previewGraphic"
+                v-lazy="project.extra_image_url"
+              />
+            </template>
           </Transition>
         </Teleport>
         <ProjectCard
@@ -79,74 +87,37 @@ function onMouseLeaveProjectCard() {
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as c;
 
-.section {
-  position: relative;
-  background: var(--color-background-1);
-  min-height: 0;
-  padding-bottom: 64px;
+.imageContainer {
+  .previewGraphic {
+    position: absolute;
+    user-select: none;
+    pointer-events: none;
+    inset: 3rem;
+    opacity: 0.15;
+    transition: opacity 2s;
+    width: auto;
+    height: calc(100% - 8rem);
+    margin: auto;
 
-  .imageContainer {
-    @include c.fillParent;
-    @include c.centerFlex;
-    max-width: 100%;
-    max-height: 100%;
-    overflow: hidden;
-
-    .previewImage {
-      @include c.fillParent;
-      user-select: none;
-      pointer-events: none;
-      opacity: 0.15;
-      transition: opacity 2s;
-
-      min-width: 100%;
-      min-height: 100%;
-
-      &.preview-image-fade-enter-from {
-        opacity: 0;
-      }
-
-      &.preview-image-fade-enter-to {
-        opacity: 0.15 !important;
-      }
-
-      &.preview-image-fade-leave-from {
-        opacity: 0.15 !important;
-      }
-
-      &.preview-image-fade-leave-to {
-        opacity: 0;
-      }
+    &.preview-image-fade-enter-from {
+      opacity: 0;
     }
 
-    &::after {
-      @include c.fillParent;
-      background: linear-gradient(transparent 60%, var(--color-background-1));
-      content: "";
+    &.preview-image-fade-enter-to {
+      opacity: 0.15 !important;
+    }
+
+    &.preview-image-fade-leave-from {
+      opacity: 0.15 !important;
+    }
+
+    &.preview-image-fade-leave-to {
+      opacity: 0;
     }
   }
-
-  .cardContainer {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 40px;
-    padding: 40px;
-  }
-
-  .card {
-    z-index: 1;
-  }
-
-  :deep(.titleDecoration) {
-    fill: var(--color-background-0);
-  }
 }
-</style>
 
-<style module="s" lang="scss">
-.sectionTitle {
-  margin-bottom: 32px;
-}
+// :deep(.titleDecoration) {
+//   fill: var(--color-background-0);
+// }
 </style>

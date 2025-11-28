@@ -3,9 +3,10 @@ import Label from "@/components/generic/Label.vue";
 import Icon from "@/components/generic/Icon.vue";
 
 defineProps<{
-  title?: string;
-  desc?: string;
-  url?: string;
+  title: string;
+  show_title: boolean;
+  desc: string;
+  url: string;
   image_url?: string;
   extra_image_url?: string;
   languages?: string[];
@@ -18,8 +19,11 @@ defineEmits<{
 </script>
 
 <template>
-  <div :class="s.container">
-    <div :class="c.fillParent" @click="$emit('expand')" />
+  <div
+    class="relative self-stretch flex flex-col justify-center items-center gap-4 p-16 w-80 rounded-2xl"
+    :class="s.container"
+  >
+    <div class="absolute inset-0" @click="$emit('expand')"></div>
     <a v-if="url" :href="url" target="_blank" :class="s.externalLink">
       <Icon name="externalLink" :class="s.externalLinkIcon" center />
     </a>
@@ -27,13 +31,18 @@ defineEmits<{
       v-if="image_url"
       :src="image_url"
       alt="Project image"
-      :class="p.logo"
+      class="h-14"
       center
     />
-    <div :class="p.title">{{ title }}</div>
+    <div
+      v-if="show_title"
+      class="text-[var(--color-primary)] font-bold text-xl"
+    >
+      {{ title }}
+    </div>
     <div :class="p.description">{{ desc }}</div>
     <div :class="c.labelContainer">
-      <Label v-for="role in roles" v-bind:key="role" :title="role" />
+      <Label v-for="role in roles" v-bind:key="role" :title="role"></Label>
     </div>
   </div>
 </template>
@@ -49,18 +58,7 @@ defineEmits<{
 <style module="s" lang="scss">
 @use "@/assets/project.module.scss" as p;
 .container {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-
-  padding: 64px 48px;
-  width: 280px;
-  font-size: 1em;
-  border-radius: 10px;
   background: rgba(var(--color-background-0-rgb), 0.7);
-
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
