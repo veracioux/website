@@ -135,7 +135,7 @@ onBeforeUnmount(() => {
         @veraciouxCrossedThreshold="onVeraciouxCrossedThreshold"
       />
     </div>
-    <Projects id="projects" class="projects" />
+    <Projects id="projects" class="projects min-h-full" />
     <CV id="cv" class="cv" />
     <!--            <About id="about" class="about" />-->
     <!--            <Contact id="contact" class="contact" />-->

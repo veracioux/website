@@ -34,7 +34,9 @@ function onMouseLeaveProjectCard() {
 </script>
 
 <template>
-  <div class="relative pb-16 bg-[var(--color-background-1)]">
+  <div
+    class="relative flex flex-col justify-between h-full bg-[var(--color-background-1)]"
+  >
     <div
       class="imageContainer absolute inset-0 flex items-center justify-center overflow-hidden"
       id="image-container"
@@ -44,38 +46,45 @@ function onMouseLeaveProjectCard() {
       <!-- Will hold the preview of the project (if it exists) via a <Teleport> -->
     </div>
     <SectionTitle class="mb-8" text="Projects" slug="projects" />
-    <div class="flex flex-wrap justify-center items-center gap-10 m-8 h-full">
-      <template v-for="project in projects" :key="project.id">
-        <Teleport v-if="includeTeleport" to="#image-container">
-          <Transition name="preview-image-fade">
-            <template v-if="previewedProjectId === project.id">
-              <video
-                v-if="project.video_url"
-                class="previewGraphic"
-                :src="project.video_url"
-                autoplay
-                muted
-                loop
-              ></video>
-              <img
-                v-else
-                class="previewGraphic"
-                v-lazy="project.extra_image_url"
-              />
-            </template>
-          </Transition>
-        </Teleport>
-        <ProjectCard
-          v-bind="project"
-          class="card"
-          @expand="
-            openModal(project);
-            previewedProjectId = project.id!;
-          "
-          @mouseenter="onMouseEnterProjectCard(project.id)"
-          @mouseleave="onMouseLeaveProjectCard"
-        />
-      </template>
+    <div class="flex justify-center items-center p-8 h-full">
+      <div class="flex flex-wrap justify-center items-center gap-10">
+        <template v-for="project in projects" :key="project.id">
+          <Teleport v-if="includeTeleport" to="#image-container">
+            <Transition name="preview-image-fade">
+              <template v-if="previewedProjectId === project.id">
+                <video
+                  v-if="project.video_url"
+                  class="previewGraphic"
+                  :src="project.video_url"
+                  autoplay
+                  muted
+                  loop
+                ></video>
+                <img
+                  v-else
+                  class="previewGraphic"
+                  v-lazy="project.extra_image_url"
+                  :style="{
+                    // Workaround for Tuterm's preview image being poorly cropped
+                    'object-position':
+                      project.slug === 'tuterm' ? 'top left' : undefined,
+                  }"
+                />
+              </template>
+            </Transition>
+          </Teleport>
+          <ProjectCard
+            v-bind="project"
+            class="card"
+            @expand="
+              openModal(project);
+              previewedProjectId = project.id!;
+            "
+            @mouseenter="onMouseEnterProjectCard(project.id)"
+            @mouseleave="onMouseLeaveProjectCard"
+          />
+        </template>
+      </div>
       <ProjectModal
         v-if="modal.show"
         :project="modal.project"
