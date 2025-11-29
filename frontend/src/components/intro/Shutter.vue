@@ -110,7 +110,8 @@ function fullyOpenOrCloseShutterWhenStoppedScrolling(
     stopScrollingDetectorId = setTimeout(() => {
       if (relativeScrollY.value >= shutterFullyOpenedScrollThreshold) return;
       if (scrollingDirection === "up") scrollContainer.value?.scrollTo(0, 0);
-      else document.getElementById("home")?.scrollIntoView();
+      else
+        document.getElementById("home")?.scrollIntoView({ behavior: "smooth" });
     }, 200);
   } else {
     stopScrollingDetectorId = undefined;
