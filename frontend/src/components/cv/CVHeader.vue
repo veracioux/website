@@ -18,7 +18,6 @@ if (variant) {
       <div class="contactAndText">
         <div class="contact">
           <div class="name">Haris Gušić</div>
-          <hr />
           <SocialIcon
             name="location"
             text="Munich, Germany"
@@ -34,17 +33,18 @@ if (variant) {
         </div>
         <div class="flex flex-col justify-between gap-2">
           <div>
-            Versatile software engineer with a broad set of skills. I have
-            almost a year of experience as a professional full-stack developer,
-            and more than 5 years of experience as a hobby open source
-            programmer. My foremost talent and professional interest is in
-            finding flaws and potential improvements in existing solutions,
-            writing well documented code and perfecting the art of programming
-            through the invention of novel workflows.
+            Versatile full-stack software engineer with 4 years of professional
+            experience delivering reliable, elegant solutions in web, SaaS and
+            IoT and 5+ more years of open source development. My strengths
+            include adaptability, simple design, strong debugging skills and a
+            keen eye for flaws and improvements. Experienced in various
+            programming languages, frameworks and paradigms. I'm passionate
+            about learning new technologies, improving my craft and contributing
+            to open source software.
           </div>
           <div class="inline-flex items-center gap-2 text-gray-500">
             <Icon name="info" />
-            <span class="text">
+            <span class="leading-[2em]">
               An interactive online version of this resume is available
               <a :href="interactiveCvUrl.toString()" target="_blank">here</a>.
             </span>
