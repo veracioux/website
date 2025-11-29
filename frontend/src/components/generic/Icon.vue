@@ -23,7 +23,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Img from "@/components/generic/Img.vue";
 import { onMounted, ref } from "vue";
-import { CvContext } from "@/inject";
 
 library.add(
   faArrowUpRightFromSquare,
@@ -79,8 +78,6 @@ const root = ref<HTMLElement>();
 
 const imageSrc = props.src;
 
-const { isPdf } = CvContext.inject();
-
 onMounted(() => {
   if ((props.name !== undefined) == (props.src !== undefined)) {
     console.error(
@@ -98,7 +95,6 @@ onMounted(() => {
       :icon="iconNameToFontAwesomeMap[props.name]"
       class="faIcon"
     />
-    <Img v-else-if="isPdf" :src="imageSrc" :alt="alt" class="customIcon" />
     <Img v-else v-lazy="imageSrc" :alt="alt" class="customIcon" />
   </span>
 </template>

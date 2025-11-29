@@ -38,7 +38,7 @@
   line-height: 160%;
   display: flex;
   flex-direction: column;
-  align-items: inherit;
+  align-items: start;
   gap: 1em;
 
   @media print {

@@ -3,7 +3,6 @@ import Label from "@/components/generic/Label.vue";
 import Icon from "@/components/generic/Icon.vue";
 import { skills, skillGroups, type Entry } from "@/cv";
 import type { Skill } from "@/types";
-import { CvContext } from "@/inject";
 
 const props = defineProps<{
   variant?: string;
@@ -14,13 +13,13 @@ const props = defineProps<{
   activeSkills?: Skill[] | null;
 }>();
 
+const showExperience = false;
+
 const emit = defineEmits<{
   (e: "hoverSkill", skill: Skill): void;
   (e: "leaveSkill"): void;
   (e: "selectSkill", skill: Skill): void;
 }>();
-
-const { isPdf } = CvContext.inject();
 
 const extraClasses: Partial<Record<keyof typeof skills, string>> = {
   bash: "iconBash",
@@ -31,7 +30,6 @@ const extraClasses: Partial<Record<keyof typeof skills, string>> = {
   nginx: "iconNginx",
   docker: "iconDocker",
   git: "iconGit",
-  jetbrains: "iconJetBrains",
   linux: "iconLinux",
   emacs: "iconEmacs",
 };
@@ -74,12 +72,15 @@ function isSelected(skill: Skill) {
                 :title="skill.name"
                 :class="`icon ${extraClasses[skill.key as keyof typeof skills] ?? ''}`"
               />
-              <span v-if="isPdf" class="name">
+              <span class="no-print text-sm">
                 {{ skill.name }}
               </span>
             </template>
             <Label v-else :title="skill.name"></Label>
-            <span v-if="isPdf && skill.experience" class="experience">
+            <span
+              v-if="skill.experience && showExperience"
+              class="experience only-print"
+            >
               {{ skill.experience }}
             </span>
           </span>
@@ -99,8 +100,6 @@ function isSelected(skill: Skill) {
   @media print {
     position: relative;
     padding: 16px;
-
-    --icon-scale-multiplier: 0.6;
 
     @include common.beveledFrame(16px, 2px, #ccc, #f7f7f7);
   }
@@ -128,6 +127,7 @@ function isSelected(skill: Skill) {
 
 .skill {
   display: flex;
+  gap: 0.5rem;
   flex-direction: column;
   align-items: center;
 
@@ -214,17 +214,6 @@ number, not as a percentage)
 
 .iconGit {
   @include scaledIcon(1.6);
-}
-
-:root[data-theme="light"] .iconJetBrains {
-  --icon-scale-multiplier: 0.65;
-}
-
-.iconJetBrains {
-  $scale: calc(2.2 * var(--icon-scale-multiplier));
-  transform: scale($scale) translate(calc(-0.1 * #{$scale} * #{$iconSize}));
-  transform-origin: 0;
-  margin-right: calc((0.3 * #{$scale} - 0.6) * #{$iconSize});
 }
 
 .iconEthereum,

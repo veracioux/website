@@ -199,7 +199,7 @@ onMounted(() => {
           </tbody>
         </table>
       </div>
-      <aside class="sidePane flex flex-col items-center gap-6">
+      <aside class="sidePane flex flex-col items-stretch gap-8">
         <SkillsPane
           :hovered-skill="hoveredSkill"
           :selected-skill="selectedSkill"
@@ -208,7 +208,7 @@ onMounted(() => {
           @leaveSkill="onLeaveSkill"
           @selectSkill="onToggleSelectSkill"
         />
-        <LanguagesPane class="languagesPane" />
+        <LanguagesPane />
       </aside>
     </div>
   </div>
@@ -251,7 +251,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
     .timelineWrapper {
       --timeline-background: var(--color-background-2);
       --timeline-background-rgb: var(--color-background-2-rgb);
-      flex: 2 1 auto;
+      flex: 3 1 auto;
 
       @media print {
         position: relative;
@@ -316,32 +316,30 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
     }
 
     .sidePane {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3em;
-      flex: 2 0 30%;
-
-      @media print {
-        gap: 24px !important;
-        flex: 2 1 0;
-      }
+      flex: 1 1 auto;
 
       @include screenWidthAboveCriticalPoint {
         position: sticky;
-        top: 5.8em;
+        top: 5.8rem;
         bottom: 4.6em;
         height: 100%;
-        flex: 2 0 40%;
-        align-items: start;
+
+        @media print {
+          top: 0;
+        }
       }
 
       @include global.screenWidthAbove(global.$large) {
         @include global.screenHeightBelow(global.$small) {
           flex-direction: row;
-          gap: 1em;
-          flex: 2 0 50%;
+          gap: 1rem;
+          flex: 2 0 auto;
         }
+      }
+
+      @media print {
+        gap: 1rem !important;
+        flex: 0 5 29%;
       }
     }
   }

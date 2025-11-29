@@ -57,6 +57,7 @@ const _skills = {
     icon: iconJS,
     group: skillGroups.programmingLanguages,
     experience: "4 years",
+    disabled: true,
   },
   typescript: {
     name: "TypeScript",
@@ -129,6 +130,7 @@ const _skills = {
     icon: iconEthereum,
     group: skillGroups.frameworksAndTechnologies,
     experience: "6 months",
+    disabled: true,
   },
   solana: {
     name: "Solana",
@@ -213,6 +215,7 @@ const _skills = {
   technicalWriting: {
     name: "Technical writing",
     group: skillGroups.others,
+    disabled: true,
   },
 } as const satisfies Record<string, Skill>;
 
