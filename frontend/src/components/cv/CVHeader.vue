@@ -14,19 +14,25 @@ if (variant) {
 
 <template>
   <ClientOnly>
-    <div class="cvHeader">
+    <div class="cvHeader relative flex justify-between items-start gap-5 mb-4">
       <div class="contactAndText">
         <div class="contact">
           <div class="name">Haris Gušić</div>
           <hr />
-          <SocialIcon name="web" text="veracioux.me" />
-          <SocialIcon name="github" text="veracioux" />
-          <SocialIcon name="linkedin" text="veracioux" />
+          <SocialIcon
+            name="location"
+            text="Munich, Germany"
+            class="opacity-50 text-[0.85rem]"
+          />
           <SocialIcon name="mail" text="hgusic.pub@gmail.com" />
           <SocialIcon name="phone" text="+387644229116" />
-          <SocialIcon name="location" text="Munich, Germany" class="location" />
+          <SocialIcon name="web" text="veracioux.me" />
+          <div class="flex gap-8">
+            <SocialIcon name="github" text="veracioux" />
+            <SocialIcon name="linkedin" text="veracioux" />
+          </div>
         </div>
-        <div class="textWithFooter">
+        <div class="flex flex-col justify-between gap-2">
           <div>
             Versatile software engineer with a broad set of skills. I have
             almost a year of experience as a professional full-stack developer,
@@ -36,7 +42,7 @@ if (variant) {
             writing well documented code and perfecting the art of programming
             through the invention of novel workflows.
           </div>
-          <div class="footer">
+          <div class="inline-flex items-center gap-2 text-gray-500">
             <Icon name="info" />
             <span class="text">
               An interactive online version of this resume is available
@@ -53,13 +59,7 @@ if (variant) {
 @use "@/assets/common.module.scss" as common;
 
 .cvHeader {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
   align-items: flex-start;
-  gap: 20px;
-  overflow: visible;
-  margin-bottom: 16px;
 
   padding: 24px 32px;
 
@@ -77,7 +77,6 @@ if (variant) {
     .contact {
       display: flex;
       flex-direction: column;
-      min-width: 200px;
 
       .name {
         font-size: 1.6em;
@@ -86,32 +85,6 @@ if (variant) {
 
       hr {
         opacity: 0.4;
-      }
-
-      .location {
-        opacity: 0.6;
-      }
-    }
-
-    .textWithFooter {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      margin-top: 8px;
-
-      .footer {
-        line-height: 1.8;
-        color: rgba(black, 0.5);
-
-        :deep(.icon) {
-          height: 1em;
-          // TODO temporary fix
-          transform: translateY(-4%);
-        }
-
-        .text {
-          margin-left: 4px;
-        }
       }
     }
   }

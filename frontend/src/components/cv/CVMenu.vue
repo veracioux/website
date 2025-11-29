@@ -18,10 +18,6 @@ function onToggleChanged(value: boolean) {
   displayMode.value = value ? "byCategory" : "timeline";
   emit("displayModeChanged", displayMode.value);
 }
-
-function print() {
-  window.print();
-}
 </script>
 
 <template>
@@ -41,9 +37,6 @@ function print() {
         Download
       </a>
       <span class="backdrop" :style="{ zIndex: zindex.cvMenu }">
-        <a class="button" @click="print()">
-          <Icon name="print" class="icon" />
-        </a>
         <ToggleSwitch
           uniform-states
           @valueChanged="onToggleChanged"

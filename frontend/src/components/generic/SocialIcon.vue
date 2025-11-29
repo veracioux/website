@@ -59,12 +59,11 @@ const href =
     :is="href ? 'a' : 'span'"
     :href="href"
     target="_blank"
-    class="socialIconRoot"
+    class="socialIconRoot leading-6 inline-flex items-center"
   >
     <Icon
       :name="name"
       :style="colorize ? nameToDataMap[name as keyof typeof nameToDataMap]?.style : undefined"
-      class="icon"
     />
     <span class="text">{{ text }}</span>
   </component>
@@ -72,14 +71,8 @@ const href =
 
 <style scoped lang="scss">
 .socialIconRoot {
-  line-height: 1.8;
-
   .text {
     margin-left: 6px;
   }
-}
-
-.icon {
-  height: 28px;
 }
 </style>

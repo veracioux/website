@@ -103,7 +103,9 @@ onMounted(() => {
 @use "@/assets/common.module.scss" as c;
 
 .icon {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   vertical-align: middle;
 
   .internalIcon {

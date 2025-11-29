@@ -6,11 +6,11 @@ import CV from "@/components/cv/CV.vue";
 
 <template>
   <PageWithNavbar class="no-print">
-    <CVSection />
+    <CVSection class="min-h-full" />
   </PageWithNavbar>
   <div class="relative bg-[var(--color-background-1)] only-print">
     <div class="page">
-      <CV class="cv" display-mode="byCategory" />
+      <CV class="text-[11px]" display-mode="byCategory" />
     </div>
   </div>
 </template>
@@ -27,10 +27,6 @@ import CV from "@/components/cv/CV.vue";
     padding: 32px;
     margin: 0 auto;
     background: var(--color-background-0);
-
-    .cv {
-      font-size: 11px;
-    }
   }
 }
 </style>
