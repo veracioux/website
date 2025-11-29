@@ -88,7 +88,7 @@ function getIcon(skill: Skill, variant: "dark" | "light"): string {
                 :title="skill.name"
                 :class="`icon only-print ${extraClasses[skill.key as keyof typeof skills] ?? ''}`"
               />
-              <span class="no-print text-sm">
+              <span class="text-sm print:text-[0.7rem] leading-[0.65rem]">
                 {{ skill.name }}
               </span>
             </template>
@@ -116,6 +116,8 @@ function getIcon(skill: Skill, variant: "dark" | "light"): string {
   @media print {
     position: relative;
     padding: 16px;
+
+    --icon-scale-multiplier: 1.1;
 
     @include common.beveledFrame(16px, 2px, #ccc, #f7f7f7);
   }

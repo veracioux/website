@@ -6,6 +6,7 @@ import iconCpp from "@/assets/icons/cpp.svg";
 import iconQt from "@/assets/icons/qt.svg";
 import iconBashDark from "@/assets/icons/bash-dark.svg";
 import iconBashLight from "@/assets/icons/bash-light.svg";
+import iconRedis from "@/assets/icons/redis.svg";
 import iconReact from "@/assets/icons/react.svg";
 import iconAngular from "@/assets/icons/angular.svg";
 import iconPostgres from "@/assets/icons/postgres.svg";
@@ -110,6 +111,12 @@ const _skills = {
     group: skillGroups.technologies,
     experience: "1 year",
   },
+  redis: {
+    name: "Redis",
+    icon: iconRedis,
+    group: skillGroups.technologies,
+    experience: "1 year",
+  },
   golang: {
     name: "Go",
     icon: iconGolang,
@@ -189,6 +196,26 @@ const _skills = {
     group: skillGroups.otherTools,
     experience: "3 years",
     disabled: true,
+  },
+  restApi: {
+    name: "REST API",
+    group: skillGroups.others,
+    experience: "3 years",
+  },
+  microservices: {
+    name: "Microservices",
+    group: skillGroups.others,
+    experience: "2 years",
+  },
+  saas: {
+    name: "SaaS",
+    group: skillGroups.others,
+    experience: "1 year",
+  },
+  iot: {
+    name: "IoT",
+    group: skillGroups.others,
+    experience: "1 year",
   },
   plc: {
     name: "PLC programming",
