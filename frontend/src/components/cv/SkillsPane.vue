@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import Label from "@/components/generic/Label.vue";
 import Icon from "@/components/generic/Icon.vue";
-import { skills, skillGroups, type Skill, type Entry } from "@/cv";
+import { skills, skillGroups, type Entry } from "@/cv";
+import type { Skill } from "@/types";
 import { CvContext } from "@/inject";
 
 const props = defineProps<{

@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import ProjectCard from "@/components/projects/ProjectCard.vue";
-import type { Project } from "@/models";
+import { projects, type Project } from "@/projects";
 import ProjectModal from "@/components/projects/ProjectModal.vue";
 import { computed, reactive, ref } from "vue";
-import projects from "@/projects.json";
 
 import SectionTitle from "@/components/SectionTitle.vue";
 
-const modal = reactive<{ show: boolean; project: Partial<Project> | null }>({
+const modal = reactive<{ show: boolean; project?: Project }>({
   show: false,
-  project: null,
 });
 
 /** Id of the project whose preview image/animation is shown. */
@@ -19,7 +17,7 @@ const imageContainer = ref<HTMLElement>();
 /** If the Teleport is not conditioned on this, Vue throws an error */
 const includeTeleport = computed(() => imageContainer.value !== undefined);
 
-function openModal(project: Partial<Project>) {
+function openModal(project: Project) {
   modal.show = true;
   modal.project = project;
 }
@@ -47,7 +45,10 @@ function onMouseLeaveProjectCard() {
     </div>
     <SectionTitle class="mb-8" text="Projects" slug="projects" />
     <div class="flex justify-center items-center p-8 h-full">
-      <div class="flex flex-wrap justify-center items-center gap-10">
+      <div
+        id="project-card-container"
+        class="flex flex-wrap justify-center items-center gap-10"
+      >
         <template v-for="project in projects" :key="project.id">
           <Teleport v-if="includeTeleport" to="#image-container">
             <Transition name="preview-image-fade">
@@ -87,7 +88,7 @@ function onMouseLeaveProjectCard() {
       </div>
       <ProjectModal
         v-if="modal.show"
-        :project="modal.project"
+        :project="modal.project!"
         @close="modal.show = false"
       />
     </div>
@@ -121,8 +122,4 @@ function onMouseLeaveProjectCard() {
     }
   }
 }
-
-// :deep(.titleDecoration) {
-//   fill: var(--color-background-0);
-// }
 </style>

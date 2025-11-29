@@ -4,14 +4,8 @@ import SkillsPane from "@/components/cv/SkillsPane.vue";
 import CVHeader from "./CVHeader.vue";
 import LanguagesPane from "@/components/cv/LanguagesPane.vue";
 import { CvContext } from "@/inject";
-import {
-  groups,
-  entries,
-  type Entry,
-  type Skill,
-  skills,
-  type DisplayMode,
-} from "@/cv";
+import { groups, entries, type Entry, skills, type DisplayMode } from "@/cv";
+import type { Skill } from "@/types";
 import { onMounted, ref, watch } from "vue";
 
 defineProps<{

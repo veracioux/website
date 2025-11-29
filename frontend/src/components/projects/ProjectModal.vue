@@ -2,13 +2,12 @@
 <script lang="ts">
 import type { App, PropType } from "vue";
 import { defineComponent, h } from "vue";
-import type { Project } from "@/models";
+import type { Project } from "@/projects";
 import Icon from "@/components/generic/Icon.vue";
 import Label from "@/components/generic/Label.vue";
 import type { IconProps } from "@/components/generic/Icon.vue";
 import type { IconName } from "@fortawesome/fontawesome-svg-core";
 
-// Types
 interface URLEntryProps {
   href: string;
   iconProps: IconProps;
