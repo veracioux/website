@@ -4,7 +4,8 @@ import iconPython from "@/assets/icons/python.svg";
 import iconC from "@/assets/icons/c.svg";
 import iconCpp from "@/assets/icons/cpp.svg";
 import iconQt from "@/assets/icons/qt.svg";
-import iconBash from "@/assets/icons/bash.svg";
+import iconBashDark from "@/assets/icons/bash-dark.svg";
+import iconBashLight from "@/assets/icons/bash-light.svg";
 import iconReact from "@/assets/icons/react.svg";
 import iconVue from "@/assets/icons/vue.svg";
 import iconDjango from "@/assets/icons/django.svg";
@@ -85,7 +86,10 @@ const _skills = {
   },
   bash: {
     name: "Bash",
-    icon: iconBash,
+    icon: {
+      dark: iconBashDark,
+      light: iconBashLight,
+    },
     group: skillGroups.programmingLanguages,
     experience: "2 years",
   },

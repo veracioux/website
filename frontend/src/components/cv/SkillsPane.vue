@@ -41,6 +41,14 @@ function isActive(skill: Skill) {
 function isSelected(skill: Skill) {
   return skill.key === props.selectedSkill?.key;
 }
+
+function getIcon(skill: Skill, variant: "dark" | "light"): string {
+  if (typeof skill.icon === "string") {
+    return skill.icon;
+  } else {
+    return skill.icon?.[variant] ?? "";
+  }
+}
 </script>
 
 <template>
@@ -67,10 +75,16 @@ function isSelected(skill: Skill) {
           >
             <template v-if="skill.icon">
               <Icon
-                :src="skill.icon"
+                :src="getIcon(skill, 'light')"
                 :alt="skill.name"
                 :title="skill.name"
-                :class="`icon ${extraClasses[skill.key as keyof typeof skills] ?? ''}`"
+                :class="`icon no-print ${extraClasses[skill.key as keyof typeof skills] ?? ''}`"
+              />
+              <Icon
+                :src="getIcon(skill, 'dark')"
+                :alt="skill.name"
+                :title="skill.name"
+                :class="`icon only-print ${extraClasses[skill.key as keyof typeof skills] ?? ''}`"
               />
               <span class="no-print text-sm">
                 {{ skill.name }}
@@ -201,7 +215,7 @@ number, not as a percentage)
 }
 
 .iconBash {
-  @include scaledIcon(2.2);
+  @include scaledIcon(2);
 }
 
 .iconDjango {
