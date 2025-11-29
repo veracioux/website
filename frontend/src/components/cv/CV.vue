@@ -5,28 +5,20 @@ import CVHeader from "./CVHeader.vue";
 import LanguagesPane from "@/components/cv/LanguagesPane.vue";
 import { CvContext } from "@/inject";
 import {
-  groups,
+  groups as _groups,
   entries as _entries,
   type Entry,
   skills,
   type DisplayMode,
 } from "@/cv";
 import type { Skill } from "@/types";
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 
 defineProps<{
   displayMode: DisplayMode;
 }>();
 
-const { variant, resume } = CvContext.inject();
-
-const entries = {
-  ..._entries,
-  evoltInternship: {
-    ..._entries.evoltInternship,
-    disabled: resume,
-  },
-} satisfies typeof _entries;
+const ctx = CvContext.inject();
 
 // NOTE: Skills and Entries are tethered. Whenever you hover over a skill, an
 // entry that references the skill is highlighted, and vice versa: when hovering over an entity, all referenced skills will be active. Let's call a
@@ -45,37 +37,89 @@ const selectedEntry = ref<Entry | null>(null);
 const selectedSkill = ref<Skill | null>(null);
 const activeSkills = ref<Skill[]>([]);
 
-// TODO Devise a method to define variants in external files.
-const excludedGroups = variant
-  ? (["extraCurricular"] as (keyof typeof groups)[])
-  : [];
+const data = computed(() => {
+  const entries = {
+    ..._entries,
+    elektromatik: {
+      ..._entries.elektromatik,
+      disabled: ctx.resume,
+    },
+    demosPMS: {
+      ..._entries.demosPMS,
+      disabled: ctx.resume,
+    },
+    demosTP: {
+      ..._entries.demosTP,
+      disabled: ctx.resume,
+    },
+    githubProjects: {
+      ..._entries.githubProjects,
+      disabled: ctx.resume,
+    },
+    rotatingLedDisplay: {
+      ..._entries.rotatingLedDisplay,
+      disabled: ctx.resume,
+    },
+    renovation: {
+      ..._entries.renovation,
+      disabled: ctx.resume,
+    },
+  } satisfies typeof _entries;
 
-const enabledGroups = Object.values(groups).filter(
-  ({ key }) => !excludedGroups.includes(key as keyof typeof groups)
-);
+  const groups = Object.fromEntries(
+    Object.entries(_groups).map(([key, group]) => [
+      key,
+      {
+        ...group,
+        entries: Object.values(entries).filter(
+          (entry) => entry.group === group
+        ),
+      },
+    ])
+  ) as unknown as Record<
+    keyof typeof _groups,
+    (typeof _groups)[keyof typeof _groups] & {
+      entries: Entry[];
+    }
+  >;
 
-// All entries that should are explicitly excluded
-const excludedEntries = variant
-  ? (["renovation", "demosTP", "demosPMS"] as (keyof typeof entries)[])
-  : [];
+  // TODO Devise a method to define variants in external files.
+  const excludedGroups = ctx.variant
+    ? (["extraCurricular"] as (keyof typeof groups)[])
+    : [];
 
-// All entries that should are explicitly excluded plus those excluded implicitly
-// because the group they belong to has been excluded.
-const allExcludedEntries = [
-  ...excludedEntries,
-  ...Object.values(entries)
-    .filter((entry) => excludedGroups.find((key) => key === entry.group?.key))
-    .map(({ key }) => key),
-];
-
-const enabledEntries = Object.values(entries).filter(
-  ({ key }) => !allExcludedEntries.includes(key)
-);
-
-enabledGroups.forEach((group) => {
-  group.entries = group.entries?.filter(
-    ({ key }) => !excludedEntries.includes(key as keyof typeof entries)
+  const enabledGroups = Object.values(groups).filter(
+    ({ key }) => !excludedGroups.includes(key as keyof typeof groups)
   );
+
+  // All entries that should are explicitly excluded
+  const excludedEntries = ctx.variant
+    ? (["renovation", "demosTP", "demosPMS"] as (keyof typeof entries)[])
+    : [];
+
+  // All entries that should are explicitly excluded plus those excluded implicitly
+  // because the group they belong to has been excluded.
+  const allExcludedEntries = [
+    ...excludedEntries,
+    ...Object.values(entries)
+      .filter((entry) => excludedGroups.find((key) => key === entry.group?.key))
+      .map(({ key }) => key),
+  ];
+
+  const enabledEntries = Object.values(entries).filter(
+    ({ key }) => !allExcludedEntries.includes(key)
+  );
+
+  enabledGroups.forEach((group) => {
+    group.entries = group.entries?.filter(
+      ({ key }) => !excludedEntries.includes(key as keyof typeof entries)
+    );
+  });
+
+  return {
+    enabledEntries,
+    enabledGroups,
+  };
 });
 
 function onHoverEntry(entry: Entry) {
@@ -148,7 +192,7 @@ onMounted(() => {
             <template v-if="displayMode === 'timeline'">
               <template
                 v-bind:key="entry.key"
-                v-for="entry of enabledEntries.sort(
+                v-for="entry of data.enabledEntries.sort(
                   (a, b) =>
                     new Date(b.startDate).getTime() -
                     new Date(a.startDate).getTime()
@@ -167,7 +211,10 @@ onMounted(() => {
               </template>
             </template>
             <template v-else>
-              <template v-bind:key="group.key" v-for="group of enabledGroups">
+              <template
+                v-bind:key="group.key"
+                v-for="group of data.enabledGroups"
+              >
                 <div class="h-16 relative [&:first-child]:-mb-4">
                   <div class="groupTitle">
                     <div class="h-full inset-0 flex items-center">

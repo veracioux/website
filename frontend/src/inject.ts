@@ -8,6 +8,7 @@ import {
   reactive,
   ref,
   watch,
+  computed,
 } from "vue";
 import * as utils from "@/utils";
 import { useRoute } from "#app";
@@ -55,14 +56,10 @@ export class ScrollData {
 
 export class CvContext {
   static inject() {
-    const { variant, resume, render } = useRoute().query;
+    const query = useRoute().query;
     return reactive({
-      variant,
-      resume: resume === "true",
-      render: render as "pdf" | "html" | undefined,
-      get isPdf() {
-        return this.render === "pdf";
-      },
+      variant: query.variant,
+      resume: computed(() => query.resume === "true"),
     });
   }
 }

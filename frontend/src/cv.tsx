@@ -252,7 +252,6 @@ export interface Group {
   key: string;
   name: string;
   disabled?: boolean;
-  entries?: Entry[];
 }
 
 export interface Entry {
@@ -571,9 +570,6 @@ Object.entries(skillGroups).forEach(
 Object.entries(entries).forEach(([key, entry]) => (entry.key = key));
 Object.entries(groups).forEach(([key, group]) => {
   group.key = key;
-  group.entries = Object.values(entries).filter(
-    (entry) => entry.group === group
-  );
 });
 
 export type DisplayMode = "timeline" | "byCategory";

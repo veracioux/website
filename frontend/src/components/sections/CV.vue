@@ -23,7 +23,7 @@ function onDisplayModeChanged(value: DisplayMode) {
     <SectionTitle class="sectionTitle" :text="title" slug="cv" />
     <CV class="cv" :display-mode="displayMode" />
     <div class="overlayContainer">
-      <div class="overlay top" />
+      <div class="overlay top"></div>
       <div class="overlay bottom">
         <CVMenu
           v-if="!isMobile"
