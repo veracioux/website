@@ -80,10 +80,7 @@ function updateShutterOutline() {
 
 function updateRotation() {
   // These values were obtained empirically
-  if (
-    scrollContainer.value!.clientWidth < 768 ||
-    scrollContainer.value!.clientWidth < 768
-  ) {
+  if (window.innerWidth < 768 || window.innerHeight < 768) {
     rotation.value = (relativeApertureSize * 7200) / shutterRadius;
   } else {
     rotation.value = (relativeApertureSize * 10200) / shutterRadius;
@@ -217,9 +214,8 @@ Classes used temporarily for debugging.
   margin: auto;
 
   width: 240px;
-  // transform: translate(0, 8%);
 
-  @include g.screenSizeAbove(768px) {
+  @include g.screenSizeAbove(g.$small) {
     width: 350px;
   }
 }
