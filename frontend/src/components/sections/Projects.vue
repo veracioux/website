@@ -47,7 +47,10 @@ function onMouseLeaveProjectCard() {
     <div class="flex justify-center items-center p-8 h-full">
       <div
         id="project-card-container"
-        class="flex flex-wrap justify-center items-center gap-10"
+        class="flex flex-wrap justify-center items-center gap-10 transition-opacity delay-200 duration-500"
+        :style="{
+          opacity: modal.show ? 0.5 : undefined,
+        }"
       >
         <template v-for="project in projects" :key="project.id">
           <Teleport v-if="includeTeleport" to="#image-container">
