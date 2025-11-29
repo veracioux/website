@@ -32,6 +32,8 @@ const extraClasses: Partial<Record<keyof typeof skills, string>> = {
   git: "iconGit",
   linux: "iconLinux",
   emacs: "iconEmacs",
+  nestjs: "iconNestJS",
+  golang: "iconGolang",
 };
 
 function isActive(skill: Skill) {
@@ -222,8 +224,20 @@ number, not as a percentage)
   @include scaledIcon(1.8);
 }
 
+.iconNestJS {
+  @include scaledIcon(2.4);
+}
+
+.iconGolang {
+  @include scaledIcon(1.4);
+}
+
+.iconJava {
+  @include scaledIcon(1.3);
+}
+
 .iconDocker {
-  @include scaledIcon(2);
+  @include scaledIcon(2.4);
 }
 
 .iconGit {

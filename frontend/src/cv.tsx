@@ -7,6 +7,10 @@ import iconQt from "@/assets/icons/qt.svg";
 import iconBashDark from "@/assets/icons/bash-dark.svg";
 import iconBashLight from "@/assets/icons/bash-light.svg";
 import iconReact from "@/assets/icons/react.svg";
+import iconAngular from "@/assets/icons/angular.svg";
+import iconPostgres from "@/assets/icons/postgres.svg";
+import iconGolang from "@/assets/icons/golang.svg";
+import iconNestJS from "@/assets/icons/nestjs.svg";
 import iconVue from "@/assets/icons/vue.svg";
 import iconDjango from "@/assets/icons/django.svg";
 import iconDocker from "@/assets/icons/docker.svg";
@@ -107,13 +111,25 @@ const _skills = {
   },
   angular: {
     name: "Angular",
-    icon: iconReact, // FIXME
+    icon: iconAngular,
+    group: skillGroups.frameworksAndTechnologies,
+    experience: "1 year",
+  },
+  nestjs: {
+    name: "NestJS",
+    icon: iconNestJS,
+    group: skillGroups.frameworksAndTechnologies,
+    experience: "1 year",
+  },
+  postgres: {
+    name: "PostgreSQL",
+    icon: iconPostgres,
     group: skillGroups.frameworksAndTechnologies,
     experience: "1 year",
   },
   golang: {
     name: "Go",
-    icon: iconReact, // FIXME
+    icon: iconGolang,
     group: skillGroups.programmingLanguages,
     experience: "6 months",
   },
@@ -158,7 +174,7 @@ const _skills = {
     name: "Git",
     icon: iconGit,
     group: skillGroups.otherTools,
-    experience: "3 years",
+    experience: "5 years",
   },
   jetbrains: {
     name: "JetBrains",
@@ -171,13 +187,13 @@ const _skills = {
     name: "Linux",
     icon: iconLinux,
     group: skillGroups.otherTools,
-    experience: "3 years",
+    experience: "5 years",
   },
   emacs: {
     name: "Emacs",
     icon: iconEmacs,
     group: skillGroups.otherTools,
-    experience: "2 years",
+    experience: "3 years",
     disabled: true,
   },
   plc: {

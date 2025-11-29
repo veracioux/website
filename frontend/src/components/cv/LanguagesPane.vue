@@ -32,22 +32,28 @@
 </template>
 
 <style scoped lang="scss">
-@use "@/assets/common.module.scss" as c;
+@use "@/assets/common.module.scss" as common;
+@use "@/assets/global.scss" as global;
 
 .languagesPaneContainer {
   line-height: 160%;
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: center;
   gap: 1em;
+
+  @include global.screenWidthAbove(global.$small) {
+    @media not print {
+      align-items: start;
+    }
+  }
 
   @media print {
     position: relative;
     padding: 24px;
-    align-items: center;
     gap: 12px;
 
-    @include c.beveledFrame(16px, 2px, #ccc, #f7f7f7);
+    @include common.beveledFrame(16px, 2px, #ccc, #f7f7f7);
   }
 
   .languageTable {
