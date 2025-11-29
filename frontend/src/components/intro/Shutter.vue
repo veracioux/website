@@ -23,6 +23,7 @@ const configKonva = reactive({
 });
 /** Aperture size relative to its fully opened state */
 let relativeApertureSize = 0;
+let shutterRadius = 0;
 const relativeScrollAtMaxAperture = 1 / 3.5;
 
 const { relativeScrollY, scrollContainer } = ScrollData.inject();
@@ -34,7 +35,7 @@ function getShutterRadius() {
 }
 
 function updateShutterGeometry() {
-  let radius = getShutterRadius();
+  shutterRadius = getShutterRadius();
   let centerX = scrollContainer.value!.clientWidth / 2,
     centerY = scrollContainer.value!.clientHeight / 2;
   // The arc that one slice occupies (radians)
@@ -42,14 +43,14 @@ function updateShutterGeometry() {
   for (let i = 0; i < numSlices; ++i) {
     let angle = i * sliceArc + Math.PI / numSlices;
     // The pivot coordinates are relative to the window center
-    let pivotX = radius * Math.cos(angle),
-      pivotY = radius * Math.sin(angle),
-      x2 = radius * Math.cos(angle + sliceArc / 2),
-      y2 = radius * Math.sin(angle + sliceArc / 2),
+    let pivotX = shutterRadius * Math.cos(angle),
+      pivotY = shutterRadius * Math.sin(angle),
+      x2 = shutterRadius * Math.cos(angle + sliceArc / 2),
+      y2 = shutterRadius * Math.sin(angle + sliceArc / 2),
       x3 = 0,
       y3 = 0,
-      x4 = radius * Math.cos(angle - sliceArc / 2),
-      y4 = radius * Math.sin(angle - sliceArc / 2);
+      x4 = shutterRadius * Math.cos(angle - sliceArc / 2),
+      y4 = shutterRadius * Math.sin(angle - sliceArc / 2);
 
     let slice: Slice = {
       pivotX: centerX + pivotX,
@@ -78,17 +79,14 @@ function updateShutterOutline() {
 }
 
 function updateRotation() {
-  let radius = getShutterRadius();
   // These values were obtained empirically
   if (
-    Math.min(
-      scrollContainer.value!.clientWidth,
-      scrollContainer.value!.clientWidth
-    ) < 768
+    scrollContainer.value!.clientWidth < 768 ||
+    scrollContainer.value!.clientWidth < 768
   ) {
-    rotation.value = (relativeApertureSize * 7200) / radius;
+    rotation.value = (relativeApertureSize * 7200) / shutterRadius;
   } else {
-    rotation.value = (relativeApertureSize * 10200) / radius;
+    rotation.value = (relativeApertureSize * 10200) / shutterRadius;
   }
 }
 
@@ -102,9 +100,7 @@ let stopScrollingDetectorId: NodeJS.Timeout | undefined = undefined;
 function fullyOpenOrCloseShutterWhenStoppedScrolling(
   scrollingDirection: "up" | "down"
 ) {
-  if (stopScrollingDetectorId) {
-    clearTimeout(stopScrollingDetectorId);
-  }
+  clearTimeout(stopScrollingDetectorId);
 
   if (relativeScrollY.value < shutterFullyOpenedScrollThreshold) {
     stopScrollingDetectorId = setTimeout(() => {
@@ -113,24 +109,11 @@ function fullyOpenOrCloseShutterWhenStoppedScrolling(
       else
         document.getElementById("home")?.scrollIntoView({ behavior: "smooth" });
     }, 200);
-  } else {
-    stopScrollingDetectorId = undefined;
   }
 }
 
-function onScroll(value?: number, oldValue?: number, forceUpdate = false) {
-  if (value === undefined || oldValue === undefined)
-    value = oldValue = relativeScrollY.value;
-  if (
-    !forceUpdate &&
-    relativeApertureSize == 1 &&
-    relativeScrollY.value > relativeScrollAtMaxAperture
-  )
-    return;
-  relativeApertureSize = Math.min(
-    relativeScrollY.value / relativeScrollAtMaxAperture,
-    1
-  );
+function onScroll(value: number, oldValue: number) {
+  relativeApertureSize = Math.min(value / relativeScrollAtMaxAperture, 1);
   updateShutterOutline();
   updateRotation();
 
@@ -148,7 +131,7 @@ function onWindowResize() {
   configKonva.width = scrollContainer.value!.clientWidth;
   configKonva.height = scrollContainer.value!.clientHeight;
   updateShutterGeometry();
-  onScroll(relativeScrollY.value, relativeScrollY.value, true);
+  onScroll(relativeScrollY.value, relativeScrollY.value);
 }
 
 watch(relativeScrollY, (value, oldValue) => onScroll(value, oldValue));
@@ -159,7 +142,7 @@ const hideAvatar = ref(true);
 onMounted(() => {
   window.addEventListener("resize", onWindowResize);
   setTimeout(() => {
-    onScroll();
+    onScroll(relativeScrollY.value, relativeScrollY.value);
     onWindowResize();
     hideAvatar.value = false;
   }, 0);
@@ -199,7 +182,7 @@ onMounted(() => {
           </v-layer>
         </v-stage>
       </ClientOnly>
-      <div class="shadowOverlay" />
+      <div class="shadowOverlay"></div>
     </div>
   </div>
 </template>
