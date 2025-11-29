@@ -6,7 +6,7 @@ import CV from "@/components/cv/CV.vue";
 
 <template>
   <PageWithNavbar class="no-print">
-    <CVSection class="min-h-full" />
+    <CVSection />
   </PageWithNavbar>
   <div class="relative bg-[var(--color-background-1)] only-print">
     <div class="page">

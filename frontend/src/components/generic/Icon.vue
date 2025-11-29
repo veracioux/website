@@ -95,7 +95,12 @@ onMounted(() => {
       :icon="iconNameToFontAwesomeMap[props.name]"
       class="faIcon"
     />
-    <Img v-else v-lazy="imageSrc" :alt="alt" class="customIcon" />
+    <template v-else>
+      <Img :src="imageSrc" :alt="alt" class="customIcon only-print" />
+      <ClientOnly>
+        <Img v-lazy="imageSrc" :alt="alt" class="customIcon no-print" />
+      </ClientOnly>
+    </template>
   </span>
 </template>
 

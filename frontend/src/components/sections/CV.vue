@@ -19,7 +19,7 @@ function onDisplayModeChanged(value: DisplayMode) {
 </script>
 
 <template>
-  <div class="section">
+  <div class="section min-h-full">
     <SectionTitle class="sectionTitle" :text="title" slug="cv" />
     <CV class="cv" :display-mode="displayMode" />
     <div class="overlayContainer">
