@@ -247,10 +247,10 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <!-- <SelfPraiseManager
+    <SelfPraiseManager
       :appear-relative-scroll-y="selfPraiseAppearRelativeScrollY"
       :self-praise-items="selfPraiseItems"
-    /> -->
+    />
   </div>
 </template>
 

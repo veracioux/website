@@ -52,11 +52,11 @@ watch(currentStep, (value, oldValue) => {
 <template>
   <div
     :class="{
-      [s.wrapper]: true,
+      'absolute inset-0 flex flex-col lg:flex-row items-center justify-between': true,
       fastTransition: scrollingFast || progress < 0,
     }"
   >
-    <div :class="[s.slot, s.slot1]">
+    <div class="slot slot1">
       <Transition name="slide-fade-1">
         <SelfPraiseCard
           v-if="currentStep >= 0"
@@ -65,14 +65,14 @@ watch(currentStep, (value, oldValue) => {
         />
       </Transition>
     </div>
-    <div :class="s.spacer">
+    <div class="spacer">
       <!--
                     Item that occupies approximately the same space as the avatar,
                     thereby making sure that the slots do not overlap with the avatar
                     and can be centered between the avatar and the window boundary.
                 -->
     </div>
-    <div :class="[s.slot, s.slot2]">
+    <div class="slot slot2">
       <Transition name="slide-fade-2">
         <SelfPraiseCard
           v-if="currentStep >= 0"
@@ -84,21 +84,9 @@ watch(currentStep, (value, oldValue) => {
   </div>
 </template>
 
-<style module="s" lang="scss">
+<style scoped lang="scss">
 @use "@/assets/common.module.scss" as c;
 @use "@/assets/global.scss" as global;
-
-.wrapper {
-  @include c.fillParent;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-
-  @include global.screenWidthAbove(global.$large) {
-    flex-direction: row;
-  }
-}
 
 .slot {
   display: flex;
@@ -146,9 +134,9 @@ watch(currentStep, (value, oldValue) => {
 
 /* Occupies approximately the same size as the avatar exposed by the shutter. */
 .spacer {
-  --size: 240px;
+  --size: 200px;
 
-  @include global.screenSizeAbove(768px) {
+  @include global.screenSizeAbove(global.$small) {
     --size: 350px;
   }
 
