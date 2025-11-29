@@ -384,7 +384,7 @@ const _entries = {
     node: () => (
       <span>
         <b>Bachelor of Electrical Engineering</b>, Automation and Electronics,
-        Faculty of Electrical Engineering, University of Sarajevo
+        University&nbsp;of&nbsp;Sarajevo
         <br />
         <pre>- GPA 9.19/10.00</pre>
       </span>
@@ -403,7 +403,8 @@ const _entries = {
         >
           <b>Rotating LED Display</b>
         </a>
-        , High School Project Festival, Hadžići, Bosnia and Herzegovina
+        , High School Project Festival, Hadžići,
+        Bosnia&nbsp;and&nbsp;Herzegovina
         <br />
       </span>
     ),
@@ -443,9 +444,9 @@ const _entries = {
   demosPMS: {
     node: () => (
       <span>
-        <b>Undergraduate Teaching Assistant</b>, Faculty of Electrical
-        Engineering, University of Sarajevo, Course:{" "}
-        <i>Design of Microprocessor Systems</i>
+        <b>Undergraduate Teaching Assistant</b>,
+        University&nbsp;of&nbsp;Sarajevo, Course:&nbsp;
+        <i>Design&nbsp;of&nbsp;Microprocessor&nbsp;Systems</i>
       </span>
     ),
     startDate: "2021-03",
@@ -464,7 +465,6 @@ const _entries = {
     labels: [
       "PLC programming",
       "Industrial sensors",
-      "Motor control",
       "Industrial schematic design",
     ],
     group: groups.professionalExperience,
@@ -472,9 +472,9 @@ const _entries = {
   demosTP: {
     node: () => (
       <span>
-        <b>Undergraduate Teaching Assistant</b>, Faculty of Electrical
-        Engineering, University of Sarajevo, Course:{" "}
-        <i>Programming Techniques</i>
+        <b>Undergraduate Teaching Assistant</b>,
+        University&nbsp;of&nbsp;Sarajevo, Course:&nbsp;
+        <i>Programming&nbsp;Techniques</i>
       </span>
     ),
     startDate: "2019-03",
