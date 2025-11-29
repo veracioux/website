@@ -325,7 +325,6 @@ const _entries = {
     skills: [skills.python, skills.django, skills.docker, skills.jetbrains],
     labels: ["Backend"],
     group: groups.professionalExperience,
-    disabled: true,
   },
   personalWebsite: {
     node: () => (

@@ -4,13 +4,29 @@ import SkillsPane from "@/components/cv/SkillsPane.vue";
 import CVHeader from "./CVHeader.vue";
 import LanguagesPane from "@/components/cv/LanguagesPane.vue";
 import { CvContext } from "@/inject";
-import { groups, entries, type Entry, skills, type DisplayMode } from "@/cv";
+import {
+  groups,
+  entries as _entries,
+  type Entry,
+  skills,
+  type DisplayMode,
+} from "@/cv";
 import type { Skill } from "@/types";
 import { onMounted, ref, watch } from "vue";
 
 defineProps<{
   displayMode: DisplayMode;
 }>();
+
+const { variant, resume } = CvContext.inject();
+
+const entries = {
+  ..._entries,
+  evoltInternship: {
+    ..._entries.evoltInternship,
+    disabled: resume,
+  },
+} satisfies typeof _entries;
 
 // NOTE: Skills and Entries are tethered. Whenever you hover over a skill, an
 // entry that references the skill is highlighted, and vice versa: when hovering over an entity, all referenced skills will be active. Let's call a
@@ -28,8 +44,6 @@ const hoveredSkill = ref<Skill | null>(null);
 const selectedEntry = ref<Entry | null>(null);
 const selectedSkill = ref<Skill | null>(null);
 const activeSkills = ref<Skill[]>([]);
-
-const { variant } = CvContext.inject();
 
 // TODO Devise a method to define variants in external files.
 const excludedGroups = variant
@@ -141,6 +155,7 @@ onMounted(() => {
                 )"
               >
                 <TimelineEntry
+                  v-if="!entry.disabled"
                   v-bind="entry"
                   :hovered="hoveredEntry?.key === entry.key"
                   :selected="selectedEntry?.key === entry.key"
