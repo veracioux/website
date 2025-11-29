@@ -33,7 +33,7 @@ function onMouseLeaveProjectCard() {
 
 <template>
   <div
-    class="relative flex flex-col justify-between h-full bg-[var(--color-background-1)]"
+    class="relative flex flex-col justify-between bg-[var(--color-background-1)]"
   >
     <div
       class="imageContainer absolute inset-0 flex items-center justify-center overflow-hidden"
@@ -43,8 +43,8 @@ function onMouseLeaveProjectCard() {
     >
       <!-- Will hold the preview of the project (if it exists) via a <Teleport> -->
     </div>
-    <SectionTitle class="mb-8" text="Projects" slug="projects" />
-    <div class="flex justify-center items-center p-8 h-full">
+    <SectionTitle text="Projects" slug="projects" />
+    <div class="grow flex justify-center items-center p-16">
       <div
         id="project-card-container"
         class="flex flex-wrap justify-center items-center gap-10 transition-opacity delay-200 duration-500"

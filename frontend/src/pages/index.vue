@@ -117,6 +117,7 @@ onBeforeUnmount(() => {
       v-if="relativeScrollY <= 1"
     ></div>
     <div
+      id="shutter-intro-container"
       class="relative h-full w-full inset-0 pointer-events-none no-print"
       :style="
         relativeScrollY > 1
