@@ -54,9 +54,20 @@ const selfPraiseAppearRelativeScrollY = 0.3;
 const defaultTypingInterval = 90;
 const minTypingInterval = 15;
 const veraciouxThresholdScroll = 0.2;
+// The length of all typed out characters combined. It can be calculated,
+// but I just hardcoded it since it won't change often (maybe never).
+const finalTypedOutLength = 30;
 
-// Refs
-const typedOutLength = ref(0);
+// Note: Initialized to the final length so search engines see the full text on initial load
+const typedOutLength = ref(finalTypedOutLength);
+onMounted(() => {
+  typedOutLength.value = 0;
+  rootStyle.visibility = "visible";
+});
+const rootStyle = reactive<CSSProperties>({
+  visibility: "hidden",
+});
+
 const fadeableStyle = reactive<CSSProperties>({
   opacity: 1,
 });
@@ -77,9 +88,7 @@ let typingIntervalId: NodeJS.Timeout | undefined = undefined;
 
 function typeOut() {
   ++typedOutLength.value;
-  // The RHS value is the length of all typed out characters combined. It can be calculated,
-  // but I just hardcoded it since it won't change often (maybe never).
-  if (typedOutLength.value === 30) {
+  if (typedOutLength.value === finalTypedOutLength) {
     clearInterval(typingIntervalId);
     typingIntervalId = undefined;
   }
@@ -124,11 +133,10 @@ function positionGreetingAndTraits() {
       -helloTopY *
       Math.max(relativeScrollY.value / shutterFullyOpenedScrollThreshold, 0)
     }px)`,
-    top: -1.5 * window.scrollY + "px",
   });
   Object.assign(traitsStyle, {
     transform: `translate(0, ${
-      (window.innerHeight - traitsBottomY) *
+      (root.value!.clientHeight - traitsBottomY) *
       Math.min(relativeScrollY.value / shutterFullyOpenedScrollThreshold, 1)
     }px)`,
   });
@@ -189,20 +197,18 @@ onMounted(() => {
     typeOut();
   }, 300);
   emit("veraciouxMounted", veracioux.value!);
-  // TODO for some reason, `traitsStatic` initially doesn't have the proper
-  //  offset. This is a temporary fix.
-  setTimeout(positionGreetingAndTraits, 400);
+  // // TODO for some reason, `traitsStatic` initially doesn't have the proper
+  // //  offset. This is a temporary fix.
+  // setTimeout(positionGreetingAndTraits, 400);
 });
 </script>
 
 <template>
-  <div class="intro section" ref="root">
-    <!-- TODO this is an indicator for testing avatar centering
-        <div style="display: flex; position: fixed; height: 100%; align-items: center; justify-content: center">
-            <div style="width: 20px; height: 20px; background: red; border-radius: 50%;"></div>
-        </div>
-        -->
-    <div ref="helloStatic">
+  <div class="intro" ref="root" :style="rootStyle">
+    <div data-nosnippet>
+      <!-- Provides vertical spacing -->
+    </div>
+    <div ref="helloStatic" id="hello-static">
       <div class="hello" :style="helloStyle" ref="hello">
         <span :style="fadeableStyle">{{
           hi.slice(0, typedOutLength).slice(0, 8)
@@ -220,40 +226,31 @@ onMounted(() => {
         <span :style="fadeableStyle">{{ hi.slice(-1, typedOutLength) }}</span>
       </div>
     </div>
-    <div ref="traitsStatic">
+    <div ref="traitsStatic" id="traits-static" class="w-full">
       <div
         ref="traits"
         :class="{
-          traits,
+          traits: true,
           makeRoomForSelfPraise:
             relativeScrollY > selfPraiseAppearRelativeScrollY,
         }"
         :style="traitsStyle"
       >
-        <div class="trait" style="align-items: flex-start">
-          <div class="dummy" data-nosnippet>Programmer</div>
-          <div>
-            {{ "Programmer".slice(0, Math.max(typedOutLength - hi.length, 0)) }}
-          </div>
+        <div class="trait">
+          {{ "Programmer".slice(0, Math.max(typedOutLength - hi.length, 0)) }}
         </div>
-        <div class="trait" style="align-items: flex-end">
-          <div class="dummy" data-nosnippet>Engineer</div>
-          <div>
-            {{ "Engineer".slice(0, Math.max(typedOutLength - hi.length, 0)) }}
-          </div>
+        <div class="trait">
+          {{ "Engineer".slice(0, Math.max(typedOutLength - hi.length, 0)) }}
         </div>
-        <div class="trait" style="align-items: flex-start">
-          <div class="dummy" data-nosnippet>Tinkerer</div>
-          <div>
-            {{ "Tinkerer".slice(0, Math.max(typedOutLength - hi.length, 0)) }}
-          </div>
+        <div class="trait">
+          {{ "Tinkerer".slice(0, Math.max(typedOutLength - hi.length, 0)) }}
         </div>
       </div>
     </div>
-    <SelfPraiseManager
+    <!-- <SelfPraiseManager
       :appear-relative-scroll-y="selfPraiseAppearRelativeScrollY"
       :self-praise-items="selfPraiseItems"
-    />
+    /> -->
   </div>
 </template>
 
@@ -265,18 +262,16 @@ onMounted(() => {
   @include common.veracioux;
   position: relative;
   text-align: center;
-  margin-bottom: 3em;
 }
 
 .traits {
   position: relative;
-  bottom: 0;
-  margin-bottom: 1em;
+  margin-bottom: 2rem;
 
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1em;
+  gap: 1rem;
 
   opacity: 0.5;
 
@@ -295,15 +290,11 @@ onMounted(() => {
 
 .trait {
   display: flex;
-  flex-direction: column;
-  min-height: 1em;
-  max-height: 1em;
   font-size: 1.4em;
-}
 
-.dummy {
-  opacity: 0;
-  height: 0;
+  &::before {
+    content: "\200B"; /* zero-width space to ensure height */
+  }
 }
 
 .intro {
@@ -311,6 +302,7 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 6rem;
 
   color: var(--color-primary);
   font-family: global.$monospace;

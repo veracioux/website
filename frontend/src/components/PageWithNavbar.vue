@@ -15,6 +15,7 @@ defineExpose({
       <Navbar class="no-print" />
     </slot>
     <div
+      id="scroll-container"
       class="relative basis-full overflow-y-scroll overflow-x-hidden scroll-smooth"
       ref="scrollContainer"
     >

@@ -3,7 +3,6 @@ import { onMounted, reactive, ref, watch } from "vue";
 import { ScrollData } from "@/inject";
 import avatar from "@/assets/avatar.webp";
 import { shutterFullyOpenedScrollThreshold } from "@/constants";
-import * as utils from "@/utils";
 
 interface Slice {
   pivotX: number;

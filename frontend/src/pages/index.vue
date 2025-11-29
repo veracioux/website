@@ -124,19 +124,17 @@ onBeforeUnmount(() => {
           : { position: 'fixed', height: 'auto', top: navbarHeight + 'px' }
       "
     >
-      <Shutter class="shutter absolute inset-0" />
+      <Shutter id="shutter" class="shutter absolute inset-0" />
       <Intro
+        id="intro"
         class="absolute inset-0"
-        :style="{
-          ...(isMobile ? { transform: 'translateY(-30px)' } : {}),
-        }"
         :veracioux-style="veraciouxStyle"
         :veracioux-text-fadeable="veraciouxTextFadeable"
         @veraciouxCrossedThreshold="onVeraciouxCrossedThreshold"
       />
     </div>
-    <Projects id="projects" class="projects min-h-full" />
-    <CV id="cv" class="cv" />
+    <Projects id="projects" class="min-h-full" />
+    <CV id="cv" />
     <!--            <About id="about" class="about" />-->
     <!--            <Contact id="contact" class="contact" />-->
   </PageWithNavbar>
@@ -170,18 +168,18 @@ onBeforeUnmount(() => {
   }
 }
 
-.shutter {
+#shutter {
   z-index: v-bind("zindex.shutter");
 }
 
-.intro {
+#intro {
   z-index: v-bind("zindex.introSection");
 }
 
-.projects,
-.cv,
-.about,
-.contact {
+#projects,
+#cv,
+#about,
+#contact {
   z-index: v-bind("zindex.section");
 }
 </style>
