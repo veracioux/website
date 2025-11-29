@@ -1,27 +1,46 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { ScrollData } from "@/inject";
-import { mapRange, mapRangeClipped, clip } from "@/utils";
+import { mapRangeClipped, dependsOn } from "@/utils";
 import CliEffect from "@/components/CliEffect.vue";
 
 defineProps<{
   text: string;
-  slug?: string;
 }>();
 
 const edgeCoordinatesX = ref([20, 80]);
 
-const scrollData = ScrollData.inject();
-const progress = ref(0);
+const { scrollContainer, relativeScrollY } = ScrollData.inject();
 const root = ref<HTMLElement>();
 
+const progress = computed(() => {
+  dependsOn(relativeScrollY);
+  if (!root.value || !scrollContainer.value) return 0;
+  const thisY = root.value.getBoundingClientRect().y;
+  const scrollContainerRect = scrollContainer.value.getBoundingClientRect();
+  const raw =
+    (-thisY + scrollContainerRect.y + scrollContainerRect.height) /
+    scrollContainer.value.offsetHeight;
+  return Math.max(0, raw);
+});
+
 const checkpoints = computed(() => {
-  const _cliTextUnclipped = mapRange(progress.value, [-1.1, -0.5], [0, 1]);
-  return {
-    textDecorationScaleY: mapRangeClipped(progress.value, [-2, -1], [0, 1]),
-    cliText: clip(_cliTextUnclipped, [-999, 1]),
-    showCliCursor: _cliTextUnclipped <= 1,
-  };
+  const textStart = 0.2;
+  const textEnd = 0.7;
+  return Object.assign(
+    {},
+    {
+      textDecorationScaleY: mapRangeClipped(
+        progress.value,
+        [0, textStart],
+        [0, 1]
+      ),
+      cliText: mapRangeClipped(progress.value, [textStart, textEnd], [0, 1]),
+      get showCliCursor() {
+        return 0 < this.cliText && this.cliText < 1;
+      },
+    }
+  );
 });
 
 onMounted(() => {
@@ -36,17 +55,6 @@ onMounted(() => {
   };
   onResize();
   window.addEventListener("resize", onResize);
-
-  if (scrollData) {
-    scrollData.scrollContainer.value?.addEventListener("scroll", () => {
-      // The factor of 2 was obtained empirically
-      progress.value = root.value
-        ? (-2 * root.value.getBoundingClientRect().top) / window.innerHeight
-        : 0;
-    });
-  } else {
-    progress.value = 1;
-  }
 });
 </script>
 
@@ -69,7 +77,6 @@ onMounted(() => {
         class="titleDecoration"
       />
     </svg>
-    <!-- TODO: convert to <a> -->
     <div>
       <h1 class="titleText">
         <CliEffect

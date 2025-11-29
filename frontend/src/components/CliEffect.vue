@@ -32,7 +32,7 @@ const prompt = computed(() =>
 <template>
   <div style="position: relative">
     <div :style="end <= text.length + 1 && { opacity: 0 }">
-      <slot />
+      <slot></slot>
     </div>
     <div
       :class="[
@@ -42,9 +42,10 @@ const prompt = computed(() =>
       ]"
     >
       <span v-if="prompt">{{ prompt }}</span>
-      <span :class="[end >= 0 && end <= text.length ? 'visible' : null]">{{
-        text.slice(0, clip(end, [1, props.text.length]))
-      }}</span>
+      <span :class="[end >= 0 && end <= text.length ? 'visible' : null]">
+        {{ "\x80" }}
+        {{ text.slice(0, clip(end, [0, props.text.length])) }}
+      </span>
       <span style="position: relative">
         <span v-if="showCursor && end <= text.length" class="cursor">█</span>
       </span>

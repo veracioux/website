@@ -27,6 +27,7 @@ const navbarHeight = computed(() => {
 });
 const windowHeight = ref(window?.innerHeight);
 
+// FIXME
 const isMobile = utils.isMobile();
 
 const { relativeScrollY, scrollContainer } = ScrollData.provide();
