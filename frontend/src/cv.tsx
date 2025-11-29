@@ -19,6 +19,7 @@ import iconGit from "@/assets/icons/git-with-text.svg";
 import iconJetBrains from "@/assets/icons/jetbrains.svg";
 import iconEmacs from "@/assets/icons/emacs.svg";
 import iconNginx from "@/assets/icons/nginx.svg";
+import iconNodejs from "@/assets/icons/nodejs.svg";
 import iconEthereum from "@/assets/icons/ethereum.svg";
 import iconSolana from "@/assets/icons/solana.svg";
 import iconJava from "@/assets/icons/java.svg";
@@ -32,9 +33,9 @@ const _skillGroups = {
     key: "programmingLanguages",
     name: "Programming Languages",
   },
-  frameworksAndTechnologies: {
-    key: "frameworksAndTechnologies",
-    name: "Frameworks & Technologies",
+  technologies: {
+    key: "technologies",
+    name: "Technologies",
   },
   otherTools: {
     key: "otherTools",
@@ -57,6 +58,12 @@ export const skillGroups = _skillGroups as Record<
 >;
 
 const _skills = {
+  python: {
+    name: "Python",
+    icon: iconPython,
+    group: skillGroups.programmingLanguages,
+    experience: "5 years",
+  },
   javascript: {
     name: "JavaScript",
     icon: iconJS,
@@ -70,6 +77,57 @@ const _skills = {
     group: skillGroups.programmingLanguages,
     experience: "4 years",
   },
+  nodejs: {
+    name: "Node.js",
+    icon: iconNodejs,
+    group: skillGroups.technologies,
+    experience: "4 years",
+  },
+  bash: {
+    name: "Bash",
+    icon: {
+      dark: iconBashDark,
+      light: iconBashLight,
+    },
+    group: skillGroups.programmingLanguages,
+    experience: "2 years",
+  },
+  angular: {
+    name: "Angular",
+    icon: iconAngular,
+    group: skillGroups.technologies,
+    experience: "1 year",
+  },
+  nestjs: {
+    name: "NestJS",
+    icon: iconNestJS,
+    group: skillGroups.technologies,
+    experience: "1 year",
+  },
+  postgres: {
+    name: "PostgreSQL",
+    icon: iconPostgres,
+    group: skillGroups.technologies,
+    experience: "1 year",
+  },
+  golang: {
+    name: "Go",
+    icon: iconGolang,
+    group: skillGroups.programmingLanguages,
+    experience: "6 months",
+  },
+  vue: {
+    name: "Vue.js",
+    icon: iconVue,
+    group: skillGroups.technologies,
+    experience: "6 months",
+  },
+  django: {
+    name: "Django",
+    icon: iconDjango,
+    group: skillGroups.technologies,
+    disabled: true,
+  },
   c: {
     name: "C",
     icon: iconC,
@@ -82,87 +140,23 @@ const _skills = {
     group: skillGroups.programmingLanguages,
     experience: "3 years",
   },
-  python: {
-    name: "Python",
-    icon: iconPython,
-    group: skillGroups.programmingLanguages,
-    experience: "5 years",
-  },
-  bash: {
-    name: "Bash",
-    icon: {
-      dark: iconBashDark,
-      light: iconBashLight,
-    },
-    group: skillGroups.programmingLanguages,
-    experience: "2 years",
-  },
-  qt: {
-    name: "Qt",
-    icon: iconQt,
-    group: skillGroups.frameworksAndTechnologies,
-    experience: "1 year",
+  nginx: {
+    name: "Nginx",
+    icon: iconNginx,
+    group: skillGroups.technologies,
+    experience: "6 months",
   },
   react: {
     name: "ReactJS",
     icon: iconReact,
-    group: skillGroups.frameworksAndTechnologies,
+    group: skillGroups.technologies,
     experience: "1 year",
   },
-  angular: {
-    name: "Angular",
-    icon: iconAngular,
-    group: skillGroups.frameworksAndTechnologies,
+  qt: {
+    name: "Qt",
+    icon: iconQt,
+    group: skillGroups.technologies,
     experience: "1 year",
-  },
-  nestjs: {
-    name: "NestJS",
-    icon: iconNestJS,
-    group: skillGroups.frameworksAndTechnologies,
-    experience: "1 year",
-  },
-  postgres: {
-    name: "PostgreSQL",
-    icon: iconPostgres,
-    group: skillGroups.frameworksAndTechnologies,
-    experience: "1 year",
-  },
-  golang: {
-    name: "Go",
-    icon: iconGolang,
-    group: skillGroups.programmingLanguages,
-    experience: "6 months",
-  },
-  vue: {
-    name: "Vue.js",
-    icon: iconVue,
-    group: skillGroups.frameworksAndTechnologies,
-    experience: "6 months",
-  },
-  django: {
-    name: "Django",
-    icon: iconDjango,
-    group: skillGroups.frameworksAndTechnologies,
-    disabled: true,
-  },
-  ethereum: {
-    name: "Ethereum",
-    icon: iconEthereum,
-    group: skillGroups.frameworksAndTechnologies,
-    experience: "6 months",
-    disabled: true,
-  },
-  solana: {
-    name: "Solana",
-    icon: iconSolana,
-    group: skillGroups.frameworksAndTechnologies,
-    disabled: true,
-  },
-  nginx: {
-    name: "Nginx",
-    icon: iconNginx,
-    group: skillGroups.frameworksAndTechnologies,
-    experience: "6 months",
   },
   docker: {
     name: "Docker",
@@ -235,6 +229,19 @@ const _skills = {
   technicalWriting: {
     name: "Technical writing",
     group: skillGroups.others,
+    disabled: true,
+  },
+  ethereum: {
+    name: "Ethereum",
+    icon: iconEthereum,
+    group: skillGroups.technologies,
+    experience: "6 months",
+    disabled: true,
+  },
+  solana: {
+    name: "Solana",
+    icon: iconSolana,
+    group: skillGroups.technologies,
     disabled: true,
   },
 } as const satisfies Record<string, Skill>;
