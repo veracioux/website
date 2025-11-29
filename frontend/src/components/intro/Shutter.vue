@@ -14,8 +14,6 @@ interface Slice {
 // Think of the shutter as a sliced pizza
 const numSlices = 10;
 
-const isMobile = utils.isMobile();
-
 const root = ref<HTMLElement>();
 const rotation = ref(0);
 const shutterEdgeColor = ref("#000");
@@ -31,17 +29,15 @@ const relativeScrollAtMaxAperture = 1 / 3.5;
 const { relativeScrollY, scrollContainer } = ScrollData.inject();
 
 function getShutterRadius() {
-  const win = scrollContainer.value as Window | undefined;
-  const other = scrollContainer.value as HTMLElement | undefined;
-  const w = win?.innerWidth ?? other?.clientWidth ?? 0;
-  const h = win?.innerHeight ?? other?.clientHeight ?? 0;
+  const w = scrollContainer.value!.clientWidth ?? 0;
+  const h = scrollContainer.value!.clientHeight ?? 0;
   return Math.max(w, h);
 }
 
 function updateShutterGeometry() {
   let radius = getShutterRadius();
-  let centerX = document.documentElement.clientWidth / 2,
-    centerY = document.documentElement.clientHeight / 2;
+  let centerX = scrollContainer.value!.clientWidth / 2,
+    centerY = scrollContainer.value!.clientHeight / 2;
   // The arc that one slice occupies (radians)
   const sliceArc = (2 * Math.PI) / numSlices;
   for (let i = 0; i < numSlices; ++i) {
@@ -85,7 +81,12 @@ function updateShutterOutline() {
 function updateRotation() {
   let radius = getShutterRadius();
   // These values were obtained empirically
-  if (Math.min(window.innerWidth, window.innerHeight) < 768) {
+  if (
+    Math.min(
+      scrollContainer.value!.clientWidth,
+      scrollContainer.value!.clientWidth
+    ) < 768
+  ) {
     rotation.value = (relativeApertureSize * 7200) / radius;
   } else {
     rotation.value = (relativeApertureSize * 10200) / radius;
@@ -145,8 +146,8 @@ const resizeEvent = ref(0);
 
 function onWindowResize() {
   resizeEvent.value = resizeEvent.value + 1;
-  configKonva.width = window.innerWidth;
-  configKonva.height = window.innerHeight;
+  configKonva.width = scrollContainer.value!.clientWidth;
+  configKonva.height = scrollContainer.value!.clientHeight;
   updateShutterGeometry();
   onScroll(relativeScrollY.value, relativeScrollY.value, true);
 }
@@ -174,7 +175,6 @@ onMounted(() => {
         class="avatar"
         :style="{
           filter: 'blur(' + 15 * Math.max(1 - 4 * relativeScrollY, 0) + 'px)',
-          ...(isMobile ? { transform: 'translateY(-27px)' } : {}),
         }"
         :src="avatar"
       />
@@ -184,12 +184,12 @@ onMounted(() => {
         <v-stage :config="configKonva">
           <v-layer>
             <v-line
-              v-for="(s, i) in slices"
+              v-for="(slice, i) in slices"
               :key="i"
               :config="{
-                x: s?.pivotX,
-                y: s?.pivotY,
-                points: s?.vertices,
+                x: slice?.pivotX,
+                y: slice?.pivotY,
+                points: slice?.vertices,
                 rotation,
                 closed: true,
                 stroke: shutterEdgeColor,
@@ -235,7 +235,7 @@ Classes used temporarily for debugging.
   margin: auto;
 
   width: 240px;
-  transform: translate(0, 8%);
+  // transform: translate(0, 8%);
 
   @include g.screenSizeAbove(768px) {
     width: 350px;
@@ -244,7 +244,6 @@ Classes used temporarily for debugging.
 
 .shadowOverlay {
   @include c.fillParent;
-  z-index: 1;
   box-shadow: inset 0 0 min(40vw, 40vh) var(--color-background-0);
 
   &::after {

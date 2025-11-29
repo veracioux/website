@@ -16,7 +16,7 @@ import { useRoute } from "#app";
 export class ScrollData {
   /* The document scroll amount expressed as a number of sections. */
   relativeScrollY = ref(0);
-  scrollContainer = ref<HTMLElement | Window>();
+  scrollContainer = ref<HTMLElement>();
 
   /*
    * Get the scroll amount from the beginning of the section expressed as a number of sections.
@@ -28,13 +28,7 @@ export class ScrollData {
     scrollData: ScrollData
   ): number {
     const { relativeScrollY, scrollContainer } = scrollData;
-    const height =
-      scrollContainer.value instanceof Window
-        ? scrollContainer.value.innerHeight
-        : scrollContainer.value?.offsetHeight;
-    if (!height) {
-      return 0;
-    }
+    const height = scrollContainer.value!.offsetHeight;
     return relativeScrollY.value - element.offsetTop / height;
   }
 
@@ -49,7 +43,7 @@ export class ScrollData {
     function onScroll() {
       if (scrollContainer.value) {
         relativeScrollY.value =
-          scrollContainer.value.scrollTop / scrollContainer.value.clientHeight;
+          scrollContainer.value.scrollTop / scrollContainer.value.offsetHeight;
       }
     }
 
