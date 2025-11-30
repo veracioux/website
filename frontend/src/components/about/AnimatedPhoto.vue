@@ -1,13 +1,6 @@
 <script setup lang="ts">
 import mugshot from "@/assets/mugshot.webp";
-import {
-  computed,
-  type CSSProperties,
-  onMounted,
-  reactive,
-  ref,
-  watch,
-} from "vue";
+import { computed, ref } from "vue";
 import useSWRV from "swrv";
 import { mapRangeClipped } from "@/utils";
 

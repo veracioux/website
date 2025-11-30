@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
-import { clip } from "@/utils";
+import { clip, mapRangeClipped } from "@/utils";
 
 const props = defineProps<{
   progress: number;
@@ -16,10 +16,12 @@ const progress = computed(() => clip(props.progress, [0, 1]));
 
 watch(progress, (value) => {
   if (!scrollBox.value) return;
+
   // Linger for a while on the first line
-  if (value < 0.3) value = 0;
+  const clippedValue = mapRangeClipped(value, [0.3, 1], [0, 1]);
+
   const naturalScrollTop =
-    (value - 0.3) *
+    clippedValue *
     (scrollBox.value.scrollHeight -
       scrollBox.value.getBoundingClientRect().height);
   const discretizedScrollTop =

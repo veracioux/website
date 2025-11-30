@@ -37,7 +37,7 @@ const checkpoints = computed(() => {
     bioCli: mapRange(progress.value, [0.2, 0.45], [0, 1]),
     workflowCli: mapRange(progress.value, [0.2, 0.45], [0, 1]),
     showWorkflow: progress.value >= 0.45,
-    bioPager: mapRange(progress.value, [0.45, 0.8], [0, 1]),
+    bioPager: mapRange(progress.value, [0.45, 0.75], [0, 1]),
   };
 });
 </script>
