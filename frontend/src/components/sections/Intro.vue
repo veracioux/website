@@ -293,7 +293,7 @@ onMounted(() => {
   font-size: 1.4em;
 
   &::before {
-    content: "\200B"; /* zero-width space to ensure height */
+    content: " ";
   }
 }
 

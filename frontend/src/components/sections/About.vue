@@ -55,7 +55,7 @@ const checkpoints = computed(() => {
     <div class="sm:sticky top-0 sm:h-1/2">
       <SectionTitle class="sectionTitle" text="About Me" slug="about" />
       <div
-        class="sm:h-full py-12 pt-24 sm:pt-8 px-12 flex items-center justify-center"
+        class="sm:h-full py-24 sm:pt-8 px-12 flex items-center justify-center"
       >
         <div class="flex flex-col xl:flex-row gap-12 font-mono">
           <div

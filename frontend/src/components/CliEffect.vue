@@ -52,7 +52,7 @@ const prompt = computed(() =>
             end >= 0 && end <= text.length ? 'opacity-100' : null,
           ]"
         >
-          {{ "\x80" }}
+          <span class="invisible w-0">|</span>
           {{ text.slice(0, clip(end, [0, props.text.length])) }}
         </span>
         <span style="position: relative">
