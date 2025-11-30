@@ -43,7 +43,7 @@ defineProps<{
       <a href="https://github.com/veracioux" target="_blank"
         >actively contributing</a
       >
-      to open source projects.
+      to open source projects since then.
       <br /><br />
       In 2021 I was invited to be a maintainer in a popular project called
       <a href="https://github.com/flameshot-org/flameshot" target="_blank">

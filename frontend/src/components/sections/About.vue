@@ -37,7 +37,11 @@ const checkpoints = computed(() => {
     bioCli: mapRange(progress.value, [0.2, 0.45], [0, 1]),
     workflowCli: mapRange(progress.value, [0.2, 0.45], [0, 1]),
     showWorkflow: progress.value >= 0.45,
-    bioPager: mapRange(progress.value, [0.45, 0.75], [0, 1]),
+    bioPager: mapRange(
+      progress.value,
+      window.innerWidth >= 1280 ? [0.45, 0.8] : [0.35, 0.99],
+      [0, 1]
+    ),
   };
 });
 </script>
@@ -55,7 +59,7 @@ const checkpoints = computed(() => {
     <div class="sm:sticky top-0 sm:h-1/2">
       <SectionTitle class="sectionTitle" text="About Me" slug="about" />
       <div
-        class="sm:h-full py-24 sm:pt-8 px-12 flex items-center justify-center"
+        class="sm:h-full py-24 sm:py-8 px-12 flex items-center justify-center"
       >
         <div class="flex flex-col xl:flex-row gap-12 font-mono">
           <div
@@ -140,8 +144,9 @@ const checkpoints = computed(() => {
   transition: background-color 2s ease;
 
   .sectionTitle {
-    position: absolute;
-    inset: 0 0 auto;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 
     :deep(.titleDecoration) {
       fill: var(--color-background-2);

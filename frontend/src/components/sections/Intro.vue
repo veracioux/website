@@ -293,7 +293,9 @@ onMounted(() => {
   font-size: 1.4em;
 
   &::before {
-    content: " ";
+    content: "|";
+    opacity: 0;
+    width: 0;
   }
 }
 
