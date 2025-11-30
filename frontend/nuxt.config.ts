@@ -6,6 +6,9 @@ import { defineNuxtConfig, type NuxtConfig } from "nuxt/config";
 export default defineNuxtConfig({
   compatibilityDate: "2025-11-23",
   modules: ["@nuxtjs/google-fonts", "@nuxtjs/tailwindcss"],
+  nitro: {
+    preset: "static",
+  },
   srcDir: "src/",
   runtimeConfig: {
     public: {
@@ -35,4 +38,4 @@ export default defineNuxtConfig({
       },
     },
   },
-}) as NuxtConfig;
+} satisfies NuxtConfig);

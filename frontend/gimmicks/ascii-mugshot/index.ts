@@ -34,7 +34,9 @@ async function convert(
     });
 
     const html = new Convert().toHtml(asciiString);
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      args: ["--no-sandbox"],
+    });
     const page = await browser.newPage();
     await page.setViewport({
       width: Math.floor(26 * outputColumns), // Empirically determined

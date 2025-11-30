@@ -47,37 +47,24 @@ http {
     {%- macro server_root_domain(protected=False, stg_subdomain=False) %}
     server {
         server_name
-            {%- if stg_subdomain %}
-                stg.veracioux.me stg.localhost
-            {%- else %}
-                veracioux.me www.veracioux.me localhost www.localhost
-            {%- endif %};
+        {%- if stg_subdomain %}
+            stg.veracioux.me stg.localhost
+        {%- else %}
+            veracioux.me www.veracioux.me localhost www.localhost
+        {%- endif %};
 
         listen 3000;
 
         error_page 404 /404.html;
         recursive_error_pages on;
 
-        {%- if env == "dev" %}
-        # Dev needs this to prevent a recursion
-        location = /404.html {
-            proxy_pass http://${FRONTEND_HOST}:${FRONTEND_PORT}/404;
-        }
-        {%- endif %}
-
         location @ {
-            {%- if env == "dev" %}
-            proxy_pass http://${FRONTEND_HOST}:${FRONTEND_PORT};
-            proxy_intercept_errors on;
-            error_page 404 @api;
-            {%- else %}
             root /app/frontend/dist;
             try_files $uri $uri/index.html @api;
             # The frontend bundler uses cache-busting, this is just to satisfy
             # web performance metrics
             expires 1M;
             add_header Cache-Control "public";
-            {%- endif %}
         }
 
         location @api {
@@ -119,12 +106,7 @@ http {
     }
     {%- endmacro %}
 
-    {%- if machine == 'dev' %}
-        {{ server_root_domain(protected=False, stg_subdomain=False) }}
-        {%- if env == 'staging' %}
-            {{ server_root_domain(protected=True, stg_subdomain=True) }}
-        {%- endif %}
-    {%- elif env == 'staging' %}
+    {%- if env == 'staging' %}
         {{ server_root_domain(protected=True, stg_subdomain=False) }}
     {%- else %}
         {{ server_root_domain(protected=False, stg_subdomain=False) }}

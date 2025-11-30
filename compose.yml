@@ -2,22 +2,6 @@ x-env_file: &env_file
   - ./.env.d/common
 
 services:
-  db:
-    image: postgres:14.1-alpine
-    restart: always
-    ports:
-      - "${EXPOSED_IP:-127.0.0.1}:${DB_PORT}:5432"
-    env_file: *env_file
-    # environment:
-    #   POSTGRES_AUTH_METHOD: trust
-
-  rabbitmq:
-    image: rabbitmq:3.7
-    ports:
-      - "${EXPOSED_IP:-127.0.0.1}:5672:5672"
-    env_file:
-      - ./.env.d/common
-
   web:
     # Image
     image: docker.veracioux.me/web
@@ -28,34 +12,21 @@ services:
     # Container
     restart: always
     depends_on:
-      - frontend
+      - _frontend
     ports:
       - "${EXPOSED_IP:-127.0.0.1}:${WEB_PORT}:3000"
     env_file: *env_file
     environment:
-      <<: *environment
       DB_HOST: db
       FRONTEND_HOST: frontend
     volumes:
       - web_static:/var/static_root:rw
 
-  frontend:
+  _frontend:
     # Image
     image: docker.veracioux.me/frontend
     build:
       context: frontend
-      dockerfile: _docker/Dockerfile.frontend
-
-    # Container
-    restart: always
-    ports:
-      - "${EXPOSED_IP:-127.0.0.1}:$FRONTEND_PORT:$FRONTEND_PORT"
-    env_file: *env_file
-    volumes:
-      - ./frontend:/frontend:ro
-      - frontend_dotnuxt:/frontend/.nuxt
-      - frontend_node_modules:/frontend/node_modules
-      - frontend_gimmicks_ascii_mugshot_node_modules:/frontend/gimmicks/ascii-mugshot/node_modules
 
   docker-registry:
     image: registry:2

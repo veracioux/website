@@ -1,8 +1,6 @@
 # -*- mode: dockerfile; -*- vim: filetype=dockerfile
 
-if [ "$ENV" != "dev" ]; then
-    FROM docker.veracioux.me/frontend as frontend
-fi
+FROM docker.veracioux.me/frontend as frontend
 
 #  ==========
 ## Main stage
