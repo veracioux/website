@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
-import { clip, logChanges } from "@/utils";
+import { clip } from "@/utils";
 
 const props = defineProps<{
   progress: number;
@@ -14,7 +14,6 @@ const lineHeight = ref(0);
 const numTotalLines = ref(0);
 const progress = computed(() => clip(props.progress, [0, 1]));
 
-logChanges(progress);
 watch(progress, (value) => {
   if (!scrollBox.value) return;
   // Linger for a while on the first line
@@ -42,7 +41,7 @@ onMounted(() => {
 <template>
   <div>
     <div class="scrollBox" ref="scrollBox">
-      <slot />
+      <slot></slot>
     </div>
     <div class="indicator">
       <b>:</b><b v-if="progress === 1"> To be continued...</b

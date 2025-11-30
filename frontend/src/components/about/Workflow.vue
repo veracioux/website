@@ -9,7 +9,6 @@ import iconGitWithText from "@/assets/icons/git-with-text.svg";
 import iconFish from "@/assets/icons/fish.png";
 import iconNeovim from "@/assets/icons/neovim.svg";
 import iconEmacs from "@/assets/icons/emacs.svg";
-import iconJetBrains from "@/assets/icons/jetbrains.svg";
 import iconDocker from "@/assets/icons/docker.svg";
 
 function Icon(props: { src: string; alt?: string; href?: string }) {
@@ -27,7 +26,11 @@ const workflow: Record<string, (() => VNode)[]> = {
         alt: "archlinux",
         href: "https://archlinux.org",
       }),
-    () => h(Icon, { src: iconI3, alt: "i3", href: "https://i3.org" }),
+    () =>
+      h("a", { href: "https://i3wm.org", target: "_blank", class: "icon" }, [
+        h(Icon, { src: iconI3, alt: "i3" }),
+        " i3wm",
+      ]),
     () =>
       h(
         "a",
@@ -74,12 +77,6 @@ const workflow: Record<string, (() => VNode)[]> = {
         },
         [h(Icon, { src: iconEmacs, alt: "emacs" }), " emacs"]
       ),
-    () =>
-      h(Icon, {
-        src: iconJetBrains,
-        alt: "jetbrains",
-        href: "https://www.jetbrains.com",
-      }),
   ],
   tools: [
     () =>
@@ -94,32 +91,25 @@ const workflow: Record<string, (() => VNode)[]> = {
         alt: "docker",
         href: "https://www.docker.com",
       }),
-    () =>
-      h(
-        "a",
-        { href: "https://github.com/tem-cli/tem", target: "_blank" },
-        "tem"
-      ),
   ],
 };
 </script>
 
 <template>
   <div class="workflowRoot">
-    <span style="display: inline"
-      ><b class="highlight" style="display: inline">Workflow</b>.json</span
+    <span class="!inline-flex items-center"
+      ><b class="text-[var(--color-text)]">Workflow</b>.json</span
     >
     <div>{</div>
     <div
       v-bind:key="key"
       v-for="([key, items], i) of Object.entries(workflow)"
-      class="indented"
+      class="ml-5"
     >
-      "<b class="highlight">{{ key }}</b
-      >": [
+      "<b class="text-[var(--color-text)]"> {{ key }} </b>": [
       <div class="mx-5">
         <span v-bind:key="i" v-for="(item, i) of items" style="line-height: 1">
-          <span class="highlight">
+          <span class="text-white">
             <component :is="item" />
           </span>
           <pre>{{ i !== items.length - 1 ? ", " : "" }}</pre>
@@ -136,14 +126,10 @@ const workflow: Record<string, (() => VNode)[]> = {
 
 .workflowRoot {
   background: var(--color-background-0);
-  color: #ffffff33; // TODO change
+  color: rgb(var(--color-text-rgb), 0.6); // TODO change
   @include c.beveledEdges(20px);
   padding: 24px;
   line-height: 2;
-}
-
-.highlight {
-  color: white;
 }
 
 .icon,
@@ -159,12 +145,6 @@ const workflow: Record<string, (() => VNode)[]> = {
   &[alt="fish"] {
     margin-left: 0.3em;
     transform: translateY(-5%) scale(1.1);
-  }
-
-  &[alt="jetbrains"] {
-    transform: scale(2.4) translate(calc(-0.25 * #{$iconSize}));
-    transform-origin: 0;
-    margin-right: calc(0.125 * #{$iconSize});
   }
 
   &[alt="docker"] {

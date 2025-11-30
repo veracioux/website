@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { clip } from "@/utils";
+import { ClientOnly } from "#components";
 
 const props = withDefaults(
   defineProps<{
@@ -30,26 +31,35 @@ const prompt = computed(() =>
 </script>
 
 <template>
-  <div style="position: relative">
-    <div :style="end <= text.length + 1 && { opacity: 0 }">
+  <div class="relative">
+    <div class="fallback" :style="end <= text.length && { opacity: 0 }">
       <slot></slot>
     </div>
-    <div
-      :class="[
-        'cli',
-        end >= 0 && end <= text.length ? 'visible' : null,
-        $slots.default ? 'fillParent' : null,
-      ]"
-    >
-      <span v-if="prompt">{{ prompt }}</span>
-      <span :class="[end >= 0 && end <= text.length ? 'visible' : null]">
-        {{ "\x80" }}
-        {{ text.slice(0, clip(end, [0, props.text.length])) }}
-      </span>
-      <span style="position: relative">
-        <span v-if="showCursor && end <= text.length" class="cursor">█</span>
-      </span>
-    </div>
+    <ClientOnly>
+      <div
+        :class="[
+          'opacity-0',
+          'pointer-events-none',
+          'cli',
+          end >= 0 && end <= text.length ? 'opacity-100' : null,
+          $slots.default ? 'absolute inset-0' : null,
+        ]"
+      >
+        <span v-if="prompt">{{ prompt }}</span>
+        <span
+          :class="[
+            'dynamicText',
+            end >= 0 && end <= text.length ? 'opacity-100' : null,
+          ]"
+        >
+          {{ "\x80" }}
+          {{ text.slice(0, clip(end, [0, props.text.length])) }}
+        </span>
+        <span style="position: relative">
+          <span v-if="showCursor && end <= text.length" class="cursor">█</span>
+        </span>
+      </div>
+    </ClientOnly>
   </div>
 </template>
 
@@ -58,24 +68,15 @@ const prompt = computed(() =>
 @use "@/assets/about.module.scss" as a;
 @use "@/assets/standard-fade-transition.module.scss" as t;
 
-.cli {
-  padding: 12px;
-  opacity: 0;
-  pointer-events: none;
-
-  .cursor {
-    position: absolute;
-    @include a.cursor;
-  }
-
-  &.visible {
-    opacity: 1;
-    @include t.standardFadeTransition;
-  }
+.cursor {
+  position: absolute;
+  @include a.cursor;
 }
 
-.fillParent {
-  @include c.fillParent;
+.fallback,
+.dynamicText,
+.cursor {
+  @include t.standardFadeTransition;
 }
 </style>
 

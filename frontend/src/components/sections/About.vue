@@ -4,93 +4,90 @@ import SocialIcon from "@/components/generic/SocialIcon.vue";
 import AnimatedPhoto from "@/components/about/AnimatedPhoto.vue";
 import Workflow from "@/components/about/Workflow.vue";
 import { ScrollData } from "@/inject";
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 import CliEffect from "@/components/CliEffect.vue";
 import Bio from "@/components/about/Bio.vue";
-import { mapRange } from "@/utils";
+import { dependsOn, logChanges, mapRange, mapRangeClipped } from "@/utils";
 import { ClientOnly } from "#components";
 
-const scrollData = ScrollData.inject();
+const { scrollContainer, relativeScrollY } = ScrollData.inject();
 
 const root = ref<HTMLElement>();
 
-const progress = ref(0);
-
-const checkpoints = computed(() => {
-  return {
-    showFrame: progress.value > -0.6,
-    photoCli: mapRange(progress.value, [-0.5, -0.2], [0, 1]),
-    photo: mapRange(progress.value, [-0.25, 0.3], [0, 1]),
-    showSocials: progress.value > -0.2,
-    showVersion: progress.value > -0.2,
-    socials: mapRange(progress.value, [-0.25, 0], [0, 1]),
-    version: mapRange(progress.value, [-0.25, 0], [0, 1]),
-    bioCli: mapRange(progress.value, [0, 0.4], [0, 1]),
-    workflowCli: mapRange(progress.value, [0.1, 0.45], [0, 1]),
-    showWorkflow: progress.value >= 0.45,
-    bioPager: mapRange(progress.value, [0.45, 0.9], [0, 1]),
-  };
+const progress = computed(() => {
+  dependsOn(relativeScrollY);
+  if (!root.value || !scrollContainer.value) return 0;
+  const thisRect = root.value.getBoundingClientRect();
+  const scrollContainerRect = scrollContainer.value.getBoundingClientRect();
+  const raw =
+    (scrollContainerRect.height - (thisRect.y - scrollContainerRect.y)) /
+    thisRect.height;
+  return Math.max(0, raw);
 });
 
-onMounted(() => {
-  scrollData.scrollContainer.value!.addEventListener("scroll", () => {
-    // The factor of 2 was obtained empirically
-    progress.value = root.value
-      ? (-2 * root.value.getBoundingClientRect().top) / root.value.offsetHeight
-      : 0;
-    console.log(progress.value);
-  });
+logChanges(progress);
+
+const checkpoints = computed(() => {
+  // Roughly chronologically sorted
+  return {
+    showFrame: progress.value > 0.2,
+    photoCli: mapRange(progress.value, [0.2, 0.3], [0, 1]),
+    socialsCli: mapRange(progress.value, [0.2, 0.3], [0, 1]),
+    versionCli: mapRange(progress.value, [0.2, 0.3], [0, 1]),
+    photo: mapRangeClipped(progress.value, [0.3, 0.45], [0, 1]),
+    bioCli: mapRange(progress.value, [0.2, 0.45], [0, 1]),
+    showVersion: progress.value >= 0.45,
+    workflowCli: mapRange(progress.value, [0.2, 0.45], [0, 1]),
+    showWorkflow: progress.value >= 0.45,
+    bioPager: mapRange(progress.value, [0.45, 0.8], [0, 1]),
+  };
 });
 </script>
 
 <template>
   <div class="section" ref="root">
-    <div class="stickyContainer">
+    <div class="sticky top-0 h-1/2">
       <SectionTitle class="sectionTitle" text="About Me" slug="about" />
-      <div class="contentContainer">
+      <div class="absolute inset-0 py-8 px-6 flex items-center justify-center">
         <div class="content">
-          <div class="leftContent">
-            <div class="frame">
-              <div class="photoWrapper">
+          <div v-if="checkpoints.showFrame" class="frame">
+            <div class="photoWrapper">
+              <CliEffect
+                prompt="$ "
+                text="cat mugshot.txt"
+                :progress="checkpoints.photoCli"
+              >
+                <ClientOnly>
+                  <AnimatedPhoto :progress="checkpoints.photo" />
+                </ClientOnly>
+              </CliEffect>
+            </div>
+            <div class="socialsContainer">
+              <Transition name="standard-fade">
+                <div v-if="checkpoints.socialsCli > 0" class="badge">
+                  <CliEffect
+                    :progress="checkpoints.socialsCli"
+                    prompt="$ "
+                    text="lsof -i"
+                  >
+                    <div class="socials">
+                      <SocialIcon name="github" class="icon" />
+                      <SocialIcon name="linkedin" class="icon" />
+                      <SocialIcon name="mail" class="icon" />
+                    </div>
+                  </CliEffect>
+                </div>
+              </Transition>
+            </div>
+            <div class="versionContainer">
+              <div class="badge">
                 <CliEffect
+                  :progress="checkpoints.versionCli"
                   prompt="$ "
-                  text="cat mugshot"
-                  :progress="checkpoints.photoCli"
+                  text="uname -r"
                 >
-                  <ClientOnly>
-                    <AnimatedPhoto :progress="checkpoints.photo" />
-                  </ClientOnly>
+                  <span class="version"> version: 23 </span>
                 </CliEffect>
-              </div>
-              <div class="socialsContainer">
-                <Transition name="standard-fade">
-                  <div v-if="checkpoints.showSocials" class="badge">
-                    <CliEffect
-                      :progress="checkpoints.socials"
-                      prompt="$ "
-                      text="lsof -i"
-                    >
-                      <div class="socials">
-                        <SocialIcon name="github" class="icon" />
-                        <SocialIcon name="linkedin" class="icon" />
-                        <SocialIcon name="mail" class="icon" />
-                      </div>
-                    </CliEffect>
-                  </div>
-                </Transition>
-              </div>
-              <div class="versionContainer">
-                <Transition name="standard-fade">
-                  <div v-if="checkpoints.showVersion" class="badge">
-                    <CliEffect
-                      :progress="checkpoints.version"
-                      prompt="$ "
-                      text="uname -r"
-                    >
-                      <span class="version"> version: 23 </span>
-                    </CliEffect>
-                  </div>
-                </Transition>
               </div>
             </div>
           </div>
@@ -121,7 +118,7 @@ onMounted(() => {
 
 .section {
   position: relative;
-  height: 200vh;
+  height: 200%;
   background: var(--color-background-1);
 
   .sectionTitle {
@@ -133,125 +130,109 @@ onMounted(() => {
     }
   }
 
-  .stickyContainer {
-    position: sticky;
-    top: 0;
-    height: 100vh;
+  .content {
+    @include c.centerFlex;
+    flex-direction: column;
+    gap: 48px;
+    font-family: monospace;
 
-    .contentContainer {
-      @include c.fillParent;
-      padding: 32px 24px;
+    @include g.screenWidthAbove(g.$small) {
+      flex-direction: row;
+      align-items: start;
+    }
 
-      @include c.centerFlex;
+    // @include c.centerFlex;
+    // flex-direction: column;
+    // gap: 16px;
+    // height: 100%;
 
-      .content {
-        @include c.centerFlex;
-        flex-direction: column;
-        gap: 48px;
-        font-family: monospace;
+    .frame {
+      position: relative;
+      background: rgba(white, 0.05);
+      $edgeRadius: 32px;
+      @include c.beveledEdges($edgeRadius);
 
-        @include g.screenWidthAbove(g.$small) {
-          flex-direction: row;
-          align-items: start;
+      --frame-height: 3.2em;
+
+      padding: var(--frame-height);
+
+      &::before,
+      &::after {
+        z-index: -1;
+        position: absolute;
+        background: inherit;
+        content: "";
+      }
+
+      &::before {
+        inset: calc(var(--frame-height) / 3);
+        @include c.beveledEdges(calc($edgeRadius * 0.75));
+      }
+
+      &::after {
+        inset: calc(var(--frame-height) * 2 / 3);
+        @include c.beveledEdges(calc($edgeRadius * 0.5));
+      }
+
+      .photoWrapper {
+        position: relative;
+        @include c.beveledEdges($edgeRadius * 0.4);
+        height: fit-content;
+
+        &::after {
+          @include c.fillParent;
+          z-index: 5;
+          content: "";
+          box-shadow: inset 0 0 40px var(--color-background-2);
         }
 
-        .leftContent {
-          @include c.centerFlex;
-          flex-direction: column;
-          gap: 16px;
-          height: 100%;
+        & :deep(.cli) {
+          padding: 0.5rem;
+        }
+      }
 
-          .frame {
-            position: relative;
-            background: rgba(white, 0.05);
-            $edgeRadius: 32px;
-            @include c.beveledEdges($edgeRadius);
+      @mixin badgeContainer($side) {
+        position: absolute;
+        inset: auto 0;
+        #{$side}: 0;
+        height: var(--frame-height);
+        @include c.centerFlex;
+        user-select: none;
 
-            --frame-height: 3.2em;
+        .badge {
+          padding: 0.5em 0.75em;
+          background: var(--color-background-0);
 
-            padding: var(--frame-height);
+          @include c.beveledEdges(8px);
 
-            &::before,
-            &::after {
-              z-index: -1;
-              position: absolute;
-              background: inherit;
-              content: "";
-            }
-
-            &::before {
-              inset: calc(var(--frame-height) / 3);
-              @include c.beveledEdges(calc($edgeRadius * 0.75));
-            }
-
-            &::after {
-              inset: calc(var(--frame-height) * 2 / 3);
-              @include c.beveledEdges(calc($edgeRadius * 0.5));
-            }
-
-            .photoWrapper {
-              position: relative;
-              @include c.beveledEdges($edgeRadius * 0.4);
-              height: fit-content;
-
-              &::after {
-                @include c.fillParent;
-                z-index: 5;
-                content: "";
-                box-shadow: inset 0 0 40px var(--color-background-2);
-              }
-            }
-
-            @mixin badgeContainer($side) {
-              position: absolute;
-              inset: auto 0;
-              #{$side}: 0;
-              height: var(--frame-height);
-              @include c.centerFlex;
-              user-select: none;
-
-              .badge {
-                padding: 0.5em 0.75em;
-                background: var(--color-background-0);
-
-                @include c.beveledEdges(8px);
-
-                :deep(.cli) {
-                  padding: 0;
-                  font-size: 0.9em;
-                }
-              }
-            }
-
-            .versionContainer {
-              @include badgeContainer(bottom);
-
-              .version {
-                font-family: monospace;
-                font-weight: bold;
-                color: var(--color-secondary);
-              }
-            }
-
-            .socialsContainer {
-              @include badgeContainer(top);
-
-              .socials {
-                @include c.centerFlex;
-                gap: 1em;
-
-                .icon {
-                  width: 1.2em;
-                  height: 1.2em;
-                  color: var(--color-primary);
-                }
-              }
-            }
+          :deep(.cli) {
+            padding: 0;
+            font-size: 0.9em;
           }
         }
+      }
 
-        .bioCliEffect :deep(.cli) {
-          padding: 0;
+      .versionContainer {
+        @include badgeContainer(bottom);
+
+        .version {
+          font-family: monospace;
+          font-weight: bold;
+          color: var(--color-secondary);
+        }
+      }
+
+      .socialsContainer {
+        @include badgeContainer(top);
+
+        .socials {
+          @include c.centerFlex;
+          gap: 1em;
+
+          .icon {
+            font-size: 1.25rem;
+            color: var(--color-primary);
+          }
         }
       }
     }
@@ -262,5 +243,6 @@ onMounted(() => {
 <!-- Standard fade transition style -->
 <style scoped lang="scss">
 // TODO: Works?
-@forward "@/assets/standard-fade-transition.module.scss";
+@use "@/assets/standard-fade-transition.module.scss" as t;
+@include t.rules;
 </style>

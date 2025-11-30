@@ -104,10 +104,6 @@ onMounted(() => {
   z-index: 1;
   padding-top: 0.3em;
   padding-bottom: 0.1em;
-
-  :deep(.cli) {
-    padding: 0;
-  }
 }
 
 .sectionTitleContainer {

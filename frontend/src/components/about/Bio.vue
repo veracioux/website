@@ -8,11 +8,10 @@ defineProps<{
 <template>
   <Pager class="bio" :progress="progress">
     <div>
-      Hi, I'm Haris. I'm a programmer, engineer, and creator of wonderful
-      things. Since I was a kid I've had a fascination with science and
-      engineering. The first time I ran a computer program, I immediately wanted
-      to create my own. I got started programming by making Minecraft mods in
-      Java when I was about 12.
+      Hi, I'm Haris. I'm a programmer, engineer, and tinkerer. Since I was a kid
+      I've had a fascination with science and engineering. The first time I ran
+      a computer program, I immediately wanted to create my own. I got started
+      programming by making Minecraft mods in Java when I was about 12.
       <br /><br />
       In high school I discovered C++ and fell in love with it. I bought an
       Arduino and played with it endlessly. I used it in an
@@ -55,4 +54,10 @@ defineProps<{
   max-width: 600px;
   text-align: justify;
 }
+// TODO
+// a {
+//   white-space: normal;
+//   word-break: normal;
+//   text-wrap: wrap;
+// }
 </style>

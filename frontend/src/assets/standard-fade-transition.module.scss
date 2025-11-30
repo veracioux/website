@@ -2,20 +2,22 @@
   transition: opacity 0.25s ease-in-out;
 }
 
-.standard-fade-enter-from,
-.standard-fade-leave-to {
-  opacity: 0;
-}
+@mixin rules {
+  .standard-fade-enter-from,
+  .standard-fade-leave-to {
+    opacity: 0;
+  }
 
-.standard-fade-enter-to,
-.standard-fade-leave-from {
-  opacity: 1;
-}
+  .standard-fade-enter-to,
+  .standard-fade-leave-from {
+    opacity: 1;
+  }
 
-.standard-fade-enter-active {
-  transition: opacity 0.25s ease-in-out;
-}
+  .standard-fade-enter-active {
+    transition: opacity 0.25s ease-in-out;
+  }
 
-.standard-fade-leave-active {
-  transition: opacity 0s;
+  .standard-fade-leave-active {
+    transition: opacity 0s;
+  }
 }
