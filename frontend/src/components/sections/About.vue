@@ -42,71 +42,77 @@ const checkpoints = computed(() => {
 </script>
 
 <template>
-  <div class="section" ref="root">
-    <div class="sticky top-0 h-1/2">
+  <div class="section relative sm:h-[300%] xl:h-[200%]" ref="root">
+    <div class="sm:sticky top-0 sm:h-1/2">
       <SectionTitle class="sectionTitle" text="About Me" slug="about" />
-      <div class="absolute inset-0 py-8 px-6 flex items-center justify-center">
-        <div class="content">
+      <div
+        class="sm:h-full py-12 pt-24 sm:pt-8 px-12 flex items-center justify-center"
+      >
+        <div class="flex flex-col xl:flex-row gap-12 font-mono">
           <div
-            :style="{ opacity: checkpoints.photoCli > 0 ? 1 : 0 }"
-            class="frame transition-opacity duration-200"
+            class="flex flex-col sm:flex-row items-center sm:items-start gap-[inherit]"
           >
-            <div class="photoWrapper">
-              <CliEffect
-                prompt="$ "
-                text="cat mugshot.txt"
-                :progress="checkpoints.photoCli"
-              >
-                <ClientOnly>
-                  <AnimatedPhoto :progress="checkpoints.photo" />
-                </ClientOnly>
-              </CliEffect>
-            </div>
-            <div class="socialsContainer">
-              <div
-                :style="{ opacity: checkpoints.socialsCli > 0 ? 1 : 0 }"
-                class="badge transition-opacity duration-200"
-              >
+            <div
+              :style="{ opacity: checkpoints.photoCli > 0 ? 1 : 0 }"
+              class="shrink-0 frame transition-opacity duration-200"
+            >
+              <div class="photoWrapper">
                 <CliEffect
-                  :progress="checkpoints.socialsCli"
                   prompt="$ "
-                  text="lsof -i"
+                  text="cat mugshot.txt"
+                  :progress="checkpoints.photoCli"
                 >
-                  <div class="socials">
-                    <SocialIcon name="github" class="icon" />
-                    <SocialIcon name="linkedin" class="icon" />
-                    <SocialIcon name="mail" class="icon" />
-                  </div>
+                  <ClientOnly>
+                    <AnimatedPhoto :progress="checkpoints.photo" />
+                  </ClientOnly>
                 </CliEffect>
               </div>
-            </div>
-            <div class="versionContainer">
-              <div
-                :style="{ opacity: checkpoints.versionCli > 0 ? 1 : 0 }"
-                class="badge transition-opacity duration-200"
-              >
-                <CliEffect
-                  :progress="checkpoints.versionCli"
-                  prompt="$ "
-                  text="uname -r"
+              <div class="socialsContainer">
+                <div
+                  :style="{ opacity: checkpoints.socialsCli > 0 ? 1 : 0 }"
+                  class="badge transition-opacity duration-200"
                 >
-                  <span class="version"> version: 26 </span>
-                </CliEffect>
+                  <CliEffect
+                    :progress="checkpoints.socialsCli"
+                    prompt="$ "
+                    text="lsof -i"
+                  >
+                    <div class="socials">
+                      <SocialIcon name="github" class="icon" />
+                      <SocialIcon name="linkedin" class="icon" />
+                      <SocialIcon name="mail" class="icon" />
+                    </div>
+                  </CliEffect>
+                </div>
+              </div>
+              <div class="versionContainer">
+                <div
+                  :style="{ opacity: checkpoints.versionCli > 0 ? 1 : 0 }"
+                  class="badge transition-opacity duration-200"
+                >
+                  <CliEffect
+                    :progress="checkpoints.versionCli"
+                    prompt="$ "
+                    text="uname -r"
+                  >
+                    <span class="version"> version: 26 </span>
+                  </CliEffect>
+                </div>
               </div>
             </div>
+            <CliEffect
+              :progress="checkpoints.bioCli"
+              prompt=">>> "
+              text="print(self.__doc__)"
+            >
+              <Bio :progress="checkpoints.bioPager" />
+            </CliEffect>
           </div>
-          <CliEffect
-            :progress="checkpoints.bioCli"
-            prompt=">>> "
-            text="print(self.__doc__)"
-            class="bioCliEffect"
-          >
-            <Bio :progress="checkpoints.bioPager" />
-          </CliEffect>
           <CliEffect
             :progress="checkpoints.workflowCli"
             prompt="> "
             text="JSON.stringify(workflow)"
+            class="basis-[25%] grow shrink-0"
           >
             <Workflow :style="checkpoints.showWorkflow || { opacity: 0 }" />
           </CliEffect>
@@ -121,8 +127,6 @@ const checkpoints = computed(() => {
 @use "@/assets/global.scss" as g;
 
 .section {
-  position: relative;
-  height: 200%;
   background: var(--color-background-1);
 
   .sectionTitle {
@@ -134,109 +138,92 @@ const checkpoints = computed(() => {
     }
   }
 
-  .content {
-    @include c.centerFlex;
-    flex-direction: column;
-    gap: 48px;
-    font-family: monospace;
+  .frame {
+    position: relative;
+    background: rgba(white, 0.05);
+    $edgeRadius: 32px;
+    @include c.beveledEdges($edgeRadius);
 
-    @include g.screenWidthAbove(g.$small) {
-      flex-direction: row;
-      align-items: start;
+    --frame-height: 3.2em;
+
+    padding: var(--frame-height);
+
+    &::before,
+    &::after {
+      z-index: -1;
+      position: absolute;
+      background: inherit;
+      content: "";
     }
 
-    // @include c.centerFlex;
-    // flex-direction: column;
-    // gap: 16px;
-    // height: 100%;
+    &::before {
+      inset: calc(var(--frame-height) / 3);
+      @include c.beveledEdges(calc($edgeRadius * 0.75));
+    }
 
-    .frame {
+    &::after {
+      inset: calc(var(--frame-height) * 2 / 3);
+      @include c.beveledEdges(calc($edgeRadius * 0.5));
+    }
+
+    .photoWrapper {
       position: relative;
-      background: rgba(white, 0.05);
-      $edgeRadius: 32px;
-      @include c.beveledEdges($edgeRadius);
+      @include c.beveledEdges($edgeRadius * 0.4);
+      height: fit-content;
 
-      --frame-height: 3.2em;
-
-      padding: var(--frame-height);
-
-      &::before,
       &::after {
-        z-index: -1;
-        position: absolute;
-        background: inherit;
+        @include c.fillParent;
+        z-index: 5;
         content: "";
+        box-shadow: inset 0 0 40px var(--color-background-2);
       }
 
-      &::before {
-        inset: calc(var(--frame-height) / 3);
-        @include c.beveledEdges(calc($edgeRadius * 0.75));
+      & :deep(.cli) {
+        padding: 0.5rem;
       }
+    }
 
-      &::after {
-        inset: calc(var(--frame-height) * 2 / 3);
-        @include c.beveledEdges(calc($edgeRadius * 0.5));
-      }
+    @mixin badgeContainer($side) {
+      position: absolute;
+      inset: auto 0;
+      #{$side}: 0;
+      height: var(--frame-height);
+      @include c.centerFlex;
+      user-select: none;
 
-      .photoWrapper {
-        position: relative;
-        @include c.beveledEdges($edgeRadius * 0.4);
-        height: fit-content;
+      .badge {
+        padding: 0.5em 0.75em;
+        background: var(--color-background-0);
 
-        &::after {
-          @include c.fillParent;
-          z-index: 5;
-          content: "";
-          box-shadow: inset 0 0 40px var(--color-background-2);
+        @include c.beveledEdges(8px);
+
+        :deep(.cli) {
+          padding: 0;
+          font-size: 0.9em;
         }
-
-        & :deep(.cli) {
-          padding: 0.5rem;
-        }
       }
+    }
 
-      @mixin badgeContainer($side) {
-        position: absolute;
-        inset: auto 0;
-        #{$side}: 0;
-        height: var(--frame-height);
+    .versionContainer {
+      @include badgeContainer(bottom);
+
+      .version {
+        font-family: monospace;
+        font-weight: bold;
+        color: var(--color-secondary);
+      }
+    }
+
+    .socialsContainer {
+      @include badgeContainer(top);
+
+      .socials {
         @include c.centerFlex;
-        user-select: none;
+        gap: 1em;
 
-        .badge {
-          padding: 0.5em 0.75em;
-          background: var(--color-background-0);
-
-          @include c.beveledEdges(8px);
-
-          :deep(.cli) {
-            padding: 0;
-            font-size: 0.9em;
-          }
-        }
-      }
-
-      .versionContainer {
-        @include badgeContainer(bottom);
-
-        .version {
-          font-family: monospace;
-          font-weight: bold;
-          color: var(--color-secondary);
-        }
-      }
-
-      .socialsContainer {
-        @include badgeContainer(top);
-
-        .socials {
-          @include c.centerFlex;
-          gap: 1em;
-
-          .icon {
-            font-size: 1.25rem;
-            color: var(--color-primary);
-          }
+        .icon {
+          font-size: 1.25rem;
+          color: var(--color-primary);
         }
       }
     }
