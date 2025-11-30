@@ -305,7 +305,7 @@ onMounted(() => {
   gap: 6rem;
 
   color: var(--color-primary);
-  font-family: global.$monospace;
+  font-family: monospace;
 
   pointer-events: none;
 }

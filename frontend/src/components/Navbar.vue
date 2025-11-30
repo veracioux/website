@@ -92,7 +92,7 @@ a.veracioux {
   display: flex;
   align-items: center;
   height: global.$navbarHeight;
-  font-family: global.$monospace;
+  font-family: monospace;
   font-size: 2em;
   text-align: center;
   z-index: v-bind("zindex.navbar");

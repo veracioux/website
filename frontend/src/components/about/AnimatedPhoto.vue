@@ -123,7 +123,7 @@ onMounted(() => {
 .asciiArtContainer {
   position: absolute;
   inset: 0;
-  font-family: global.$monospace;
+  font-family: monospace;
 
   transform-origin: 0 0;
 }

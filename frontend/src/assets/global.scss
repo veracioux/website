@@ -59,8 +59,17 @@ $smallHeight: 480px;
 $largeHeight: 768px;
 $xlargeHeight: 1024px;
 
-$monospace: "Roboto Mono";
 $navbarHeight: 3.2rem;
+
+@font-face {
+  font-family: monospace;
+  src: local("Roboto Mono");
+}
+
+@font-face {
+  font-family: ui-monospace;
+  src: local("Roboto Mono");
+}
 
 :root {
   // Font settings

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import GlitchedWriter from "vue-glitched-writer";
 import { ref } from "vue";
-import Navbar from "@/components/Navbar.vue";
+import PageWithNavbar from "./components/PageWithNavbar.vue";
 
 const phrases = [
   "Not Found",
@@ -19,20 +19,21 @@ function incrementActivePhrase() {
 </script>
 
 <template>
-  <Navbar />
-  <div class="container">
-    <div class="content">
+  <PageWithNavbar>
+    <div
+      class="h-full flex flex-col gap-4 items-center justify-center text-[var(--color-secondary)] font-mono"
+    >
       <GlitchedWriter
-        class="number"
+        class="text-9xl"
         text="404"
-        :queue="{ steps: 2, interval: 10, delay: 10 }"
+        :queue="{ steps: 2, interval: 8, delay: 10 }"
         appear
       />
-      <div style="height: 64px">
+      <div class="h-16">
         <div v-for="(phrase, i) of phrases" :key="i">
           <GlitchedWriter
             v-if="activePhraseId === i"
-            class="notFound"
+            class="text-3xl h-16"
             :text="phrase"
             :queue="{ interval: 100 }"
             @finish="incrementActivePhrase"
@@ -41,36 +42,5 @@ function incrementActivePhrase() {
         </div>
       </div>
     </div>
-  </div>
+  </PageWithNavbar>
 </template>
-
-<style scoped lang="scss">
-@use "@/assets/global.scss";
-.container {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .content {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    font-family: global.$monospace;
-    color: var(--color-secondary);
-
-    .number {
-      font-size: 4em;
-    }
-
-    .notFound {
-      font-size: 2em;
-      height: 64px;
-      vertical-align: middle;
-    }
-  }
-}
-</style>
