@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import Navbar from "@/components/Navbar.vue";
-import { ref } from "vue";
+import { ScrollData } from "~/inject";
 
-const scrollContainer = ref<HTMLElement>();
+const { scrollContainer } = ScrollData.inject();
 
 defineExpose({
   scrollContainer,

@@ -117,7 +117,7 @@ const workflow: Record<string, (() => VNode)[]> = {
     >
       "<b class="highlight">{{ key }}</b
       >": [
-      <div class="indented">
+      <div class="mx-5">
         <span v-bind:key="i" v-for="(item, i) of items" style="line-height: 1">
           <span class="highlight">
             <component :is="item" />
@@ -144,11 +144,6 @@ const workflow: Record<string, (() => VNode)[]> = {
 
 .highlight {
   color: white;
-}
-
-.indented {
-  margin-left: 1.2em;
-  margin-right: 1.2em;
 }
 
 .icon,

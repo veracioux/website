@@ -8,6 +8,7 @@ import { computed, onMounted, ref } from "vue";
 import CliEffect from "@/components/CliEffect.vue";
 import Bio from "@/components/about/Bio.vue";
 import { mapRange } from "@/utils";
+import { ClientOnly } from "#components";
 
 const scrollData = ScrollData.inject();
 
@@ -32,17 +33,18 @@ const checkpoints = computed(() => {
 });
 
 onMounted(() => {
-  scrollData.scrollContainer.value?.addEventListener("scroll", () => {
+  scrollData.scrollContainer.value!.addEventListener("scroll", () => {
     // The factor of 2 was obtained empirically
     progress.value = root.value
       ? (-2 * root.value.getBoundingClientRect().top) / root.value.offsetHeight
       : 0;
+    console.log(progress.value);
   });
 });
 </script>
 
 <template>
-  <div class="fullWindow section" ref="root">
+  <div class="section" ref="root">
     <div class="stickyContainer">
       <SectionTitle class="sectionTitle" text="About Me" slug="about" />
       <div class="contentContainer">
@@ -55,7 +57,9 @@ onMounted(() => {
                   text="cat mugshot"
                   :progress="checkpoints.photoCli"
                 >
-                  <AnimatedPhoto :progress="checkpoints.photo" />
+                  <ClientOnly>
+                    <AnimatedPhoto :progress="checkpoints.photo" />
+                  </ClientOnly>
                 </CliEffect>
               </div>
               <div class="socialsContainer">
@@ -144,7 +148,7 @@ onMounted(() => {
         @include c.centerFlex;
         flex-direction: column;
         gap: 48px;
-        font-family: g.$monospace;
+        font-family: monospace;
 
         @include g.screenWidthAbove(g.$small) {
           flex-direction: row;
@@ -223,7 +227,7 @@ onMounted(() => {
               @include badgeContainer(bottom);
 
               .version {
-                font-family: g.$monospace;
+                font-family: monospace;
                 font-weight: bold;
                 color: var(--color-secondary);
               }

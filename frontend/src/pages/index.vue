@@ -9,6 +9,7 @@ import PageWithNavbar from "@/components/PageWithNavbar.vue";
 import Shutter from "@/components/intro/Shutter.vue";
 import Projects from "@/components/sections/Projects.vue";
 import CV from "@/components/sections/CV.vue";
+import About from "@/components/sections/About.vue";
 import { useRoute } from "#app";
 import * as utils from "@/utils";
 
@@ -137,7 +138,7 @@ onBeforeUnmount(() => {
     </div>
     <Projects id="projects" class="min-h-full" />
     <CV id="cv" />
-    <!--            <About id="about" class="about" />-->
+    <About id="about" class="about" />
     <!--            <Contact id="contact" class="contact" />-->
   </PageWithNavbar>
 </template>
