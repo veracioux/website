@@ -49,49 +49,51 @@ const checkpoints = computed(() => {
       <SectionTitle class="sectionTitle" text="About Me" slug="about" />
       <div class="absolute inset-0 py-8 px-6 flex items-center justify-center">
         <div class="content">
-          <div v-if="checkpoints.showFrame" class="frame">
-            <div class="photoWrapper">
-              <CliEffect
-                prompt="$ "
-                text="cat mugshot.txt"
-                :progress="checkpoints.photoCli"
-              >
-                <ClientOnly>
-                  <AnimatedPhoto :progress="checkpoints.photo" />
-                </ClientOnly>
-              </CliEffect>
+          <Transition name="standard-fade">
+            <div v-if="checkpoints.showFrame" class="frame">
+              <div class="photoWrapper">
+                <CliEffect
+                  prompt="$ "
+                  text="cat mugshot.txt"
+                  :progress="checkpoints.photoCli"
+                >
+                  <ClientOnly>
+                    <AnimatedPhoto :progress="checkpoints.photo" />
+                  </ClientOnly>
+                </CliEffect>
+              </div>
+              <div class="socialsContainer">
+                <Transition name="standard-fade">
+                  <div v-if="checkpoints.socialsCli > 0" class="badge">
+                    <CliEffect
+                      :progress="checkpoints.socialsCli"
+                      prompt="$ "
+                      text="lsof -i"
+                    >
+                      <div class="socials">
+                        <SocialIcon name="github" class="icon" />
+                        <SocialIcon name="linkedin" class="icon" />
+                        <SocialIcon name="mail" class="icon" />
+                      </div>
+                    </CliEffect>
+                  </div>
+                </Transition>
+              </div>
+              <div class="versionContainer">
+                <Transition name="standard-fade">
+                  <div v-if="checkpoints.versionCli > 0" class="badge">
+                    <CliEffect
+                      :progress="checkpoints.versionCli"
+                      prompt="$ "
+                      text="uname -r"
+                    >
+                      <span class="version"> version: 26 </span>
+                    </CliEffect>
+                  </div>
+                </Transition>
+              </div>
             </div>
-            <div class="socialsContainer">
-              <Transition name="standard-fade">
-                <div v-if="checkpoints.socialsCli > 0" class="badge">
-                  <CliEffect
-                    :progress="checkpoints.socialsCli"
-                    prompt="$ "
-                    text="lsof -i"
-                  >
-                    <div class="socials">
-                      <SocialIcon name="github" class="icon" />
-                      <SocialIcon name="linkedin" class="icon" />
-                      <SocialIcon name="mail" class="icon" />
-                    </div>
-                  </CliEffect>
-                </div>
-              </Transition>
-            </div>
-            <div class="versionContainer">
-              <Transition name="standard-fade">
-                <div v-if="checkpoints.versionCli > 0" class="badge">
-                  <CliEffect
-                    :progress="checkpoints.versionCli"
-                    prompt="$ "
-                    text="uname -r"
-                  >
-                    <span class="version"> version: 26 </span>
-                  </CliEffect>
-                </div>
-              </Transition>
-            </div>
-          </div>
+          </Transition>
           <CliEffect
             :progress="checkpoints.bioCli"
             prompt=">>> "
