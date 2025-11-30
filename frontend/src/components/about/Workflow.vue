@@ -96,40 +96,52 @@ const workflow: Record<string, (() => VNode)[]> = {
 </script>
 
 <template>
-  <div class="workflowRoot">
-    <span class="!inline-flex items-center"
-      ><b class="text-[var(--color-text)]">Workflow</b>.json</span
-    >
-    <div>{</div>
-    <div
-      v-bind:key="key"
-      v-for="([key, items], i) of Object.entries(workflow)"
-      class="ml-5"
-    >
-      "<b class="text-[var(--color-text)]"> {{ key }} </b>": [
-      <div class="mx-5">
-        <span v-bind:key="i" v-for="(item, i) of items" style="line-height: 1">
-          <span class="text-white">
-            <component :is="item" />
+  <div class="clippedContainer">
+    <div class="workflowRoot">
+      <span class="!inline-flex items-center"
+        ><b class="text-[var(--color-text)]">Workflow</b>.json</span
+      >
+      <div>{</div>
+      <div
+        v-bind:key="key"
+        v-for="([key, items], i) of Object.entries(workflow)"
+        class="ml-5"
+      >
+        "<b class="text-[var(--color-text)]"> {{ key }} </b>": [
+        <div class="mx-5">
+          <span
+            v-bind:key="i"
+            v-for="(item, i) of items"
+            style="line-height: 1"
+          >
+            <span class="text-white">
+              <component :is="item" />
+            </span>
+            <pre>{{ i !== items.length - 1 ? ", " : "" }}</pre>
           </span>
-          <pre>{{ i !== items.length - 1 ? ", " : "" }}</pre>
-        </span>
+        </div>
+        ]{{ i !== items.length - 1 ? ", " : "" }}
       </div>
-      ]{{ i !== items.length - 1 ? ", " : "" }}
+      <div>}</div>
     </div>
-    <div>}</div>
   </div>
 </template>
 
 <style scoped lang="scss">
 @use "@/assets/common.module.scss" as c;
 
+.clippedContainer {
+  filter: drop-shadow(0 0 0.25rem rgba(var(--color-secondary-rgb), 0.5));
+}
+
 .workflowRoot {
-  background: var(--color-background-0);
-  color: rgb(var(--color-text-rgb), 0.6); // TODO change
-  @include c.beveledEdges(20px);
+  position: relative;
+  color: rgb(var(--color-text-rgb), 0.6);
   padding: 24px;
   line-height: 2;
+  z-index: 20;
+  @include c.beveledEdges(20px);
+  background: var(--color-background-0);
 }
 
 .icon,
