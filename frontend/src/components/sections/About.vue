@@ -39,7 +39,7 @@ const checkpoints = computed(() => {
     showWorkflow: progress.value >= 0.45,
     bioPager: mapRange(
       progress.value,
-      window.innerWidth >= 1280 ? [0.45, 0.8] : [0.35, 0.99],
+      window?.innerWidth >= 1280 ? [0.45, 0.8] : [0.35, 0.99],
       [0, 1]
     ),
   };
