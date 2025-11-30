@@ -1,10 +1,10 @@
 import asciify from "asciify-image";
 import Convert from "ansi-to-html";
 import path from "path";
-import { minify } from "html-minifier";
 import sharp from "sharp";
 import fs from "fs/promises";
 import os from "os";
+import puppeteer from "puppeteer";
 
 async function convert(
   imagePath: string,
@@ -13,10 +13,14 @@ async function convert(
   // Convert webp to temporary jpg
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "ascii-"));
   const jpgPath = path.join(tempDir, "mugshot.jpg");
-  await sharp(imagePath).jpeg().toFile(jpgPath);
+  const screenshotPath = path.join(tempDir, "screenshot.png");
+  const image = sharp(imagePath);
+  const width = (await image.metadata()).width!;
+  const height = (await image.metadata()).height!;
+  await image.jpeg().toFile(jpgPath);
 
   try {
-    return await new Promise((resolve, reject) => {
+    const asciiString = await new Promise<string>((resolve, reject) => {
       asciify(
         jpgPath,
         { fit: "width", width: outputColumns },
@@ -24,11 +28,36 @@ async function convert(
           if (err) {
             return reject(err);
           }
-          const convert = new Convert();
-          resolve(convert.toHtml(asciified as string));
+          resolve(asciified as string);
         }
       );
     });
+
+    const html = new Convert().toHtml(asciiString);
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.setViewport({
+      width: Math.floor(26 * outputColumns), // Empirically determined
+      get height() {
+        return Math.round((height / width) * this.width);
+      },
+    });
+    const fullHtml = `
+      <html>
+        <body style="margin: 0; font-size: 22px; font-family: monospace">
+          ${html}
+        </body>
+      </html>
+    `;
+    await page.setContent(fullHtml, { waitUntil: "networkidle0" });
+    await page.screenshot({
+      path: screenshotPath,
+      omitBackground: true,
+      fullPage: true,
+    });
+    await browser.close();
+    const buffer = await fs.readFile(screenshotPath);
+    return `data:image/png;base64,${buffer.toString("base64")}`;
   } finally {
     // Clean up temp directory
     await fs.rm(tempDir, { recursive: true });
@@ -52,11 +81,11 @@ function rollupPlugin() {
       const match = regex1.exec(id);
       if (!match) return null;
       const mugshotColumnWidth = Number(regex1.exec(id)![1]);
-      const html = await convert(
+      const dataUrl = await convert(
         path.resolve(__dirname, "../../src/assets/mugshot.webp"),
         mugshotColumnWidth
       );
-      return "export default " + JSON.stringify(minify(html)) + ";";
+      return "export default " + JSON.stringify(dataUrl) + ";";
     },
   };
 }
