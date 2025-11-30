@@ -19,8 +19,9 @@
     "@fortawesome/vue-fontawesome": "^3.0.0-5",
     "@nuxtjs/google-fonts": "3.0.0-1",
     "@nuxtjs/proxy": "^2.1.0",
+    "@nuxtjs/tailwindcss": "^6.14.0",
     "@types/jsdom": "^16.2.14",
-    "@vitejs/plugin-vue-jsx": "^1.3.10",
+    "@vitejs/plugin-vue-jsx": "^5",
     "@vue/tsconfig": "^0.1.3",
     "ascii-mugshot": "workspace:*",
     "konva": "^8.3.13",
@@ -33,8 +34,7 @@
     "vue": "^3.2.33",
     "vue-glitched-writer": "^1.2.2",
     "vue-konva": "^3.0.0",
-    "vue3-lazyload": "^0.3.6",
-    "@nuxtjs/tailwindcss": "^6.14.0"
+    "vue3-lazyload": "^0.3.6"
   },
   "devDependencies": {
     "@eslint/css": "^0.14.1",
