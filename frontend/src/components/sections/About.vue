@@ -86,7 +86,7 @@ const checkpoints = computed(() => {
                     prompt="$ "
                     text="uname -r"
                   >
-                    <span class="version"> version: 23 </span>
+                    <span class="version"> version: 26 </span>
                   </CliEffect>
                 </div>
               </Transition>
