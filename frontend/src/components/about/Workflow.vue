@@ -136,12 +136,12 @@ const workflow: Record<string, (() => VNode)[]> = {
 
 .workflowRoot {
   position: relative;
-  color: rgb(var(--color-text-rgb), 0.6);
+  color: rgb(var(--color-text-rgb), 0.75);
   padding: 24px;
   line-height: 2;
   z-index: 20;
   @include c.beveledEdges(20px);
-  background: var(--color-background-0);
+  background: var(--color-background-2);
 }
 
 .icon,

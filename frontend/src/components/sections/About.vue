@@ -28,6 +28,7 @@ const progress = computed(() => {
 const checkpoints = computed(() => {
   // Roughly chronologically sorted
   return {
+    darkenBackground: progress.value >= 0.35,
     showFrame: progress.value > 0.2,
     photoCli: mapRange(progress.value, [0.2, 0.3], [0, 1]),
     socialsCli: mapRange(progress.value, [0.2, 0.3], [0, 1]),
@@ -42,7 +43,15 @@ const checkpoints = computed(() => {
 </script>
 
 <template>
-  <div class="section relative sm:h-[300%] xl:h-[200%]" ref="root">
+  <div
+    class="section relative sm:h-[300%] xl:h-[200%]"
+    ref="root"
+    :style="{
+      background: checkpoints.darkenBackground
+        ? 'var(--color-background-0)'
+        : undefined,
+    }"
+  >
     <div class="sm:sticky top-0 sm:h-1/2">
       <SectionTitle class="sectionTitle" text="About Me" slug="about" />
       <div
@@ -127,7 +136,8 @@ const checkpoints = computed(() => {
 @use "@/assets/global.scss" as g;
 
 .section {
-  background: var(--color-background-1);
+  background-color: var(--color-background-1);
+  transition: background-color 2s ease;
 
   .sectionTitle {
     position: absolute;
@@ -210,6 +220,7 @@ const checkpoints = computed(() => {
       .version {
         font-family: monospace;
         font-weight: bold;
+        line-height: 1;
         color: var(--color-secondary);
       }
     }
