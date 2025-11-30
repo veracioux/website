@@ -1,9 +1,5 @@
-x-environment: &environment
-  ENV: "${ENV:?one of prod, staging, dev}"
-
 x-env_file: &env_file
   - ./.env.d/common
-  - ./.env.d/${ENV}
 
 services:
   db:
@@ -24,10 +20,10 @@ services:
 
   web:
     # Image
-    image: docker.veracioux.me/web:${ENV}
+    image: docker.veracioux.me/web
     build:
       context: .
-      dockerfile: _docker/Dockerfile.web.${ENV}
+      dockerfile: _docker/Dockerfile.web
 
     # Container
     restart: always
@@ -45,10 +41,10 @@ services:
 
   frontend:
     # Image
-    image: docker.veracioux.me/frontend:${ENV}
+    image: docker.veracioux.me/frontend
     build:
       context: frontend
-      dockerfile: _docker/Dockerfile.frontend.${ENV}
+      dockerfile: _docker/Dockerfile.frontend
 
     # Container
     restart: always

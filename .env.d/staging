@@ -1,2 +1,1 @@
 ENV=staging
-SECRET_KEY=1234

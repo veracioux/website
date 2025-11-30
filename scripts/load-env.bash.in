@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-[ -z "$ENV" ] && ENV="$(tem var env)"
-[ -z "$MACHINE" ] && MACHINE="$(tem var machine)"
+[ -z "$ENV" ] && ENV=staging
 
 print_and_eval() {
     echo "$1"

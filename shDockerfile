@@ -1,8 +1,7 @@
 # -*- mode: dockerfile; -*- vim: filetype=dockerfile
 
-# Separate frontend build stage; reduces final image size
 if [ "$ENV" != "dev" ]; then
-    FROM docker.veracioux.me/frontend:"$ENV" as frontend
+    FROM docker.veracioux.me/frontend as frontend
 fi
 
 #  ==========
@@ -38,8 +37,6 @@ ENTRYPOINT '["/app/scripts/entrypoint.sh"]'
 CMD '["nginx", "-g", "daemon off;"]'
 SHDOCKER quote on
 
-if [ "$ENV" != "dev" ]; then
-    ENV MACHINE="$MACHINE"
-    COPY --from=frontend /frontend/dist /app/frontend/dist
-    CMD nginx -g "daemon off;"
-fi
+ENV MACHINE="$MACHINE"
+COPY --from=frontend /frontend/dist /app/frontend/dist
+CMD nginx -g "daemon off;"
