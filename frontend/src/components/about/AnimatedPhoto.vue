@@ -45,10 +45,12 @@ const { data: htmlSources } = useSWRV("ascii-mugshots", async () =>
 );
 
 const activeAsciiArtIndex = computed(() => {
-  return mapRangeClipped(
-    props.progress,
-    [0, 1],
-    [0, (htmlSources.value?.length ?? 1) - 1]
+  return Math.floor(
+    mapRangeClipped(
+      props.progress,
+      [0, 1],
+      [0, (htmlSources.value?.length ?? 1) - 1]
+    )
   );
 });
 
@@ -82,18 +84,18 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div class="flex">
     <img
       v-lazy="mugshot"
       @load="updateAsciiArtSize"
-      class="w-48 h-60 aspect-[48/60]"
+      class="w-48 h-60"
       ref="photo"
       :style="{ opacity: photoOpacity }"
     />
     <div
       v-for="(htmlContent, i) of htmlSources"
       v-bind:key="i"
-      class="absolute inset-0 font-mono origin-center"
+      class="absolute inset-0 font-mono origin-top-left"
       :style="asciiArtStyle"
     >
       <span

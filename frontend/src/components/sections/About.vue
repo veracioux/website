@@ -7,7 +7,7 @@ import { ScrollData } from "@/inject";
 import { computed, ref } from "vue";
 import CliEffect from "@/components/CliEffect.vue";
 import Bio from "@/components/about/Bio.vue";
-import { dependsOn, logChanges, mapRange, mapRangeClipped } from "@/utils";
+import { dependsOn, mapRange, mapRangeClipped } from "@/utils";
 import { ClientOnly } from "#components";
 
 const { scrollContainer, relativeScrollY } = ScrollData.inject();
@@ -24,8 +24,6 @@ const progress = computed(() => {
     thisRect.height;
   return Math.max(0, raw);
 });
-
-logChanges(progress);
 
 const checkpoints = computed(() => {
   // Roughly chronologically sorted
