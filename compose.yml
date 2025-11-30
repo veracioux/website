@@ -17,8 +17,6 @@ services:
     environment:
       DB_HOST: db
       FRONTEND_HOST: frontend
-    volumes:
-      - web_static:/var/static_root:rw
 
   _frontend:
     # Image
@@ -39,9 +37,3 @@ services:
     volumes:
       - "${HOME}/auth:/auth"
       - "${HOME}/docker-registry:/var/lib/registry"
-
-volumes:
-  web_static:
-  frontend_dotnuxt:
-  frontend_node_modules:
-  frontend_gimmicks_ascii_mugshot_node_modules:
