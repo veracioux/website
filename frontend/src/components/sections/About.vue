@@ -33,10 +33,9 @@ const checkpoints = computed(() => {
     showFrame: progress.value > 0.2,
     photoCli: mapRange(progress.value, [0.2, 0.3], [0, 1]),
     socialsCli: mapRange(progress.value, [0.2, 0.3], [0, 1]),
-    versionCli: mapRange(progress.value, [0.2, 0.3], [0, 1]),
+    versionCli: mapRange(progress.value, [0.32, 0.42], [0, 1]),
     photo: mapRangeClipped(progress.value, [0.3, 0.45], [0, 1]),
     bioCli: mapRange(progress.value, [0.2, 0.45], [0, 1]),
-    showVersion: progress.value >= 0.45,
     workflowCli: mapRange(progress.value, [0.2, 0.45], [0, 1]),
     showWorkflow: progress.value >= 0.45,
     bioPager: mapRange(progress.value, [0.45, 0.8], [0, 1]),
@@ -80,15 +79,17 @@ const checkpoints = computed(() => {
               </Transition>
             </div>
             <div class="versionContainer">
-              <div class="badge">
-                <CliEffect
-                  :progress="checkpoints.versionCli"
-                  prompt="$ "
-                  text="uname -r"
-                >
-                  <span class="version"> version: 23 </span>
-                </CliEffect>
-              </div>
+              <Transition name="standard-fade">
+                <div v-if="checkpoints.versionCli > 0" class="badge">
+                  <CliEffect
+                    :progress="checkpoints.versionCli"
+                    prompt="$ "
+                    text="uname -r"
+                  >
+                    <span class="version"> version: 23 </span>
+                  </CliEffect>
+                </div>
+              </Transition>
             </div>
           </div>
           <CliEffect
