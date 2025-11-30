@@ -49,51 +49,54 @@ const checkpoints = computed(() => {
       <SectionTitle class="sectionTitle" text="About Me" slug="about" />
       <div class="absolute inset-0 py-8 px-6 flex items-center justify-center">
         <div class="content">
-          <Transition name="standard-fade">
-            <div v-if="checkpoints.showFrame" class="frame">
-              <div class="photoWrapper">
+          <div
+            :style="{ opacity: checkpoints.photoCli > 0 ? 1 : 0 }"
+            class="frame transition-opacity duration-200"
+          >
+            <div class="photoWrapper">
+              <CliEffect
+                prompt="$ "
+                text="cat mugshot.txt"
+                :progress="checkpoints.photoCli"
+              >
+                <ClientOnly>
+                  <AnimatedPhoto :progress="checkpoints.photo" />
+                </ClientOnly>
+              </CliEffect>
+            </div>
+            <div class="socialsContainer">
+              <div
+                :style="{ opacity: checkpoints.socialsCli > 0 ? 1 : 0 }"
+                class="badge transition-opacity duration-200"
+              >
                 <CliEffect
+                  :progress="checkpoints.socialsCli"
                   prompt="$ "
-                  text="cat mugshot.txt"
-                  :progress="checkpoints.photoCli"
+                  text="lsof -i"
                 >
-                  <ClientOnly>
-                    <AnimatedPhoto :progress="checkpoints.photo" />
-                  </ClientOnly>
+                  <div class="socials">
+                    <SocialIcon name="github" class="icon" />
+                    <SocialIcon name="linkedin" class="icon" />
+                    <SocialIcon name="mail" class="icon" />
+                  </div>
                 </CliEffect>
               </div>
-              <div class="socialsContainer">
-                <Transition name="standard-fade">
-                  <div v-if="checkpoints.socialsCli > 0" class="badge">
-                    <CliEffect
-                      :progress="checkpoints.socialsCli"
-                      prompt="$ "
-                      text="lsof -i"
-                    >
-                      <div class="socials">
-                        <SocialIcon name="github" class="icon" />
-                        <SocialIcon name="linkedin" class="icon" />
-                        <SocialIcon name="mail" class="icon" />
-                      </div>
-                    </CliEffect>
-                  </div>
-                </Transition>
-              </div>
-              <div class="versionContainer">
-                <Transition name="standard-fade">
-                  <div v-if="checkpoints.versionCli > 0" class="badge">
-                    <CliEffect
-                      :progress="checkpoints.versionCli"
-                      prompt="$ "
-                      text="uname -r"
-                    >
-                      <span class="version"> version: 26 </span>
-                    </CliEffect>
-                  </div>
-                </Transition>
+            </div>
+            <div class="versionContainer">
+              <div
+                :style="{ opacity: checkpoints.versionCli > 0 ? 1 : 0 }"
+                class="badge transition-opacity duration-200"
+              >
+                <CliEffect
+                  :progress="checkpoints.versionCli"
+                  prompt="$ "
+                  text="uname -r"
+                >
+                  <span class="version"> version: 26 </span>
+                </CliEffect>
               </div>
             </div>
-          </Transition>
+          </div>
           <CliEffect
             :progress="checkpoints.bioCli"
             prompt=">>> "
@@ -241,11 +244,4 @@ const checkpoints = computed(() => {
     }
   }
 }
-</style>
-
-<!-- Standard fade transition style -->
-<style scoped lang="scss">
-// TODO: Works?
-@use "@/assets/standard-fade-transition.module.scss" as t;
-@include t.rules;
 </style>
