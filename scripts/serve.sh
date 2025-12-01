@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 
-# The `serve` script (managed by tem) should be run to serve the website on a
-# dedicated host. That script in turn runs this script with sudo access, and
-# that's the only reason this script is separate.
-
-# Do not run this script directly, unless you know what you are doing. Note that
-# you need to set $USER_HOME to $HOME of the non-root user invoking the script.
+if [ -z "$USER_HOME" ]; then
+    echo "Error: Please set USER_HOME to the HOME of the main data user." >&2
+    exit 1
+fi
 
 [ -z "$ENV" ] && ENV=staging
 
