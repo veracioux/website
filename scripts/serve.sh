@@ -17,23 +17,19 @@ if nginx -t 2>/dev/null; then
 fi
 
 cat host/nginx.conf.in | envsubst '$WEB_PORT,$WEB_PORT_STAGING,$USER_HOME,$DOCKER_REGISTRY_PORT' > /etc/nginx/nginx.conf
-# Create file in case it doesn't exist, so nginx doesn't complain
-cp nginx.tmp.conf /etc/nginx/nginx.tmp.conf 2>/dev/null
-touch /etc/nginx/nginx.tmp.conf
 
 config_check_output="$(nginx -t 2>&1)"
 
 if [ "$?" = 0 ]; then
-    pkill nginx
-    nginx
+    systemctl reload nginx
     echo "Successfully started nginx." >&2
 else
+    echo "Error in nginx configuration:" >&2
+    echo "$config_check_output" >&2
+
+    tempfile="$(mktemp XXXXX/nginx.conf)"
+    cp /etc/nginx/nginx.conf "$tempfile"
+    echo "View the failed configuration here: $tempfile"
+
     cp /etc/nginx/nginx.conf{.bak,}
-    echo "Error: nginx config invalid." >&2
-    echo "$config_check_output"
-    if nginx -t 2>/dev/null; then
-        echo "Starting nginx using previous config..." >&2
-        pkill nginx
-        nginx
-    fi
 fi
