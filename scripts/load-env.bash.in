@@ -14,9 +14,9 @@ load_envvars_from_file() {
 }
 
 for file in \
-    .env/common \
-    .env/staging \
-    .env/"$ENV"{,.secret}
+    .env.d/common \
+    .env.d/staging \
+    .env.d/"$ENV"{,.secret}
 do
     [ -f "$file" ] && load_envvars_from_file "$file"
 done
