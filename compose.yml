@@ -9,7 +9,7 @@ services:
     # Container
     restart: always
     depends_on:
-      - _frontend
+      - frontend
     ports:
       - "${EXPOSED_IP:-127.0.0.1}:${WEB_PORT}:3000"
     env_file:
@@ -18,7 +18,7 @@ services:
       DB_HOST: db
       FRONTEND_HOST: frontend
 
-  _frontend:
+  frontend:
     # Image
     image: docker.veracioux.me/frontend
     build:
