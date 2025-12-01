@@ -9,7 +9,9 @@ import iconGitWithText from "@/assets/icons/git-with-text.svg";
 import iconFish from "@/assets/icons/fish.png";
 import iconNeovim from "@/assets/icons/neovim.svg";
 import iconEmacs from "@/assets/icons/emacs.svg";
+import iconVscode from "@/assets/icons/vscode.svg";
 import iconDocker from "@/assets/icons/docker.svg";
+import iconOpencode from "@/assets/icons/opencode.svg";
 
 function Icon(props: { src: string; alt?: string; href?: string }) {
   const icon = h(_Icon, { class: "icon", ...props });
@@ -77,6 +79,16 @@ const workflow: Record<string, (() => VNode)[]> = {
         },
         [h(Icon, { src: iconEmacs, alt: "emacs" }), " emacs"]
       ),
+    () =>
+      h(
+        "a",
+        {
+          href: "https://code.visualstudio.com/",
+          target: "_blank",
+          class: "icon",
+        },
+        [h(Icon, { src: iconVscode, alt: "vscode" }), " vscode"]
+      ),
   ],
   tools: [
     () =>
@@ -90,6 +102,13 @@ const workflow: Record<string, (() => VNode)[]> = {
         src: iconDocker,
         alt: "docker",
         href: "https://www.docker.com",
+      }),
+    () =>
+      h(Icon, {
+        style: "transform: scale(75%); transform-origin: left center",
+        src: iconOpencode,
+        alt: "opencode",
+        href: "https://opencode.ai",
       }),
   ],
 };
