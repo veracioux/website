@@ -27,7 +27,7 @@ else
     echo "Error in nginx configuration:" >&2
     echo "$config_check_output" >&2
 
-    tempdir="$(mktemp XXXXX)"
+    tempdir="$(mktemp -t  -d XXXXX)"
     cp /etc/nginx/nginx.conf "$tempdir/nginx.conf"
     echo "View the failed configuration file here: $tempdir/nginx.conf" >&2
 
