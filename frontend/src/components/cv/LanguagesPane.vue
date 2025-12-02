@@ -1,30 +1,26 @@
+<script setup lang="ts">
+const languages = [
+  { name: "English", level: "Advanced" },
+  { name: "German", level: "Advanced" },
+  { name: "Spanish", level: "Intermediate" },
+  { name: "Bosnian", level: "Native language" },
+];
+</script>
 <template>
   <div class="languagesPaneContainer">
     <h2 class="subsectionTitle">Languages</h2>
     <table class="languageTable">
       <tbody>
-        <tr>
-          <td>English</td>
-          <td rowspan="0" class="columnDelimiter"></td>
+        <tr v-for="(lang, i) in languages" :key="i">
+          <td>{{ lang.name }}</td>
+          <td
+            v-if="i === 0"
+            :rowspan="languages.length"
+            class="columnDelimiter"
+          ></td>
           <td>
-            <b>Advanced</b>
+            <b>{{ lang.level }}</b>
           </td>
-        </tr>
-        <tr>
-          <td>German</td>
-          <td>
-            <b>Advanced</b>
-          </td>
-        </tr>
-        <tr>
-          <td>Spanish</td>
-          <td>
-            <b>Intermediate</b>
-          </td>
-        </tr>
-        <tr>
-          <td>Bosnian</td>
-          <td><b>Native language</b></td>
         </tr>
       </tbody>
     </table>
@@ -57,6 +53,7 @@
   }
 
   .languageTable {
+    position: relative;
     border-collapse: separate;
     border-spacing: 16px;
 
