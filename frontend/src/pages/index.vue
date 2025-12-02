@@ -12,6 +12,7 @@ import CV from "@/components/sections/CV.vue";
 import About from "@/components/sections/About.vue";
 import { useRoute } from "#app";
 import * as utils from "@/utils";
+import Icon from "~/components/generic/Icon.vue";
 
 const zindex = reactive(_zindex);
 
@@ -27,6 +28,7 @@ const navbarHeight = computed(() => {
   return windowHeight.value && navbar.value?.clientHeight;
 });
 const windowHeight = ref(window?.innerHeight);
+const showArrowDown = ref(false);
 
 // FIXME
 const isMobile = utils.isMobile();
@@ -94,6 +96,10 @@ onMounted(() => {
   });
 
   window.addEventListener("resize", onWindowResize);
+
+  setTimeout(() => {
+    showArrowDown.value = true;
+  }, 3000);
 });
 onBeforeUnmount(() => {
   window.removeEventListener("resize", onWindowResize);
@@ -135,6 +141,14 @@ onBeforeUnmount(() => {
         :veracioux-text-fadeable="veraciouxTextFadeable"
         @veraciouxCrossedThreshold="onVeraciouxCrossedThreshold"
       />
+      <Icon
+        v-if="pageWithNavbar"
+        class="arrowDown fixed bottom-12 w-full text-[var(--color-secondary)] text-5xl z-10 transition-opacity duration-700 ease-in-out"
+        :style="{
+          opacity: showArrowDown && relativeScrollY == 0 ? 0.6 : 0,
+        }"
+        name="arrowDown"
+      ></Icon>
     </div>
     <Projects id="projects" class="min-h-full" />
     <CV id="cv" />
@@ -168,6 +182,22 @@ onBeforeUnmount(() => {
       opacity: 1;
       pointer-events: unset;
     }
+  }
+}
+
+.arrowDown {
+  animation: upAndDown 2s ease-in-out infinite;
+}
+
+@keyframes upAndDown {
+  from {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-30%);
+  }
+  to {
+    transform: translateY(0);
   }
 }
 
