@@ -7,14 +7,9 @@ fi
 
 [ -z "$ENV" ] && ENV=staging
 
-kill "$(cat /run/nginx.pid)"
-
 . scripts/load-env.bash.in
 
-# If the nginx config is sound, back it up
-if nginx -t 2>/dev/null; then
-    cp /etc/nginx/nginx.conf{,.bak}
-fi
+cp /etc/nginx/nginx.conf{,.bak}
 
 if [ -z "$WEB_PORT" ]; then
     echo "Error: Please set WEB_PORT environment variable in the .env.d files." >&2
@@ -36,6 +31,7 @@ cat host/nginx.conf.in | envsubst '$WEB_PORT,$WEB_PORT_STAGING,$USER_HOME,$DOCKE
 config_check_output="$(nginx -t 2>&1)"
 
 if [ "$?" = 0 ]; then
+    systemctl start nginx
     systemctl reload nginx
     echo "Successfully started nginx." >&2
 else
