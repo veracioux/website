@@ -24,7 +24,7 @@ if (variant) {
             class="opacity-50 text-[0.85rem]"
           />
           <SocialIcon name="mail" text="hgusic.pub@gmail.com" />
-          <SocialIcon name="phone" text="+387644229116" />
+          <SocialIcon name="phone" text="+49 151 29984107" />
           <SocialIcon name="web" text="veracioux.me" />
           <div class="flex gap-8">
             <SocialIcon name="github" text="veracioux" />
