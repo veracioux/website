@@ -164,6 +164,7 @@ const _skills = {
     icon: iconQt,
     group: skillGroups.technologies,
     experience: "1 year",
+    disabled: true,
   },
   docker: {
     name: "Docker",
