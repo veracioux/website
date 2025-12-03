@@ -1,19 +1,14 @@
 <script setup lang="ts">
-import { type VNode } from "vue";
 import Label from "@/components/generic/Label.vue";
 import zindex from "@/zindex";
+import type { Entry } from "@/cv";
 
-defineProps<{
-  name?: string;
-  node?: () => VNode;
-  startDate?: string | number;
-  endDate?: string | number;
-  displayDate?: string;
-  labels?: string[];
-  hovered?: boolean;
-  selected?: boolean;
-  active?: boolean;
-}>();
+defineProps<
+  Entry & {
+    active: boolean;
+    selected: boolean;
+  }
+>();
 </script>
 
 <template>
@@ -41,13 +36,17 @@ defineProps<{
             <component v-if="node" :is="node" />
           </slot>
           <div v-if="labels" class="labelContainer">
-            <!-- TODO: Check if key is appropriate -->
-            <Label
-              v-bind:key="label"
-              v-for="label of labels"
-              :title="label"
-            ></Label>
+            <Label :key="label" v-for="label of labels" :title="label"></Label>
           </div>
+          <ul v-if="accomplishments?.length" class="!mt-2 font-thin">
+            <li
+              class="text-[0.9em] flex gap-1"
+              v-for="accomplishment in accomplishments"
+              :key="accomplishment"
+            >
+              <span>•</span> {{ accomplishment }}
+            </li>
+          </ul>
         </div>
       </div>
     </td>

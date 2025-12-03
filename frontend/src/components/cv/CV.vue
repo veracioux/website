@@ -64,6 +64,10 @@ const data = computed(() => {
       ..._entries.renovation,
       disabled: ctx.resume,
     },
+    stackExchange: {
+      ..._entries.stackExchange,
+      disabled: ctx.resume,
+    },
   } satisfies typeof _entries;
 
   const groups = Object.fromEntries(
@@ -89,7 +93,9 @@ const data = computed(() => {
     : [];
 
   const enabledGroups = Object.values(groups).filter(
-    ({ key }) => !excludedGroups.includes(key as keyof typeof groups)
+    ({ key, entries }) =>
+      !excludedGroups.includes(key as keyof typeof groups) &&
+      entries.some((entry) => !entry.disabled)
   );
 
   // All entries that should are explicitly excluded
@@ -215,9 +221,11 @@ onMounted(() => {
                 v-bind:key="group.key"
                 v-for="group of data.enabledGroups"
               >
-                <div class="h-16 relative [&:first-child]:-mb-4">
+                <div
+                  class="h-16 print:h-8 relative [&:first-child]:-mb-4 print:[&:first-child]:-mb-2"
+                >
                   <div class="groupTitle">
-                    <div class="h-full inset-0 flex items-center">
+                    <div class="h-full inset-0 pl-4 flex items-center">
                       {{ group.name }}
                     </div>
                   </div>
@@ -327,7 +335,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
 
       @media print {
         margin: 24px;
-        margin-top: 0px;
+        margin-top: 12px;
       }
 
       @include global.screenSizeAbove(global.$large) {
@@ -339,7 +347,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
       }
 
       .groupTitle {
-        font-size: 1.6em;
+        font-size: 1.4em;
         position: absolute;
         left: 0;
         height: inherit;

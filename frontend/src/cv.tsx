@@ -291,6 +291,7 @@ export interface Entry {
   labels?: string[];
   group?: Group;
   disabled?: boolean;
+  accomplishments?: string[];
 }
 
 const _groups = {
@@ -345,8 +346,14 @@ const _entries = {
       _skills.saas,
       _skills.iot,
     ],
-    labels: ["IoT", "Frontend", "Backend"],
+    labels: ["IoT", "Frontend", "Backend", "System Architecture"],
     group: groups.professionalExperience,
+    accomplishments: [
+      "Participated in architectural decisions and feasibility investigations",
+      "Delivered migration from old Karaf codebase to Spring Boot",
+      "Significantly improved reliability, maintainability, CI/CD and observability",
+      "Consistently delivered features in greenfield and brownfield projects",
+    ],
   },
   evoltSoftwareEngineer: {
     node: () => (
@@ -445,6 +452,12 @@ const _entries = {
     skills: [skills.cpp, skills.qt, skills.git],
     labels: ["Co-maintainer", "Developer", "Tester", "UI/UX Designer"],
     group: groups.otherExperience,
+    accomplishments: [
+      "Led major refactors, solving long-standing bugs and pain points",
+      "Improved performance significantly",
+      "Led discussions on project direction",
+      "Reviewed and merged various community contributions",
+    ],
   },
   bachelor: {
     node: () => (
@@ -491,7 +504,7 @@ const _entries = {
     ),
     startDate: "2016",
     endDate: "2017",
-    // skills: ["C#", "Unity"],
+    skills: [],
     labels: ["Programmer", "Artist", "Sound Designer", "Publisher"],
     group: groups.otherExperience,
   },
@@ -506,6 +519,7 @@ const _entries = {
     displayDate: "Mar - Nov 2016",
     labels: ["Participant", "Youth Leadership Program 2016"],
     group: groups.extraCurricular,
+    skills: [],
   },
   demosPMS: {
     node: () => (
@@ -594,7 +608,7 @@ const _entries = {
     ],
     group: groups.otherExperience,
   },
-};
+} satisfies Record<string, Entry>;
 
 export const entries = Object.fromEntries(
   Object.entries(_entries).map(([key, entry]) => [key, { ...entry, key }])
