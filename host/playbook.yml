@@ -1,0 +1,115 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+    - name: Install required packages
+      apt:
+        name:
+          - docker-compose
+          - git
+          - fish
+          - nginx
+          - fdisk
+          - parted
+          - rsync
+        state: present
+    - name: Gather disk facts
+      setup:
+        gather_subset: hardware
+    - name: Wait for secondary disk (/dev/sdb)
+      wait_for:
+        path: /dev/sdb
+        state: present
+    - name: Partition the disk with fdisk
+      shell: echo -e "o\nn\np\n1\n\n\nw" | /usr/sbin/fdisk /dev/sdb
+    - name: Format /dev/sdb1 as ext4
+      filesystem:
+        dev: /dev/sdb1
+        fstype: ext4
+    - name: Create mount point /media/data
+      file:
+        path: /media/data
+        state: directory
+        owner: root
+        group: root
+    - name: Mount /dev/sdb1 to /media/data
+      mount:
+        path: /media/data
+        src: /dev/sdb1
+        fstype: ext4
+        opts: defaults
+        state: mounted
+    - name: Create var on sdb1
+      file:
+        path: /media/data/var
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+    - name: Create docker-registry on sdb1
+      file:
+        path: /media/data/docker-registry
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+    - name: Create git on sdb1
+      file:
+        path: /media/data/git
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+    - name: Create eo-git on sdb1
+      file:
+        path: /media/data/eo-git
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+    - name: Move /var contents to /media/data/var
+      command: rsync -a --remove-source-files /var/ /media/data/var/
+    - name: Mount /media/data/var to /var
+      mount:
+        path: /var
+        src: /media/data/var
+        fstype: none
+        opts: bind
+        state: mounted
+    - block: # Set up ~haris
+        - name: Create user haris
+          user:
+            name: haris
+            state: present
+        - name: Create ~/docker-registry directory
+          file:
+            path: /home/haris/docker-registry
+            state: directory
+            owner: haris
+            group: haris
+        - name: Create ~/auth directory
+          file:
+            path: /home/haris/auth
+            state: directory
+            owner: haris
+            group: haris
+        - name: Mount /media/data/docker-registry /home/haris/docker-registry
+          mount:
+            path: /home/haris/docker-registry
+            src: /media/data/docker-registry
+            fstype: none
+            opts: bind
+            state: mounted
+    # Set up ~git
+    - name: Create user git
+      user:
+        name: git
+        state: present
+    # Set up ~eo-git
+    - name: Create user git
+      user:
+        name: git
+        state: present
