@@ -126,3 +126,16 @@
       user:
         name: git
         state: present
+    # Set up website
+    - block:
+      - name: Clone or update website repo
+        git:
+          repo: https://github.com/veracioux/website
+          dest: /home/haris/website
+          update: yes
+      - name: Set ownership of website repo
+        file:
+          path: /home/haris/website
+          owner: haris
+          group: haris
+          recurse: yes
