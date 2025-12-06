@@ -70,16 +70,28 @@
         owner: root
         group: root
         mode: '0755'
-    - name: Move /var contents to /media/data/var
-      command: rsync -a --remove-source-files /var/ /media/data/var/
-    - name: Mount /media/data/var to /var
-      mount:
-        path: /var
-        src: /media/data/var
-        fstype: none
-        opts: bind
-        state: mounted
-    - block: # Set up ~haris
+    # Move /var contents to /media/data/var and mount
+    - block:
+      - name: Check if move already done
+        stat:
+          path: /media/data/var/.veracioux-moved
+        register: moved_flag
+      - name: Move /var contents to /media/data/var
+        command: rsync -a --remove-source-files /var/ /media/data/var/
+        when: not moved_flag.stat.exists
+      - name: Mark move as done
+        copy:
+          content: "# This file indicates that /var contents have been moved to /media/data/var\n# Created by Ansible playbook for idempotency\n"
+          dest: /media/data/var/.veracioux-moved
+      - name: Mount /media/data/var to /var
+        mount:
+          path: /var
+          src: /media/data/var
+          fstype: none
+          opts: bind
+          state: mounted
+    # Set up ~haris
+    - block:
         - name: Create user haris
           user:
             name: haris
