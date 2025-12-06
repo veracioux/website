@@ -187,3 +187,15 @@
           update: yes
         become: true
         become_user: haris
+      - name: Start website services
+        command: ln -s compose.prod-merge.yml compose.override.yml
+        args:
+          chdir: /home/haris/website
+        become_user: haris
+      - name: Start website services
+        command: docker-compose up -d
+        environment:
+          ENV: prod
+        args:
+          chdir: /home/haris/website
+        become_user: haris
