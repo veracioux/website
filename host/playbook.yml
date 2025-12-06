@@ -16,6 +16,8 @@
           - fdisk
           - parted
           - rsync
+          - curl
+          - acl
         state: present
     - name: Gather disk facts
       setup:
@@ -97,6 +99,11 @@
           user:
             name: haris
             state: present
+        - name: Add haris to docker group
+          user:
+            name: haris
+            groups: docker
+            append: yes
         - name: Create ~/docker-registry directory
           file:
             path: /home/haris/docker-registry
@@ -133,9 +140,5 @@
           repo: https://github.com/veracioux/website
           dest: /home/haris/website
           update: yes
-      - name: Set ownership of website repo
-        file:
-          path: /home/haris/website
-          owner: haris
-          group: haris
-          recurse: yes
+        become: true
+        become_user: haris
