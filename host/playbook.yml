@@ -153,28 +153,16 @@
           environment:
             DOCKER_REGISTRY_PASSWORD: "{{ lookup('pipe', 'cd .. && lpass docker-registry') }}"
           become_user: haris
+        - name: Pull docker.veracioux.me/dotfiles
+          docker_image:
+            name: docker.veracioux.me/dotfiles
+            source: pull
+          become_user: haris
+          register: dotfiles_pull_result
         - name: Bootstrap dotfiles
           shell: curl https://raw.githubusercontent.com/veracioux/dotfiles/master/bootstrap/bootstrap.sh | bash
           become_user: haris
-        - name: Create ~/docker-registry directory
-          file:
-            path: /home/haris/docker-registry
-            state: directory
-            owner: haris
-            group: haris
-        - name: Create ~/auth directory
-          file:
-            path: /home/haris/auth
-            state: directory
-            owner: haris
-            group: haris
-        - name: Mount /media/data/docker-registry /home/haris/docker-registry
-          mount:
-            path: /home/haris/docker-registry
-            src: /media/data/docker-registry
-            fstype: none
-            opts: bind
-            state: mounted
+          when: dotfiles_pull_result.changed
     # Set up ~git
     - name: Create user git
       user:
