@@ -9,7 +9,6 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "2048"
     vb.cpus = 2
-    # Disk size set to 10GB via config.vm.disk
   end
 
   config.vm.provision "ansible" do |ansible|

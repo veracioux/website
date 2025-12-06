@@ -123,6 +123,19 @@
             fstype: none
             opts: bind
             state: mounted
+        - name: Configure Docker to store credentials in plaintext
+          copy:
+            content: '{"auths":{}}'
+            dest: /home/haris/.docker/config.json
+            owner: haris
+            group: haris
+            mode: '0600'
+        - name: Log into Docker registry
+          docker_login:
+            registry: docker.veracioux.me
+            username: docker-registry
+            password: "{{ lookup('pipe', 'cd .. && lpass docker-registry') }}"
+          become_user: haris
     # Set up ~git
     - name: Create user git
       user:
