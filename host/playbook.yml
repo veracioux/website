@@ -20,6 +20,7 @@
           - acl
           - pass
           - golang-docker-credential-helpers
+          - apache2-utils
         state: present
     - name: Gather disk facts
       setup:
@@ -146,6 +147,12 @@
             username: docker-registry
             password: "{{ lookup('pipe', 'cd .. && lpass docker-registry') }}"
           become_user: haris
+        - name: Add docker-registry password to pass
+          shell: |
+            echo "$DOCKER_REGISTRY_PASSWORD" | pass insert -m docker-registry
+          environment:
+            DOCKER_REGISTRY_PASSWORD: "{{ lookup('pipe', 'cd .. && lpass docker-registry') }}"
+          become_user: haris
         - name: Bootstrap dotfiles
           shell: curl https://raw.githubusercontent.com/veracioux/dotfiles/master/bootstrap/bootstrap.sh | bash
           become_user: haris
@@ -180,15 +187,36 @@
         state: present
     # Set up website
     - block:
+      - name: Create ~/docker-registry directory
+        file:
+          path: /home/haris/docker-registry
+          state: directory
+          owner: haris
+          group: haris
+      - name: Create ~/auth directory
+        file:
+          path: /home/haris/auth
+          state: directory
+          owner: haris
+          group: haris
+      - name: Mount /media/data/docker-registry /home/haris/docker-registry
+        mount:
+          path: /home/haris/docker-registry
+          src: /media/data/docker-registry
+          fstype: none
+          opts: bind
+          state: mounted
       - name: Clone or update website repo
         git:
           repo: https://github.com/veracioux/website
           dest: /home/haris/website
           update: yes
-        become: true
         become_user: haris
-      - name: Start website services
-        command: ln -s compose.prod-merge.yml compose.override.yml
+      - name: Set up docker registry password
+        shell: pass show docker-registry | htpasswd -Bci /home/haris/auth/htpasswd docker-registry
+        become_user: haris
+      - name: Apply production compose config
+        command: ln -sf compose.prod-merge.yml compose.override.yml
         args:
           chdir: /home/haris/website
         become_user: haris
@@ -199,3 +227,10 @@
         args:
           chdir: /home/haris/website
         become_user: haris
+      - name: Serve website
+        command: env USER_HOME="$HOME" scripts/serve.sh
+        environment:
+          ENV: prod
+          WEB_PORT_STAGING: "13000"
+        args:
+          chdir: /home/haris/website
