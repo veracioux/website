@@ -136,6 +136,9 @@
             username: docker-registry
             password: "{{ lookup('pipe', 'cd .. && lpass docker-registry') }}"
           become_user: haris
+        - name: Bootstrap dotfiles
+          shell: curl https://raw.githubusercontent.com/veracioux/dotfiles/master/bootstrap/bootstrap.sh | bash
+          become_user: haris
     # Set up ~git
     - name: Create user git
       user:
