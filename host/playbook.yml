@@ -18,6 +18,8 @@
           - rsync
           - curl
           - acl
+          - pass
+          - golang-docker-credential-helpers
         state: present
     - name: Gather disk facts
       setup:
@@ -99,11 +101,54 @@
           user:
             name: haris
             state: present
+        - name: Generate GPG key
+          shell: |
+            cat > /tmp/gpg-key.conf <<EOF
+            Key-Type: RSA
+            Key-Length: 4096
+            Subkey-Type: RSA
+            Subkey-Length: 4096
+            Name-Real: Haris
+            Name-Email: haris@veracioux.me
+            Expire-Date: 0
+            %no-protection
+            %commit
+            EOF
+            gpg --batch --gen-key /tmp/gpg-key.conf
+          become_user: haris
+        - name: Initialize pass with GPG key
+          shell: |
+            KEY_ID=$(gpg --list-keys --with-colons | awk -F: '/^pub:/ { print $5 }' | head -1)
+            pass init $KEY_ID
+          become_user: haris
         - name: Add haris to docker group
           user:
             name: haris
             groups: docker
             append: yes
+        - name: Create .docker directory
+          file:
+            path: /home/haris/.docker
+            state: directory
+            owner: haris
+            group: haris
+            mode: '0700'
+        - name: Configure Docker to use pass credential helper
+          copy:
+            content: '{"credsStore": "pass"}'
+            dest: /home/haris/.docker/config.json
+            owner: haris
+            group: haris
+            mode: '0600'
+        - name: Log into Docker registry
+          docker_login:
+            registry: docker.veracioux.me
+            username: docker-registry
+            password: "{{ lookup('pipe', 'cd .. && lpass docker-registry') }}"
+          become_user: haris
+        - name: Bootstrap dotfiles
+          shell: curl https://raw.githubusercontent.com/veracioux/dotfiles/master/bootstrap/bootstrap.sh | bash
+          become_user: haris
         - name: Create ~/docker-registry directory
           file:
             path: /home/haris/docker-registry
@@ -123,22 +168,6 @@
             fstype: none
             opts: bind
             state: mounted
-        - name: Configure Docker to store credentials in plaintext
-          copy:
-            content: '{"auths":{}}'
-            dest: /home/haris/.docker/config.json
-            owner: haris
-            group: haris
-            mode: '0600'
-        - name: Log into Docker registry
-          docker_login:
-            registry: docker.veracioux.me
-            username: docker-registry
-            password: "{{ lookup('pipe', 'cd .. && lpass docker-registry') }}"
-          become_user: haris
-        - name: Bootstrap dotfiles
-          shell: curl https://raw.githubusercontent.com/veracioux/dotfiles/master/bootstrap/bootstrap.sh | bash
-          become_user: haris
     # Set up ~git
     - name: Create user git
       user:
