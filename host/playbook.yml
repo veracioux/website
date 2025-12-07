@@ -209,7 +209,7 @@
           chdir: /home/haris/website
         become_user: haris
       - name: Start website services
-        command: docker-compose up -d
+        command: docker-compose up -d --pull always
         environment:
           ENV: prod
         args:
