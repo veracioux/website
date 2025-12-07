@@ -31,7 +31,7 @@ http {
     gzip_min_length 512;
 
     server {
-        server_name *.veracioux.me *.localhost;
+        server_name *.veracioux.me *.veracioux.local;
         listen 3000 default_server;
 
         location / {
@@ -48,9 +48,9 @@ http {
     server {
         server_name
         {%- if stg_subdomain %}
-            stg.veracioux.me stg.localhost
+            stg.veracioux.me stg.veracioux.local
         {%- else %}
-            veracioux.me www.veracioux.me localhost www.localhost
+            veracioux.me www.veracioux.me veracioux.local
         {%- endif %};
 
         listen 3000;
@@ -111,18 +111,6 @@ http {
     {%- else %}
         {{ server_root_domain(protected=False, stg_subdomain=False) }}
     {%- endif %}
-
-    server {
-        server_name api.veracioux.me api.localhost;
-        listen 3000;
-
-        location / {
-            proxy_pass http://${API_HOST}:${API_PORT}/api/;
-        }
-
-        {{ location_status() }}
-        {{ location_static() }}
-    }
 }
 
 # -*- mode: nginx-mode; -*- vim: filetype=nginx

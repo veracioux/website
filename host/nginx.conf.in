@@ -19,7 +19,7 @@ http {
     }
 
     server {
-        server_name *.veracioux.me *.localhost;
+        server_name *.veracioux.me *.veracioux.local;
         listen 443 ssl;
 
         gzip on;
@@ -47,7 +47,7 @@ http {
     }
 
     server {
-        server_name stg.veracioux.me;
+        server_name stg.veracioux.me stg.veracioux.local;
         listen 443 ssl;
 
         gzip on;
@@ -60,7 +60,7 @@ http {
     }
 
     server {
-        server_name docker.veracioux.me;
+        server_name docker.veracioux.me docker.veracioux.local;
         listen 443 ssl;
         location / {
             proxy_set_header    Host $host;
