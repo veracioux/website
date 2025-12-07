@@ -1,32 +1,10 @@
 #!/usr/bin/env bash
 
-if [ -z "$USER_HOME" ]; then
-    echo "Error: Please set USER_HOME to the HOME of the main data user." >&2
-    exit 1
-fi
-
-[ -z "$ENV" ] && ENV=staging
-
-. scripts/load-env.bash.in
+cd /home/haris/website
 
 cp /etc/nginx/nginx.conf{,.bak}
 
-if [ -z "$WEB_PORT" ]; then
-    echo "Error: Please set WEB_PORT environment variable in the .env.d files." >&2
-    exit 1
-fi
-
-if [ -z "$WEB_PORT_STAGING" ]; then
-    echo "Error: Please set WEB_PORT_STAGING environment variable in the .env.d files." >&2
-    exit 1
-fi
-
-if [ -z "$DOCKER_REGISTRY_PORT" ]; then
-    echo "Error: Please set DOCKER_REGISTRY_PORT environment variable in the .env.d files." >&2
-    exit 1
-fi
-
-cat host/nginx.conf.in | envsubst '$WEB_PORT,$WEB_PORT_STAGING,$USER_HOME,$DOCKER_REGISTRY_PORT' > /etc/nginx/nginx.conf
+cp host/nginx.conf /etc/nginx/nginx.conf
 
 config_check_output="$(nginx -t 2>&1)"
 

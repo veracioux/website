@@ -215,15 +215,10 @@
         become_user: haris
       - name: Start website services
         command: docker-compose up -d --pull always
-        environment:
-          ENV: prod
         args:
           chdir: /home/haris/website
         become_user: haris
       - name: Serve website
-        command: env USER_HOME="$HOME" scripts/serve.sh
-        environment:
-          ENV: prod
-          WEB_PORT_STAGING: "13000"
+        command: scripts/serve.sh
         args:
           chdir: /home/haris/website
