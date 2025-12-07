@@ -200,6 +200,11 @@
           dest: /home/haris/website
           update: yes
         become_user: haris
+      - name: Revert local changes
+        shell: git restore --staged .; git restore .
+        args:
+          chdir: /home/haris/website
+        become_user: haris
       - name: Allow pushes to website repo
         command: git config receive.denyCurrentBranch warn
         args:
