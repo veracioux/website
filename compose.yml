@@ -4,7 +4,7 @@ services:
     image: docker.veracioux.me/web
     build:
       context: .
-      dockerfile: _docker/Dockerfile.web
+      dockerfile: Dockerfile
 
     # Container
     restart: always
@@ -14,9 +14,6 @@ services:
       - "${EXPOSED_IP:-127.0.0.1}:3000:3000"
     env_file:
       - ./.env.d/common
-    environment:
-      DB_HOST: db
-      FRONTEND_HOST: frontend
 
   frontend:
     # Image
@@ -34,6 +31,3 @@ services:
       REGISTRY_AUTH: htpasswd
       REGISTRY_AUTH_HTPASSWD_REALM: "Registry"
       REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
-    volumes:
-      - "${HOME}/auth:/auth"
-      - "${HOME}/docker-registry:/var/lib/registry"

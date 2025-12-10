@@ -2,10 +2,7 @@ services:
   web:
     volumes:
       - $HOME/auth:/var/www/auth
-  frontend:
-    image: alpine
-    build:
-      dockerfile_inline: FROM alpine
-      pull: true
-    volumes: !reset []
-    entrypoint: 'true'
+  docker-registry:
+    volumes:
+      - "${HOME}/auth:/auth"
+      - "${HOME}/docker-registry:/var/lib/registry"
