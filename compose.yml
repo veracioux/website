@@ -4,7 +4,6 @@ services:
     image: docker.veracioux.me/web
     build:
       context: .
-      dockerfile: Dockerfile
 
     # Container
     restart: always

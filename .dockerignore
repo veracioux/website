@@ -1,4 +1,2 @@
 *
-!proxy/
-!scripts/
-!nginx.conf.in
+!nginx.conf
