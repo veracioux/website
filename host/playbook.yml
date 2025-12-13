@@ -10,22 +10,11 @@
     - name: Update apt cache
       apt:
         update_cache: yes
-    - name: Install required packages
+    - name: Install dependencies to move /var to new disk
       apt:
         name:
-          - docker.io
-          - docker-compose
-          - git
-          - fish
-          - nginx
-          - fdisk
-          - parted
           - rsync
-          - curl
-          - acl
-          - pass
-          - golang-docker-credential-helpers
-          - apache2-utils
+          - fdisk
         state: present
     - name: Gather disk facts
       setup:
@@ -60,6 +49,40 @@
         owner: root
         group: root
         mode: '0755'
+    # Move /var contents to /media/data/var and mount
+    - block:
+      - name: Check if move already done
+        stat:
+          path: /media/data/var/.veracioux-moved
+        register: moved_flag
+      - name: Move /var contents to /media/data/var
+        command: rsync -a --remove-source-files /var/ /media/data/var/
+        when: not moved_flag.stat.exists
+      - name: Mark move as done
+        copy:
+          content: "# This file indicates that /var contents have been moved to /media/data/var\n# Created by Ansible playbook for idempotency\n"
+          dest: /media/data/var/.veracioux-moved
+      - name: Mount /media/data/var to /var
+        mount:
+          path: /var
+          src: /media/data/var
+          fstype: none
+          opts: bind
+          state: mounted
+    - name: Install required packages
+      apt:
+        name:
+          - docker.io
+          - docker-compose
+          - git
+          - fish
+          - nginx
+          - curl
+          - acl
+          - pass
+          - golang-docker-credential-helpers
+          - apache2-utils
+        state: present
     - name: Create docker-registry on sdb1
       file:
         path: /media/data/docker-registry
@@ -81,26 +104,6 @@
         owner: root
         group: root
         mode: '0755'
-    # Move /var contents to /media/data/var and mount
-    - block:
-      - name: Check if move already done
-        stat:
-          path: /media/data/var/.veracioux-moved
-        register: moved_flag
-      - name: Move /var contents to /media/data/var
-        command: rsync -a --remove-source-files /var/ /media/data/var/
-        when: not moved_flag.stat.exists
-      - name: Mark move as done
-        copy:
-          content: "# This file indicates that /var contents have been moved to /media/data/var\n# Created by Ansible playbook for idempotency\n"
-          dest: /media/data/var/.veracioux-moved
-      - name: Mount /media/data/var to /var
-        mount:
-          path: /var
-          src: /media/data/var
-          fstype: none
-          opts: bind
-          state: mounted
     # Set up ~haris
     - block:
         - name: Create user haris
