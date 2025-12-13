@@ -1,6 +1,6 @@
 # -*- mode: dockerfile; -*- vim: filetype=dockerfile
 
-FROM oven/bun:1.3.1-alpine AS bun-base
+FROM oven/bun:1.3.1-alpine AS build
 
 ## Install deps for "canvas" node package
 RUN apk add --no-cache \
@@ -20,9 +20,7 @@ RUN --mount=type=cache,target=/root/.bun \
 
 WORKDIR /frontend
 
-FROM bun-base AS build
 ## Install local frontend dependencies
-COPY package.json bun.lock ./
 COPY package.json bun.lock ./
 COPY gimmicks/ascii-mugshot/package.json gimmicks/ascii-mugshot/
 RUN --mount=type=cache,target=/root/.bun \
