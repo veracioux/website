@@ -12,11 +12,9 @@ dist
 *.key
 *.csr
 
-# Docker and build process (I use shdocker to generate Dockerfiles)
-_docker
-/docker-compose*.yaml
-
 # Miscellaneous
 _*/
 .pnpm-store
 /host/.vagrant/
+**.tfvars
+**.backup
