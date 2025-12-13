@@ -224,7 +224,7 @@
           chdir: /home/haris/website
         become_user: haris
       - name: Start website services
-        command: docker-compose up -d --pull always
+        command: docker-compose up -d --build
         args:
           chdir: /home/haris/website
         become_user: haris
