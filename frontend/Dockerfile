@@ -1,6 +1,6 @@
 # -*- mode: dockerfile; -*- vim: filetype=dockerfile
 
-FROM oven/bun:1.3-alpine AS bun-base
+FROM oven/bun:1.3.1-alpine AS bun-base
 
 ## Install deps for "canvas" node package
 RUN apk add --no-cache \
@@ -40,7 +40,7 @@ RUN --mount=type=cache,target=/root/.bun \
 # TODO: integrate into "bun run generate" or as a vite plugin
 RUN bun svgo -f src/assets/icons -o dist/static/icons
 
-FROM oven/bun:1.3-alpine AS prod-base
+FROM oven/bun:1.3.1-alpine AS prod-base
 
 WORKDIR /frontend
 COPY --from=build /frontend/dist /frontend/dist
