@@ -1,19 +1,18 @@
 # -*- mode: dockerfile; -*- vim: filetype=dockerfile
 
-FROM oven/bun:1.3.1-alpine AS build
+FROM oven/bun:1.3.1-slim AS build
 
-## Install deps for "canvas" node package
-RUN apk add --no-cache \
+RUN apt-get update -y
+
+RUN apt-get install -y --no-install-recommends \
     curl \
-    build-base \
+    build-essential \
     g++ \
-    cairo-dev \
-    jpeg-dev \
-    giflib-dev \
-    pango-dev
-
-## Install Chromium for Puppeteer
-RUN apk add --no-cache chromium
+    libcairo2-dev \
+    libjpeg-dev \
+    libgif-dev \
+    libpango1.0-dev \
+    chromium
 
 RUN --mount=type=cache,target=/root/.bun \
     bun install -g node-gyp puppeteer@^19
@@ -28,17 +27,17 @@ RUN --mount=type=cache,target=/root/.bun \
 
 COPY . .
 
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 ## Bundle frontend
 RUN --mount=type=cache,target=/root/.bun \
-    bun run generate
+    env FORCE_COLOR=3 bun run generate
 
 # Minify SVG icons and copy them to static root
 # TODO: integrate into "bun run generate" or as a vite plugin
 RUN bun svgo -f src/assets/icons -o dist/static/icons
 
-FROM oven/bun:1.3.1-alpine AS prod-base
+FROM oven/bun:1.3.1-slim
 
 WORKDIR /frontend
 COPY --from=build /frontend/dist /frontend/dist
