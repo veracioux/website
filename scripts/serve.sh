@@ -21,4 +21,5 @@ else
     echo "View the failed configuration file here: $tempdir/nginx.conf" >&2
 
     cp /etc/nginx/nginx.conf{.bak,}
+    exit 1
 fi
