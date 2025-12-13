@@ -7,14 +7,6 @@
 #+LINK: upload-secrets ./.tem/path/upload-secrets
 
 * Deployment
-Deployment is controlled using =tem=.
-
-** TODO Production
-Run the following commands on your local machine:
-- [[upload-secrets][=upload-secrets=]] :: Upload private =.env= files and passwords stored in =.htpasswd= files.
-- [[./.tem/path/upload][=upload=]] :: Builds all images and pushes them to the registry.
-
-* Infrastructure
 The website comprises the following components:
 - Frontend :: =frontend/=, Vue 3, Nuxt 3
 - API backend :: =api/=, Django 3
@@ -23,50 +15,13 @@ The website comprises the following components:
 
 The plan is to have them organized in the following docker containers
 (services), managed by =docker compose=:
-- =web= :: Runs an =nginx= server configured from =nginx.conf.in= that serves the
-  static frontend and acts as a reverse proxy for all the other services. In a
-  staging environment, it also proxies all requests through a password auth PHP
-  script located in =proxy/=.
-- =frontend= :: Runs a development frontend server with HMR, and using a
-  volume to share data with the host and watch for file changes. Exists only
-  when =env = dev=.
-- =api= :: Runs the Django API backend.
+- =web= :: Runs an =nginx= server configured from =nginx.conf= that serves the
+  static frontend.
+- =frontend= :: Only serves to register the frontend image as a build dependency
+  for the =web= service, and to automatically build the frontend image when
+  needed. When run as a container, it is a no-op.
 - =docker-registry= :: Runs a docker registry using the =registry= image.
-
-/NOTE: All config files ending with =.in= are preprocessed by jinja2. Scripts ending with =.in= are meant to be sourced instead of executed./
-
-I use this project frequently as a playing ground to test some **unorthodox
-practices and novel workflows** that I am working on. Some of them have proven
-very useful, and I have decided to make them a central part of the development
-workflow of my website:
-- [[tem][=tem=]] :: A new way to manage project environments. It is still in its early
-  stages, but is still useful as it made my workflow very efficient.
-  Using this program, I am able to create shell scripts for common tasks and
-  automatically have them available in my =PATH= whenever I enter the project
-  directory using the CLI. I have also set the project up so that some shell
-  variables are automatically available to me when I use the =fish= shell.
-- [[shdocker][=shdocker=]] :: A preprocessor for Dockerfiles that allows me to use the shell
-  to inject dynamic data into them. For example, each configuration (production,
-  staging and dev) is defined in the same shDockerfile, and I control the
-  different output Dockerfiles using =if= statements in the shDockerfile. See for
-  yourself in [[./shDockerfile]].
-
 * Environment variables
-** =ENV=
-The environment that the server is running in. Can be one of: =dev=, =staging=,
-=prod=.
-
-The meaning of these should be obvious. The =dev= environment exposes ports of all
-containers to the host and it enables hot reloading. It uses a local (ephemeral)
-database and the local filesystem where applicable. The =staging= environment is
-meant to be as similar to =prod= as possible, using a persistent database, a
-dropbox account for storage of some files, etc. Obviously, it doesn't use the
-same accounts and API keys. =dev= and =staging= can be deployed locally. =staging= can
-also be served on a dedicated server. It is password protected regardless of
-whether it is served locally or on a server. The password is saved in the
-browser via cookie so you don't have to enter it every time.
-
-** =MACHINE=
 ** TODO Hostnames and ports
 | *Env variable*         | *Value*   | *Description*                       |
 | =WEB_HOST=             | =0.0.0.0= | Main web host                     |
@@ -80,13 +35,6 @@ browser via cookie so you don't have to enter it every time.
 | =DOCKER_REGISTRY_PORT= | =5000=    | Docker registry port              |
 
 /NOTE: Within =docker-compose.yaml=, some of these hosts are changed to their coresponding service names, so that different services can communicate with each other./
-
-* Conventions
-- For each service, a =shDockerfile= exists either in the service's dedicated
-  subdirectory or in a =docker= subdirectory of that directory.
-- Generated dockerfiles for each service reside in a =_docker= subdirectory of
-  that service. Each dockerfile has an extension based on the environment for
-  which the dockerfile was generated (=dev=, =staging= or =prod=).
 * Setting up the production server
 - Bind =docker.veracioux.me= to =localhost= in =/etc/hosts=.
 - Load the contents of [[file:host/crontab][=host/crontab=]] into the actual cron process on the server
@@ -105,18 +53,6 @@ browser via cookie so you don't have to enter it every time.
 - Automatically reissue certificate: =reissue-cert=. Uses =acme.sh=. You shouldn't
   have to run this manually, because there is a cronjob that does this
   automatically every few months (see [[file:host/crontab][=host/crontab=]])
-
-* Some things that should be kept in mind
-- For greater maintainability and migratability, ports are not hardcoded in
-  files (where possible). Instead they are taken from the environment. The
-  most notable example is =nginx.conf= where variables are baked into the
-  target file using =envsubst=. To avoid conflicts with nginx's own variables,
-  the =envsubst= command is called with the relevant environment variables
-  explicitly specified as arguments. So, if you want to add a new variable in
-  =nginx.conf=, you will have to specify the variable inside
-  =scripts/entrypoint-prod.sh= where the =envsubst= command is invoked.
-- If the dev frontend HMR gives you any headache, try removing
-  =frontend/.pnpm-store= and restarting the frontend service.
 * Static assets
 
 Static assets are collected by the django =manage.py= script into
