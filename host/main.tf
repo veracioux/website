@@ -1,0 +1,115 @@
+variable "deployment" {
+  type        = string
+  description = "'prod-{number}' or 'staging-{number}'"
+}
+
+output "external_ip" {
+  value = google_compute_instance.instance.network_interface.0.access_config.0.nat_ip
+}
+
+terraform {
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "6.8.0"
+    }
+  }
+}
+
+provider "google" {
+  project = "veracioux"
+  region  = "europe-west1"
+  zone    = "europe-west1-b"
+}
+
+resource "google_compute_disk" "data" {
+  disk_encryption_key {}
+
+  labels = {
+    managed-by-cnrm = "true"
+  }
+
+  name                      = "${var.deployment}-data"
+  physical_block_size_bytes = 4096
+  project                   = "veracioux"
+  size                      = 50
+  type                      = "pd-balanced"
+  zone                      = "europe-west1-b"
+}
+
+resource "google_compute_instance" "instance" {
+  attached_disk {
+    device_name = "data"
+    mode        = "READ_WRITE"
+    source      = google_compute_disk.data.id
+  }
+
+  # attached_disk {
+  #   device_name = "boot"
+  #   mode        = "READ_WRITE"
+  #   source      = "https://www.googleapis.com/compute/v1/projects/veracioux/zones/europe-west1-b/disks/${var.deployment}-boot"
+  # }
+
+  boot_disk {
+    auto_delete = true
+    device_name = "${var.deployment}-boot"
+
+    initialize_params {
+      image = "https://www.googleapis.com/compute/beta/projects/debian-cloud/global/images/debian-13-trixie-v20251111"
+      size  = 10
+      type  = "pd-balanced"
+    }
+
+    mode = "READ_WRITE"
+  }
+
+  confidential_instance_config {
+    enable_confidential_compute = false
+  }
+
+  labels = {
+    managed-by-cnrm = "true"
+  }
+
+  machine_type = "e2-small"
+
+  metadata = {
+    ssh-keys = "harisgusic.dev:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIITlRNFuNc+CCq4n71WHLjDnJDKX216TjfleRtROwfJu harisgusic.dev@gmail.com"
+  }
+
+  name = "${var.deployment}-instance"
+
+  network_interface {
+    access_config {
+      # empty block → ephemeral external IP
+    }
+
+    network    = "default"
+    subnetwork = "default"
+  }
+
+  project = "veracioux"
+
+  reservation_affinity {
+    type = "ANY_RESERVATION"
+  }
+
+  scheduling {
+    automatic_restart   = true
+    on_host_maintenance = "MIGRATE"
+    provisioning_model  = "STANDARD"
+  }
+
+  service_account {
+    email  = "120391169168-compute@developer.gserviceaccount.com"
+    scopes = ["https://www.googleapis.com/auth/devstorage.read_only", "https://www.googleapis.com/auth/logging.write", "https://www.googleapis.com/auth/monitoring.write", "https://www.googleapis.com/auth/service.management.readonly", "https://www.googleapis.com/auth/servicecontrol", "https://www.googleapis.com/auth/trace.append"]
+  }
+
+  shielded_instance_config {
+    enable_integrity_monitoring = true
+    enable_vtpm                 = true
+  }
+
+  tags = ["http-server", "https-server"]
+  zone = "europe-west1-b"
+}
