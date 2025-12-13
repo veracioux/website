@@ -1,6 +1,6 @@
 variable "deployment" {
   type        = string
-  description = "'prod-{number}' or 'staging-{number}'"
+  description = "'deployment-{number}'"
 }
 
 output "external_ip" {
@@ -43,12 +43,6 @@ resource "google_compute_instance" "instance" {
     mode        = "READ_WRITE"
     source      = google_compute_disk.data.id
   }
-
-  # attached_disk {
-  #   device_name = "boot"
-  #   mode        = "READ_WRITE"
-  #   source      = "https://www.googleapis.com/compute/v1/projects/veracioux/zones/europe-west1-b/disks/${var.deployment}-boot"
-  # }
 
   boot_disk {
     auto_delete = true
