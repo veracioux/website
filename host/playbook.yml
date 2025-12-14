@@ -69,6 +69,20 @@
           fstype: none
           opts: bind
           state: mounted
+    # Set up docker daemon config
+    - block:
+      - name: Create /etc/docker
+        file:
+          path: /etc/docker
+          state: directory
+          owner: root
+          group: root
+          mode: '0755'
+      - name: Set up docker daemon config
+        copy:
+          src: docker-daemon.json
+          dest: /etc/docker/daemon.json
+          mode: '0644'
     - name: Install required packages
       apt:
         name:
