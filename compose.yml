@@ -22,8 +22,8 @@ services:
 
   docker-registry:
     image: registry:2
-    # ports:
-    #   - "${EXPOSED_IP:-127.0.0.1}:5000:5000"
+    ports:
+      - "${EXPOSED_IP:-127.0.0.1}:5000:5000"
     restart: always
     environment:
       REGISTRY_HTTP_HOST: https://docker.veracioux.me:443
