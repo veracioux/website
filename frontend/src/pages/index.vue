@@ -12,7 +12,7 @@ import CV from "@/components/sections/CV.vue";
 import About from "@/components/sections/About.vue";
 import { useRoute } from "#app";
 import * as utils from "@/utils";
-import Icon from "~/components/generic/Icon.vue";
+import Icon from "@/components/generic/Icon.vue";
 
 const zindex = reactive(_zindex);
 
