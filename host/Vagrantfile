@@ -33,5 +33,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
     sudo cp /home/vagrant/.ssh/authorized_keys ~haris/.ssh/authorized_keys
     sudo chown haris:haris ~haris/.ssh/authorized_keys
+    sudo -u haris sed -i 's|REGISTRY_HTTP_HOST:.*|REGISTRY_HTTP_HOST: https://docker.veracioux.local:443|' /home/haris/website/compose.override.yml
+    docker-compose --project-directory /home/haris/website up -d
   SHELL
 end
