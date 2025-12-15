@@ -56,7 +56,7 @@
           path: /media/data/var/.veracioux-moved
         register: moved_flag
       - name: Move /var contents to /media/data/var
-        command: rsync -a --remove-source-files /var/ /media/data/var/
+        shell: systemctl isolate network.target && rsync -a --remove-source-files /var/ /media/data/var/; systemctl default
         when: not moved_flag.stat.exists
       - name: Mark move as done
         copy:
