@@ -33,10 +33,6 @@ ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 RUN --mount=type=cache,target=/root/.bun \
     env FORCE_COLOR=3 bun run generate
 
-# Minify SVG icons and copy them to static root
-# TODO: integrate into "bun run generate" or as a vite plugin
-RUN bun svgo -f src/assets/icons -o dist/static/icons
-
 FROM oven/bun:1.3.1-slim
 
 WORKDIR /frontend
