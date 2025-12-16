@@ -10,10 +10,9 @@
     - name: Update apt cache
       apt:
         update_cache: yes
-    - name: Install dependencies to move /var to new disk
+    - name: Install fdisk
       apt:
         name:
-          - rsync
           - fdisk
         state: present
     - name: Gather disk facts
@@ -42,26 +41,15 @@
         fstype: ext4
         opts: defaults
         state: mounted
-    - name: Create var on sdb1
-      file:
-        path: /media/data/var
-        state: directory
-        owner: root
-        group: root
-        mode: '0755'
     # Move /var contents to /media/data/var and mount
     - block:
       - name: Check if move already done
         stat:
-          path: /media/data/var/.veracioux-moved
+          path: /media/data/var
         register: moved_flag
       - name: Copy /var contents to /media/data/var
-        shell: systemctl isolate network.target && rsync -a /var/ /media/data/var/; systemctl default
+        shell: cp -a /var /media/data/var
         when: not moved_flag.stat.exists
-      - name: Mark move as done
-        copy:
-          content: "# This file indicates that /var contents have been moved to /media/data/var\n# Created by Ansible playbook for idempotency\n"
-          dest: /media/data/var/.veracioux-moved
       - name: Mount /media/data/var to /var
         mount:
           path: /var
@@ -69,6 +57,21 @@
           fstype: none
           opts: bind
           state: mounted
+    - name: Install required packages
+      apt:
+        name:
+          - docker.io
+          - docker-compose
+          - git
+          - fish
+          - nginx
+          - curl
+          - acl
+          - pass
+          - golang-docker-credential-helpers
+          - apache2-utils
+          - rsync
+        state: present
     # Set up docker daemon config
     - block:
       - name: Create /etc/docker
@@ -83,20 +86,6 @@
           src: docker-daemon.json
           dest: /etc/docker/daemon.json
           mode: '0644'
-    - name: Install required packages
-      apt:
-        name:
-          - docker.io
-          - docker-compose
-          - git
-          - fish
-          - nginx
-          - curl
-          - acl
-          - pass
-          - golang-docker-credential-helpers
-          - apache2-utils
-        state: present
     - name: Create docker-registry on sdb1
       file:
         path: /media/data/docker-registry
