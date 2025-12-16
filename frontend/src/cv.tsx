@@ -140,12 +140,14 @@ const _skills = {
     icon: iconC,
     group: skillGroups.programmingLanguages,
     experience: "1 year",
+    disabled: true,
   },
   cpp: {
     name: "C++",
     icon: iconCpp,
     group: skillGroups.programmingLanguages,
     experience: "3 years",
+    disabled: true,
   },
   nginx: {
     name: "Nginx",
@@ -243,6 +245,7 @@ const _skills = {
     icon: iconJava,
     experience: "1 year",
     group: skillGroups.programmingLanguages,
+    disabled: true,
   },
   csharp: {
     name: "C#",
