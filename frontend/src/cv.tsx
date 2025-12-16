@@ -7,6 +7,8 @@ import iconQt from "@/assets/icons/qt.svg";
 import iconBashDark from "@/assets/icons/bash-dark.svg";
 import iconBashLight from "@/assets/icons/bash-light.svg";
 import iconRedis from "@/assets/icons/redis.svg";
+import iconRabbitMQ from "@/assets/icons/rabbitmq.svg";
+import iconKafka from "@/assets/icons/kafka.svg";
 import iconReact from "@/assets/icons/react.svg";
 import iconAngular from "@/assets/icons/angular.svg";
 import iconPostgres from "@/assets/icons/postgres.svg";
@@ -117,7 +119,17 @@ const _skills = {
     group: skillGroups.technologies,
     experience: "1 year",
   },
-  golang: {
+   rabbitmq: {
+     name: "RabbitMQ",
+     icon: iconRabbitMQ,
+     group: skillGroups.technologies,
+   },
+   kafka: {
+     name: "Kafka",
+     icon: iconKafka,
+     group: skillGroups.technologies,
+   },
+   golang: {
     name: "Go",
     icon: iconGolang,
     group: skillGroups.programmingLanguages,
@@ -239,6 +251,10 @@ const _skills = {
     name: "ABB VFDs (basic)",
     group: skillGroups.others,
     disabled: true,
+  },
+  eventDriven: {
+    name: "Event-driven architectures",
+    group: skillGroups.others,
   },
   java: {
     name: "Java",
