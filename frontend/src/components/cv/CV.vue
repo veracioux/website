@@ -189,7 +189,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="cvRoot">
+  <main>
     <CVHeader class="only-print" />
     <div class="content" @click="onDeselect">
       <div class="timelineWrapper">
@@ -225,7 +225,7 @@ onMounted(() => {
                   class="h-16 print:h-8 relative [&:first-child]:-mb-4 print:[&:first-child]:-mb-2"
                 >
                   <div class="groupTitle">
-                    <div class="h-full inset-0 pl-4 flex items-center">
+                    <div class="h-full inset-0 flex items-center">
                       {{ group.name }}
                     </div>
                   </div>
@@ -266,7 +266,7 @@ onMounted(() => {
         <LanguagesPane />
       </aside>
     </div>
-  </div>
+  </main>
 </template>
 
 <style scoped lang="scss">
@@ -282,7 +282,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
   }
 }
 
-.cvRoot {
+main {
   display: flex;
   flex-direction: column;
 
@@ -347,7 +347,7 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
       }
 
       .groupTitle {
-        font-size: 1.4em;
+        font-size: 1.5em;
         position: absolute;
         left: 0;
         height: inherit;
@@ -361,12 +361,19 @@ $colorDimText: rgba(var(--color-text-rgb), 0.7);
         $transparent: rgba(var(--timeline-background-rgb), 0);
         $background: var(--timeline-background);
 
-        background: linear-gradient(
-          $transparent,
-          $background,
-          $background,
-          $transparent
-        );
+        &::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            $transparent,
+            $background,
+            $background,
+            $transparent
+          );
+          z-index: -1;
+          transform: scaleY(175%);
+        }
       }
     }
 

@@ -18,16 +18,16 @@ if (variant) {
       <div class="contactAndText">
         <div class="contact min-w-[192px]">
           <div class="name">Haris Gušić</div>
-           <SocialIcon
-             name="location"
-             text="Munich, Germany"
-             class="opacity-50 text-[0.85rem] mb-1"
-           />
-           <div class="flex items-center gap-2 opacity-50">
-             <Icon name="passport" />
-             <span>EU Blue Card (valid until 2029)</span>
-           </div>
-           <SocialIcon name="mail" text="hgusic.pub@gmail.com" />
+          <SocialIcon
+            name="location"
+            text="Munich, Germany"
+            class="opacity-50 text-[0.85rem] mb-1"
+          />
+          <div class="flex items-center gap-2 opacity-50">
+            <Icon name="passport" />
+            <span>EU Blue Card (valid until 2029)</span>
+          </div>
+          <SocialIcon name="mail" text="hgusic.pub@gmail.com" />
           <SocialIcon name="phone" text="+49 151 29984107" />
           <SocialIcon name="web" text="veracioux.me" />
           <div class="flex gap-12">

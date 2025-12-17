@@ -119,17 +119,17 @@ const _skills = {
     group: skillGroups.technologies,
     experience: "1 year",
   },
-   rabbitmq: {
-     name: "RabbitMQ",
-     icon: iconRabbitMQ,
-     group: skillGroups.technologies,
-   },
-   kafka: {
-     name: "Kafka",
-     icon: iconKafka,
-     group: skillGroups.technologies,
-   },
-   golang: {
+  rabbitmq: {
+    name: "RabbitMQ",
+    icon: iconRabbitMQ,
+    group: skillGroups.technologies,
+  },
+  kafka: {
+    name: "Kafka",
+    icon: iconKafka,
+    group: skillGroups.technologies,
+  },
+  golang: {
     name: "Go",
     icon: iconGolang,
     group: skillGroups.programmingLanguages,
@@ -236,6 +236,7 @@ const _skills = {
     name: "PLC programming",
     group: skillGroups.others,
     experience: "6 months",
+    disabled: true,
   },
   tiaPortal: {
     name: "TIA Portal",
@@ -366,7 +367,17 @@ const _entries = {
       _skills.saas,
       _skills.iot,
     ],
-    labels: ["IoT", "Frontend", "Backend", "System Architecture"],
+    labels: [
+      "SaaS",
+      "IoT",
+      "Frontend",
+      "Backend",
+      "System Architecture",
+      "Microservices",
+      "Event-driven",
+      "REST API",
+      "Protobuf",
+    ],
     group: groups.professionalExperience,
     accomplishments: [
       "Participated in architectural decisions and led feasibility investigations",
@@ -440,7 +451,7 @@ const _entries = {
       skills.linux,
       skills.bash,
     ],
-    labels: ["Backend", "Frontend", "Google Cloud"],
+    labels: ["Backend", "Frontend", "Google Cloud", "Ansible", "IaC"],
     group: groups.otherExperience,
   },
   opencode: {
@@ -449,13 +460,13 @@ const _entries = {
         <a href="https://opencode.ai" target="_blank">
           <b>OpenCode</b>
         </a>
-        , Open Source Terminal AI Agent
+        , Popular Open Source Terminal AI Agent
       </span>
     ),
     startDate: "2025-10",
     displayDate: "Oct 2025 - present",
     skills: [skills.typescript, skills.git],
-    labels: ["Contributor"],
+    labels: ["Contributor", "SolidJS", "AI"],
     group: groups.otherExperience,
   },
   flameshot: {
