@@ -8,7 +8,8 @@ import iconBashDark from "@/assets/icons/bash-dark.svg";
 import iconBashLight from "@/assets/icons/bash-light.svg";
 import iconRedis from "@/assets/icons/redis.svg";
 import iconRabbitMQ from "@/assets/icons/rabbitmq.svg";
-import iconKafka from "@/assets/icons/kafka.svg";
+import iconKafkaDark from "@/assets/icons/kafka-dark.svg";
+import iconKafkaLight from "@/assets/icons/kafka-light.svg";
 import iconReact from "@/assets/icons/react.svg";
 import iconAngular from "@/assets/icons/angular.svg";
 import iconPostgres from "@/assets/icons/postgres.svg";
@@ -126,7 +127,10 @@ const _skills = {
   },
   kafka: {
     name: "Kafka",
-    icon: iconKafka,
+    icon: {
+      dark: iconKafkaDark,
+      light: iconKafkaLight,
+    },
     group: skillGroups.technologies,
   },
   golang: {
@@ -363,6 +367,7 @@ const _entries = {
       _skills.nestjs,
       _skills.postgres,
       _skills.redis,
+      _skills.kafka,
       _skills.restApi,
       _skills.saas,
       _skills.iot,
