@@ -369,7 +369,7 @@ const _entries = {
     labels: ["IoT", "Frontend", "Backend", "System Architecture"],
     group: groups.professionalExperience,
     accomplishments: [
-      "Participated in architectural decisions and feasibility investigations",
+      "Participated in architectural decisions and led feasibility investigations",
       "Delivered migration from old Karaf codebase to Spring Boot",
       "Significantly improved reliability, maintainability, CI/CD and observability",
       "Consistently delivered features in greenfield and brownfield projects",
@@ -467,8 +467,9 @@ const _entries = {
         , A Free & Open Source Screenshot Program <br />
       </span>
     ),
-    startDate: "2021",
-    endDate: "present",
+    startDate: "Jul 2021",
+    endDate: "Sep 2023",
+    displayDate: "Jul 2021 - Sep 2023", // NOTE: Contains non-breaking spaces
     skills: [skills.cpp, skills.qt, skills.git],
     labels: ["Co-maintainer", "Developer", "Tester", "UI/UX Designer"],
     group: groups.otherExperience,

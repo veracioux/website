@@ -22,7 +22,8 @@ import CV from "@/components/cv/CV.vue";
   height: 100vh;
   overflow: scroll;
   @media print {
-    aspect-ratio: 210 / 297;
+    height: 297mm;
+    width: 210mm;
 
     padding: 32px;
     margin: 0 auto;

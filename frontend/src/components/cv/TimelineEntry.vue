@@ -38,9 +38,9 @@ defineProps<
           <div v-if="labels" class="labelContainer">
             <Label :key="label" v-for="label of labels" :title="label"></Label>
           </div>
-          <ul v-if="accomplishments?.length" class="!mt-2 font-thin">
+          <ul v-if="accomplishments?.length" class="!mt-2 font-thin text-[0.95em]">
             <li
-              class="text-[0.9em] flex gap-1"
+              class="flex gap-1"
               v-for="accomplishment in accomplishments"
               :key="accomplishment"
             >

@@ -16,23 +16,28 @@ if (variant) {
   <ClientOnly>
     <div class="cvHeader relative flex justify-between items-start gap-5 mb-4">
       <div class="contactAndText">
-        <div class="contact">
+        <div class="contact min-w-[192px]">
           <div class="name">Haris Gušić</div>
-          <SocialIcon
-            name="location"
-            text="Munich, Germany"
-            class="opacity-50 text-[0.85rem]"
-          />
-          <SocialIcon name="mail" text="hgusic.pub@gmail.com" />
+           <SocialIcon
+             name="location"
+             text="Munich, Germany"
+             class="opacity-50 text-[0.85rem] mb-1"
+           />
+           <div class="flex items-center gap-2 opacity-50">
+             <Icon name="passport" />
+             <span>EU Blue Card (valid until 2029)</span>
+           </div>
+           <SocialIcon name="mail" text="hgusic.pub@gmail.com" />
           <SocialIcon name="phone" text="+49 151 29984107" />
           <SocialIcon name="web" text="veracioux.me" />
-          <div class="flex gap-8">
+          <div class="flex gap-12">
             <SocialIcon name="github" text="veracioux" />
             <SocialIcon name="linkedin" text="veracioux" />
           </div>
         </div>
         <div class="flex flex-col justify-between gap-2">
-          <div>
+          <div class="name"></div>
+          <div class="text-md">
             Versatile full-stack software engineer with 4 years of professional
             experience delivering reliable, elegant solutions in web, SaaS and
             IoT and 5+ more years of open source development. My strengths
@@ -42,9 +47,9 @@ if (variant) {
             about learning new technologies, improving my craft and contributing
             to open source software.
           </div>
-          <div class="inline-flex items-center gap-2 text-gray-500">
+          <div class="inline-flex items-center gap-2 text-gray-500 leading-6">
             <Icon name="info" />
-            <span class="leading-[2em]">
+            <span>
               An interactive online version of this resume is available
               <a :href="interactiveCvUrl.toString()" target="_blank">here</a>.
             </span>

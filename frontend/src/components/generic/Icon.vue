@@ -14,6 +14,7 @@ import {
   faFileArrowDown,
   faPrint,
   faArrowDown,
+  faPassport,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faGithub,
@@ -43,7 +44,8 @@ library.add(
   faMobile,
   faFileArrowDown,
   faPrint,
-  faArrowDown
+  faArrowDown,
+  faPassport
 );
 
 export type IconProps = {
@@ -73,6 +75,7 @@ const iconNameToFontAwesomeMap = {
   linkedin: ["fab", "linkedin"],
   print: "print",
   arrowDown: "arrow-down",
+  passport: "passport",
 } as const;
 
 type IconName = keyof typeof iconNameToFontAwesomeMap;
