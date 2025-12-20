@@ -301,6 +301,8 @@ main {
 
     @media print {
       align-items: stretch;
+      flex-direction: row;
+      gap: 1rem;
     }
 
     .timelineWrapper {
@@ -310,7 +312,6 @@ main {
 
       @media print {
         position: relative;
-        width: 440px;
 
         --timeline-background: #f7f7f7;
         --timeline-background-rgb: 247, 247, 247;
@@ -401,7 +402,7 @@ main {
 
       @media print {
         gap: 1rem !important;
-        flex: 0 5 29%;
+        flex: 1 0 29%;
       }
     }
   }

@@ -12,6 +12,9 @@ dist
 *.key
 *.csr
 
+# Node
+node_modules
+
 # Miscellaneous
 _*/
 .pnpm-store

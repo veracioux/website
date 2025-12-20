@@ -8,7 +8,7 @@ import CV from "@/components/cv/CV.vue";
   <PageWithNavbar class="no-print">
     <CVSection />
   </PageWithNavbar>
-  <div class="relative bg-[var(--color-background-1)] only-print">
+  <div class="only-print">
     <div class="page">
       <CV class="text-[11px]" display-mode="byCategory" />
     </div>

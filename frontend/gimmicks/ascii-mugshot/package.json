@@ -1,5 +1,5 @@
 {
-  "name": "ascii-mugshot",
+  "name": "@veracioux/ascii-mugshot",
   "version": "0.1.0",
   "description": "Convert images to ASCII art, rendered as PNG",
   "type": "module",
@@ -14,7 +14,7 @@
     "asciify-image": "^0.1.8",
     "canvas": "~3.0.0",
     "html-minifier": "^4.0.0",
-    "puppeteer": "^19.2.2",
+    "puppeteer": "catalog:",
     "sharp": "^0.32.6"
   }
 }

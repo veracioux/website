@@ -1,9 +1,9 @@
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import { rollupPlugin as asciiMugshotRollupPlugin } from "ascii-mugshot";
 
-import { defineNuxtConfig, type NuxtConfig } from "nuxt/config";
+import { type NuxtConfig } from "nuxt/config";
 
-export default defineNuxtConfig({
+const config: NuxtConfig = {
   compatibilityDate: "2025-11-23",
   modules: ["@nuxtjs/google-fonts", "@nuxtjs/tailwindcss"],
   nitro: {
@@ -22,10 +22,12 @@ export default defineNuxtConfig({
   googleFonts: {
     families: {
       "Secular One": true,
-      "Roboto Mono": true,
     },
   },
   css: ["@/assets/global.scss"],
+  alias: {
+    "@lib": "../lib/src",
+  },
   vite: {
     plugins: [vueJsx(), asciiMugshotRollupPlugin()],
     build: {
@@ -38,4 +40,6 @@ export default defineNuxtConfig({
       },
     },
   },
-} satisfies NuxtConfig);
+};
+
+export default config;

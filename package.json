@@ -1,0 +1,11 @@
+{
+  "name": "@veracioux/website",
+  "workspaces": [
+    "cli",
+    "frontend",
+    "frontend/gimmicks/ascii-mugshot"
+  ],
+  "catalog": {
+    "puppeteer": "^19.2.2"
+  }
+}

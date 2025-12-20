@@ -172,7 +172,7 @@ const _skills = {
     experience: "6 months",
   },
   react: {
-    name: "ReactJS",
+    name: "React",
     icon: iconReact,
     group: skillGroups.technologies,
     experience: "1 year",
@@ -230,6 +230,11 @@ const _skills = {
     name: "SaaS",
     group: skillGroups.others,
     experience: "1 year",
+  },
+  agile: {
+    name: "Agile",
+    group: skillGroups.others,
+    experience: "3 years",
   },
   iot: {
     name: "IoT",
@@ -439,7 +444,7 @@ const _entries = {
     node: () => (
       <span>
         <a href="https://github.com/veracioux/website" target="_blank">
-          Personal website and webserver
+          <b>Personal website and webserver</b>
         </a>
       </span>
     ),
@@ -501,8 +506,7 @@ const _entries = {
       <span>
         <b>Bachelor of Electrical Engineering</b>, Automation and Electronics,
         University&nbsp;of&nbsp;Sarajevo
-        <br />
-        <pre>- GPA 9.19/10.00</pre>
+        <br />• <pre style="display: inline">GPA 9.19/10.00</pre>
       </span>
     ),
     startDate: "2017",

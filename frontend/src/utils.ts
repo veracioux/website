@@ -82,10 +82,6 @@ export function isMobile() {
   );
 }
 
-export function iife<T>(fn: () => T): T {
-  return fn();
-}
-
 export function dependsOn(...refs: Ref[]) {
   refs.forEach((r) => r.value);
 }

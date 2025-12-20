@@ -21,7 +21,7 @@ if (variant) {
           <SocialIcon
             name="location"
             text="Munich, Germany"
-            class="opacity-50 text-[0.85rem] mb-1"
+            class="opacity-50 text-md mb-1"
           />
           <div class="flex items-center gap-2 opacity-50">
             <Icon name="passport" />
