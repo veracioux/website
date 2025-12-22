@@ -184,6 +184,42 @@
       user:
         name: git
         state: present
+    # Set up ~sabina
+    - block:
+      - name: Create user sabina
+        user:
+          name: sabina
+          state: present
+      - name: Copy ~sabina home skeleton
+        copy:
+          src: ./home_sabina/
+          dest: /home/sabina
+          owner: sabina
+          group: sabina
+          mode: '0755'
+      - name: Create ~sabina/.ssh directory
+        file:
+          path: /home/sabina/.ssh
+          state: directory
+          owner: sabina
+          group: sabina
+          mode: '0700'
+      - name: Generate SSH key for sabina
+        openssh_keypair:
+          path: /home/sabina/.ssh/id_rsa
+          owner: sabina
+          group: sabina
+          mode: '0600'
+          state: present
+      - name: Enable linger for sabina
+        command: loginctl enable-linger sabina
+      - name: Enable and start SSH user service for sabina
+        systemd:
+          name: ssh
+          scope: user
+          state: started
+          enabled: yes
+        become_user: sabina
     # Set up website
     - block:
       - name: Create ~/docker-registry directory
