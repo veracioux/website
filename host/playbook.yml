@@ -206,7 +206,7 @@
           mode: '0700'
       - name: Generate SSH key for sabina
         openssh_keypair:
-          path: /home/sabina/.ssh/id_rsa
+          path: /home/sabina/.ssh/main
           owner: sabina
           group: sabina
           mode: '0600'
