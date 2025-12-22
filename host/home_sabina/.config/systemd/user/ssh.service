@@ -1,0 +1,11 @@
+[Unit]
+Description=SSH server on port 2222
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/sshd -D -p 2222 -h %h/.ssh/main -o PidFile=/run/user/%U/sshd.pid
+Restart=always
+
+[Install]
+WantedBy=default.target
