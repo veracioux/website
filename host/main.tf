@@ -1,6 +1,11 @@
-variable "deployment" {
+variable "diskname" {
   type        = string
-  description = "'deployment-{number}'"
+  description = "Name of the disk to use (default: 'deployment-{workspace}-data')"
+  default     = ""
+}
+
+locals {
+  diskname = var.diskname != "" ? var.diskname : "deployment-${terraform.workspace}-data"
 }
 
 output "external_ip" {
@@ -23,13 +28,11 @@ provider "google" {
 }
 
 resource "google_compute_disk" "data" {
-  disk_encryption_key {}
-
   labels = {
     managed-by-cnrm = "true"
   }
 
-  name                      = "${var.deployment}-data"
+  name                      = local.diskname
   physical_block_size_bytes = 4096
   project                   = "veracioux"
   size                      = 50
@@ -38,6 +41,8 @@ resource "google_compute_disk" "data" {
 }
 
 resource "google_compute_instance" "instance" {
+  name = "deployment-${terraform.workspace}-instance"
+
   attached_disk {
     device_name = "data"
     mode        = "READ_WRITE"
@@ -46,7 +51,7 @@ resource "google_compute_instance" "instance" {
 
   boot_disk {
     auto_delete = true
-    device_name = "${var.deployment}-boot"
+    device_name = "deployment-${terraform.workspace}-boot"
 
     initialize_params {
       image = "https://www.googleapis.com/compute/beta/projects/debian-cloud/global/images/debian-13-trixie-v20251111"
@@ -57,9 +62,9 @@ resource "google_compute_instance" "instance" {
     mode = "READ_WRITE"
   }
 
-  confidential_instance_config {
-    enable_confidential_compute = false
-  }
+  # confidential_instance_config {
+  #   enable_confidential_compute = false
+  # }
 
   labels = {
     managed-by-cnrm = "true"
@@ -70,8 +75,6 @@ resource "google_compute_instance" "instance" {
   metadata = {
     ssh-keys = "harisgusic.dev:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIITlRNFuNc+CCq4n71WHLjDnJDKX216TjfleRtROwfJu harisgusic.dev@gmail.com"
   }
-
-  name = "${var.deployment}-instance"
 
   network_interface {
     access_config {
