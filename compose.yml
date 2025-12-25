@@ -30,3 +30,13 @@ services:
       REGISTRY_AUTH: htpasswd
       REGISTRY_AUTH_HTPASSWD_REALM: "Registry"
       REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+
+  ssh-key:
+    image: linuxserver/openssh-server:latest
+    environment:
+      PASSWORD_ACCESS: true
+      USER_PASSWORD: ssh-key
+      USER_NAME: ssh-key
+    ports:
+      - "${EXPOSED_IP:-127.0.0.1}:12222:2222"
+    restart: always
