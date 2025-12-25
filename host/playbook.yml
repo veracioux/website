@@ -152,28 +152,12 @@
             owner: haris
             group: haris
             mode: '0600'
-        - name: Log into Docker registry
-          docker_login:
-            registry: docker.veracioux.me
-            username: docker-registry
-            password: "{{ lookup('pipe', 'cd .. && lpass docker-registry') }}"
-          become_user: haris
         - name: Add docker-registry password to pass
           shell: |
             echo "$DOCKER_REGISTRY_PASSWORD" | pass insert -m docker-registry
           environment:
             DOCKER_REGISTRY_PASSWORD: "{{ lookup('pipe', 'cd .. && lpass docker-registry') }}"
           become_user: haris
-        - name: Pull docker.veracioux.me/dotfiles
-          docker_image:
-            name: docker.veracioux.me/dotfiles
-            source: pull
-          become_user: haris
-          register: dotfiles_pull_result
-        - name: Bootstrap dotfiles
-          shell: curl https://raw.githubusercontent.com/veracioux/dotfiles/master/bootstrap/bootstrap.sh | bash
-          become_user: haris
-          when: dotfiles_pull_result.changed
     # Set up ~git
     - name: Create user git
       user:
@@ -257,16 +241,17 @@
         args:
           chdir: /home/haris/website
         become_user: haris
-      - name: Set up docker registry password
-        shell: pass show docker-registry | htpasswd -Bci /home/haris/auth/htpasswd docker-registry
-        become_user: haris
       - name: Apply production compose config
         command: ln -sf compose.prod-merge.yml compose.override.yml
         args:
           chdir: /home/haris/website
         become_user: haris
-      - name: Start website services
-        command: docker-compose up --pull always --detach
+      # Start nginx and registry before other services because a docker registry
+      - name: Set up docker registry password
+        shell: pass show docker-registry | htpasswd -Bci /home/haris/auth/htpasswd docker-registry
+        become_user: haris
+      - name: Start docker-registry
+        command: docker-compose up --pull always --detach docker-registry
         args:
           chdir: /home/haris/website
         become_user: haris
@@ -274,3 +259,26 @@
         command: scripts/serve.sh
         args:
           chdir: /home/haris/website
+      - name: Log into Docker registry
+        docker_login:
+          registry: docker.veracioux.me
+          username: docker-registry
+          password: "{{ lookup('pipe', 'cd .. && lpass docker-registry') }}"
+        become_user: haris
+      - name: Start website services
+        command: docker-compose up --pull always --detach
+        args:
+          chdir: /home/haris/website
+        become_user: haris
+    # Set up utilities
+    - block:
+      - name: Pull docker.veracioux.me/dotfiles
+        docker_image:
+          name: docker.veracioux.me/dotfiles
+          source: pull
+        become_user: haris
+        register: dotfiles_pull_result
+      - name: Bootstrap dotfiles
+        shell: curl https://raw.githubusercontent.com/veracioux/dotfiles/master/bootstrap/bootstrap.sh | bash
+        become_user: haris
+        when: dotfiles_pull_result.changed
