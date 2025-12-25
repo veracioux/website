@@ -47,13 +47,35 @@
         stat:
           path: /media/data/var
         register: moved_flag
-      - name: Copy /var contents to /media/data/var
-        shell: cp -a /var /media/data/var
+      - name: Create /media/data/var
+        file:
+          path: /media/data/var
+          state: directory
+          owner: root
+          group: root
+          mode: '0755'
         when: not moved_flag.stat.exists
-      - name: Mount /media/data/var to /var
+      - name: Copy /var/{chosen dirs} contents to /media/data/var
+        shell: cp -a /var/cache /var/log /var/backups /media/data/var/
+        when: not moved_flag.stat.exists
+      - name: Mount /media/data/var/cache to /var/cache
         mount:
-          path: /var
-          src: /media/data/var
+          path: /var/cache
+          src: /media/data/var/cache
+          fstype: none
+          opts: bind
+          state: mounted
+      - name: Mount /media/data/var/log to /var/log
+        mount:
+          path: /var/log
+          src: /media/data/var/log
+          fstype: none
+          opts: bind
+          state: mounted
+      - name: Mount /media/data/var/backups to /var/backups
+        mount:
+          path: /var/backups
+          src: /media/data/var/backups
           fstype: none
           opts: bind
           state: mounted
@@ -107,57 +129,64 @@
         owner: root
         group: root
         mode: '0755'
+    - name: Create /etc/nginx/ssl
+      file:
+        path: /etc/nginx/ssl
+        state: directory
+        owner: root
+        group: root
+        mode: '0700'
     # Set up ~haris
     - block:
-        - name: Create user haris
-          user:
-            name: haris
-            state: present
-        - name: Generate GPG key
-          shell: |
-            cat > /tmp/gpg-key.conf <<EOF
-            Key-Type: RSA
-            Key-Length: 4096
-            Subkey-Type: RSA
-            Subkey-Length: 4096
-            Name-Real: Haris
-            Name-Email: haris@veracioux.me
-            Expire-Date: 0
-            %no-protection
-            %commit
-            EOF
-            gpg --batch --gen-key /tmp/gpg-key.conf
-          become_user: haris
-        - name: Initialize pass with GPG key
-          shell: |
-            KEY_ID=$(gpg --list-keys --with-colons | awk -F: '/^pub:/ { print $5 }' | head -1)
-            pass init $KEY_ID
-          become_user: haris
-        - name: Add haris to docker group
-          user:
-            name: haris
-            groups: docker
-            append: yes
-        - name: Create .docker directory
-          file:
-            path: /home/haris/.docker
-            state: directory
-            owner: haris
-            group: haris
-            mode: '0700'
-        - name: Configure Docker to use pass credential helper
-          copy:
-            content: '{"credsStore": "pass"}'
-            dest: /home/haris/.docker/config.json
-            owner: haris
-            group: haris
-            mode: '0600'
-        - name: Add docker-registry password to pass
-          shell: |
-            echo "$DOCKER_REGISTRY_PASSWORD" | pass insert -m docker-registry
-          environment:
-            DOCKER_REGISTRY_PASSWORD: "{{ lookup('pipe', 'cd .. && lpass docker-registry') }}"
-          become_user: haris
+      - name: Create user haris
+        user:
+          name: haris
+          state: present
+      - name: Generate GPG key
+        shell: |
+          cat > /tmp/gpg-key.conf <<EOF
+          Key-Type: RSA
+          Key-Length: 4096
+          Subkey-Type: RSA
+          Subkey-Length: 4096
+          Name-Real: Haris
+          Name-Email: haris@veracioux.me
+          Expire-Date: 0
+          %no-protection
+          %commit
+          EOF
+          gpg --batch --gen-key /tmp/gpg-key.conf
+        become_user: haris
+      - name: Initialize pass with GPG key
+        shell: |
+          KEY_ID=$(gpg --list-keys --with-colons | awk -F: '/^pub:/ { print $5 }' | head -1)
+          pass init $KEY_ID
+        become_user: haris
+      - name: Add haris to docker group
+        user:
+          name: haris
+          groups: docker
+          append: yes
+      - name: Create .docker directory
+        file:
+          path: /home/haris/.docker
+          state: directory
+          owner: haris
+          group: haris
+          mode: '0700'
+      - name: Configure Docker to use pass credential helper
+        copy:
+          content: '{"credsStore": "pass"}'
+          dest: /home/haris/.docker/config.json
+          owner: haris
+          group: haris
+          mode: '0600'
+      - name: Add docker-registry password to pass
+        shell: |
+          echo "$DOCKER_REGISTRY_PASSWORD" | pass insert -m docker-registry
+        environment:
+          DOCKER_REGISTRY_PASSWORD: "{{ lookup('pipe', 'cd .. && lpass docker-registry') }}"
+        become_user: haris
     # Set up ~git
     - name: Create user git
       user:
