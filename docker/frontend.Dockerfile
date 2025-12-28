@@ -21,7 +21,7 @@ WORKDIR /website
 
 ## Install local frontend dependencies
 COPY package.json bun.lock ./
-COPY frontend/package.json bun.lock frontend/
+COPY frontend/package.json frontend/
 COPY frontend/gimmicks/ascii-mugshot/package.json frontend/gimmicks/ascii-mugshot/
 COPY cli/package.json cli/
 RUN --mount=type=cache,target=/root/.bun \
