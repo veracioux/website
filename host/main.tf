@@ -1,11 +1,5 @@
-variable "diskname" {
-  type        = string
-  description = "Name of the disk to use (default: 'deployment-{workspace}-data')"
-  default     = ""
-}
-
 locals {
-  diskname = var.diskname != "" ? var.diskname : "deployment-${terraform.workspace}-data"
+  diskname = "${terraform.workspace}-data"
 }
 
 output "external_ip" {
@@ -41,7 +35,7 @@ resource "google_compute_disk" "data" {
 }
 
 resource "google_compute_instance" "instance" {
-  name = "deployment-${terraform.workspace}-instance"
+  name = "${terraform.workspace}-vm"
 
   attached_disk {
     device_name = "data"
@@ -51,7 +45,7 @@ resource "google_compute_instance" "instance" {
 
   boot_disk {
     auto_delete = true
-    device_name = "deployment-${terraform.workspace}-boot"
+    device_name = "boot"
 
     initialize_params {
       image = "https://www.googleapis.com/compute/beta/projects/debian-cloud/global/images/debian-13-trixie-v20251111"
