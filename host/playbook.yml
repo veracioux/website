@@ -310,7 +310,8 @@
         become_user: haris
         notify: restart_docker_registry
       - name: Start docker-registry
-        command: docker-compose up --pull always --detach docker-registry
+        # FIXME: Sleep makes sure the registry is ready before docker login
+        shell: docker-compose up --pull always --detach docker-registry && sleep 3s
         args:
           chdir: /home/haris/website
         become_user: haris
