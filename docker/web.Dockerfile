@@ -10,8 +10,8 @@ RUN apk add --no-cache nginx
 ## The rest...
 #  ------------
 
-WORKDIR /app
+WORKDIR /website
 COPY nginx.conf /etc/nginx/nginx.conf
 
-COPY --from=frontend /frontend/dist /app/frontend/dist
+COPY --from=frontend /website/frontend/dist /website/frontend/dist
 CMD ["nginx", "-g", "daemon off;"]
