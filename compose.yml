@@ -40,3 +40,13 @@ services:
     ports:
       - "${EXPOSED_IP:-127.0.0.1}:12222:2222"
     restart: always
+
+  github-stats:
+    image: docker.veracioux.me/github-stats:latest
+    build:
+      context: apps/github-stats
+    environment:
+      PAT_1: "${GITHUB_README_STATS_PAT}"
+    ports:
+      - "${EXPOSED_IP:-127.0.0.1}:9000:9000"
+    restart: on-failure
