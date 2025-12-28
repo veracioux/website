@@ -11,8 +11,8 @@ USER user
 RUN git clone \
     https://github.com/anuraghazra/github-readme-stats.git \
     --branch master
-# RUN git checkout 8108ba1417faaad7182399e01dd724777adc63e5
 WORKDIR /home/user/github-readme-stats
+RUN git checkout 8108ba1417faaad7182399e01dd724777adc63e5
 
 RUN bun install
 RUN bun add express@5.2.1
