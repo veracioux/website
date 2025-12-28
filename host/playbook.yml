@@ -183,9 +183,15 @@
           mode: '0600'
       - name: Add docker-registry password to pass
         shell: |
-          echo "$DOCKER_REGISTRY_PASSWORD" | pass insert -m docker-registry
+          echo "$PASSWORD" | pass insert -m docker.veracioux.me
         environment:
-          DOCKER_REGISTRY_PASSWORD: "{{ lookup('pipe', 'cd .. && lpass docker-registry') }}"
+          DOCKER_REGISTRY_PASSWORD: "{{ lookup('pipe', 'pass docker.veracioux.me') }}"
+        become_user: haris
+      - name: Add github-readme-stats-pat to pass
+        shell: |
+          echo "$PASSWORD" | pass insert -m github-readme-stats-pat
+        environment:
+          PASSWORD: "{{ lookup('pipe', 'pass github-readme-stats-pat') }}"
         become_user: haris
     # Set up ~git
     - name: Create user git
@@ -292,7 +298,7 @@
         docker_login:
           registry: docker.veracioux.me
           username: docker-registry
-          password: "{{ lookup('pipe', 'cd .. && lpass docker-registry') }}"
+          password: "{{ lookup('pipe', 'pass docker.veracioux.me') }}"
         become_user: haris
       - name: Start website services
         command: docker-compose up --pull always --detach
