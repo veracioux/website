@@ -93,6 +93,7 @@
           - golang-docker-credential-helpers
           - apache2-utils
           - rsync
+          - python3-passlib  # for community.general.htpasswd
         state: present
     # Set up docker daemon config
     - block:
@@ -129,13 +130,31 @@
         owner: root
         group: root
         mode: '0755'
-    - name: Create /etc/nginx/ssl
-      file:
-        path: /etc/nginx/ssl
-        state: directory
-        owner: root
-        group: root
-        mode: '0700'
+    # Configure nginx SSL
+    - block:
+      - name: Create /etc/nginx/ssl
+        file:
+          path: /etc/nginx/ssl
+          state: directory
+          owner: root
+          group: root
+          mode: '0700'
+      - name: Install SSL certificate
+        copy:
+          content: "{{ lookup('pipe', 'pass veracioux.me/server.crt') }}"
+          dest: /etc/nginx/ssl/server.crt
+          owner: root
+          group: root
+          mode: '0644'
+        notify: reload_nginx
+      - name: Install SSL private key
+        copy:
+          content: "{{ lookup('pipe', 'pass veracioux.me/server.key') }}"
+          dest: /etc/nginx/ssl/server.key
+          owner: root
+          group: root
+          mode: '0600'
+        notify: reload_nginx
     # Set up ~haris
     - block:
       - name: Create user haris
@@ -283,8 +302,13 @@
         become_user: haris
       # Start nginx and registry before other services because a docker registry
       - name: Set up docker registry password
-        shell: pass show docker-registry | htpasswd -Bci /home/haris/auth/htpasswd docker-registry
+        community.general.htpasswd:
+          path: /home/haris/auth/htpasswd
+          name: docker-registry
+          password: "{{ lookup('pipe', 'pass docker.veracioux.me') }}"
+          crypt_scheme: bcrypt
         become_user: haris
+        notify: restart_docker_registry
       - name: Start docker-registry
         command: docker-compose up --pull always --detach docker-registry
         args:
@@ -317,3 +341,18 @@
         shell: curl https://raw.githubusercontent.com/veracioux/dotfiles/master/bootstrap/bootstrap.sh | bash
         become_user: haris
         when: dotfiles_pull_result.changed
+
+  handlers:
+    - name: Reload nginx if running
+      listen: reload_nginx
+      service:
+        name: nginx
+        state: reloaded
+      failed_when: false
+    - name: Restart docker-registry
+      listen: restart_docker_registry
+      command: docker-compose restart docker-registry
+      args:
+        chdir: /home/haris/website
+      become_user: haris
+      failed_when: false
