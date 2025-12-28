@@ -49,4 +49,3 @@ services:
       PAT_1: "${GITHUB_README_STATS_PAT}"
     ports:
       - "${EXPOSED_IP:-127.0.0.1}:9000:9000"
-    restart: on-failure
