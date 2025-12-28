@@ -309,6 +309,14 @@
           crypt_scheme: bcrypt
         become_user: haris
         notify: restart_docker_registry
+      - name: Create .env file with secrets
+        copy:
+          content: "GITHUB_README_STATS_PAT={{ lookup('pipe', 'pass github-readme-stats-pat') }}"
+          dest: /home/haris/website/.env
+          owner: haris
+          group: haris
+          mode: '0600'
+        become_user: haris
       - name: Start docker-registry
         # FIXME: Sleep makes sure the registry is ready before docker login
         shell: docker-compose up --pull always --detach docker-registry && sleep 3s
