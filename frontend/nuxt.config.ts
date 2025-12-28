@@ -1,5 +1,5 @@
 import vueJsx from "@vitejs/plugin-vue-jsx";
-import { rollupPlugin as asciiMugshotRollupPlugin } from "ascii-mugshot";
+import { rollupPlugin as asciiMugshotRollupPlugin } from "@veracioux/ascii-mugshot";
 
 import { type NuxtConfig } from "nuxt/config";
 

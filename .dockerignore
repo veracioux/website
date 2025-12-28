@@ -1,16 +1,21 @@
 *
-# Frontend
-!src/
-!*.ts
-!gimmicks/ascii-mugshot/*.ts
-!tsconfig.json
-!gimmicks/ascii-mugshot/tsconfig.json
-!tailwind.config.ts
-!**/package.json
 !package.json
-!**/bun.lock
-!scripts
-!urls.json
-node_modules/**
+!bun.lock
+# Frontend
+!frontend/**/bun.lock
+!frontend/gimmicks/ascii-mugshot/*.ts
+!frontend/gimmicks/ascii-mugshot/package.json
+!frontend/gimmicks/ascii-mugshot/tsconfig.json
+frontend/node_modules/**
+!frontend/**/package.json
+!frontend/package.json
+!frontend/scripts
+!frontend/src/
+!frontend/tailwind.config.ts
+!frontend/*.ts
+!frontend/tsconfig.json
+!frontend/urls.json
+# CLI
+!cli/package.json
 # Web
 !nginx.conf
