@@ -31,6 +31,9 @@ services:
       REGISTRY_AUTH: htpasswd
       REGISTRY_AUTH_HTPASSWD_REALM: "Registry"
       REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+    volumes:
+      - "${HTPASSWD_PATH:-./dev.htpasswd}:/auth/htpasswd:ro"
+      - "${DOCKER_REGISTRY_DIR}:/var/lib/registry"
 
   ssh-key:
     image: linuxserver/openssh-server:latest
