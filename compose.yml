@@ -13,8 +13,6 @@ services:
       - github-stats
     ports:
       - "${EXPOSED_IP:-127.0.0.1}:3000:3000"
-    env_file:
-      - ./.env.d/common
 
   frontend:
     # Image
