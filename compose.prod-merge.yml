@@ -1,9 +1,0 @@
-services:
-  web:
-    volumes:
-      - $HOME/auth:/var/www/auth
-  docker-registry:
-    environment:
-      REGISTRY_HTTP_HOST: https://docker.veracioux.me:443
-    volumes:
-      - "${HOME}/docker-registry:/var/lib/registry"
