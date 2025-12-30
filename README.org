@@ -75,6 +75,12 @@ The following domains are used:
 - 80 :: HTTP port, redirected to 443
 - 443 :: HTTPS port
 - 22 :: SSH server, configured for public-key-only
+* Development
+If you want to use the npm registry or docker registry during development, make
+sure to put the credentials into [[file:dev.htpasswd][dev.htpasswd]]. This can be done using:
+#+begin_src shell
+  bun cli pass set <username> -f dev.htpasswd # Prompts for password
+#+end_src
 * Additional useful features
 ** Serving files temporarily
 To serve a temporary file under =veracioux.me/=, just place it in the =~/tmp_root=
