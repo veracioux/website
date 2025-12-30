@@ -6,112 +6,81 @@
 #+LINK: upload ./.tem/path/upload
 #+LINK: upload-secrets ./.tem/path/upload-secrets
 
+* Introduction
+This repo contains the source code and configuration of my personal web server
+at [[https://veracioux.me][veracioux.me]], serving the following:
+
+- Personal portfolio website
+- Miscellaneous static content
+- Docker registry
+- Git server for private repos
+- Various other self-hosted services
+  - GitHub Stats API server (because the free public API is subject to public
+    rate limits)
+  - Private NPM registry
+* Architecture
+The services are orchestrated via docker compose, configured via [[compose.yml]]
+(+ [[compose.prod-merge.yml]] for production-specific overrides). The following
+services exist:
+
+** Website server
+Compose Service: =web=
+Configuration: [[file:nginx.conf][nginx.conf]]
+
+Serves my personal website along with some additional static content that's
+useful to host myself (temporary files, github stats via [[*GitHub Stats API
+ server][anuraghazra/github-readme-stats]], etc).
+
+** GitHub Stats API server
+Compose Service: =github-stats=
+Configuration: [[file:apps/github-stats][apps/github-stats]]
+
+Uses [[https://github.com/anuraghazra/github-readme-stats][anuraghazra/github-readme-stats]] to serve my GitHub stats as images. The
+compose service itself serves as a generic GitHub stats server for any user, but
+in the reverse proxy I only expose my own stats. This is to prevent abuse
+(other users using my server to serve their own).
+
+** TODO Frontend
 * Deployment
-The website comprises the following components:
-- Frontend :: =frontend/=, Vue 3, Nuxt 3
-- API backend :: =api/=, Django 3
-- Staging proxy :: =proxy/=, PHP, provides password auth for staging
-- Docker registry :: Facilitates efficient image uploads (runs only on production)
+The web server is deployed as a VPS on *Google Cloud*. It is done using the
+following tools:
+- *Docker Compose* for orchestrating the services (see [[file:compose.yml][compose.yml]] and [[file:compose.prod-merge.yml][compose.prod-merge.yml]])
+- *Terraform* as the IaC tool (see [[file:host/main.tf][host/main.tf]])
+- *Ansible* for provisioning (see [[file:host/playbook.yml][host/playbook.yml]])
+- *Vagrant* for preview deployment in a local VM (see [[file:host/Vagrantfile][host/Vagrantfile]])
 
-The plan is to have them organized in the following docker containers
-(services), managed by =docker compose=:
-- =web= :: Runs an =nginx= server configured from =nginx.conf= that serves the
-  static frontend.
-- =frontend= :: Only serves to register the frontend image as a build dependency
-  for the =web= service, and to automatically build the frontend image when
-  needed. When run as a container, it is a no-op.
-- =docker-registry= :: Runs a docker registry using the =registry= image.
-* Environment variables
-** TODO Hostnames and ports
-| *Env variable*         | *Value*   | *Description*                       |
-| =WEB_HOST=             | =0.0.0.0= | Main web host                     |
-| =WEB_PORT=             | =3000=    | Main web port                     |
-| =FRONTEND_HOST=        | =0.0.0.0= | Development frontend server host  |
-| =FRONTEND_PORT=        | =8080=    | Development frontend server port  |
-| =API_HOST=             | =0.0.0.0= | API backend host                  |
-| =API_PORT=             | =8000=    | API backend port                  |
-| =DB_HOST=              | =0.0.0.0= | Database host                     |
-| =DB_PORT=              | =5432=    | Database port                     |
-| =DOCKER_REGISTRY_PORT= | =5000=    | Docker registry port              |
+Currently the whole web server can be deployed on a single machine of class
+*e2-small*, running *Debian 13*. The deployment is done on separate =prod= and =stg=
+(staging) environments.
 
-/NOTE: Within =docker-compose.yaml=, some of these hosts are changed to their coresponding service names, so that different services can communicate with each other./
-* Setting up the production server
-- Bind =docker.veracioux.me= to =localhost= in =/etc/hosts=.
-- Load the contents of [[file:host/crontab][=host/crontab=]] into the actual cron process on the server
-- TODO more
-* Available commands
-** Running and deployment
-- Deploy locally: =up=
-- Force remove all service containers locally: =down=
-- Serve production server: =serve=. If no arguments are given, serves the staging build.
-  This command should be run on the dedicated hosting server.
-- Manage local secrets: =lpass= - a wrapper around GNU =pass=
-- Upload all locally built dockerfiles to the server: =upload=. If no arguments
-  are given, uploads the staging images. To upload production images, pass the =prod= argument.
-- Upload local secrets to the server: =upload-secrets=
-** Maintenance
-- Automatically reissue certificate: =reissue-cert=. Uses =acme.sh=. You shouldn't
-  have to run this manually, because there is a cronjob that does this
-  automatically every few months (see [[file:host/crontab][=host/crontab=]])
-* Static assets
-
-Static assets are collected by the django =manage.py= script into
-=/var/static_root=, because that's the easiest way (django provides the
-=collectstatic= command).
-
-* Serving files temporarily
-
-To create a temporary endpoint that serves a file, just put a file (for example
-one named =myfile=) inside the =~/tmp_root= directory. The file will be available at
-a URL subpath that corresponds to the path of the file relative to =~/tmp_root=
-(in our example that is =/myfile=). Note that =index.html= files behave as usual,
-i.e. =~/tmp_root/myfile/index.html= will be available at =/myfile= and =/myfile/=.
-
-* Staging
-The staging version of the website can be accessed at =/stg=. A form will be
-displayed for you to login. Your auth will be stored in the session, so you don't
-have to login again until the staging website is restarted.
-
-When testing the staging build locally, you can use the following credentials:
-Username: =test=
-Password: =test=
-
-** Notes
-The =web= container (if run with a staging configuration) also allows you to
-access the website at =/=, without password protection for convenience, just
-like in =dev= or =prod=.
-
-* Git server
-I host my dotfiles on [[gh-dotfiles][GitHub]] and mirror them on [[gl-dotfiles][GitLab]] as well. I have a =master=
-branch which contains the configs that I want to always use, and there are other
-branches for different (specialized) users. The different users can be either
-users on other machines (e.g. my separate work laptop) or users created for
-testing.
-
-My main user =haris= is the only one I want to trust completely, so that's the
-only one that I want to be able to modify all branches. And I want other users to
-be able to push changes to their own branches, both as a backup option and so
-that the =haris= user can merge those changes into =master=. One option would be to
-create another GitHub user, restrict its permissions and reconcile changes using
-PRs. But I don't want to create another user and I don't need PRs (simple git
-merge is fine), so I do this:
-
-- I create a user named =git= on my personal server.
-- I add the dotfiles repo at =/home/git/dotfiles=
-- I allow all my alternative users to SSH to the =git= user using their SSH keys.
-
-That way each user can push to any branch of the repo, and when I want to merge
-any branch into the =master= branch of the repo hosted on GitHub and GitLab, I can
-do that with the =haris= user. I always keep the =master= branch checked out on
-=git@veracioux.me= so no one can push to that branch.
-
-** Setup
-On the server run:
-#+begin_src shell
-  sudo useradd --create-home git
-  sudo passwd git
-#+end_src
-On the client run:
-#+begin_src shell
-  ssh-copy-id ~/.ssh/<ID-FILE> git@veracioux.me
-#+end_src
+** Deployment Strategy
+- Build and push new images to =docker.veracioux.me=
+- Provision a temporary staging environment via [[file:host/playbook.yml][Ansible]]
+- Clone production data to a temporary staging instance
+- (New version was already deployed in the)
+- Run tests on staging
+- If tests pass, deploy to production via [[file:host/playbook.yml][Ansible provisioning]]
+* Configuration
+** Local ports
+The following ports are used by the compose services:
+- Web :: 3000
+- Docker registry :: 5000
+- GitHub stats :: 9000
+- NPM registry :: 4873
+** DNS
+The following domains are used:
+- =veracioux.me= :: Apex domain pointing to the main portfolio/static-content website
+- =docker.veracioux.me= :: Points to the docker registry
+** Public ports
+- 80 :: HTTP port, redirected to 443
+- 443 :: HTTPS port
+- 22 :: SSH server, configured for public-key-only
+* Additional useful features
+** Serving files temporarily
+To serve a temporary file under =veracioux.me/=, just place it in the =~/tmp_root=
+directory on the server.
+** TODO Generating my CV from the latest website
+The CV can be generated using the [[*CLI][CLI]], via =bun run cv= (see =--help= for options).
+** TODO CLI
+I am working on a CLI tool for interacting with the various services hosted on
+my web server.
