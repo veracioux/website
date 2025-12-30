@@ -299,11 +299,6 @@
         args:
           chdir: /home/haris/website
         become_user: haris
-      - name: Apply production compose config
-        command: ln -sf compose.prod-merge.yml compose.override.yml
-        args:
-          chdir: /home/haris/website
-        become_user: haris
       # Start nginx and registry before other services because a docker registry
       - name: Set up docker registry password
         community.general.htpasswd:
