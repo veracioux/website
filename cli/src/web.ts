@@ -1,5 +1,4 @@
 import { CommandModule } from "yargs";
-import * as childProcess from "child_process";
 
 export default {
   command: "web",
@@ -10,6 +9,9 @@ export default {
       describe: "Show web server info",
       async handler() {
         // TODO
-      }
+      },
     }),
+  handler: (args) => {
+    throw new Error("Function not implemented.");
+  },
 } satisfies CommandModule;

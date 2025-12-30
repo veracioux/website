@@ -21,7 +21,7 @@ export async function findUpwardFile(
     }
 }
 
-export async function getEnv(): "stg" | "prod" | "dev" {
+export async function getEnv(): Promise<"stg" | "prod" | "dev"> {
   if (
     await fs
       .access("/etc/veracioux", fs.constants.R_OK)
