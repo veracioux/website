@@ -1,6 +1,7 @@
 import { exec, execFile, spawn } from "child_process";
 import { promisify } from "util";
 import * as readline from "readline";
+import fs from "fs/promises";
 import { cmd, failExit } from "./lib";
 
 const execAsync = promisify(exec);
@@ -19,11 +20,14 @@ async function checkHtpasswdAvailable(): Promise<void> {
 async function runHtpasswd(args: string[]) {
   return new Promise<void>((resolve, reject) => {
     const child = execFile("htpasswd", args, (_1, _2, stderr) => {
-      if (stderr.includes("not found")) {
+      if (stderr.includes("not found") || stderr.includes("cannot modify")) {
         return reject(new Error(stderr.trim()));
+      } else {
+        console.log(stderr.trim());
       }
       resolve();
     });
+    child.stdout?.pipe(process.stdout);
     child.on("error", (error) => {
       reject(error);
     });
@@ -46,8 +50,7 @@ export default cmd({
               demandOption: true,
             })
             .positional("password", {
-              describe:
-                "Password for the user (read from stdin if provided)",
+              describe: "Password for the user (read from stdin if provided)",
               type: "string",
             })
             .option("file", {
@@ -70,6 +73,14 @@ export default cmd({
                 resolve(answer);
               });
             });
+          }
+          if (
+            !(await fs
+              .access(argv.file, fs.constants.F_OK)
+              .then(() => true)
+              .catch(() => false))
+          ) {
+            await fs.writeFile(argv.file, "");
           }
           await runHtpasswd(["-Bb", argv.file, argv.username, pass]).catch(
             (e) => failExit(e.message)
