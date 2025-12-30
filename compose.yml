@@ -27,13 +27,13 @@ services:
       - "${EXPOSED_IP:-127.0.0.1}:5000:5000"
     restart: always
     environment:
-      REGISTRY_HTTP_HOST: https://docker.veracioux.me:443
+      REGISTRY_HTTP_HOST: https://docker.${VERACIOUX_HOSTNAME}:443
       REGISTRY_AUTH: htpasswd
       REGISTRY_AUTH_HTPASSWD_REALM: "Registry"
       REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
     volumes:
       - "${HTPASSWD_PATH:-./dev.htpasswd}:/auth/htpasswd:ro"
-      - "${DOCKER_REGISTRY_DIR}:/var/lib/registry"
+      - "${DOCKER_REGISTRY_DIR:-docker-registry-data}:/var/lib/registry"
 
   ssh-key:
     image: linuxserver/openssh-server:latest
@@ -53,3 +53,6 @@ services:
       PAT_1: "${GITHUB_README_STATS_PAT}"
     ports:
       - "${EXPOSED_IP:-127.0.0.1}:9000:9000"
+
+volumes:
+  docker-registry-data:

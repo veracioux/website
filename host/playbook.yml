@@ -4,7 +4,10 @@
 # COPY proxy/php.ini /etc/php81/php.ini
 # COPY proxy/dummy.staging.htpasswd /var/www/auth/staging.htpasswd
 ---
-- hosts: all
+- hosts:
+    - veracioux.me
+    - stg.veracioux.me
+    - veracioux.local
   become: true
   tasks:
     - name: Update apt cache
@@ -94,6 +97,7 @@
           - apache2-utils
           - rsync
           - python3-passlib  # for community.general.htpasswd
+          - python3-bcrypt   # for community.general.htpasswd
         state: present
     # Set up docker daemon config
     - block:
@@ -309,9 +313,14 @@
           crypt_scheme: bcrypt
         become_user: haris
         notify: restart_docker_registry
-      - name: Create .env file with secrets
+      - name: Create .env file
         copy:
-          content: "GITHUB_README_STATS_PAT={{ lookup('pipe', 'pass github-readme-stats-pat') }}"
+          content: |
+            # Environment variables for docker compose
+            DOCKER_REGISTRY_DIR=/home/haris/docker-registry
+            VERACIOUX_HOSTNAME={{ inventory_hostname }}
+            HTPASSWD_PATH=/home/haris/auth/htpasswd
+            GITHUB_README_STATS_PAT={{ lookup('pipe', 'pass github-readme-stats-pat') }}
           dest: /home/haris/website/.env
           owner: haris
           group: haris
