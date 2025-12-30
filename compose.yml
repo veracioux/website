@@ -54,5 +54,14 @@ services:
     ports:
       - "${EXPOSED_IP:-127.0.0.1}:9000:9000"
 
+  npm:
+    image: verdaccio/verdaccio:6.2.4
+    ports:
+      - "${EXPOSED_IP:-127.0.0.1}:4873:4873"
+    volumes:
+      - ./apps/verdaccio/config.yaml:/verdaccio/conf/config.yaml
+      - ${HTPASSWD_PATH:-./dev.htpasswd}:/verdaccio/htpasswd
+    restart: always
+
 volumes:
   docker-registry-data:
