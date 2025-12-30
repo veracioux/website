@@ -1,10 +1,16 @@
 {
   "name": "@veracioux/website",
+  "private": true,
+  "version": "0.0.1",
   "workspaces": [
     "cli",
     "frontend",
-    "frontend/gimmicks/ascii-mugshot"
+    "frontend/gimmicks/ascii-mugshot",
+    "lib"
   ],
+  "scripts": {
+    "cli:build-publish": "cd cli && bun run build-publish $@"
+  },
   "catalog": {
     "puppeteer": "^19.2.2"
   }
