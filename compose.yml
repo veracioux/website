@@ -27,7 +27,7 @@ services:
       - "${EXPOSED_IP:-127.0.0.1}:5000:5000"
     restart: always
     environment:
-      REGISTRY_HTTP_HOST: https://docker.${VERACIOUX_HOSTNAME}:443
+      REGISTRY_HTTP_HOST: https://docker.${VERACIOUX_HOSTNAME:-unconfigured}:443
       REGISTRY_AUTH: htpasswd
       REGISTRY_AUTH_HTPASSWD_REALM: "Registry"
       REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
