@@ -32,7 +32,6 @@ const config: NuxtConfig = {
     plugins: [vueJsx(), asciiMugshotRollupPlugin()],
     build: {
       write: true,
-      assetsDir: process.env.ENV === "staging" ? "stg/static" : "static",
     },
     css: {
       modules: {
