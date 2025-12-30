@@ -19,9 +19,8 @@ at [[https://veracioux.me][veracioux.me]], serving the following:
     rate limits)
   - Private NPM registry
 * Architecture
-The services are orchestrated via docker compose, configured via [[compose.yml]]
-(+ [[compose.prod-merge.yml]] for production-specific overrides). The following
-services exist:
+The services are orchestrated via docker compose, configured via [[compose.yml]].
+The following services exist:
 
 ** Website server
 Compose Service: =web=
@@ -44,7 +43,7 @@ in the reverse proxy I only expose my own stats. This is to prevent abuse
 * Deployment
 The web server is deployed as a VPS on *Google Cloud*. It is done using the
 following tools:
-- *Docker Compose* for orchestrating the services (see [[file:compose.yml][compose.yml]] and [[file:compose.prod-merge.yml][compose.prod-merge.yml]])
+- *Docker Compose* for orchestrating the services (see [[file:compose.yml][compose.yml]])
 - *Terraform* as the IaC tool (see [[file:host/main.tf][host/main.tf]])
 - *Ansible* for provisioning (see [[file:host/playbook.yml][host/playbook.yml]])
 - *Vagrant* for preview deployment in a local VM (see [[file:host/Vagrantfile][host/Vagrantfile]])
