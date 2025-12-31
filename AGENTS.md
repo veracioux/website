@@ -1,4 +1,4 @@
-- Frontend uses bun instead of nodejs+npm
+Bun is used as the runtime instead of Node.js.
 
 ## Adding a New Skill
 
