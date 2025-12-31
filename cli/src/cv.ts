@@ -1,7 +1,7 @@
 import { launch } from "puppeteer";
 import { writeFile, mkdir } from "fs/promises";
 import path, { dirname } from "path";
-import { iife, sleep } from "@lib/utils";
+import { iife, sleep } from "@veracioux/lib";
 import * as readline from "readline";
 import { cmd, failExit } from "./lib";
 
