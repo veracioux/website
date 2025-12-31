@@ -1,11 +1,10 @@
-import { exec, execFile, spawn } from "child_process";
+import { exec, execFile } from "child_process";
 import { promisify } from "util";
 import * as readline from "readline";
 import fs from "fs/promises";
 import { cmd, failExit } from "./lib";
 
 const execAsync = promisify(exec);
-const spawnAsync = promisify(spawn);
 
 async function checkHtpasswdAvailable(): Promise<void> {
   try {
