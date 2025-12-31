@@ -8,6 +8,7 @@
     "lib"
   ],
   "scripts": {
+    "cli": "cd cli && bun run cli",
     "cli:build": "cd cli && bun run build $@",
     "cli:build-publish": "cd cli && bun run build-publish $@"
   },

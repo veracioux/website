@@ -6,7 +6,7 @@
     "dist"
   ],
   "scripts": {
-    "cli": "bun .",
+    "cli": "VERACIOUX_IS_DEV_CLI=1 bun run src/index.ts",
     "build": "bun build src/index.ts --outdir dist --target bun",
     "build-publish": "bun run build && bun publish"
   },
