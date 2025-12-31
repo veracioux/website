@@ -12,9 +12,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "paths": {
-      "@lib/*": ["../lib/src/*"]
-    }
+    "types": ["node"]
   },
   "include": ["src/**/*.ts"]
 }
