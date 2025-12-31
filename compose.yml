@@ -64,6 +64,15 @@ services:
       - ${NPM_STORAGE_PATH:-npm-storage}:/verdaccio/storage
     restart: always
 
+  grafana:
+    image: grafana/grafana:12.4.0-20585723282
+    ports:
+      - "${EXPOSED_IP:-127.0.0.1}:3001:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    restart: always
+
 volumes:
   docker-registry-data:
   npm-storage:
+  grafana-data:
