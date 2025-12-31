@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "cli": "bun .",
-    "build": "bun build src/index.ts --outdir dist --target node",
+    "build": "bun build src/index.ts --outdir dist --target bun",
     "build-publish": "bun run build && bun publish"
   },
   "main": "src/index.ts",
