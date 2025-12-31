@@ -120,6 +120,13 @@
         owner: root
         group: root
         mode: '0755'
+    - name: Create npm-registry on sdb1
+      file:
+        path: /media/data/npm-registry
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
     - name: Create git on sdb1
       file:
         path: /media/data/git
@@ -276,10 +283,23 @@
           state: directory
           owner: haris
           group: haris
+      - name: Create ~/npm-registry directory
+        file:
+          path: /home/haris/npm-registry
+          state: directory
+          owner: haris
+          group: haris
       - name: Mount /media/data/docker-registry /home/haris/docker-registry
         mount:
           path: /home/haris/docker-registry
           src: /media/data/docker-registry
+          fstype: none
+          opts: bind
+          state: mounted
+      - name: Mount /media/data/npm-registry /home/haris/npm-registry
+        mount:
+          path: /home/haris/npm-registry
+          src: /media/data/npm-registry
           fstype: none
           opts: bind
           state: mounted
@@ -315,6 +335,7 @@
             DOCKER_REGISTRY_DIR=/home/haris/docker-registry
             VERACIOUX_HOSTNAME={{ inventory_hostname }}
             HTPASSWD_PATH=/home/haris/auth/htpasswd
+            NPM_STORAGE_PATH=/home/haris/npm-registry
             GITHUB_README_STATS_PAT={{ lookup('pipe', 'pass github-readme-stats-pat') }}
           dest: /home/haris/website/.env
           owner: haris

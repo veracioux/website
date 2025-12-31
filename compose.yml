@@ -61,7 +61,9 @@ services:
     volumes:
       - ./apps/verdaccio/config.yaml:/verdaccio/conf/config.yaml
       - ${HTPASSWD_PATH:-./dev.htpasswd}:/verdaccio/htpasswd
+      - ${NPM_STORAGE_PATH:-npm-storage}:/verdaccio/storage
     restart: always
 
 volumes:
   docker-registry-data:
+  npm-storage:
