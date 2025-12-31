@@ -6,7 +6,7 @@
     },
     "cli": {
       "name": "@veracioux/cli",
-      "version": "0.0.0",
+      "version": "0.0.1",
       "dependencies": {
         "deepmerge": "^4.3.1",
         "puppeteer": "catalog:",
