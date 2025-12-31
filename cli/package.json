@@ -1,13 +1,12 @@
 {
   "name": "@veracioux/cli",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.0.1",
   "files": [
     "src"
   ],
   "scripts": {
     "cli": "bun .",
-    "build-publish": "tsc && npm version $@ && bun publish"
+    "build-publish": "tsc && bun publish"
   },
   "main": "src/index.ts",
   "type": "module",

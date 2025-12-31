@@ -10,7 +10,7 @@ uplinks:
     cache: false
 
 packages:
-  '@veracioux/*':
+  '**':
     access: $all
     publish: $authenticated
     proxy: npmjs
