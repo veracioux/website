@@ -48,7 +48,6 @@ export default cmd({
                   const statusEmoji = response.ok ? "✅" : "❌";
                   status += "  " + chalk.green(`/status ${statusEmoji}`);
                 } catch (e: any) {
-                  console.error(e);
                   if (e.name === "AbortError")
                     status += "  " + chalk.red(`/status ⌛`);
                   else status += "  " + chalk.red(`/status ❌`);
