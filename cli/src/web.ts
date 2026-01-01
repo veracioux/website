@@ -34,7 +34,7 @@ export default cmd({
                       signal: AbortSignal.timeout(TIMEOUT),
                     });
                     status += "  " + chalk.green(`PING ✅`);
-                  } catch (e: any)  {
+                  } catch (e: any) {
                     if (e.name === "AbortError")
                       status += "  " + chalk.red(`PING ⌛`);
                     else status += "  " + chalk.red(`PING ❌`);
@@ -70,7 +70,7 @@ export default cmd({
       })
       .command({
         command: "update-ip <ip>",
-          describe: "Update web server IP address in DNS and locally",
+        describe: "Update web server IP address in DNS and locally",
         builder: (yargs) =>
           yargs
             .positional("ip", {
@@ -134,7 +134,9 @@ async function getTLSInfo(domain: string): Promise<string> {
       const expiresIn = diffDays > 0 ? `${diffDays} days` : "EXPIRED";
       const color =
         diffDays > 30 ? chalk.green : diffDays > 7 ? chalk.yellow : chalk.red;
-      tlsInfo += color(`${color.bold(" TLS " + expiresIn)} (${color(expDate.toISOString())})`);
+      tlsInfo += color(
+        `${color.bold(" TLS " + expiresIn)} (${color(expDate.toISOString())})`
+      );
     } else {
       tlsInfo += `  ${chalk.red("TLS info unavailable")}`;
     }
