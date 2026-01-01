@@ -70,6 +70,7 @@ export default cmd({
       })
       .command({
         command: "update-ip <ip>",
+          describe: "Update web server IP address in DNS and locally",
         builder: (yargs) =>
           yargs
             .positional("ip", {
