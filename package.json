@@ -10,7 +10,8 @@
   "scripts": {
     "cli": "cd cli && bun run cli",
     "cli:build": "cd cli && bun run build $@",
-    "cli:build-publish": "cd cli && bun run build-publish $@"
+    "cli:build-publish": "cd cli && bun run build-publish $@",
+    "frontend:dev": "cd frontend && bun run dev"
   },
   "catalog": {
     "puppeteer": "^19.2.2"
