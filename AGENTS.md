@@ -1,5 +1,9 @@
 Bun is used as the runtime instead of Node.js.
 
+# Project structure
+See <README.org>.
+
+# Common operations
 ## Adding a New Skill
 
 To add a new skill to the CV:
