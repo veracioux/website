@@ -102,8 +102,9 @@ export default cmd({
           await $`gcloud dns record-sets update --type=A ${hostname} --rrdatas=${argv.ip} --zone=veracioux`;
           log("Updating SSH known hosts");
           await $`ssh ${hostname} true`;
+          log("Flushing local DNS cache");
+          await $`sudo systemd-resolve --flush-caches`;
           if (argv.prod) {
-            await $`sudo systemd-resolve --flush-caches`;
             await $`sudo hostess add me ${argv.ip}`;
             await $`ssh me true`;
           }
