@@ -10,6 +10,8 @@ import { $ } from "bun";
 
 const execAsync = promisify(exec);
 
+const TIMEOUT = 1000;
+
 export default cmd({
   command: "web",
   describe: "Manage web server",
@@ -21,7 +23,6 @@ export default cmd({
         async handler() {
           const domains = ["veracioux.me", "stg.veracioux.me"];
           const promises = [];
-          const timeout = 1000;
           for (const domain of domains) {
             promises.push(
               iife(async () => {
@@ -30,10 +31,10 @@ export default cmd({
                   let status: string = "";
                   try {
                     await execAsync(`ping -c 1 ${domain}`, {
-                      signal: AbortSignal.timeout(timeout),
+                      signal: AbortSignal.timeout(TIMEOUT),
                     });
                     status += "  " + chalk.green(`PING ✅`);
-                  } catch (e: any) {
+                  } catch (e: any)  {
                     if (e.name === "AbortError")
                       status += "  " + chalk.red(`PING ⌛`);
                     else status += "  " + chalk.red(`PING ❌`);
@@ -42,7 +43,7 @@ export default cmd({
                     const response = await undici.fetch(
                       `https://${domain}/status`,
                       {
-                        signal: AbortSignal.timeout(timeout),
+                        signal: AbortSignal.timeout(TIMEOUT),
                         dispatcher: new undici.Agent({
                           connect: { rejectUnauthorized: false },
                         }),
@@ -55,8 +56,9 @@ export default cmd({
                       status += "  " + chalk.red(`/status ⌛`);
                     else status += "  " + chalk.red(`/status ❌`);
                   }
+                  let tlsInfo = await getTLSInfo(domain);
                   console.log(`${chalk.bold(domain)}: ${addresses.join(", ")}`);
-                  console.log(status);
+                  console.log(status + "  " + tlsInfo);
                 } catch (err) {
                   console.log(chalk.red(`${chalk.bold(domain)}: ${err}`));
                 }
@@ -88,8 +90,7 @@ export default cmd({
           if (!argv.stg && !argv.prod)
             failExit("Please specify either --stg or --prod option.");
 
-          if (!isIPv4(argv.ip))
-            failExit("Invalid IPv4 address format.");
+          if (!isIPv4(argv.ip)) failExit("Invalid IPv4 address format.");
 
           const log = (msg: string) =>
             console.log(chalk.bgYellow.black.bold(" " + msg + " "));
@@ -112,3 +113,35 @@ export default cmd({
     console.log("Use a subcommand, see --help for more info.");
   },
 });
+
+async function getTLSInfo(domain: string): Promise<string> {
+  let tlsInfo = "";
+  try {
+    const result = await execAsync(
+      `openssl s_client -connect ${domain}:443 -servername ${domain} < /dev/null 2>/dev/null | openssl x509 -noout -dates`,
+      { timeout: TIMEOUT }
+    );
+    const lines = result.stdout.trim().split("\n");
+    const notAfterLine = lines.find((l) => l.startsWith("notAfter="));
+    if (notAfterLine) {
+      const notAfter = notAfterLine.split("=")[1];
+      const expDate = new Date(notAfter);
+      const now = new Date();
+      const diffMs = expDate.getTime() - now.getTime();
+      const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+      const expiresIn = diffDays > 0 ? `${diffDays} days` : "EXPIRED";
+      const color =
+        diffDays > 30 ? chalk.green : diffDays > 7 ? chalk.yellow : chalk.red;
+      tlsInfo += color(`${color.bold(" TLS " + expiresIn)} (${color(expDate.toISOString())})`);
+    } else {
+      tlsInfo += `  ${chalk.red("TLS info unavailable")}`;
+    }
+  } catch (e: any) {
+    if (e.signal === "SIGTERM") {
+      tlsInfo += chalk.red(" TLS timeout");
+    } else {
+      tlsInfo += chalk.red(" TLS info unavailable");
+    }
+  }
+  return tlsInfo;
+}
