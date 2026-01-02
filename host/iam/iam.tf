@@ -22,6 +22,7 @@ resource "google_project_iam_custom_role" "cd_deployer" {
     "compute.instances.get",
     "compute.instances.setMetadata",
     "compute.instances.setTags",
+    "compute.disks.setLabels",
     # "compute.subnetworks.use",
     # "compute.subnetworks.useExternalIp",
     "compute.zones.get"
@@ -39,10 +40,8 @@ resource "google_project_iam_member" "cd_deployer" {
     title       = "Restrict operations to ${each.value} environment"
     description = "Allow non-read-only instance operations only on instances named ${each.value}-vm"
     expression  = <<EOF
-(permission == "compute.instances.get") ||
-(permission == "compute.zones.get") ||
-(resource.name.extract("projects/{project}/zones/{zone}/instances/{name}").name == "${each.value}-vm") ||
-(resource.name.extract("projects/{project}/zones/{zone}/disks/{name}").name == "${each.value}-data")
+resource.name.endsWith("/${each.value}-vm") ||
+resource.name.endsWith("/${each.value}-data")
 EOF
   }
 }
