@@ -83,17 +83,13 @@ jobs:
           ls ~/.ssh >&2
           # Make sure we can connect without password using plain SSH
           timeout 5s ssh haris@stg.veracioux.me true || sleep 999999
-      # - name: Set up SSH key
-      #   run: |
-      #     mkdir -p ~/.ssh
-      #     echo "${{ env.VERACIOUX_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-      #     chmod 600 ~/.ssh/id_rsa
       - name: Run Ansible playbook
         run: |
+          ansible-galaxy collection install community.docker --force
           ansible-playbook -i "stg.veracioux.me," \
             --extra-vars "
-            veracioux_ssl_cert='${{ env.VERACIOUX_SSL_CERT }}'
-            veracioux_ssl_key='${{ env.VERACIOUX_SSL_KEY }}'
-            veracioux_docker_password='${{ env.VERACIOUX_DOCKER_PASSWORD }}'
+            ssl_cert='${{ env.VERACIOUX_SSL_CERT }}'
+            ssl_key='${{ env.VERACIOUX_SSL_KEY }}'
+            docker_password='${{ env.VERACIOUX_DOCKER_PASSWORD }}'
             github_readme_stats_pat='${{ env.GITHUB_README_STATS_PAT }}'" \
             host/playbook.yml
