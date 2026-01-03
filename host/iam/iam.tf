@@ -76,8 +76,8 @@ resource.name.endsWith("/${each.value}.tfstate") ||
 resource.name.endsWith("/${each.value}.tflock") ||
 resource.name.endsWith("/${each.value}-vm") ||
 resource.name.endsWith("/${each.value}-data") ||
-resource.name.startsWith("projects/veracioux/zones") ||
-resource.name.endsWith("/subnetworks/default")
+resource.name.endsWith("/subnetworks/default") ||
+resource.name == "projects/veracioux/zones/europe-west1-b"
 EOF
   }
 }
