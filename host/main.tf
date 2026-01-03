@@ -1,5 +1,7 @@
 locals {
-  diskname = "${terraform.workspace}-data"
+  diskname        = "${terraform.workspace}-data"
+  apex_domain     = terraform.workspace == "prod" ? "veracioux.me." : "${terraform.workspace}.veracioux.me."
+  wildcard_domain = "*.${local.apex_domain}"
 }
 
 output "external_ip" {
@@ -101,7 +103,7 @@ resource "google_compute_instance" "instance" {
   }
 
   service_account {
-    email  = "stg-vm@veracioux.iam.gserviceaccount.com"
+    email = "stg-vm@veracioux.iam.gserviceaccount.com"
     scopes = [
       "https://www.googleapis.com/auth/devstorage.read_only",
       "https://www.googleapis.com/auth/logging.write",
@@ -114,4 +116,20 @@ resource "google_compute_instance" "instance" {
 
   tags = ["http-server", "https-server"]
   zone = "europe-west1-b"
+}
+
+resource "google_dns_record_set" "a_record" {
+  name         = local.apex_domain
+  managed_zone = "veracioux"
+  type         = "A"
+  ttl          = 300
+  rrdatas      = [google_compute_instance.instance.network_interface.0.access_config.0.nat_ip]
+}
+
+resource "google_dns_record_set" "cname_wildcard_record" {
+  name         = local.wildcard_domain
+  managed_zone = "veracioux"
+  type         = "CNAME"
+  ttl          = 300
+  rrdatas      = [local.apex_domain]
 }
