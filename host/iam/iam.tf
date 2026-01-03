@@ -83,7 +83,7 @@ EOF
 }
 
 resource "google_service_account_iam_member" "cd_deployer_act_as_vm" {
-  for_each = local.environment
+  for_each           = local.environment
   service_account_id = google_service_account.vm_internal_service_account[each.value].name
   role               = "roles/iam.serviceAccountUser"
   member             = "serviceAccount:${google_service_account.cd_deployer[each.value].email}"
@@ -93,13 +93,23 @@ resource "google_project_iam_member" "cd_deployer_storage_objects_list_tfstate" 
   for_each = local.environment
 
   project = "veracioux"
-  role    =google_project_iam_custom_role.storage_objects_list_tfstate.id
+  role    = google_project_iam_custom_role.storage_objects_list_tfstate.id
   member  = "serviceAccount:${each.value}-deployer@veracioux.iam.gserviceaccount.com"
 
   condition {
-    title       = "Allow Storage Object List operations on veracioux-tfstate bucket"
-    expression  = <<EOF
+    title      = "Allow Storage Object List operations on veracioux-tfstate bucket"
+    expression = <<EOF
 resource.name.startsWith("projects/_/buckets/veracioux-tfstate")
 EOF
   }
+}
+
+resource "google_dns_managed_zone_iam_binding" "dns_admin_binding" {
+  managed_zone = "veracioux"
+  role         = "roles/dns.admin"
+  members = [
+    "serviceAccount:${google_service_account.cd_deployer["prod"].email}",
+    "serviceAccount:${google_service_account.cd_deployer["stg"].email}",
+  ]
+  project = "veracioux"
 }
