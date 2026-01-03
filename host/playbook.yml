@@ -10,10 +10,10 @@
     - veracioux.local
   become: true
   vars:
-    ssl_cert: "{{ lookup('env', 'VERACIOUX_SSL_CERT') | default(lookup('pipe', 'pass veracioux.me/server.crt')) }}"
-    ssl_key: "{{ lookup('env', 'VERACIOUX_SSL_KEY') | default(lookup('pipe', 'pass veracioux.me/server.key')) }}"
-    docker_password: "{{ lookup('env', 'VERACIOUX_DOCKER_PASSWORD') | default(lookup('pipe', 'pass docker.veracioux.me')) }}"
-    github_readme_stats_pat: "{{ lookup('env', 'GITHUB_README_STATS_PAT') | default(lookup('pipe', 'pass github-readme-stats-pat')) }}"
+    ssl_cert: "{{ lookup('pipe', 'pass veracioux.me/server.crt') }}"
+    ssl_key: "{{ lookup('pipe', 'pass veracioux.me/server.key') }}"
+    docker_password: "{{ lookup('pipe', 'pass docker.veracioux.me') }}"
+    github_readme_stats_pat: "{{ lookup('pipe', 'pass github-readme-stats-pat') }}"
   tasks:
     - name: Update apt cache
       apt:
