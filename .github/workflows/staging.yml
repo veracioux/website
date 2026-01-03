@@ -69,13 +69,13 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Terraform Init
-        working-directory: host
-        run: terraform init
-
       - name: Select stg workspace
         working-directory: host
         run: terraform workspace select stg
+
+      - name: Terraform Init
+        working-directory: host
+        run: terraform init
 
       - name: Terraform Apply
         working-directory: host
