@@ -7,20 +7,19 @@ on:
     branches: [staging]
 
 env:
-  DOCKER_IMAGES_VERSION: stg
-  TAG: ${DOCKER_IMAGES_VERSION}
-  DOCKER_REGISTRY: docker.veracioux.me
-  DOCKER_USERNAME: docker-registry
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  # Expects credentials for service account:
-  #   {environment}-deployer@veracioux.iam.gserviceaccount.com
-  GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+   VERACIOUX_DOCKER_PASSWORD: ${{ secrets.VERACIOUX_DOCKER_PASSWORD }}
+   VERACIOUX_SSL_CERT: ${{ secrets.VERACIOUX_SSL_CERT }}
+   VERACIOUX_SSL_KEY: ${{ secrets.VERACIOUX_SSL_KEY }}
+   GITHUB_README_STATS_PAT: ${{ secrets.README_STATS_PAT }}
+   # Expects credentials for service account:
+   #   {environment}-deployer@veracioux.iam.gserviceaccount.com
+   GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 
 jobs:
-  terraform-apply:
-    runs-on: ubuntu-latest
-    environment: stg
-    steps:
+   terraform-apply:
+     runs-on: ubuntu-latest
+     environment: stg
+     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -49,8 +48,28 @@ jobs:
         working-directory: host
         run: terraform apply -auto-approve
 
-  provision:
-    runs-on: ubuntu-latest
-    environment: stg
-    steps:
-      - TODO
+   provision:
+     needs: terraform-apply
+     runs-on: ubuntu-latest
+     environment: stg
+     steps:
+       - name: Checkout code
+         uses: actions/checkout@v4
+       - name: APT update
+         run: apt-get update -y
+       - name: Install dependencies
+         run: apt-get install -y --no-install-recommends ansible terraform
+       # - name: Set up SSH key
+       #   run: |
+       #     mkdir -p ~/.ssh
+       #     echo "${{ env.VERACIOUX_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+       #     chmod 600 ~/.ssh/id_rsa
+       - name: Run Ansible playbook
+         run: |
+            ansible-playbook -i "stg.veracioux.me," \
+              --extra-vars "
+              veracioux_ssl_cert='${{ env.VERACIOUX_SSL_CERT }}'
+              veracioux_ssl_key='${{ env.VERACIOUX_SSL_KEY }}'
+              veracioux_docker_password='${{ env.VERACIOUX_DOCKER_PASSWORD }}'
+              github_readme_stats_pat='${{ env.GITHUB_README_STATS_PAT }}'" \
+              host/playbook.yml
