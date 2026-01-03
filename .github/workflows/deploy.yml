@@ -11,18 +11,8 @@ env:
   DOCKER_REGISTRY: docker.veracioux.me
   DOCKER_USERNAME: docker-registry
   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  # Example policy bindings for the service account:
-  # - condition:
-  #     expression: |-
-  #       resource.name == "stg-vm" ||
-  #       resource.name == "stg-data"
-  #     title: Staging
-  #   members:
-  #   - serviceAccount:stg-deployer@veracioux.iam.gserviceaccount.com
-  #   role: roles/compute.admin
-  # - members:
-  #   - serviceAccount:stg-deployer@veracioux.iam.gserviceaccount.com
-  #   role: roles/compute.viewer
+  # Expects credentials for service account:
+  #   {environment}-deployer@veracioux.iam.gserviceaccount.com
   GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 
 jobs:
