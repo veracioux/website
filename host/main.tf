@@ -7,6 +7,10 @@ output "external_ip" {
 }
 
 terraform {
+  backend "gcs" {
+    bucket = "veracioux-tfstate"
+  }
+
   required_providers {
     google = {
       source  = "hashicorp/google"
