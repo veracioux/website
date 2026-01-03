@@ -103,7 +103,7 @@ resource "google_compute_instance" "instance" {
   }
 
   service_account {
-    email = "stg-vm@veracioux.iam.gserviceaccount.com"
+    email = "${terraform.workspace}-vm@veracioux.iam.gserviceaccount.com"
     scopes = [
       "https://www.googleapis.com/auth/devstorage.read_only",
       "https://www.googleapis.com/auth/logging.write",
