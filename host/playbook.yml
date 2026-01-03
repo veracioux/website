@@ -157,7 +157,7 @@
           mode: '0700'
       - name: Install SSL certificate
         copy:
-          content: "{{ lookup('pipe', 'pass veracioux.me/server.crt') }}"
+          content: "{{ ssl_cert }}"
           dest: /etc/nginx/ssl/server.crt
           owner: root
           group: root
@@ -165,7 +165,7 @@
         notify: reload_nginx
       - name: Install SSL private key
         copy:
-          content: "{{ lookup('pipe', 'pass veracioux.me/server.key') }}"
+          content: "{{ ssl_key }}"
           dest: /etc/nginx/ssl/server.key
           owner: root
           group: root
@@ -220,13 +220,13 @@
         shell: |
           echo "$PASSWORD" | pass insert -m docker.veracioux.me
         environment:
-          DOCKER_REGISTRY_PASSWORD: "{{ lookup('pipe', 'pass docker.veracioux.me') }}"
+          DOCKER_REGISTRY_PASSWORD: "{{ docker_password }}"
         become_user: haris
       - name: Add github-readme-stats-pat to pass
         shell: |
           echo "$PASSWORD" | pass insert -m github-readme-stats-pat
         environment:
-          PASSWORD: "{{ lookup('pipe', 'pass github-readme-stats-pat') }}"
+          PASSWORD: "{{ github_readme_stats_pat }}"
         become_user: haris
     # Set up ~git
     - name: Create user git
@@ -329,7 +329,7 @@
         community.general.htpasswd:
           path: /home/haris/auth/htpasswd
           name: docker-registry
-          password: "{{ lookup('pipe', 'pass docker.veracioux.me') }}"
+          password: "{{ docker_password }}"
           crypt_scheme: bcrypt
         become_user: haris
         notify: restart_docker_registry
@@ -341,7 +341,7 @@
             VERACIOUX_HOSTNAME={{ inventory_hostname }}
             HTPASSWD_PATH=/home/haris/auth/htpasswd
             NPM_STORAGE_PATH=/home/haris/npm-registry
-            GITHUB_README_STATS_PAT={{ lookup('pipe', 'pass github-readme-stats-pat') }}
+            GITHUB_README_STATS_PAT={{ github_readme_stats_pat }}
           dest: /home/haris/website/.env
           owner: haris
           group: haris
@@ -361,7 +361,7 @@
         docker_login:
           registry: docker.veracioux.me
           username: docker-registry
-          password: "{{ lookup('pipe', 'pass docker.veracioux.me') }}"
+          password: "{{ docker_password }}"
         become_user: haris
       - name: Start website services
         command: docker-compose up --pull always --detach
