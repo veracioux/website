@@ -1,0 +1,38 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - staging
+
+env:
+  DOCKER_IMAGES_VERSION: prod
+  TAG: ${DOCKER_IMAGES_VERSION}
+  DOCKER_REGISTRY: docker.veracioux.me
+  DOCKER_USERNAME: docker-registry
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker registry
+        run: echo "${{ env.DOCKER_PASSWORD }}" | docker login ${{ env.DOCKER_REGISTRY }} -u ${{ env.DOCKER_USERNAME }} --password-stdin
+
+      # FIXME: Temporarily disabled due to upstream issue with a dependency
+      # - name: Build frontend image
+      #   run: |
+      #     docker build -f docker/frontend.Dockerfile -t ${{ env.DOCKER_REGISTRY }}/frontend:${{ env.TAG }} .
+
+      # - name: Build web image
+      #   run: |
+      #     docker build -f docker/web.Dockerfile -t ${{ env.DOCKER_REGISTRY }}/web:${{ env.TAG }} .
+
+      # - name: Push frontend and web images
+      #   run: |
+      #     docker push ${{ env.DOCKER_REGISTRY }}/web:${{ env.TAG }}
+      #     docker push ${{ env.DOCKER_REGISTRY }}/frontend:${{ env.TAG }}
