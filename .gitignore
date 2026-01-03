@@ -21,3 +21,4 @@ _*/
 /host/.vagrant/
 **.tfvars
 **.backup
+*.tfstate
