@@ -1,7 +1,7 @@
 services:
   web:
     # Image
-    image: docker.veracioux.me/web
+    image: docker.veracioux.me/web:${DOCKER_IMAGES_VERSION:-latest}
     build:
       context: .
       dockerfile: docker/web.Dockerfile
@@ -16,7 +16,7 @@ services:
 
   frontend:
     # Image
-    image: docker.veracioux.me/frontend
+    image: docker.veracioux.me/frontend:${DOCKER_IMAGES_VERSION:-latest}
     build:
       context: .
       dockerfile: docker/frontend.Dockerfile
@@ -46,7 +46,7 @@ services:
     restart: always
 
   github-stats:
-    image: docker.veracioux.me/github-stats:latest
+    image: docker.veracioux.me/github-stats:${DOCKER_IMAGES_VERSION:-latest}
     build:
       context: apps/github-stats
     environment:
