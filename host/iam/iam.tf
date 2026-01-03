@@ -66,7 +66,7 @@ resource "google_project_iam_member" "cd_deployer" {
 
   project = "veracioux"
   role    = google_project_iam_custom_role.cd_deployer.id
-  member  = "serviceAccount:${each.value}-deployer@veracioux.iam.gserviceaccount.com"
+  member  = "serviceAccount:${google_service_account.cd_deployer[each.value].email}"
 
   condition {
     title       = "Restrict operations to ${each.value} environment"
@@ -80,6 +80,13 @@ resource.name.startsWith("projects/veracioux/zones") ||
 resource.name.endsWith("/subnetworks/default")
 EOF
   }
+}
+
+resource "google_service_account_iam_member" "cd_deployer_act_as_vm" {
+  for_each = local.environment
+  service_account_id = google_service_account.vm_internal_service_account[each.value].name
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:${google_service_account.cd_deployer[each.value].email}"
 }
 
 resource "google_project_iam_member" "cd_deployer_storage_objects_list_tfstate" {
