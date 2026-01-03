@@ -97,17 +97,20 @@ export default cmd({
             console.log(chalk.bgYellow.black.bold(" " + msg + " "));
 
           const hostname = argv.stg ? "stg.veracioux.me" : "veracioux.me";
-          log("Removing SSH host key");
-          await $`ssh-keygen -R ${hostname}`;
-          log(`Updating DNS A record for ${hostname}`);
-          await $`gcloud dns record-sets update --type=A ${hostname} --rrdatas=${argv.ip} --zone=veracioux`;
-          log("Updating SSH known hosts");
-          await $`ssh ${hostname} true`;
-          log("Flushing local DNS cache");
-          await $`sudo systemd-resolve --flush-caches`;
-          if (argv.prod) {
-            await $`sudo hostess add me ${argv.ip}`;
-            await $`ssh me true`;
+          try {
+            log("Flushing local DNS cache");
+            await $`sudo systemd-resolve --flush-caches`;
+            log("Removing SSH host key");
+            await $`ssh-keygen -R ${hostname}`;
+            log("Updating SSH known hosts");
+            await $`ssh ${hostname} true`;
+            if (argv.prod) {
+                await $`sudo hostess add me ${argv.ip}`;
+                await $`ssh me true`;
+            }
+          } finally {
+            // Ensure sudo access isn't cached
+            await $`sudo -k`
           }
         },
       }),
