@@ -71,7 +71,9 @@ jobs:
 
       - name: Select stg workspace
         working-directory: host
-        run: terraform workspace select stg
+        run: |
+          mkdir -p .terraform
+          echo stg > .terraform/environment
 
       - name: Terraform Init
         working-directory: host
