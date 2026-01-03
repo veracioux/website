@@ -95,14 +95,21 @@ resource "google_compute_instance" "instance" {
     provisioning_model  = "STANDARD"
   }
 
-  service_account {
-    email  = "120391169168-compute@developer.gserviceaccount.com"
-    scopes = ["https://www.googleapis.com/auth/devstorage.read_only", "https://www.googleapis.com/auth/logging.write", "https://www.googleapis.com/auth/monitoring.write", "https://www.googleapis.com/auth/service.management.readonly", "https://www.googleapis.com/auth/servicecontrol", "https://www.googleapis.com/auth/trace.append"]
-  }
-
   shielded_instance_config {
     enable_integrity_monitoring = true
     enable_vtpm                 = true
+  }
+
+  service_account {
+    email  = "stg-vm@veracioux.iam.gserviceaccount.com"
+    scopes = [
+      "https://www.googleapis.com/auth/devstorage.read_only",
+      "https://www.googleapis.com/auth/logging.write",
+      "https://www.googleapis.com/auth/monitoring.write",
+      "https://www.googleapis.com/auth/service.management.readonly",
+      "https://www.googleapis.com/auth/servicecontrol",
+      "https://www.googleapis.com/auth/trace.append",
+    ]
   }
 
   tags = ["http-server", "https-server"]
