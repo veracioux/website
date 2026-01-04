@@ -5,6 +5,12 @@ on:
     workflows: ["Build"]
     types: [completed]
     branches: [staging]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        default: "stg"
 
 env:
   # Expects credentials for service account:
