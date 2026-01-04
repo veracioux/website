@@ -20,7 +20,9 @@ env:
 jobs:
   terraform-apply:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev' }}
+    environment: ${{ inputs.environment || vars.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev') }}
+    env:
+      environment: ${{ inputs.environment || vars.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -31,16 +33,17 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ env.GCP_SA_KEY }}
+          credentials_json: |
+            ${{ env.GCP_SA_KEY }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Select ${{ job.environment }} workspace
+      - name: Select ${{ env.environment }} workspace
         working-directory: host
         run: |
           mkdir -p .terraform
-          echo ${{ job.environment }} > .terraform/environment
+          echo ${{ env.environment }} > .terraform/environment
 
       - name: Terraform Init
         working-directory: host
