@@ -23,7 +23,7 @@ jobs:
        - name: Log in to Docker registry
          run: echo "${{ env.DOCKER_PASSWORD }}" | docker login docker.veracioux.me -u ${{ env.DOCKER_USERNAME }} --password-stdin
 
-       - name: Build web image
+       - name: Build and push web image
          uses: docker/build-push-action@v5
          with:
            context: .
@@ -31,9 +31,9 @@ jobs:
            tags: docker.veracioux.me/web:${{ env.DOCKER_IMAGES_VERSION }}
            cache-from: type=gha
            cache-to: type=gha,mode=max
-           load: true
+           push: true
 
-       - name: Build frontend image
+       - name: Build and push frontend image
          uses: docker/build-push-action@v5
          with:
            context: .
@@ -41,18 +41,13 @@ jobs:
            tags: docker.veracioux.me/frontend:${{ env.DOCKER_IMAGES_VERSION }}
            cache-from: type=gha
            cache-to: type=gha,mode=max
-           load: true
+           push: true
 
-       - name: Build github-stats image
+       - name: Build and push github-stats image
          uses: docker/build-push-action@v5
          with:
            context: apps/github-stats
            tags: docker.veracioux.me/github-stats:${{ env.DOCKER_IMAGES_VERSION }}
            cache-from: type=gha
            cache-to: type=gha,mode=max
-           load: true
-
-       - name: Push Docker images
-         run: |
-          export DOCKER_IMAGES_VERSION="${{ env.DOCKER_IMAGES_VERSION }}"
-          docker compose push
+           push: true
