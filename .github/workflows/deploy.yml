@@ -5,6 +5,12 @@ on:
     workflows: ["Set up infrastructure"]
     types: [completed]
     branches: [staging]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        default: "stg"
 
 env:
   VERACIOUX_DOCKER_PASSWORD: ${{ secrets.VERACIOUX_DOCKER_PASSWORD }}

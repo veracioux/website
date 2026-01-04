@@ -2,6 +2,7 @@ name: Build
 
 on:
   push:
+  workflow_dispatch:
 
 env:
   DOCKER_IMAGES_VERSION: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'latest' }}
