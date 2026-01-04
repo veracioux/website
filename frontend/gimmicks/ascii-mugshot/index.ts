@@ -35,6 +35,7 @@ async function convert(
 
     const html = new Convert().toHtml(asciiString);
     const browser = await puppeteer.launch({
+      headless: "new",
       args: ["--no-sandbox"],
     });
     const page = await browser.newPage();
