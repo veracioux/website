@@ -25,22 +25,22 @@ jobs:
           username: ${{ env.DOCKER_USERNAME }}
           password: ${{ env.DOCKER_PASSWORD }}
 
-      - name: Build and push web image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: docker/web.Dockerfile
-          tags: docker.veracioux.me/web:${{ env.DOCKER_IMAGES_VERSION }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          push: true
-
       - name: Build and push frontend image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: docker/frontend.Dockerfile
           tags: docker.veracioux.me/frontend:${{ env.DOCKER_IMAGES_VERSION }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          push: true
+
+      - name: Build and push web image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: docker/web.Dockerfile
+          tags: docker.veracioux.me/web:${{ env.DOCKER_IMAGES_VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: true
