@@ -4,7 +4,7 @@ on:
   workflow_run:
     workflows: ["Build"]
     types: [completed]
-    branches: [staging]
+    tags: ['stg-*', 'prod-*']
   workflow_dispatch:
 
 env:
@@ -16,9 +16,9 @@ env:
 jobs:
   terraform-apply:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev' }}
+    environment: ${{ startsWith(github.ref_name, 'stg-') && 'stg' || startsWith(github.ref_name, 'prod-') && 'prod' || 'dev' }}
     env:
-      environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev' }}
+      environment: ${{ startsWith(github.ref_name, 'stg-') && 'stg' || startsWith(github.ref_name, 'prod-') && 'prod' || 'dev' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
