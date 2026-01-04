@@ -6,11 +6,6 @@ on:
     types: [completed]
     branches: [staging]
   workflow_dispatch:
-    inputs:
-      environment:
-        description: "Target environment"
-        required: true
-        default: "stg"
 
 env:
   VERACIOUX_DOCKER_PASSWORD: ${{ secrets.VERACIOUX_DOCKER_PASSWORD }}
@@ -25,9 +20,9 @@ env:
 jobs:
   provision:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment || vars.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev') }}
+    environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev' }}
     env:
-      environment: ${{ inputs.environment || vars.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev') }}
+      environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

@@ -8,6 +8,7 @@ env:
   DOCKER_IMAGES_VERSION: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'latest' }}
   DOCKER_USERNAME: docker-registry
   DOCKER_PASSWORD: ${{ secrets.VERACIOUX_DOCKER_PASSWORD }}
+  DOCKER_BUILDKIT: 1
 
 jobs:
   build:
