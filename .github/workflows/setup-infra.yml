@@ -6,11 +6,6 @@ on:
     types: [completed]
     branches: [staging]
   workflow_dispatch:
-    inputs:
-      environment:
-        description: "Target environment"
-        required: true
-        default: "stg"
 
 env:
   # Expects credentials for service account:
@@ -21,18 +16,12 @@ env:
 jobs:
   terraform-apply:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment || vars.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev') }}
+    environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev' }}
     env:
-      environment: ${{ inputs.environment || vars.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev') }}
+      environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Print environment
-        run: |
-          echo "job.environment: ${{ job.environment }}"
-          echo "inputs.environment: ${{ inputs.environment }}"
-          echo "vars.environment: ${{ vars.environment }}"
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
