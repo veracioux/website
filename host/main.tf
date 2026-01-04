@@ -62,10 +62,6 @@ resource "google_compute_instance" "instance" {
     mode = "READ_WRITE"
   }
 
-  # confidential_instance_config {
-  #   enable_confidential_compute = false
-  # }
-
   labels = {
     managed-by-cnrm = "true"
   }
