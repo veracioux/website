@@ -1,0 +1,69 @@
+name: Build
+
+on:
+  push:
+  workflow_dispatch:
+
+env:
+  DOCKER_IMAGES_VERSION: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'latest' }}
+  DOCKER_USERNAME: docker-registry
+  DOCKER_PASSWORD: ${{ secrets.VERACIOUX_DOCKER_PASSWORD }}
+  DOCKER_BUILDKIT: 1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker registry
+        uses: docker/login-action@v3
+        with:
+          registry: docker.veracioux.me
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_PASSWORD }}
+
+      - name: Build and push github-stats image
+        uses: docker/build-push-action@v5
+        with:
+          context: apps/github-stats
+          tags: github-stats
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          load: true
+
+      - name: Build frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: docker/frontend.Dockerfile
+          tags: frontend
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          load: true
+
+      - name: Create tag docker.veracioux.me/frontend:latest
+        run: |
+          docker tag frontend docker.veracioux.me/frontend:latest
+
+      - name: Build web image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: docker/web.Dockerfile
+          tags: web
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          load: true
+
+      - name: Push images to custom registry
+        if: github.ref_name == 'main' || github.ref_name == 'staging' || github.ref_name == 'dev'
+        run: |
+          docker tag github-stats docker.veracioux.me/github-stats:${{ env.DOCKER_IMAGES_VERSION }}
+          docker tag web docker.veracioux.me/web:${{ env.DOCKER_IMAGES_VERSION }}
+          docker compose push github-stats
+          docker compose push web

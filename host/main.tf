@@ -1,5 +1,7 @@
 locals {
-  diskname = "${terraform.workspace}-data"
+  diskname        = "${terraform.workspace}-data"
+  apex_domain     = terraform.workspace == "prod" ? "veracioux.me." : "${terraform.workspace}.veracioux.me."
+  wildcard_domain = "*.${local.apex_domain}"
 }
 
 output "external_ip" {
@@ -7,6 +9,10 @@ output "external_ip" {
 }
 
 terraform {
+  backend "gcs" {
+    bucket = "veracioux-tfstate"
+  }
+
   required_providers {
     google = {
       source  = "hashicorp/google"
@@ -56,10 +62,6 @@ resource "google_compute_instance" "instance" {
     mode = "READ_WRITE"
   }
 
-  # confidential_instance_config {
-  #   enable_confidential_compute = false
-  # }
-
   labels = {
     managed-by-cnrm = "true"
   }
@@ -91,16 +93,39 @@ resource "google_compute_instance" "instance" {
     provisioning_model  = "STANDARD"
   }
 
-  service_account {
-    email  = "120391169168-compute@developer.gserviceaccount.com"
-    scopes = ["https://www.googleapis.com/auth/devstorage.read_only", "https://www.googleapis.com/auth/logging.write", "https://www.googleapis.com/auth/monitoring.write", "https://www.googleapis.com/auth/service.management.readonly", "https://www.googleapis.com/auth/servicecontrol", "https://www.googleapis.com/auth/trace.append"]
-  }
-
   shielded_instance_config {
     enable_integrity_monitoring = true
     enable_vtpm                 = true
   }
 
+  service_account {
+    email = "${terraform.workspace}-vm@veracioux.iam.gserviceaccount.com"
+    scopes = [
+      "https://www.googleapis.com/auth/devstorage.read_only",
+      "https://www.googleapis.com/auth/logging.write",
+      "https://www.googleapis.com/auth/monitoring.write",
+      "https://www.googleapis.com/auth/service.management.readonly",
+      "https://www.googleapis.com/auth/servicecontrol",
+      "https://www.googleapis.com/auth/trace.append",
+    ]
+  }
+
   tags = ["http-server", "https-server"]
   zone = "europe-west1-b"
+}
+
+resource "google_dns_record_set" "a_record" {
+  name         = local.apex_domain
+  managed_zone = "veracioux"
+  type         = "A"
+  ttl          = 300
+  rrdatas      = [google_compute_instance.instance.network_interface.0.access_config.0.nat_ip]
+}
+
+resource "google_dns_record_set" "cname_wildcard_record" {
+  name         = local.wildcard_domain
+  managed_zone = "veracioux"
+  type         = "CNAME"
+  ttl          = 300
+  rrdatas      = [local.apex_domain]
 }

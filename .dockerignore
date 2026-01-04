@@ -7,7 +7,6 @@
 !frontend/gimmicks/ascii-mugshot/package.json
 !frontend/gimmicks/ascii-mugshot/tsconfig.json
 frontend/node_modules/**
-!frontend/**/package.json
 !frontend/package.json
 !frontend/scripts
 !frontend/src/
@@ -15,6 +14,8 @@ frontend/node_modules/**
 !frontend/*.ts
 !frontend/tsconfig.json
 !frontend/urls.json
+# LIB
+!lib/package.json
 # CLI
 !cli/package.json
 # Web

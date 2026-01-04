@@ -1,0 +1,78 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: ["Set up infrastructure"]
+    types: [completed]
+    branches: [staging, main]
+  workflow_dispatch:
+
+env:
+  VERACIOUX_DOCKER_PASSWORD: ${{ secrets.VERACIOUX_DOCKER_PASSWORD }}
+  VERACIOUX_SSL_CERT: ${{ secrets.VERACIOUX_SSL_CERT }}
+  VERACIOUX_SSL_KEY: ${{ secrets.VERACIOUX_SSL_KEY }}
+  GITHUB_README_STATS_PAT: ${{ secrets.README_STATS_PAT }}
+  # Expects credentials for service account:
+  #   {environment}-deployer@veracioux.iam.gserviceaccount.com
+  GCP_SA_KEY: |-
+    ${{ secrets.GCP_SA_KEY }}
+
+jobs:
+  provision:
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev' }}
+    env:
+      environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: APT update
+        run: sudo apt-get update -y
+      - name: Install dependencies
+        run: sudo apt-get install -y --no-install-recommends ansible
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: |-
+            ${{ env.GCP_SA_KEY }}
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+      - name: Set up SSH
+        run: |
+          # Set up initial SSh connection to create SSH key trusted by server
+          gcloud_ssh() {
+            gcloud compute ssh --project=veracioux --zone=europe-west1-b haris@${{ env.environment }}-vm "$@"
+          }
+          if [ "${{ env.environment }}" = "prod" ]; then
+            hostname="veracioux.me"
+          else
+            hostname="${{ env.environment }}.veracioux.me"
+          fi
+          echo -e "y\n" | gcloud_ssh -- true
+          # Add server's SSH key to known_hosts under $hostname
+          echo $hostname "$(gcloud_ssh -- cat /etc/ssh/ssh_host_ed25519_key.pub)" >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/google_compute_engine.pub
+          cat >>~/.ssh/config <<EOF
+          Host $hostname
+            User haris
+            IdentityFile ~/.ssh/google_compute_engine
+          Match all
+          EOF
+          ls ~/.ssh >&2
+          # Make sure we can connect without password using plain SSH
+          timeout 5s ssh haris@$hostname true || sleep 999999
+      - name: Run Ansible playbook
+        run: |
+          ansible-galaxy collection install community.docker --force
+          if [ "${{ env.environment }}" = "prod" ]; then
+            hostname="veracioux.me"
+          else
+            hostname="${{ env.environment }}.veracioux.me"
+          fi
+          ansible-playbook -i "$hostname," \
+            --extra-vars "
+            ssl_cert='${{ env.VERACIOUX_SSL_CERT }}'
+            ssl_key='${{ env.VERACIOUX_SSL_KEY }}'
+            docker_password='${{ env.VERACIOUX_DOCKER_PASSWORD }}'
+            github_readme_stats_pat='${{ env.GITHUB_README_STATS_PAT }}'" \
+            host/playbook.yml

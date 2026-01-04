@@ -1,6 +1,6 @@
 # -*- mode: dockerfile; -*- vim: filetype=dockerfile
 
-FROM oven/bun:1.3.1-slim AS build
+FROM oven/bun:1.3.5-slim AS build
 
 RUN apt-get update -y
 
@@ -23,9 +23,11 @@ WORKDIR /website
 COPY package.json bun.lock ./
 COPY frontend/package.json frontend/
 COPY frontend/gimmicks/ascii-mugshot/package.json frontend/gimmicks/ascii-mugshot/
+# Ensure all workspace projects can be resolved
 COPY cli/package.json cli/
+COPY lib/package.json lib/
 RUN --mount=type=cache,target=/root/.bun \
-    bun install --frozen-lockfile --prod
+    bun install --frozen-lockfile --prod --filter='!./cli'
 
 COPY frontend frontend
 
@@ -37,7 +39,7 @@ WORKDIR /website/frontend
 RUN --mount=type=cache,target=/root/.bun \
     env FORCE_COLOR=3 bun run generate
 
-FROM oven/bun:1.3.1-slim
+FROM oven/bun:1.3.5-slim
 
 WORKDIR /website/frontend
 COPY --from=build /website/frontend/dist /website/frontend/dist

@@ -34,7 +34,7 @@ export default cmd({
                       signal: AbortSignal.timeout(TIMEOUT),
                     });
                     status += "  " + chalk.green(`PING ✅`);
-                  } catch (e: any)  {
+                  } catch (e: any) {
                     if (e.name === "AbortError")
                       status += "  " + chalk.red(`PING ⌛`);
                     else status += "  " + chalk.red(`PING ❌`);
@@ -70,6 +70,7 @@ export default cmd({
       })
       .command({
         command: "update-ip <ip>",
+        describe: "Update web server IP address in DNS and locally",
         builder: (yargs) =>
           yargs
             .positional("ip", {
@@ -96,16 +97,20 @@ export default cmd({
             console.log(chalk.bgYellow.black.bold(" " + msg + " "));
 
           const hostname = argv.stg ? "stg.veracioux.me" : "veracioux.me";
-          log("Removing SSH host key");
-          await $`ssh-keygen -R ${hostname}`;
-          log(`Updating DNS A record for ${hostname}`);
-          await $`gcloud dns record-sets update --type=A ${hostname} --rrdatas=${argv.ip} --zone=veracioux`;
-          log("Updating SSH known hosts");
-          await $`ssh ${hostname} true`;
-          if (argv.prod) {
+          try {
+            log("Flushing local DNS cache");
             await $`sudo systemd-resolve --flush-caches`;
-            await $`sudo hostess add me ${argv.ip}`;
-            await $`ssh me true`;
+            log("Removing SSH host key");
+            await $`ssh-keygen -R ${hostname}`;
+            log("Updating SSH known hosts");
+            await $`ssh ${hostname} true`;
+            if (argv.prod) {
+                await $`sudo hostess add me ${argv.ip}`;
+                await $`ssh me true`;
+            }
+          } finally {
+            // Ensure sudo access isn't cached
+            await $`sudo -k`
           }
         },
       }),
@@ -132,7 +137,9 @@ async function getTLSInfo(domain: string): Promise<string> {
       const expiresIn = diffDays > 0 ? `${diffDays} days` : "EXPIRED";
       const color =
         diffDays > 30 ? chalk.green : diffDays > 7 ? chalk.yellow : chalk.red;
-      tlsInfo += color(`${color.bold(" TLS " + expiresIn)} (${color(expDate.toISOString())})`);
+      tlsInfo += color(
+        `${color.bold(" TLS " + expiresIn)} (${color(expDate.toISOString())})`
+      );
     } else {
       tlsInfo += `  ${chalk.red("TLS info unavailable")}`;
     }
