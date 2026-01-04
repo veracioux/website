@@ -19,7 +19,8 @@ env:
   GITHUB_README_STATS_PAT: ${{ secrets.README_STATS_PAT }}
   # Expects credentials for service account:
   #   {environment}-deployer@veracioux.iam.gserviceaccount.com
-  GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+  GCP_SA_KEY: |-
+    ${{ secrets.GCP_SA_KEY }}
 
 jobs:
   provision:
@@ -37,7 +38,8 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ env.GCP_SA_KEY }}
+          credentials_json: |-
+            ${{ env.GCP_SA_KEY }}
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
       - name: Set up SSH
