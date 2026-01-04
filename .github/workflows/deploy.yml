@@ -1,8 +1,8 @@
-name: Staging Deploy
+name: Deploy staging
 
 on:
   workflow_run:
-    workflows: ["Build"]
+    workflows: ["Set up staging infrastructure"]
     types: [completed]
     branches: [staging]
 
@@ -16,38 +16,6 @@ env:
   GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 
 jobs:
-  terraform-apply:
-    runs-on: ubuntu-latest
-    environment: stg
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v3
-
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ env.GCP_SA_KEY }}
-
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Select stg workspace
-        working-directory: host
-        run: |
-          mkdir -p .terraform
-          echo stg > .terraform/environment
-
-      - name: Terraform Init
-        working-directory: host
-        run: terraform init
-
-      - name: Terraform Apply
-        working-directory: host
-        run: terraform apply -auto-approve
-
   provision:
     runs-on: ubuntu-latest
     environment: stg
