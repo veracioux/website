@@ -4,11 +4,13 @@ import path from "path";
 import sharp from "sharp";
 import fs from "fs/promises";
 import os from "os";
-import puppeteer from "puppeteer";
+import puppeteer, { type Browser } from "puppeteer";
 
 async function convert(
   imagePath: string,
-  outputColumns: number
+  outputColumns: number,
+  id: string,
+  browser: Browser
 ): Promise<string> {
   // Convert webp to temporary jpg
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "ascii-"));
@@ -34,10 +36,6 @@ async function convert(
     });
 
     const html = new Convert().toHtml(asciiString);
-    const browser = await puppeteer.launch({
-      headless: "new",
-      args: ["--no-sandbox"],
-    });
     const page = await browser.newPage();
     await page.setViewport({
       width: Math.floor(26 * outputColumns), // Empirically determined
@@ -46,23 +44,24 @@ async function convert(
       },
     });
     const fullHtml = `
-      <html>
-        <body style="margin: 0; font-size: 22px; font-family: monospace">
-          ${html}
-        </body>
-      </html>
-    `;
+        <html>
+          <body style="margin: 0; font-size: 22px; font-family: monospace">
+            ${html}
+          </body>
+        </html>
+      `;
+    console.log(`Mugshot ${id}: Waiting for page to load...`);
     await page.setContent(fullHtml, {
       waitUntil: "networkidle0",
       // Default of 30s can be too short on CI
       timeout: 600_000,
     });
+    console.log(`Mugshot ${id}: Taking screenshot...`);
     await page.screenshot({
       path: screenshotPath,
       omitBackground: true,
       fullPage: true,
     });
-    await browser.close();
     const buffer = await fs.readFile(screenshotPath);
     return `data:image/png;base64,${buffer.toString("base64")}`;
   } finally {
@@ -75,6 +74,7 @@ function rollupPlugin() {
   const regex0 = /^virtual:ascii-mugshot\//;
   // eslint-disable-next-line no-control-regex
   const regex1 = /^\x00virtual:ascii-mugshot\/(.+)/;
+  let browser: Browser | null = null;
 
   return {
     name: "ascii-mugshot",
@@ -85,14 +85,30 @@ function rollupPlugin() {
       return null;
     },
     async load(id: string) {
+      if (!browser) {
+        browser = await puppeteer.launch({
+          headless: "new",
+          args: ["--no-sandbox"],
+        });
+      }
       const match = regex1.exec(id);
       if (!match) return null;
       const mugshotColumnWidth = Number(regex1.exec(id)![1]);
+      console.log(`Generating ASCII mugshot ${id}...`);
       const dataUrl = await convert(
         path.resolve(__dirname, "../../src/assets/mugshot.webp"),
-        mugshotColumnWidth
+        mugshotColumnWidth,
+        id,
+        browser
       );
+      console.log(`Generated ASCII mugshot ${id}.`);
       return "export default " + JSON.stringify(dataUrl) + ";";
+    },
+    generateBundle() {
+      if (browser) {
+        browser.close();
+        browser = null;
+      }
     },
   };
 }
