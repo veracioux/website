@@ -55,7 +55,7 @@ async function convert(
     await page.setContent(fullHtml, {
       waitUntil: "networkidle0",
       // Default of 30s can be too short on CI
-      timeout: 120_000,
+      timeout: 600_000,
     });
     await page.screenshot({
       path: screenshotPath,
