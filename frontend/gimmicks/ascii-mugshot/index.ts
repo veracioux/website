@@ -73,6 +73,7 @@ function rollupPlugin() {
   // eslint-disable-next-line no-control-regex
   const regex1 = /^\x00virtual:ascii-mugshot\/(.+)/;
   let browser: Browser | null = null;
+  let browserLoadingInProgress = false;
 
   return {
     name: "ascii-mugshot",
@@ -83,11 +84,19 @@ function rollupPlugin() {
       return null;
     },
     async load(id: string) {
-      if (!browser) {
-        browser = await puppeteer.launch({
-          headless: "new",
-          args: ["--no-sandbox"],
-        });
+      if (!browser && !browserLoadingInProgress) {
+        console.log(
+          "Launching puppeteer browser for ASCII mugshot generation..."
+        );
+        browserLoadingInProgress = true;
+        try {
+          browser = await puppeteer.launch({
+            headless: "new",
+            args: ["--no-sandbox"],
+          });
+        } finally {
+          browserLoadingInProgress = false;
+        }
       }
       const match = regex1.exec(id);
       if (!match) return null;
@@ -97,13 +106,14 @@ function rollupPlugin() {
         path.resolve(__dirname, "../../src/assets/mugshot.webp"),
         mugshotColumnWidth,
         id,
-        browser
+        browser!
       );
       console.log(`Generated ASCII mugshot ${id}.`);
       return "export default " + JSON.stringify(dataUrl) + ";";
     },
     generateBundle() {
       if (browser) {
+        console.log("Closing puppeteer browser...");
         browser.close();
         browser = null;
       }
