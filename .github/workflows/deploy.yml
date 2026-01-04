@@ -75,4 +75,10 @@ jobs:
             ssl_key='${{ env.VERACIOUX_SSL_KEY }}'
             docker_password='${{ env.VERACIOUX_DOCKER_PASSWORD }}'
             github_readme_stats_pat='${{ env.GITHUB_README_STATS_PAT }}'" \
-            host/playbook.yml
+             host/playbook.yml
+      - name: Tag deployment
+        run: |
+          timestamp=$(date -u +"%Y_%m_%dT%H_%M_%SZ")
+          tag="${{ env.environment }}-${timestamp}"
+          git tag "$tag"
+          git push origin "$tag"
