@@ -52,9 +52,7 @@ async function convert(
       `;
     console.log(`Mugshot ${id}: Waiting for page to load...`);
     await page.setContent(fullHtml, {
-      waitUntil: "networkidle0",
-      // Default of 30s can be too short on CI
-      timeout: 600_000,
+      waitUntil: "domcontentloaded",
     });
     console.log(`Mugshot ${id}: Taking screenshot...`);
     await page.screenshot({
