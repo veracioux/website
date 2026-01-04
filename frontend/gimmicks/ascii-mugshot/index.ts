@@ -51,7 +51,11 @@ async function convert(
         </body>
       </html>
     `;
-    await page.setContent(fullHtml, { waitUntil: "networkidle0" });
+    await page.setContent(fullHtml, {
+      waitUntil: "networkidle0",
+      // Default of 30s can be too short on CI
+      timeout: 120_000,
+    });
     await page.screenshot({
       path: screenshotPath,
       omitBackground: true,
