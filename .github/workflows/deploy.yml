@@ -31,9 +31,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: APT update
-        run: apt-get update -y
+        run: sudo apt-get update -y
       - name: Install dependencies
-        run: apt-get install -y --no-install-recommends ansible
+        run: sudo apt-get install -y --no-install-recommends ansible
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
