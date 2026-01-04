@@ -24,7 +24,9 @@ env:
 jobs:
   provision:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev' }}
+    environment: ${{ inputs.environment || vars.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev') }}
+    env:
+      environment: ${{ inputs.environment || vars.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -42,12 +44,12 @@ jobs:
         run: |
           # Set up initial SSh connection to create SSH key trusted by server
           gcloud_ssh() {
-            gcloud compute ssh --project=veracioux --zone=europe-west1-b haris@${{ job.environment }}-vm "$@"
+            gcloud compute ssh --project=veracioux --zone=europe-west1-b haris@${{ env.environment }}-vm "$@"
           }
-          if [ "${{ job.environment }}" = "prod" ]; then
+          if [ "${{ env.environment }}" = "prod" ]; then
             hostname="veracioux.me"
           else
-            hostname="${{ job.environment }}.veracioux.me"
+            hostname="${{ env.environment }}.veracioux.me"
           fi
           echo -e "y\n" | gcloud_ssh -- true
           # Add server's SSH key to known_hosts under $hostname
@@ -65,10 +67,10 @@ jobs:
       - name: Run Ansible playbook
         run: |
           ansible-galaxy collection install community.docker --force
-          if [ "${{ job.environment }}" = "prod" ]; then
+          if [ "${{ env.environment }}" = "prod" ]; then
             hostname="veracioux.me"
           else
-            hostname="${{ job.environment }}.veracioux.me"
+            hostname="${{ env.environment }}.veracioux.me"
           fi
           ansible-playbook -i "$hostname," \
             --extra-vars "
