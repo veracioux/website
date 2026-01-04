@@ -4,7 +4,7 @@ on:
   workflow_run:
     workflows: ["Set up infrastructure"]
     types: [completed]
-    branches: [staging]
+    branches: [staging, main]
   workflow_dispatch:
 
 env:
