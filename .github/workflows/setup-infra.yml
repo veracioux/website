@@ -15,7 +15,8 @@ on:
 env:
   # Expects credentials for service account:
   #   {environment}-deployer@veracioux.iam.gserviceaccount.com
-  GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+  GCP_SA_KEY: |-
+    ${{ secrets.GCP_SA_KEY }}
 
 jobs:
   terraform-apply:
@@ -27,13 +28,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Print environment
+        run: |
+          echo "job.environment: ${{ job.environment }}"
+          echo "inputs.environment: ${{ inputs.environment }}"
+          echo "vars.environment: ${{ vars.environment }}"
+
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: |
+          credentials_json: |-
             ${{ env.GCP_SA_KEY }}
 
       - name: Set up Cloud SDK
