@@ -4,8 +4,6 @@
   "scripts": {
     "dev": "nuxt dev",
     "lint": "eslint",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
     "generate": "nuxt generate",
     "postinstall": "nuxt prepare",
     "typecheck": "nuxt typecheck"
