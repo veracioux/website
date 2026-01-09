@@ -44,9 +44,9 @@ in the reverse proxy I only expose my own stats. This is to prevent abuse
 The web server is deployed as a VPS on *Google Cloud*. It is done using the
 following tools:
 - *Docker Compose* for orchestrating the services (see [[file:compose.yml][compose.yml]])
-- *Terraform* as the IaC tool (see [[file:host/main.tf][host/main.tf]])
-- *Ansible* for provisioning (see [[file:host/playbook.yml][host/playbook.yml]])
-- *Vagrant* for preview deployment in a local VM (see [[file:host/Vagrantfile][host/Vagrantfile]])
+- *Terraform* as the IaC tool (see [[file:infra/main.tf][infra/main.tf]])
+- *Ansible* for provisioning (see [[file:infra/playbook.yml][infra/playbook.yml]])
+- *Vagrant* for preview deployment in a local VM (see [[file:infra/Vagrantfile][infra/Vagrantfile]])
 
 Currently the whole web server can be deployed on a single machine of class
 *e2-small*, running *Debian 13*. The deployment is done on separate =prod= and =stg=
@@ -54,11 +54,11 @@ Currently the whole web server can be deployed on a single machine of class
 
 ** Deployment Strategy
 - Build and push new images to =docker.veracioux.me=
-- Provision a temporary staging environment via [[file:host/playbook.yml][Ansible]]
+- Provision a temporary staging environment via [[file:infra/playbook.yml][Ansible]]
 - Clone production data to a temporary staging instance
 - (New version was already deployed in the)
 - Run tests on staging
-- If tests pass, deploy to production via [[file:host/playbook.yml][Ansible provisioning]]
+- If tests pass, deploy to production via [[file:infra/playbook.yml][Ansible provisioning]]
 * Configuration
 ** Local ports
 The following ports are used by the compose services:
