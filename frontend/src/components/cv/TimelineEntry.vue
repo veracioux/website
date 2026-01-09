@@ -86,7 +86,9 @@ defineProps<
     .dot,
     .timeSpan,
     .description {
-      transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+      transition:
+        transform 0.2s ease-in-out,
+        background-color 0.2s ease-in-out;
     }
 
     .dot {

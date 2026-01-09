@@ -105,12 +105,12 @@ export default cmd({
             log("Updating SSH known hosts");
             await $`ssh ${hostname} true`;
             if (argv.prod) {
-                await $`sudo hostess add me ${argv.ip}`;
-                await $`ssh me true`;
+              await $`sudo hostess add me ${argv.ip}`;
+              await $`ssh me true`;
             }
           } finally {
             // Ensure sudo access isn't cached
-            await $`sudo -k`
+            await $`sudo -k`;
           }
         },
       }),

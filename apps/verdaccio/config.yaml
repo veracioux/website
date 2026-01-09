@@ -10,10 +10,10 @@ uplinks:
     cache: false
 
 packages:
-  '**':
+  "**":
     access: $all
     publish: $authenticated
     proxy: npmjs
 
 logs:
-  - {type: stdout, format: pretty, level: http}
+  - { type: stdout, format: pretty, level: http }

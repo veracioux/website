@@ -3,15 +3,15 @@ name: Build
 on:
   push:
     paths:
-      - '.github/workflows/build.yml'
-      - 'compose.yml'
-      - 'apps/**'
-      - 'docker/**'
-      - 'frontend/**'
-      - 'lib/**'
-      - 'package.json'
-      - 'bun.lock'
-      - 'nginx.conf'
+      - ".github/workflows/build.yml"
+      - "compose.yml"
+      - "apps/**"
+      - "docker/**"
+      - "frontend/**"
+      - "lib/**"
+      - "package.json"
+      - "bun.lock"
+      - "nginx.conf"
   workflow_dispatch:
 
 env:
@@ -33,23 +33,23 @@ jobs:
         with:
           base: ${{ github.ref_name }}
           filters: |
-           github_stats:
-             - '.github/workflows/build.yml'
-             - 'compose.yml'
-             - 'apps/github-stats/**'
-           frontend:
-             - '.github/workflows/build.yml'
-             - 'compose.yml'
-             - 'frontend/**'
-             - 'lib/**'
-             - 'docker/frontend.Dockerfile'
-             - 'package.json'
-             - 'bun.lock'
-           web:
-             - '.github/workflows/build.yml'
-             - 'compose.yml'
-             - 'docker/web.Dockerfile'
-             - 'nginx.conf'
+            github_stats:
+              - '.github/workflows/build.yml'
+              - 'compose.yml'
+              - 'apps/github-stats/**'
+            frontend:
+              - '.github/workflows/build.yml'
+              - 'compose.yml'
+              - 'frontend/**'
+              - 'lib/**'
+              - 'docker/frontend.Dockerfile'
+              - 'package.json'
+              - 'bun.lock'
+            web:
+              - '.github/workflows/build.yml'
+              - 'compose.yml'
+              - 'docker/web.Dockerfile'
+              - 'nginx.conf'
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3

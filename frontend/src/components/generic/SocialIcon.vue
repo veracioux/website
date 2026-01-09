@@ -63,7 +63,11 @@ const href =
   >
     <Icon
       :name="name"
-      :style="colorize ? nameToDataMap[name as keyof typeof nameToDataMap]?.style : undefined"
+      :style="
+        colorize
+          ? nameToDataMap[name as keyof typeof nameToDataMap]?.style
+          : undefined
+      "
     />
     <span class="ml-1.5">{{ text }}</span>
   </component>

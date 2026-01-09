@@ -76,8 +76,9 @@ $navbarHeight: 3.2rem;
   font-size: 12px;
 
   // All these fonts are here so I can switch when I get bored of the current one
-  font-family: "Secular One", "Kanit", "Play", "Mitr", "Hammersmith One",
-    "Roboto Mono", Helvetica, sans-serif;
+  font-family:
+    "Secular One", "Kanit", "Play", "Mitr", "Hammersmith One", "Roboto Mono",
+    Helvetica, sans-serif;
 
   @include screenSizeAbove($small) {
     font-size: 14px;
