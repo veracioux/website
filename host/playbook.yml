@@ -1,8 +1,3 @@
-# TODO: Adapt this, formerly in dockerfile
-# RUN apk add php81-fpm php81-session
-# COPY proxy/php-fpm.conf /etc/php81/php-fpm.d/www.conf
-# COPY proxy/php.ini /etc/php81/php.ini
-# COPY proxy/dummy.staging.htpasswd /var/www/auth/staging.htpasswd
 ---
 - hosts:
     - veracioux.me
