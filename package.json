@@ -11,7 +11,9 @@
     "cli": "cd cli && bun run cli",
     "cli:build": "cd cli && bun run build $@",
     "cli:build-publish": "cd cli && bun run build-publish $@",
-    "frontend:dev": "cd frontend && bun run dev"
+    "frontend:dev": "cd frontend && bun run dev",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "catalog": {
     "puppeteer": "^19.2.2"

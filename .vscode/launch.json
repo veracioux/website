@@ -20,7 +20,7 @@
       "name": "bun attach",
       "type": "bun",
       "request": "attach",
-      "url": "ws://localhost:6499/",
+      "url": "ws://localhost:6499/"
     }
   ]
 }

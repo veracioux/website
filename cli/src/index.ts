@@ -24,7 +24,7 @@ if (env === "dev" && !process.env.VERACIOUX_IS_DEV_CLI) {
       ...process.env,
       BUN_OPTIONS: "",
       NODE_OPTIONS: "",
-    }
+    },
   }).exited;
 } else {
   const cli = yargs(hideBin(process.argv))

@@ -3,8 +3,8 @@ repos:
     hooks:
       - id: prettier-check
         name: Check prettier formatting
-        entry: bun run --cwd frontend/ format:check
+        entry: bun run format:check
         language: system
         files: \.(js|ts|vue|scss|css|json|yml|yaml)$
-        exclude: ^\.nuxt/|^node_modules/|^bun\.lock$
+        exclude: ^\.nuxt/|^\.output|^dist|^node_modules/|^bun\.lock|^\.tem|^wt.*|^infra/backup$
         pass_filenames: false

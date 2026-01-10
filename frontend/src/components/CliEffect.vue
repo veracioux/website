@@ -25,8 +25,8 @@ const prompt = computed(() =>
   props.prompt === true
     ? defaultPrompt
     : props.prompt === false
-    ? ""
-    : props.prompt ?? defaultPrompt
+      ? ""
+      : (props.prompt ?? defaultPrompt)
 );
 </script>
 
