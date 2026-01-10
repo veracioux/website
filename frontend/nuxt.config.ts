@@ -10,11 +10,6 @@ const config: NuxtConfig = {
     preset: "static",
   },
   srcDir: "src/",
-  runtimeConfig: {
-    public: {
-      env: process.env.ENV,
-    },
-  },
   devServer: {
     port: 8080,
   },
