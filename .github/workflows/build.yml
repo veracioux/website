@@ -100,7 +100,13 @@ jobs:
       - name: Push images to custom registry
         if: github.ref_name == 'main' || github.ref_name == 'staging' || github.ref_name == 'dev'
         run: |
-          docker tag github-stats docker.veracioux.me/github-stats:${{ env.DOCKER_IMAGES_VERSION }}
-          docker tag web docker.veracioux.me/web:${{ env.DOCKER_IMAGES_VERSION }}
-          docker compose push github-stats
-          docker compose push web
+          if [ "${{ steps.changes.outputs.github_stats }}" = "true" ]; then
+            echo "Pushing github-stats image..."
+            docker tag github-stats docker.veracioux.me/github-stats:${{ env.DOCKER_IMAGES_VERSION }}
+            docker compose push github-stats
+          fi
+          if [ "${{ steps.changes.outputs.frontend }}" = "true" ] || [ "${{ steps.changes.outputs.web }}" = "true" ]; then
+            echo "Pushing web image..."
+            docker tag web docker.veracioux.me/web:${{ env.DOCKER_IMAGES_VERSION }}
+            docker compose push web
+          fi
