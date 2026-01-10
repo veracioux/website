@@ -36,15 +36,15 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
 
       - name: Select ${{ env.environment }} workspace
-        working-directory: host
+        working-directory: infra
         run: |
           mkdir -p .terraform
           echo ${{ env.environment }} > .terraform/environment
 
       - name: Terraform Init
-        working-directory: host
+        working-directory: infra
         run: terraform init
 
       - name: Terraform Apply
-        working-directory: host
+        working-directory: infra
         run: terraform apply -auto-approve
