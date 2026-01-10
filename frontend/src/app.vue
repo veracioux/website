@@ -4,7 +4,7 @@ import { useHead } from "nuxt/app";
 import { ScrollData } from "./inject";
 
 useHead({
-  title: "veracioux | Haris Gušić",
+  title: "Haris Gušić | veracioux",
   htmlAttrs: {
     lang: "en",
   },
