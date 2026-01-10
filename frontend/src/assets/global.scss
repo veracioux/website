@@ -1,6 +1,12 @@
 // TODO: Reconcile with common.module.scss
 @tailwind base;
 @tailwind components;
+@tailwind utilities;
+@layer utilities {
+  .content-auto {
+    content-visibility: auto;
+  }
+}
 
 @layer components {
   .only-print {
