@@ -4,7 +4,16 @@ import { computed, ref } from "vue";
 import PageWithNavbar from "./components/PageWithNavbar.vue";
 import { ClientOnly } from "#components";
 import { ScrollData } from "./inject";
-import type { NuxtError } from "#app";
+import { useServerHead, type NuxtError } from "#app";
+
+useServerHead({
+  meta: [
+    {
+      name: "robots",
+      content: "noindex, nofollow",
+    },
+  ],
+});
 
 const props = defineProps<{
   error: NuxtError;
