@@ -2,6 +2,12 @@ import vueJsx from "@vitejs/plugin-vue-jsx";
 import { rollupPlugin as asciiMugshotRollupPlugin } from "@veracioux/ascii-mugshot";
 
 import { type NuxtConfig } from "nuxt/config";
+import environment from "./src/environment";
+
+// Prevents indexing of staging site
+if (environment.IS_STAGING) {
+  process.env.NUXT_SITE_ENV = "staging";
+}
 
 const config: NuxtConfig = {
   compatibilityDate: "2025-11-23",

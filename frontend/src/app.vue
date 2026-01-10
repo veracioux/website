@@ -5,7 +5,6 @@ import { ScrollData } from "./inject";
 import faviconUrl from "@/assets/favicon.ico";
 import avatarUrl from "@/assets/avatar.webp";
 import environment from "@/environment";
-import { useRobotsRule } from "#imports";
 
 if (import.meta.server) {
   const title =
@@ -30,10 +29,6 @@ if (import.meta.server) {
           },
         ]
       : undefined,
-  });
-
-  useRobotsRule({
-    none: environment.IS_STAGING,
   });
 
   useSeoMeta({
