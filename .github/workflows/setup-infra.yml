@@ -1,4 +1,5 @@
 name: Set up infrastructure
+run-name: Set up infrastructure (${{ github.ref_name }})
 
 on:
   workflow_run:
