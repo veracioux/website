@@ -118,15 +118,20 @@ onBeforeUnmount(() => {
       </div>
     </template>
     <!-- TODO: #home is connected with shutter. Connect them via explicit reference -->
-    <div class="%home-section-space-occupant no-print h-[35%]"></div>
-    <div id="home" class="%home-section-space-occupant no-print h-[65%]"></div>
+    <div
+      class="%home-section-space-occupant no-print h-[35%] content-auto"
+    ></div>
+    <div
+      id="home"
+      class="%home-section-space-occupant no-print h-[65%] content-auto"
+    ></div>
     <div
       class="%home-section-space-occupant no-print h-full"
       v-if="relativeScrollY <= 1"
     ></div>
     <div
       id="shutter-intro-container"
-      class="relative h-full w-full inset-0 pointer-events-none no-print"
+      class="relative h-full w-full inset-0 pointer-events-none no-print content-auto"
       :style="
         relativeScrollY > 1
           ? {}
@@ -150,9 +155,9 @@ onBeforeUnmount(() => {
         name="arrowDown"
       ></Icon>
     </div>
-    <Projects id="projects" class="min-h-full" />
-    <CV id="cv" />
-    <About id="about" class="about" />
+    <Projects id="projects" class="min-h-full content-auto" />
+    <CV id="cv" class="content-auto" />
+    <About id="about" class="about content-auto" />
     <!--            <Contact id="contact" class="contact" />-->
   </PageWithNavbar>
 </template>
