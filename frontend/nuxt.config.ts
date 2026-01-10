@@ -5,7 +5,7 @@ import { type NuxtConfig } from "nuxt/config";
 
 const config: NuxtConfig = {
   compatibilityDate: "2025-11-23",
-  modules: ["@nuxtjs/google-fonts", "@nuxtjs/tailwindcss"],
+  modules: ["@nuxtjs/google-fonts", "@nuxtjs/tailwindcss", "@nuxtjs/robots"],
   nitro: {
     preset: "static",
   },

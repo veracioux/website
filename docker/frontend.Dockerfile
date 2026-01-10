@@ -1,6 +1,7 @@
 # -*- mode: dockerfile; -*- vim: filetype=dockerfile
 
 FROM oven/bun:1.3.5-slim AS build
+ARG IS_STAGING="false"
 
 RUN apt-get update -y
 

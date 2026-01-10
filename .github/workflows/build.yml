@@ -77,6 +77,8 @@ jobs:
         with:
           context: .
           file: docker/frontend.Dockerfile
+          build-args: |
+            IS_STAGING=${{ github.ref_name == 'staging' }}
           tags: frontend
           cache-from: type=gha
           cache-to: type=gha,mode=max
