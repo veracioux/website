@@ -35,16 +35,6 @@ services:
       - "${HTPASSWD_PATH:-./dev.htpasswd}:/auth/htpasswd:ro"
       - "${DOCKER_REGISTRY_DIR:-docker-registry-data}:/var/lib/registry"
 
-  ssh-key:
-    image: linuxserver/openssh-server:latest
-    environment:
-      PASSWORD_ACCESS: true
-      USER_PASSWORD: ssh-key
-      USER_NAME: ssh-key
-    ports:
-      - "${EXPOSED_IP:-127.0.0.1}:12222:2222"
-    restart: always
-
   github-stats:
     image: docker.veracioux.me/github-stats:${DOCKER_IMAGES_VERSION:-latest}
     build:
