@@ -85,6 +85,7 @@ jobs:
           load: true
 
       - name: Create tag docker.veracioux.me/frontend:latest
+        if: steps.changes.outputs.frontend == 'true'
         run: |
           docker tag frontend docker.veracioux.me/frontend:latest
 
