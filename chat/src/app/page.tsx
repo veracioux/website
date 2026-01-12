@@ -1,9 +1,11 @@
+import AppSwitcher from "@/components/AppSwitcher";
 import PromptArea from "@/components/PromptArea";
 import { Fab } from "@mui/material";
 
 export default function Page() {
   return (
     <div className="h-screen w-screen">
+      <AppSwitcher></AppSwitcher>
       <div className="h-full p-12 flex flex-col items-center justify-between">
         <main className="flex flex-col items-center p-8 sm:p-16 md:p-32">
           <div className="font-bold flex flex-col gap-4 text-center text-2xl">
