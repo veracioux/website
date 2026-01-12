@@ -1,0 +1,22 @@
+{
+  "name": "@veracioux/chat",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "start": "NODE_ENV=production bun src/index.ts",
+    "build": "bun run build.ts"
+  },
+  "dependencies": {
+    "next": "^16.1.1",
+    "react": "^19",
+    "react-dom": "^19",
+    "tailwindcss": "^4.1.11"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5.9.3"
+  }
+}
