@@ -108,7 +108,7 @@ function AppSwitcher(props: { className?: string }) {
           clipPath,
           transition: isDragging
             ? "none"
-            : `clip-path ${crossedThreshold ? 0.5 : 0.15}s ease-out`,
+            : `clip-path ${crossedThreshold ? 1.0 : 0.15}s ease-out`,
         }}
       >
         {/* TODO: URL */}
