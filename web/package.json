@@ -1,12 +1,11 @@
 {
-  "name": "@veracioux/chat",
+  "name": "@veracioux/web",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev --port 3001",
-    "start": "NODE_ENV=production bun src/index.ts",
-    "build": "bun run build.ts"
+    "dev": "next dev --port 8000",
+    "build": "next build"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

@@ -62,10 +62,9 @@ function PromptArea(props: { className?: string }) {
         }}
       >
         {PROMPT_SUGGESTIONS.map((suggestion, index) => (
-          <Grow in={!promptValue} timeout={300}>
+          <Grow in={!promptValue} timeout={300} key={index}>
             <Chip
               className="origin-left"
-              key={index}
               tabIndex={-1}
               onFocus={focusTextField}
               variant="outlined"

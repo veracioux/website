@@ -6,14 +6,15 @@
     "frontend",
     "frontend/gimmicks/ascii-mugshot",
     "lib",
-    "chat"
+    "chat",
+    "web"
   ],
   "scripts": {
     "cli": "cd cli && bun run cli",
     "cli:build": "cd cli && bun run build $@",
     "cli:build-publish": "cd cli && bun run build-publish $@",
     "frontend:dev": "cd frontend && bun run dev",
-    "chat:dev": "cd chat && bun run dev",
+    "web:dev": "cd web && bun run dev",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
