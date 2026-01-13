@@ -123,8 +123,8 @@ function AppSwitcher(props: { className?: string }) {
             : `translate(${delta.x}px, ${delta.y}px)`,
           top: crossedThreshold ? "auto" : undefined,
           left: crossedThreshold ? "auto" : undefined,
-          bottom: crossedThreshold ? "1.25rem" : undefined,
-          right: crossedThreshold ? "1.25rem" : undefined,
+          bottom: crossedThreshold ? "2rem" : undefined,
+          right: crossedThreshold ? "2rem" : undefined,
         }}
         className={clsx(
           "absolute -top-5 -left-5",
