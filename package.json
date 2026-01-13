@@ -6,7 +6,9 @@
     "frontend",
     "frontend/gimmicks/ascii-mugshot",
     "lib",
-    "chat"
+    "chat",
+    "chat/fe",
+    "chat/api"
   ],
   "scripts": {
     "cli": "cd cli && bun run cli",
