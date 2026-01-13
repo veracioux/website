@@ -6,7 +6,6 @@
     "frontend",
     "frontend/gimmicks/ascii-mugshot",
     "lib",
-    "chat",
     "chat/fe",
     "chat/api"
   ],
