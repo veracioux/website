@@ -1,0 +1,9 @@
+{
+  "name": "@veracioux/chat-lib",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

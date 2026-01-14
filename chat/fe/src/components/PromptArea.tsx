@@ -6,8 +6,10 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import clsx from "clsx";
 import { useRef, useState, type KeyboardEventHandler } from "react";
 import React from "react";
+import { useMessaging } from "@/hooks/messaging";
 
 const PROMPT_SUGGESTIONS = [
+  "Hi Haris, I'm a recruiter. Would you be intereseted in a job opportunity?",
   "Hi Haris, I'm a recruiter. Please send me a customized resume.",
   "Hi Haris, I'd like to collaborate on a project about...",
 ];
@@ -19,9 +21,14 @@ function PromptArea(props: { className?: string }) {
     x: 0,
     y: 0,
   });
+  const messaging = useMessaging();
 
   const onSubmit = (value: string) => {
     setPromptValue("");
+    messaging.sendMessage({
+      content: value,
+      recipient: "agent", // FIXME
+    });
   };
 
   const onKeyDown: KeyboardEventHandler = (
@@ -56,20 +63,23 @@ function PromptArea(props: { className?: string }) {
       )}
     >
       <div
-        className={clsx("flex flex-col items-start gap-2 mb-2", "suggestions")}
+        className={clsx("flex flex-col items-start gap-2 mb-2")}
         style={{
           transform: `translate(${suggestionsTranslation.x}px, ${suggestionsTranslation.y}px)`,
         }}
       >
         {PROMPT_SUGGESTIONS.map((suggestion, index) => (
-          <Grow in={!promptValue} timeout={300}>
+          <Grow in={!promptValue} timeout={300} key={index}>
             <Chip
               className="origin-left"
-              key={index}
               tabIndex={-1}
               onFocus={focusTextField}
               variant="outlined"
-              {...{ onClick() {} }}
+              {...{
+                onClick(e: React.MouseEvent<HTMLDivElement>) {
+                  setPromptValue(suggestion);
+                },
+              }}
               label={suggestion}
             />
           </Grow>
@@ -78,7 +88,6 @@ function PromptArea(props: { className?: string }) {
       <TextField
         ref={textFieldRef}
         className={clsx(
-          "textfield",
           "w-full [&_textarea]:pr-10!",
           "transition-all duration-300 origin-top",
           "focus-within:shadow-lg focus-within:scale-[115%]"

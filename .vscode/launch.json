@@ -21,6 +21,16 @@
       "type": "bun",
       "request": "attach",
       "url": "ws://localhost:6499/"
+    },
+    {
+      "name": "chat:api",
+      "type": "node",
+      "request": "launch",
+      "runtimeVersion": "20",
+      "runtimeExecutable": "npm",
+      "args": ["run", "dev"],
+      "cwd": "${workspaceFolder}/chat/api",
+      "console": "integratedTerminal"
     }
   ]
 }

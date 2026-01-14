@@ -1,5 +1,5 @@
 {
-  "name": "@veracioux/chat/fe",
+  "name": "@veracioux/chat-frontend",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -9,6 +9,8 @@
     "build": "bun run build.ts"
   },
   "dependencies": {
+    "@veracioux/lib": "workspace:*",
+    "@veracioux/chat-lib": "workspace:*",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.7",
@@ -22,6 +24,7 @@
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
+    "@types/node": "^25.0.8",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "typescript": "^5.9.3"
