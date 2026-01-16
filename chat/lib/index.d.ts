@@ -1,9 +1,13 @@
 type Variant = "query" | "update" | "create";
 
+type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & {};
+
 type Dto<
   V extends Variant,
   T extends { query: infer Q; create: infer C },
-> = V extends "query" ? T["query"] : T["create"];
+> = V extends "query" ? Prettify<T["query"]> : Prettify<T["create"]>;
 
 type ChatMessageCreate = {
   content: string;
@@ -50,3 +54,21 @@ export type ChatMetadata<V extends Variant = "query"> = Dto<
     create: {};
   }
 >;
+
+export type MessageAck = {
+  id: string;
+  type: "received";
+  timestamp: string;
+};
+
+export type MessageError = { error: string };
+
+export type WebSocketMessage =
+  | {
+      event: "ack";
+      data: MessageAck;
+    }
+  | {
+      event: "message";
+      data: ChatMessage<"create">;
+    };

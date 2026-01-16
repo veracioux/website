@@ -9,18 +9,20 @@
     "build": "bun run build.ts"
   },
   "dependencies": {
-    "@veracioux/lib": "workspace:*",
-    "@veracioux/chat-lib": "workspace:*",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.7",
     "@mui/material": "^7.3.7",
+    "@reduxjs/toolkit": "^2.11.2",
     "@tailwindcss/postcss": "^4.1.18",
+    "@veracioux/chat-lib": "workspace:*",
+    "@veracioux/lib": "workspace:*",
     "clsx": "^2.1.1",
     "next": "^16.1.1",
     "postcss": "^8.5.6",
     "react": "^19",
     "react-dom": "^19",
+    "react-redux": "^9.2.0",
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {

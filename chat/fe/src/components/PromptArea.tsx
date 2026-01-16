@@ -7,6 +7,10 @@ import clsx from "clsx";
 import { useRef, useState, type KeyboardEventHandler } from "react";
 import React from "react";
 import { useMessaging } from "@/hooks/messaging";
+import type { State } from "@/lib/store";
+import { useDispatch, useSelector } from "react-redux";
+import store from "@/lib/store";
+import type { ChatMessage, MessageAck } from "@veracioux/chat-lib";
 
 const PROMPT_SUGGESTIONS = [
   "Hi Haris, I'm a recruiter. Would you be intereseted in a job opportunity?",
@@ -15,20 +19,25 @@ const PROMPT_SUGGESTIONS = [
 ];
 
 function PromptArea(props: { className?: string }) {
+  const messaging = useMessaging();
+  const currentChat = useSelector(
+    (state: State) => state.currentChat.queuedMessages
+  );
+  const dispatch = useDispatch();
   const [promptValue, setPromptValue] = useState("");
   const textFieldRef = useRef<HTMLDivElement>(null);
   const [suggestionsTranslation, setSuggestionsTranslation] = useState({
     x: 0,
     y: 0,
   });
-  const messaging = useMessaging();
 
   const onSubmit = (value: string) => {
-    setPromptValue("");
-    messaging.sendMessage({
+    const message: ChatMessage<"create"> = {
       content: value,
-      recipient: "agent", // FIXME
-    });
+      recipient: "haris", // FIXME
+    };
+    messaging.sendMessage(message);
+    setPromptValue("");
   };
 
   const onKeyDown: KeyboardEventHandler = (

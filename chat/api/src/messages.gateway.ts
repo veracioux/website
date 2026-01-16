@@ -5,11 +5,16 @@ import {
   SubscribeMessage,
   WebSocketGateway,
 } from "@nestjs/websockets";
-import type { ChatMessage } from "@veracioux/chat-lib";
+import type {
+  ChatMessage,
+  MessageAck,
+  WebSocketMessage,
+} from "@veracioux/chat-lib";
 import { IncomingMessage } from "http";
 import typia from "typia";
 import WebSocket from "ws";
 import * as url from "url";
+import { v4 as uuidv4 } from "uuid";
 
 type Query = {
   chatId: string;
@@ -32,13 +37,16 @@ export class MessagesGateway implements OnGatewayConnection {
   handleMessage(
     @MessageBody() data: ChatMessage<"create">,
     @ConnectedSocket() socket: EnrichedWebSocket
-  ): ChatMessage {
+  ): WebSocketMessage {
     const query = socket.query;
     const body = typia.assert<ChatMessage<"create">>(data);
     return {
-      id: "TODO",
-      content: `Received message ${body.content} for chat ${query.chatId}`,
-      timestamp: new Date().toISOString(),
-    } satisfies ChatMessage<"query">;
+      event: "ack",
+      data: {
+        type: "received",
+        id: uuidv4(),
+        timestamp: new Date().toISOString(),
+      },
+    };
   }
 }

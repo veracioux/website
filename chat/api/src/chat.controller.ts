@@ -8,6 +8,7 @@ import {
 import type { ChatMetadata } from "@veracioux/chat-lib";
 import { AgentService } from "./agent/agent.service";
 import { ApiTags } from "@nestjs/swagger";
+import { v4 as uuidv4 } from "uuid";
 
 @ApiTags("Chat")
 @Controller("chats")
@@ -28,7 +29,7 @@ export class ChatController {
   createChat(@TypedBody() body: ChatMetadata<"create">): ChatMetadata<"query"> {
     // FIXME
     return {
-      id: "chat-id-todo",
+      id: uuidv4(),
     };
   }
 }
