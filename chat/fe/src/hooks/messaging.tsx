@@ -13,7 +13,7 @@ import type {
   WebSocketMessage,
 } from "@veracioux/chat-lib";
 import { iife } from "@veracioux/lib/utils";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import store from "@/lib/store";
 import { createContext } from "react";
 import type { State } from "@/lib/store";
@@ -37,7 +37,7 @@ const context = createContext<MessagingContext | null>(null);
 export function MessagingProvider(props: PropsWithChildren) {
   const currentChat = useSelector((state: State) => state.currentChat);
 
-  const dispatch = useDispatch();
+  const dispatch = store.useAppDispatch();
 
   const events = useRef(new EventEmitter<Events>()).current;
 

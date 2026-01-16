@@ -6,11 +6,11 @@ import WelcomeMessage from "@/components/WelcomeMessage";
 import { MessagingProvider } from "@/hooks/messaging";
 import store, { type State } from "@/lib/store";
 import { useEffect } from "react";
-import { Provider, useDispatch, useSelector } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 
 function InnerPage() {
   const currentChat = useSelector((state: State) => state.currentChat);
-  const dispatch = useDispatch();
+  const dispatch = store.useAppDispatch();
 
   useEffect(() => {
     dispatch(store.currentChat.loadFromLocalStorage());

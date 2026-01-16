@@ -1,5 +1,5 @@
 "use client";
-import type { QueuedMessage } from "@/lib/store";
+import type { QueuedMessage } from "@/lib/types";
 import type { ChatMessage } from "@veracioux/chat-lib";
 import clsx from "clsx";
 
