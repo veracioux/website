@@ -35,16 +35,19 @@ const currentChatSlice = createSlice({
       state.id = action.payload;
       customLocalStorage.currentChatId = action.payload;
     },
-    appendMessage: (state, action: PayloadAction<ChatMessage>) => {
+    messageSent: (state, action: PayloadAction<ChatMessage>) => {
       state.messages.push(action.payload);
       customLocalStorage.setMessages(state.id!, state.messages);
     },
-    addMessageToQueue: (state, action: PayloadAction<QueuedMessage>) => {
+    messageQueued: (state, action: PayloadAction<QueuedMessage>) => {
       console.debug("Queueing message", action.payload);
       state.queuedMessages.push(action.payload);
     },
     /** Pop the oldest queued message from the queue. */
-    popQueuedMessage: (state, action: PayloadAction<{ requestId: string }>) => {
+    queuedMessagePopped: (
+      state,
+      action: PayloadAction<{ requestId: string }>
+    ) => {
       const index = state.queuedMessages.findIndex(
         (msg) => msg.requestId === action.payload.requestId
       );
@@ -52,7 +55,7 @@ const currentChatSlice = createSlice({
         throw new Error("Tried to remove a message from an empty queue");
       state.queuedMessages.splice(index, 1);
     },
-    markQueuedMessageAsFailed: (
+    queuedMessageFailedToSend: (
       state,
       action: PayloadAction<{ requestId: string }>
     ) => {

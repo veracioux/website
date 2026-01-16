@@ -75,15 +75,15 @@ export function MessagingProvider(props: PropsWithChildren) {
           const requestId = crypto.randomUUID();
           const queuedMessage = { ...message, requestId };
 
-          dispatch(store.currentChat.addMessageToQueue(queuedMessage));
+          dispatch(store.currentChat.messageQueued(queuedMessage));
           let received = false;
           const onAck = (ack: MessageAck) => {
             if (ack.type === "received") {
               console.debug("Ack received", ack);
               received = true;
-              dispatch(store.currentChat.popQueuedMessage({ requestId }));
+              dispatch(store.currentChat.queuedMessagePopped({ requestId }));
               dispatch(
-                store.currentChat.appendMessage({
+                store.currentChat.messageSent({
                   ...queuedMessage,
                   id: ack.id,
                   timestamp: ack.timestamp,
@@ -96,7 +96,7 @@ export function MessagingProvider(props: PropsWithChildren) {
             console.debug("Ack timeout for message", requestId);
             events.off("ack", onAck);
             if (!received)
-              store.currentChat.markQueuedMessageAsFailed({ requestId });
+              store.currentChat.queuedMessageFailedToSend({ requestId });
           }, 2000);
         },
         events,
