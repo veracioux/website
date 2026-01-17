@@ -4,7 +4,6 @@ import {
   configureStore,
   createAsyncThunk,
   createListenerMiddleware,
-  isAnyOf,
 } from "@reduxjs/toolkit";
 import type { ChatMessage } from "@veracioux/chat-lib";
 import customLocalStorage from "./customLocalStorage";

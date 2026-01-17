@@ -1,32 +1,45 @@
 "use client";
-import type { QueuedMessage } from "@/lib/types";
-import type { ChatMessage } from "@veracioux/chat-lib";
-import clsx from "clsx";
+import { useEffect } from "react";
+import Messages from "./Messages";
+import WelcomeMessage from "./WelcomeMessage";
+import store, { type State } from "@/lib/store";
+import { Provider, useSelector } from "react-redux";
+import PromptArea from "./PromptArea";
+import { MessagingProvider } from "@/hooks/messaging";
 
-function Chat(props: {
-  chatId: string;
-  messages: ChatMessage[];
-  queuedMessages: QueuedMessage[];
-  className?: string;
-}) {
+function InnerChat() {
+  const currentChat = useSelector((state: State) => state.currentChat);
+  const dispatch = store.useAppDispatch();
+
+  useEffect(() => {
+    dispatch(store.currentChat.loadFromLocalStorage());
+  }, []);
+
   return (
-    <div className={props.className}>
-      {props.messages.map((message) => (
-        <div key={message.id}>{message.content}</div>
-      ))}
-      {props.queuedMessages?.map((message) => (
-        <div
-          key={message.requestId}
-          className={clsx(
-            "opacity-35",
-            message.failed && "bg-red-600 line-through"
-          )}
-        >
-          {message.content}
-        </div>
-      ))}
-    </div>
+    <>
+      <main className="flex flex-col items-center w-full px-20">
+        {currentChat.id ? (
+          <Messages
+            className="w-full"
+            chatId={currentChat.id}
+            messages={currentChat.messages}
+            queuedMessages={currentChat.queuedMessages}
+          ></Messages>
+        ) : (
+          <WelcomeMessage></WelcomeMessage>
+        )}
+      </main>
+      <PromptArea className="w-full max-w-[60vw]" />
+    </>
   );
 }
 
-export default Chat;
+export default function Chat() {
+  return (
+    <Provider store={store.store}>
+      <MessagingProvider>
+        <InnerChat></InnerChat>
+      </MessagingProvider>
+    </Provider>
+  );
+}
