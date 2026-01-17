@@ -4,7 +4,13 @@ import { TextField, Fab, Grow } from "@mui/material";
 import Chip from "@mui/material/Chip";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import clsx from "clsx";
-import { useRef, useState, type KeyboardEventHandler } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type KeyboardEventHandler,
+} from "react";
 import React from "react";
 import { useMessaging } from "@/hooks/messaging";
 import type { ChatMessage } from "@veracioux/chat-lib";
@@ -15,6 +21,8 @@ const PROMPT_SUGGESTIONS = [
   "Hi Haris, I'd like to collaborate on a project about...",
 ];
 
+const SCALE_WHEN_UNFOCUSED = 0.85;
+
 function PromptArea(props: { className?: string }) {
   const messaging = useMessaging();
   const [promptValue, setPromptValue] = useState("");
@@ -23,6 +31,7 @@ function PromptArea(props: { className?: string }) {
     x: 0,
     y: 0,
   });
+  const [isFocused, setIsFocused] = useState(false);
 
   const onSubmit = (value: string) => {
     const message: ChatMessage<"create"> = {
@@ -43,18 +52,16 @@ function PromptArea(props: { className?: string }) {
     }
   };
 
-  const onPromptFocusChange: React.FocusEventHandler<HTMLElement> = (e) => {
+  useLayoutEffect(() => {
+    // Translate suggestions left border to make it align with the text field
     setSuggestionsTranslation({
-      x: e.target.matches(":focus-within")
-        ? (-e.target.clientWidth * 0.15) / 2
-        : 0,
+      x: isFocused ? 0 : (textFieldRef.current!.clientWidth * 0.15) / 2,
       y: 0,
     });
-  };
+  }, [isFocused]);
 
-  const focusTextField = () => {
+  const focusTextField = () =>
     textFieldRef.current!.querySelector("textarea")!.focus();
-  };
 
   return (
     <div
@@ -65,7 +72,9 @@ function PromptArea(props: { className?: string }) {
       )}
     >
       <div
-        className={clsx("flex flex-col items-start gap-2 mb-2")}
+        className={clsx(
+          "absolute flex flex-col items-start gap-2 pb-2 -translate-y-full"
+        )}
         style={{
           transform: `translate(${suggestionsTranslation.x}px, ${suggestionsTranslation.y}px)`,
         }}
@@ -92,14 +101,14 @@ function PromptArea(props: { className?: string }) {
         className={clsx(
           "w-full [&_textarea]:pr-10!",
           "transition-all duration-300 origin-top",
-          "focus-within:shadow-lg focus-within:scale-[115%]"
+          "focus-within:shadow-lg focus-within:scale-[100%]"
         )}
         data-testid="prompt-textfield"
         placeholder="Start typing..."
         multiline
         onKeyDown={onKeyDown}
-        onFocus={onPromptFocusChange}
-        onBlur={onPromptFocusChange}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
         onChange={(e) => setPromptValue(e.target.value)}
         value={promptValue}
         maxRows={10}
@@ -107,6 +116,7 @@ function PromptArea(props: { className?: string }) {
           "& textarea": {
             transition: "height 0.2s ease-in-out, width 0.2s ease-in-out",
           },
+          transform: `scale(${isFocused ? 1 : SCALE_WHEN_UNFOCUSED})`,
         }}
         slotProps={{
           input: {
