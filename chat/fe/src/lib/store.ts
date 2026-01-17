@@ -164,9 +164,18 @@ const store = configureStore({
 export type State = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
+const currentChatActions = {
+  ...currentChatSlice.actions,
+  loadFromLocalStorage,
+};
+
 export default {
-  currentChat: { ...currentChatSlice.actions, loadFromLocalStorage },
-  useAppDispatch: useDispatch as () => AppDispatch,
+  currentChat: currentChatActions,
+  useAppDispatch: useDispatch as () => (
+    action: ReturnType<
+      (typeof currentChatActions)[keyof typeof currentChatActions]
+    >
+  ) => void,
   store,
   listenForMessageFailures,
 };

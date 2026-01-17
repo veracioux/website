@@ -13,7 +13,7 @@ function InnerPage() {
   const dispatch = store.useAppDispatch();
 
   useEffect(() => {
-    dispatch(store.currentChat.loadFromLocalStorage()); // FIXME: type error
+    dispatch(store.currentChat.loadFromLocalStorage());
   }, []);
 
   return (
