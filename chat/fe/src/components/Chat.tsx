@@ -17,7 +17,7 @@ export function InnerChat() {
 
   return (
     <>
-      <main className="flex flex-col items-center w-full px-20">
+      <main className="flex flex-col overflow-hidden items-center w-full px-20">
         {currentChat.id ? (
           <Messages
             className="w-full"
@@ -29,7 +29,7 @@ export function InnerChat() {
           <WelcomeMessage></WelcomeMessage>
         )}
       </main>
-      <PromptArea className="w-full max-w-[60vw]" />
+      <PromptArea className="mt-4 w-full max-w-[60vw]" />
     </>
   );
 }

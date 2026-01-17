@@ -10,7 +10,7 @@ import { useMessaging } from "@/hooks/messaging";
 import type { ChatMessage } from "@veracioux/chat-lib";
 
 const PROMPT_SUGGESTIONS = [
-  "Hi Haris, I'm a recruiter. Would you be intereseted in a job opportunity?",
+  "Hi Haris, I'm a recruiter. Would you be interested in a job opportunity?",
   "Hi Haris, I'm a recruiter. Please send me a customized resume.",
   "Hi Haris, I'd like to collaborate on a project about...",
 ];

@@ -31,6 +31,7 @@ function AppSwitcher(props: { className?: string }) {
     x: number;
     y: number;
   } | null>(null);
+  const clicked = !!clickOrigin;
   const [delta, setDelta] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [activeApp, setActiveApp] = useState<"chat" | "main">("chat");
@@ -97,11 +98,13 @@ function AppSwitcher(props: { className?: string }) {
       className={clsx(
         "fixed inset-0",
         crossedThreshold ? "z-2000" : "",
+        !clicked && "pointer-events-none",
         props.className
       )}
       onMouseMove={onMouseMove}
       onMouseUp={onMouseUp}
     >
+      {/* The overlay that expands when dragging */}
       <div
         className="absolute inset-0 bg-white duration-200"
         style={{
@@ -116,6 +119,7 @@ function AppSwitcher(props: { className?: string }) {
           <iframe src="https://veracioux.me" className="w-full h-full"></iframe>
         ) : null}
       </div>
+      {/* The drag handle button */}
       <div
         style={{
           transform: crossedThreshold
@@ -136,6 +140,7 @@ function AppSwitcher(props: { className?: string }) {
           className={clsx(
             "transition-all! duration-200",
             "hover:scale-125 select-none",
+            "pointer-events-auto",
             isDragging ? "scale-125" : ""
           )}
           size="medium"
