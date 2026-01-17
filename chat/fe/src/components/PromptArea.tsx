@@ -94,7 +94,8 @@ function PromptArea(props: { className?: string }) {
           "transition-all duration-300 origin-top",
           "focus-within:shadow-lg focus-within:scale-[115%]"
         )}
-        placeholder="adsfasdf"
+        data-testid="prompt-textfield"
+        placeholder="Start typing..."
         multiline
         onKeyDown={onKeyDown}
         onFocus={onPromptFocusChange}
@@ -118,6 +119,7 @@ function PromptArea(props: { className?: string }) {
                 <Fab
                   onClick={() => onSubmit(promptValue)}
                   onFocus={focusTextField}
+                  data-testid="prompt-submit-button"
                   disabled={!promptValue.trim()}
                   color="primary"
                   aria-label="Submit"

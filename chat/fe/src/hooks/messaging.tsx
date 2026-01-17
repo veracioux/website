@@ -108,7 +108,7 @@ export function MessagingProvider(props: PropsWithChildren) {
             if (!conn) {
               conn = api.connectToMessages(id, {
                 onMessage: (msg) => events.emit(msg.event, msg.data),
-                onConnect: () => resolve(conn!),
+                onConnect: () => Promise.resolve().then(() => resolve(conn!)),
               });
               setConnection(conn);
             } else {

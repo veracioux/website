@@ -7,7 +7,7 @@ import { Provider, useSelector } from "react-redux";
 import PromptArea from "./PromptArea";
 import { MessagingProvider } from "@/hooks/messaging";
 
-function InnerChat() {
+export function InnerChat() {
   const currentChat = useSelector((state: State) => state.currentChat);
   const dispatch = store.useAppDispatch();
 
