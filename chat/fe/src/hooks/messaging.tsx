@@ -17,6 +17,8 @@ import { useSelector } from "react-redux";
 import store from "@/lib/store";
 import { createContext } from "react";
 import type { State } from "@/lib/store";
+import { MESSAGE_ACK_TIMEOUT_MS } from "@/lib/constants";
+import type { QueuedMessage } from "@/lib/types";
 
 type DataForEvent<E extends WebSocketMessage["event"]> = Extract<
   WebSocketMessage,
@@ -48,6 +50,37 @@ export function MessagingProvider(props: PropsWithChildren) {
   // Clean up connection on unmount
   useEffect(() => () => connection?.close(), []);
 
+  /**
+   * Listen for message acknowledgement and process them accordingly.
+   */
+  function listenAndProcessAck(queuedMessage: QueuedMessage) {
+    const onAck = (ack: MessageAck) => {
+      if (ack.type === "received") {
+        console.debug("Ack received", ack);
+        clearTimeout(timeoutHandle);
+        dispatch(
+          store.currentChat.queuedMessagePopped({
+            requestId: queuedMessage.requestId,
+          })
+        );
+        dispatch(
+          store.currentChat.messageSent({
+            ...queuedMessage,
+            id: ack.id,
+            timestamp: ack.timestamp,
+          })
+        );
+      }
+    };
+    events.on("ack", onAck);
+    const timeoutHandle = setTimeout(() => {
+      console.debug("Ack timeout for message", queuedMessage.requestId);
+      events.off("ack", onAck);
+    }, MESSAGE_ACK_TIMEOUT_MS);
+
+    store.listenForMessageFailures();
+  }
+
   return (
     <context.Provider
       value={{
@@ -58,6 +91,17 @@ export function MessagingProvider(props: PropsWithChildren) {
             return (await api.createChat()).id;
           });
           if (!currentChat.id) dispatch(store.currentChat.setId(id));
+
+          const requestId = crypto.randomUUID();
+          const queuedMessage: QueuedMessage = {
+            ...message,
+            requestId,
+            requestTimestamp: new Date().toISOString(),
+          };
+
+          dispatch(store.currentChat.messageQueued(queuedMessage));
+
+          listenAndProcessAck(queuedMessage);
 
           new Promise<ReturnType<typeof api.connectToMessages>>((resolve) => {
             let conn = connection;
@@ -71,33 +115,6 @@ export function MessagingProvider(props: PropsWithChildren) {
               resolve(conn);
             }
           }).then((conn) => conn.sendMessage(message));
-
-          const requestId = crypto.randomUUID();
-          const queuedMessage = { ...message, requestId };
-
-          dispatch(store.currentChat.messageQueued(queuedMessage));
-          let received = false;
-          const onAck = (ack: MessageAck) => {
-            if (ack.type === "received") {
-              console.debug("Ack received", ack);
-              received = true;
-              dispatch(store.currentChat.queuedMessagePopped({ requestId }));
-              dispatch(
-                store.currentChat.messageSent({
-                  ...queuedMessage,
-                  id: ack.id,
-                  timestamp: ack.timestamp,
-                })
-              );
-            }
-          };
-          events.on("ack", onAck);
-          setTimeout(() => {
-            console.debug("Ack timeout for message", requestId);
-            events.off("ack", onAck);
-            if (!received)
-              store.currentChat.queuedMessageFailedToSend({ requestId });
-          }, 2000);
         },
         events,
       }}

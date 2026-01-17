@@ -3,11 +3,14 @@ import {
   type PayloadAction,
   configureStore,
   createAsyncThunk,
+  createListenerMiddleware,
+  isAnyOf,
 } from "@reduxjs/toolkit";
 import type { ChatMessage } from "@veracioux/chat-lib";
 import customLocalStorage from "./customLocalStorage";
 import { type QueuedMessage } from "./types";
 import { useDispatch } from "react-redux";
+import { MESSAGE_ACK_TIMEOUT_MS } from "./constants";
 
 const loadFromLocalStorage = createAsyncThunk(
   "currentChat/loadFromLocalStorage",
@@ -52,7 +55,9 @@ const currentChatSlice = createSlice({
         (msg) => msg.requestId === action.payload.requestId
       );
       if (index === -1)
-        throw new Error("Tried to remove a message from an empty queue");
+        throw new Error(
+          "Tried to remove a non-existent message from the queue"
+        );
       state.queuedMessages.splice(index, 1);
     },
     queuedMessageFailedToSend: (
@@ -66,16 +71,81 @@ const currentChatSlice = createSlice({
       const msg = state.queuedMessages.find(
         (msg) => msg.requestId === action.payload.requestId
       );
-      if (!msg) throw new Error("Tried to mark a non-existing queued message");
+      if (!msg)
+        throw new Error(
+          "Tried to mark a non-existing queued message as failed"
+        );
       msg.failed = true;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(loadFromLocalStorage.fulfilled, (state, action) => {
-      state.id = action.payload.id;
-      state.messages = action.payload.messages;
-      state.queuedMessages = action.payload.queuedMessages;
-    });
+    builder
+      .addCase(loadFromLocalStorage.fulfilled, (state, action) => {
+        state.id = action.payload.id;
+        state.messages = action.payload.messages;
+        state.queuedMessages = action.payload.queuedMessages;
+      })
+      .addCase(currentChatSlice.actions.messageQueued, (state) => {
+        if (state.id)
+          customLocalStorage.setQueuedMessages(state.id, state.queuedMessages);
+      });
+  },
+});
+
+// #region Set up listeners
+
+/**
+ * Middleware to monitor queued messages and mark them as failed if they
+ * exceed the acknowledgement timeout.
+ */
+const queuedMessageStatusSyncMiddleware = createListenerMiddleware<
+  State,
+  AppDispatch
+>();
+
+/**
+ * Use this function to document that message status is monitored by store middleware.
+ * @see queuedMessageStatusSyncMiddleware
+ */
+const listenForMessageFailures = () => {};
+
+queuedMessageStatusSyncMiddleware.startListening({
+  matcher: (x): x is any => true, // catch all actions
+  effect: async (_, listenerApi) => {
+    const prevState = listenerApi.getOriginalState();
+    const nextState = listenerApi.getState();
+
+    if (
+      prevState.currentChat.queuedMessages !==
+      nextState.currentChat.queuedMessages
+    ) {
+      const requestIds = new Set(
+        nextState.currentChat.queuedMessages.map((msg) => msg.requestId)
+      );
+      const oldRequestIds = new Set(
+        prevState.currentChat.queuedMessages.map((msg) => msg.requestId)
+      );
+      requestIds.difference(oldRequestIds).forEach((requestId) => {
+        setTimeout(() => {
+          if (
+            listenerApi
+              .getState()
+              .currentChat.queuedMessages.find(
+                (msg) => msg.requestId === requestId
+              ) === undefined
+          ) {
+            // Message was sent successfully in the meantime
+            return;
+          }
+          console.debug(
+            `Marking queued message ${requestId} as failed due to timeout`
+          );
+          listenerApi.dispatch(
+            currentChatSlice.actions.queuedMessageFailedToSend({ requestId })
+          );
+        }, MESSAGE_ACK_TIMEOUT_MS);
+      });
+    }
   },
 });
 
@@ -83,7 +153,13 @@ const store = configureStore({
   reducer: {
     currentChat: currentChatSlice.reducer,
   },
+  middleware: (getDefaultMiddleware): any =>
+    getDefaultMiddleware().prepend(
+      queuedMessageStatusSyncMiddleware.middleware
+    ),
 });
+
+// #endregion
 
 export type State = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
@@ -92,4 +168,5 @@ export default {
   currentChat: { ...currentChatSlice.actions, loadFromLocalStorage },
   useAppDispatch: useDispatch as () => AppDispatch,
   store,
+  listenForMessageFailures,
 };
