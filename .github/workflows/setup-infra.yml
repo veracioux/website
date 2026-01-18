@@ -5,7 +5,7 @@ on:
   workflow_run:
     workflows: ["Build"]
     types: [completed]
-    branches: [staging]
+    branches: [staging, main]
   workflow_dispatch:
 
 jobs:
