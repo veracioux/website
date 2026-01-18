@@ -62,12 +62,22 @@ jobs:
         if: github.ref_name == 'staging'
         run: gcloud storage cp infra/prod.tfplan gs://veracioux-tfstate/${{ github.sha }}-prod.tfplan
 
-      - name: Create PR with plan output
+      - name: Install msmtp
         if: github.ref_name == 'staging'
-        env:
-          GH_TOKEN: ${{ github.token }}
+        run: sudo apt-get update && sudo apt-get install -y msmtp
+
+      - name: Send plan via email
+        if: github.ref_name == 'staging'
         run: |
-          gh pr create --base main --head staging --title "Terraform Plan for Prod" --body "${{ env.PLAN_OUTPUT }}"
+          echo "Subject: Terraform Plan for Prod \nTo: me@veracioux.me\n\n${{ env.PLAN_OUTPUT }}" | msmtp \
+            --host=smtp.protonmail.ch \
+            --port=587 \
+            --auth=on \
+            --user=cicd@veracioux.me \
+            --password="${{ secrets.SMTP_PASSWORD }}" \
+            --tls=on \
+            --from=cicd@veracioux.me \
+            me@veracioux.me
 
       # - name: Download plan from GCS
       #   if: github.ref_name == 'main'
