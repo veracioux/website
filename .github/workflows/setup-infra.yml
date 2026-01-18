@@ -79,16 +79,16 @@ jobs:
         env:
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
         run: |
-          echo > email.txt <<EOF
+          cat > email.txt <<EOF
           Subject: Terraform Plan for Prod
           To: me@veracioux.me
 
           The staging setup-infra workflow has generated the following Terraform plan for production:
+
+          $PLAN_OUTPUT
+          Merging the associated PR will apply this exact plan to production.
+          NOTE: The PR may take some more time to appear.
           EOF
-          echo >>email.txt
-          echo >>email.txt "$PLAN_OUTPUT"
-          echo >>email.txt "Merging the associated PR will apply this exact plan to production."
-          echo >>email.txt "NOTE: The PR may take some more time to appear."
           msmtp <email.txt \
             --host=smtp.protonmail.ch \
             --port=587 \
