@@ -23,6 +23,8 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      UNIQUE_TAG: job_${{ github.job }}-run_${{ github.run_id }}-attempt_${{ github.run_attempt }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -61,12 +63,12 @@ jobs:
           username: ${{ env.DOCKER_USERNAME }}
           password: ${{ env.DOCKER_PASSWORD }}
 
-      - name: Build and push github-stats image
+      - name: Build github-stats image
         uses: docker/build-push-action@v6
         if: steps.changes.outputs.github_stats == 'true'
         with:
           context: apps/github-stats
-          tags: github-stats
+          tags: github-stats:${{ env.UNIQUE_TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           load: true
@@ -79,15 +81,10 @@ jobs:
           file: docker/frontend.Dockerfile
           build-args: |
             IS_STAGING=${{ github.ref_name == 'staging' }}
-          tags: frontend
+          tags: frontend:${{ env.UNIQUE_TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           load: true
-
-      - name: Create tag docker.veracioux.me/frontend:latest
-        if: steps.changes.outputs.frontend == 'true'
-        run: |
-          docker tag frontend docker.veracioux.me/frontend:latest
 
       - name: Build web image
         uses: docker/build-push-action@v6
@@ -95,7 +92,9 @@ jobs:
         with:
           context: .
           file: docker/web.Dockerfile
-          tags: web
+          tags: web:${{ env.UNIQUE_TAG }}
+          build-args: |
+            TAG=${{ env.UNIQUE_TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           load: true
@@ -105,11 +104,11 @@ jobs:
         run: |
           if [ "${{ steps.changes.outputs.github_stats }}" = "true" ]; then
             echo "Pushing github-stats image..."
-            docker tag github-stats docker.veracioux.me/github-stats:${{ env.DOCKER_IMAGES_VERSION }}
+            docker tag github-stats:$UNIQUE_TAG docker.veracioux.me/github-stats:${{ env.DOCKER_IMAGES_VERSION }}
             docker compose push github-stats
           fi
           if [ "${{ steps.changes.outputs.frontend }}" = "true" ] || [ "${{ steps.changes.outputs.web }}" = "true" ]; then
             echo "Pushing web image..."
-            docker tag web docker.veracioux.me/web:${{ env.DOCKER_IMAGES_VERSION }}
+            docker tag web:$UNIQUE_TAG docker.veracioux.me/web:${{ env.DOCKER_IMAGES_VERSION }}
             docker compose push web
           fi
