@@ -72,7 +72,7 @@ jobs:
           load: true
 
       - name: Build frontend image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         if: steps.changes.outputs.frontend == 'true'
         with:
           context: .
@@ -90,7 +90,7 @@ jobs:
           docker tag frontend docker.veracioux.me/frontend:latest
 
       - name: Build web image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         if: steps.changes.outputs.web == 'true' || steps.changes.outputs.frontend == 'true'
         with:
           context: .
