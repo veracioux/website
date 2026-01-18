@@ -75,7 +75,7 @@ jobs:
         run: sudo apt-get update -y && sudo apt-get install -y msmtp
 
       - name: Send plan via email
-        if: github.ref_name == 'staging'
+        if: github.ref_name == 'staging' && env.PLAN_EXIT_CODE == '2'
         env:
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
         run: |
@@ -105,13 +105,12 @@ jobs:
             --from=cicd@veracioux.me \
             me@veracioux.me
 
-      # - name: Download plan from GCS
-      #   if: github.ref_name == 'main'
-      #   run:
-      #     SHA="$(git rev-parse HEAD^2)"
-      #     gcloud storage cp gs://veracioux-tfstate/plans/"$SHA".tfplan infra/prod.tfplan
+      - name: Download plan from GCS
+        if: github.ref_name == 'main'
+        run: SHA="$(git rev-parse HEAD^2)"
+          gcloud storage cp gs://veracioux-tfstate/plans/"$SHA".tfplan infra/prod.tfplan
 
-      # - name: Terraform Apply Plan
-      #   if: github.ref_name == 'main'
-      #   working-directory: infra
-      #   run: terraform apply -auto-approve prod.tfplan
+      - name: Terraform Apply Plan
+        if: github.ref_name == 'main'
+        working-directory: infra
+        run: terraform apply -auto-approve prod.tfplan
