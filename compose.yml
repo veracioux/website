@@ -1,25 +1,14 @@
 services:
   web:
-    # Image
     image: docker.veracioux.me/web:${DOCKER_IMAGES_VERSION:-latest}
     build:
       context: .
       dockerfile: docker/web.Dockerfile
-
-    # Container
     restart: always
     depends_on:
-      - frontend
       - github-stats
     ports:
       - "${EXPOSED_IP:-127.0.0.1}:3000:3000"
-
-  frontend:
-    # Image
-    image: docker.veracioux.me/frontend:${DOCKER_IMAGES_VERSION:-latest}
-    build:
-      context: .
-      dockerfile: docker/frontend.Dockerfile
 
   docker-registry:
     image: registry:2
@@ -37,6 +26,7 @@ services:
 
   github-stats:
     image: docker.veracioux.me/github-stats:${DOCKER_IMAGES_VERSION:-latest}
+    init: true
     build:
       context: apps/github-stats
     environment:
@@ -57,10 +47,21 @@ services:
   grafana:
     image: grafana/grafana:12.4.0-20585723282
     ports:
-      - "${EXPOSED_IP:-127.0.0.1}:3001:3000"
+      - "${EXPOSED_IP:-127.0.0.1}:3002:3000"
     volumes:
       - grafana-data:/var/lib/grafana
     restart: always
+
+  redis:
+    image: redis:7.4-alpine
+    ports:
+      - "${EXPOSED_IP:-127.0.0.1}:6379:6379"
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
 
 volumes:
   docker-registry-data:

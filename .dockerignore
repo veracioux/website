@@ -20,3 +20,5 @@ frontend/node_modules/**
 !cli/package.json
 # Web
 !nginx.conf
+# Chat
+!chat/*/package.json

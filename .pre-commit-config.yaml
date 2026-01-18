@@ -6,5 +6,5 @@ repos:
         entry: bun run format:check
         language: system
         files: \.(js|ts|vue|scss|css|json|yml|yaml)$
-        exclude: ^\.nuxt/|^\.output|^dist|^node_modules/|^bun\.lock|^\.tem|^wt.*|^infra/backup$
+        exclude: ^\.nuxt/|^\.next/|^\.output|^dist|^node_modules/|^bun\.lock|^\.tem|^wt.*|^infra/backup$
         pass_filenames: false
