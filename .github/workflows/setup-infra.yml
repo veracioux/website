@@ -75,7 +75,7 @@ jobs:
         run: sudo apt-get update -y && sudo apt-get install -y msmtp
 
       - name: Send plan via email
-        if: github.ref_name == 'staging'
+        if: github.ref_name == 'staging' && env.PLAN_EXIT_CODE == '2'
         env:
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
         run: |
