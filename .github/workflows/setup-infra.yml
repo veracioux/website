@@ -57,7 +57,7 @@ jobs:
         if: github.ref_name == 'staging'
         working-directory: infra
         run: |
-          terraform plan -out prod.tfplan > plan_output.log 2>&1
+          terraform plan -no-color -out prod.tfplan > plan_output.log 2>&1
           echo "PLAN_OUTPUT<<EOF" >> $GITHUB_ENV
           cat plan_output.log >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
