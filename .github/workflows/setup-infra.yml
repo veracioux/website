@@ -16,6 +16,7 @@ jobs:
     environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev' }}
     env:
       environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev' }}
+      TF_IN_AUTOMATION: "true"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -53,7 +54,14 @@ jobs:
         if: github.ref_name == 'staging'
         working-directory: infra
         run: |
-          terraform plan -no-color -out prod.tfplan > plan_output.log 2>&1
+          set +e
+          terraform plan -detailed-exitcode -no-color -out prod.tfplan > plan_output.log 2>&1
+          exit_code=$?
+          if [ $exit_code -ne 0 ] && [ $exit_code -ne 2 ]; then
+            echo "Terraform plan failed with exit code $exit_code"
+            exit $exit_code
+          fi
+          echo "PLAN_EXIT_CODE=$exit_code" >> $GITHUB_ENV
           echo "PLAN_OUTPUT<<EOF" >> $GITHUB_ENV
           cat plan_output.log >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
@@ -67,9 +75,19 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y msmtp
 
       - name: Send plan via email
-        if: github.ref_name == 'staging'
+        if: github.ref_name == 'staging' && env.PLAN_EXIT_CODE == '2'
         run: |
-          echo "Subject: Terraform Plan for Prod \nTo: me@veracioux.me\n\n${{ env.PLAN_OUTPUT }}" | msmtp \
+          echo > email.txt <<EOF
+          Subject: Terraform Plan for Prod
+          To: me@veracioux.me
+
+          The staging setup-infra workflow has generated the following Terraform plan for production:
+
+          ${{ env.PLAN_OUTPUT }}
+
+          Merging the associated PR will apply this exact plan to production.
+          EOF
+          msmtp <email.txt \
             --host=smtp.protonmail.ch \
             --port=587 \
             --auth=on \
