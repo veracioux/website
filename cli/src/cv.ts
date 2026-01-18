@@ -44,7 +44,7 @@ export default cmd({
     });
 
     const browser = await launch({
-      headless: !argv.debug,
+      headless: !argv.debug ? "new" : false,
       devtools: argv.debug,
     });
     const [page] = await browser.pages();
