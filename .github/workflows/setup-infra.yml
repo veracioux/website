@@ -72,7 +72,7 @@ jobs:
 
       - name: Install msmtp
         if: github.ref_name == 'staging'
-        run: sudo apt-get update && sudo apt-get install -y msmtp
+        run: sudo apt-get update -y && sudo apt-get install -y msmtp
 
       - name: Send plan via email
         if: github.ref_name == 'staging'
@@ -82,11 +82,11 @@ jobs:
           To: me@veracioux.me
 
           The staging setup-infra workflow has generated the following Terraform plan for production:
-
-          ${{ env.PLAN_OUTPUT }}
-
-          Merging the associated PR will apply this exact plan to production.
           EOF
+          echo >>email.txt
+          echo >>email.txt "$PLAN_OUTPUT"
+          echo >>email.txt "Merging the associated PR will apply this exact plan to production."
+          echo >>email.txt "NOTE: The PR may take some more time to appear."
           msmtp <email.txt \
             --host=smtp.protonmail.ch \
             --port=587 \
