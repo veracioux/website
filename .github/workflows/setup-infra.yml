@@ -68,16 +68,22 @@ jobs:
 
       - name: Create PR with plan output
         if: github.ref_name == 'staging'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh pr create --base main --head staging --title "Terraform Plan for Prod" --body "${{ env.PLAN_OUTPUT }}"
 
       # - name: Download plan from GCS
       #   if: github.ref_name == 'main'
+      #   env:
+      #     GH_TOKEN: ${{ github.token }}
       #   run:
       #     SHA="$(git rev-parse HEAD^2)"
       #     gcloud storage cp gs://veracioux-tfstate/plans/"$SHA".tfplan infra/prod.tfplan
 
       # - name: Terraform Apply Plan
       #   if: github.ref_name == 'main'
+      #   env:
+      #     GH_TOKEN: ${{ github.token }}
       #   working-directory: infra
       #   run: terraform apply -auto-approve prod.tfplan
