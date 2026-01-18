@@ -105,13 +105,12 @@ jobs:
             --from=cicd@veracioux.me \
             me@veracioux.me
 
-      # - name: Download plan from GCS
-      #   if: github.ref_name == 'main'
-      #   run:
-      #     SHA="$(git rev-parse HEAD^2)"
-      #     gcloud storage cp gs://veracioux-tfstate/plans/"$SHA".tfplan infra/prod.tfplan
+      - name: Download plan from GCS
+        if: github.ref_name == 'main'
+        run: SHA="$(git rev-parse HEAD^2)"
+          gcloud storage cp gs://veracioux-tfstate/plans/"$SHA".tfplan infra/prod.tfplan
 
-      # - name: Terraform Apply Plan
-      #   if: github.ref_name == 'main'
-      #   working-directory: infra
-      #   run: terraform apply -auto-approve prod.tfplan
+      - name: Terraform Apply Plan
+        if: github.ref_name == 'main'
+        working-directory: infra
+        run: terraform apply -auto-approve prod.tfplan
