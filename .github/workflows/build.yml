@@ -73,19 +73,6 @@ jobs:
           cache-to: type=gha,mode=max
           load: true
 
-      - name: Build frontend image
-        uses: docker/build-push-action@v6
-        if: steps.changes.outputs.frontend == 'true'
-        with:
-          context: .
-          file: docker/frontend.Dockerfile
-          build-args: |
-            IS_STAGING=${{ github.ref_name == 'staging' }}
-          tags: docker.veracioux.me/frontend:${{ env.UNIQUE_TAG }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          load: true
-
       - name: Build web image
         uses: docker/build-push-action@v6
         if: steps.changes.outputs.web == 'true' || steps.changes.outputs.frontend == 'true'
