@@ -1,4 +1,5 @@
-FROM docker.veracioux.me/frontend AS frontend
+ARG TAG=latest
+FROM docker.veracioux.me/frontend:${TAG} AS frontend
 
 FROM alpine:3.23
 

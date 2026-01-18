@@ -37,6 +37,7 @@ services:
 
   github-stats:
     image: docker.veracioux.me/github-stats:${DOCKER_IMAGES_VERSION:-latest}
+    init: true
     build:
       context: apps/github-stats
     environment:
