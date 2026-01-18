@@ -21,6 +21,19 @@ export async function findUpwardFile(
   }
 }
 
+export async function getRepoRoot() {
+  const repoRootFile = await findUpwardFile(
+    process.cwd(),
+    ".veracioux-website-repo-root"
+  );
+
+  if (repoRootFile) {
+    return path.dirname(repoRootFile);
+  }
+
+  return undefined;
+}
+
 export async function getEnv(): Promise<"stg" | "prod" | "dev"> {
   if (
     await fs
@@ -40,12 +53,7 @@ export async function getEnv(): Promise<"stg" | "prod" | "dev"> {
     }
   }
 
-  const repoRootFile = await findUpwardFile(
-    process.cwd(),
-    ".veracioux-website-repo-root"
-  );
-
-  if (repoRootFile) {
+  if (await getRepoRoot()) {
     return "dev";
   }
 

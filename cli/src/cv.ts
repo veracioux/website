@@ -32,6 +32,11 @@ export default cmd({
           "Run in headed mode and require confirmation before generating PDF from page",
         type: "boolean",
         default: false,
+      })
+      .option("stg", {
+        describe: "Use staging environment (stg.veracioux.me)",
+        type: "boolean",
+        default: false,
       }),
   handler: async (argv) => {
     const outputPath = iife(() => {
@@ -42,6 +47,10 @@ export default cmd({
         argv.resume ? "Resume" : "CV"
       }_Haris_Gusic.pdf`}`;
     });
+
+    const baseUrl = argv.stg
+      ? "https://stg.veracioux.me"
+      : "https://veracioux.me";
 
     const browser = await launch({
       headless: !argv.debug ? "new" : false,
@@ -54,7 +63,7 @@ export default cmd({
       deviceScaleFactor: 1,
     });
     await page.setCacheEnabled(false);
-    await page.goto(`http://localhost:8080/cv?resume=${argv.resume}`, {
+    await page.goto(`${baseUrl}/cv?resume=${argv.resume}`, {
       waitUntil: "networkidle2",
     });
     await page.emulateMediaType("print");
