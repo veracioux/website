@@ -94,7 +94,7 @@ jobs:
             --port=587 \
             --auth=on \
             --user=cicd@veracioux.me \
-            --password="${{ env.SMTP_PASSWORD }}" \
+            --passwordeval='echo "$SMTP_PASSWORD"' \
             --tls=on \
             --from=cicd@veracioux.me \
             me@veracioux.me
