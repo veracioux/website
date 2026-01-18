@@ -20,6 +20,9 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "plugins": [
       {
         "transform": "typia/lib/transform"
@@ -27,7 +30,7 @@
       {
         "transform": "@nestia/core/lib/transform",
         "validate": "validate",
-        "stringify": "assert"
+        "stringify": "validate.log"
       },
       {
         "transform": "@nestia/sdk/lib/transform"

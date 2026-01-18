@@ -57,7 +57,7 @@ services:
   grafana:
     image: grafana/grafana:12.4.0-20585723282
     ports:
-      - "${EXPOSED_IP:-127.0.0.1}:3001:3000"
+      - "${EXPOSED_IP:-127.0.0.1}:3002:3000"
     volumes:
       - grafana-data:/var/lib/grafana
     restart: always

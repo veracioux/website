@@ -1,8 +1,10 @@
+import type { Prettify } from "@veracioux/lib";
+
 type Variant = "query" | "update" | "create";
 
 type Dto<
   V extends Variant,
-  T extends { query: infer Q; create: infer C },
+  T extends { query: any; create: any },
 > = V extends "query" ? Prettify<T["query"]> : Prettify<T["create"]>;
 
 type ChatMessageCreate = {

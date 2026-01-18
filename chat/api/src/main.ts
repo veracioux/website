@@ -11,13 +11,13 @@ async function bootstrap() {
     servers: [
       { url: "https://veracioux.me", description: "Production" },
       { url: "https://stg.veracioux.me", description: "Staging" },
-      { url: "http://localhost:9000", description: "Development" },
+      { url: "http://localhost:9001", description: "Development" },
     ],
   });
   SwaggerModule.setup("swagger", app, document as any, {
     jsonDocumentUrl: "openapi.json",
     yamlDocumentUrl: "openapi.yaml",
   });
-  await app.listen(process.env.PORT ?? 9000);
+  await app.listen(process.env.PORT ?? 9001);
 }
 bootstrap();
