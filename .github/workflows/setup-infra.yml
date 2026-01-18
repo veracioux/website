@@ -16,6 +16,7 @@ env:
 
 jobs:
   terraform-apply:
+    if: github.ref_name != 'main'
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev' }}
     env:
@@ -49,3 +50,48 @@ jobs:
       - name: Terraform Apply
         working-directory: infra
         run: terraform apply -auto-approve
+
+  terraform-plan-prod:
+    if: github.ref_name == 'staging'
+    runs-on: ubuntu-latest
+    environment: stg
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: |-
+            ${{ env.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Select prod workspace
+        working-directory: infra
+        run: |
+          mkdir -p .terraform
+          echo prod > .terraform/environment
+
+      - name: Terraform Init
+        working-directory: infra
+        run: terraform init
+
+      - name: Terraform Plan
+        working-directory: infra
+        run: |
+          terraform plan -out prod.tfplan > plan_output.log 2>&1
+          echo "PLAN_OUTPUT<<EOF" >> $GITHUB_ENV
+          cat plan_output.log >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Upload plan to GCS
+        run: gcloud storage cp infra/prod.tfplan gs://veracioux-tfstate/plans/${{ github.sha }}.tfplan
+
+      - name: Create PR with plan output
+        run: |
+          gh pr create --base main --head staging --title "Terraform Plan for Prod" --body "${{ env.PLAN_OUTPUT }}"
