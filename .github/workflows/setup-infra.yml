@@ -82,12 +82,18 @@ jobs:
           cat > email.txt <<EOF
           Subject: Terraform Plan for Prod
           To: me@veracioux.me
+          Content-Type: text/html
 
-          The staging setup-infra workflow has generated the following Terraform plan for production:
+          <html>
+          <body>
+          <p>The staging setup-infra workflow has generated the following Terraform plan for production:</p>
 
-          $PLAN_OUTPUT
-          Merging the associated PR will apply this exact plan to production.
-          NOTE: The PR may take some more time to appear.
+          <pre>$PLAN_OUTPUT</pre>
+
+          <p>Merging the associated PR will apply this exact plan to production.</p>
+          <p><strong>NOTE:</strong> The PR may take some more time to appear.</p>
+          </body>
+          </html>
           EOF
           msmtp <email.txt \
             --host=smtp.protonmail.ch \
@@ -101,15 +107,11 @@ jobs:
 
       # - name: Download plan from GCS
       #   if: github.ref_name == 'main'
-      #   env:
-      #     GH_TOKEN: ${{ github.token }}
       #   run:
       #     SHA="$(git rev-parse HEAD^2)"
       #     gcloud storage cp gs://veracioux-tfstate/plans/"$SHA".tfplan infra/prod.tfplan
 
       # - name: Terraform Apply Plan
       #   if: github.ref_name == 'main'
-      #   env:
-      #     GH_TOKEN: ${{ github.token }}
       #   working-directory: infra
       #   run: terraform apply -auto-approve prod.tfplan
