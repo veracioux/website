@@ -8,12 +8,6 @@ on:
     branches: [staging]
   workflow_dispatch:
 
-env:
-  # Expects credentials for service account:
-  #   {environment}-deployer@veracioux.iam.gserviceaccount.com
-  GCP_SA_KEY: |-
-    ${{ secrets.GCP_SA_KEY }}
-
 jobs:
   terraform-apply-or-plan:
     name: Terraform Apply (Staging) or Plan and create PR (Prod)
@@ -22,6 +16,7 @@ jobs:
     environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev' }}
     env:
       environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev' }}
+      TF_IN_AUTOMATION: "true"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -32,8 +27,10 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
+          # Expects credentials for service account:
+          #   {environment}-deployer@veracioux.iam.gserviceaccount.com
           credentials_json: |-
-            ${{ env.GCP_SA_KEY }}
+            ${{ secrets.GCP_SA_KEY }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
@@ -57,7 +54,14 @@ jobs:
         if: github.ref_name == 'staging'
         working-directory: infra
         run: |
-          terraform plan -out prod.tfplan > plan_output.log 2>&1
+          set +e
+          terraform plan -detailed-exitcode -no-color -out prod.tfplan > plan_output.log 2>&1
+          exit_code=$?
+          if [ $exit_code -ne 0 ] && [ $exit_code -ne 2 ]; then
+            echo "Terraform plan failed with exit code $exit_code"
+            exit $exit_code
+          fi
+          echo "PLAN_EXIT_CODE=$exit_code" >> $GITHUB_ENV
           echo "PLAN_OUTPUT<<EOF" >> $GITHUB_ENV
           cat plan_output.log >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
@@ -66,12 +70,32 @@ jobs:
         if: github.ref_name == 'staging'
         run: gcloud storage cp infra/prod.tfplan gs://veracioux-tfstate/${{ github.sha }}-prod.tfplan
 
-      - name: Create PR with plan output
+      - name: Install msmtp
         if: github.ref_name == 'staging'
-        env:
-          GH_TOKEN: ${{ github.token }}
+        run: sudo apt-get update && sudo apt-get install -y msmtp
+
+      - name: Send plan via email
+        if: github.ref_name == 'staging'
         run: |
-          gh pr create --base main --head staging --title "Terraform Plan for Prod" --body "${{ env.PLAN_OUTPUT }}"
+          echo > email.txt <<EOF
+          Subject: Terraform Plan for Prod
+          To: me@veracioux.me
+
+          The staging setup-infra workflow has generated the following Terraform plan for production:
+
+          ${{ env.PLAN_OUTPUT }}
+
+          Merging the associated PR will apply this exact plan to production.
+          EOF
+          msmtp <email.txt \
+            --host=smtp.protonmail.ch \
+            --port=587 \
+            --auth=on \
+            --user=cicd@veracioux.me \
+            --password="${{ secrets.SMTP_PASSWORD }}" \
+            --tls=on \
+            --from=cicd@veracioux.me \
+            me@veracioux.me
 
       # - name: Download plan from GCS
       #   if: github.ref_name == 'main'
