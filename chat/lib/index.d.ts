@@ -1,9 +1,5 @@
 type Variant = "query" | "update" | "create";
 
-type Prettify<T> = {
-  [K in keyof T]: T[K];
-} & {};
-
 type Dto<
   V extends Variant,
   T extends { query: infer Q; create: infer C },
