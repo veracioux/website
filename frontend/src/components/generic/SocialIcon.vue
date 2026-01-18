@@ -44,7 +44,7 @@ const nameToDataMap: Record<string, IconData> = {
     },
   },
   mail: {
-    href: "mailto:hgusic.pub@gmail.com",
+    href: urls.mail,
   },
 };
 
