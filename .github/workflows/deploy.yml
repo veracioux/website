@@ -1,4 +1,5 @@
 name: Deploy
+run-name: Deploy ${{ github.ref_name }}
 
 on:
   workflow_run:
@@ -12,13 +13,10 @@ env:
   VERACIOUX_SSL_CERT: ${{ secrets.VERACIOUX_SSL_CERT }}
   VERACIOUX_SSL_KEY: ${{ secrets.VERACIOUX_SSL_KEY }}
   GITHUB_README_STATS_PAT: ${{ secrets.README_STATS_PAT }}
-  # Expects credentials for service account:
-  #   {environment}-deployer@veracioux.iam.gserviceaccount.com
-  GCP_SA_KEY: |-
-    ${{ secrets.GCP_SA_KEY }}
 
 jobs:
   provision:
+    if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev' }}
     env:
@@ -33,8 +31,10 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
+          # Expects credentials for service account:
+          #   {environment}-deployer@veracioux.iam.gserviceaccount.com
           credentials_json: |-
-            ${{ env.GCP_SA_KEY }}
+            ${{ secrets.GCP_SA_KEY }}
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
       - name: Set up SSH
@@ -75,4 +75,10 @@ jobs:
             ssl_key='${{ env.VERACIOUX_SSL_KEY }}'
             docker_password='${{ env.VERACIOUX_DOCKER_PASSWORD }}'
             github_readme_stats_pat='${{ env.GITHUB_README_STATS_PAT }}'" \
-            host/playbook.yml
+             infra/playbook.yml
+      - name: Tag deployment
+        run: |
+          timestamp=$(date -u +"%Y_%m_%dT%H_%M_%SZ")
+          tag="${{ env.environment }}-${timestamp}"
+          git tag "$tag"
+          git push origin "$tag"

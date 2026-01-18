@@ -1,24 +1,22 @@
 name: Set up infrastructure
+run-name: Set up infrastructure (${{ github.ref_name }})
 
 on:
   workflow_run:
     workflows: ["Build"]
     types: [completed]
-    branches: [staging, main]
+    branches: [staging]
   workflow_dispatch:
 
-env:
-  # Expects credentials for service account:
-  #   {environment}-deployer@veracioux.iam.gserviceaccount.com
-  GCP_SA_KEY: |-
-    ${{ secrets.GCP_SA_KEY }}
-
 jobs:
-  terraform-apply:
+  terraform-apply-or-plan:
+    name: Terraform Apply (Staging) or Plan and create PR (Prod)
+    if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev' }}
     env:
       environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev' }}
+      TF_IN_AUTOMATION: "true"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -29,22 +27,90 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
+          # Expects credentials for service account:
+          #   {environment}-deployer@veracioux.iam.gserviceaccount.com
           credentials_json: |-
-            ${{ env.GCP_SA_KEY }}
+            ${{ secrets.GCP_SA_KEY }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
       - name: Select ${{ env.environment }} workspace
-        working-directory: host
+        working-directory: infra
         run: |
           mkdir -p .terraform
           echo ${{ env.environment }} > .terraform/environment
 
       - name: Terraform Init
-        working-directory: host
+        working-directory: infra
         run: terraform init
 
       - name: Terraform Apply
-        working-directory: host
+        if: github.ref_name == 'staging'
+        working-directory: infra
         run: terraform apply -auto-approve
+
+      - name: Terraform Plan
+        if: github.ref_name == 'staging'
+        working-directory: infra
+        run: |
+          set +e
+          terraform plan -detailed-exitcode -no-color -out prod.tfplan > plan_output.log 2>&1
+          exit_code=$?
+          if [ $exit_code -ne 0 ] && [ $exit_code -ne 2 ]; then
+            echo "Terraform plan failed with exit code $exit_code"
+            exit $exit_code
+          fi
+          echo "PLAN_EXIT_CODE=$exit_code" >> $GITHUB_ENV
+          echo "PLAN_OUTPUT<<EOF" >> $GITHUB_ENV
+          cat plan_output.log >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Upload plan to GCS
+        if: github.ref_name == 'staging'
+        run: gcloud storage cp infra/prod.tfplan gs://veracioux-tfstate/${{ github.sha }}-prod.tfplan
+
+      - name: Install msmtp
+        if: github.ref_name == 'staging'
+        run: sudo apt-get update -y && sudo apt-get install -y msmtp
+
+      - name: Send plan via email
+        if: github.ref_name == 'staging' && env.PLAN_EXIT_CODE == '2'
+        env:
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+        run: |
+          cat > email.txt <<EOF
+          Subject: Terraform Plan for Prod
+          To: me@veracioux.me
+          Content-Type: text/html
+
+          <html>
+          <body>
+          <p>The staging setup-infra workflow has generated the following Terraform plan for production:</p>
+
+          <pre>$PLAN_OUTPUT</pre>
+
+          <p>Merging the associated PR will apply this exact plan to production.</p>
+          <p><strong>NOTE:</strong> The PR may take some more time to appear.</p>
+          </body>
+          </html>
+          EOF
+          msmtp <email.txt \
+            --host=smtp.protonmail.ch \
+            --port=587 \
+            --auth=on \
+            --user=cicd@veracioux.me \
+            --passwordeval='echo "$SMTP_PASSWORD"' \
+            --tls=on \
+            --from=cicd@veracioux.me \
+            me@veracioux.me
+
+      - name: Download plan from GCS
+        if: github.ref_name == 'main'
+        run: SHA="$(git rev-parse HEAD^2)"
+          gcloud storage cp gs://veracioux-tfstate/plans/"$SHA".tfplan infra/prod.tfplan
+
+      - name: Terraform Apply Plan
+        if: github.ref_name == 'main'
+        working-directory: infra
+        run: terraform apply -auto-approve prod.tfplan

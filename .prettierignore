@@ -1,0 +1,8 @@
+bun.lock
+.nuxt
+.next
+.output
+dist
+.tem
+infra/backup
+wt*

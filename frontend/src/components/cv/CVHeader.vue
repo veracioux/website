@@ -27,7 +27,7 @@ if (variant) {
             <Icon name="passport" />
             <span>EU Blue Card (valid until 2029)</span>
           </div>
-          <SocialIcon name="mail" text="hgusic.pub@gmail.com" />
+          <SocialIcon name="mail" text="me@veracioux.me" />
           <SocialIcon name="phone" text="+49 151 29984107" />
           <SocialIcon name="web" text="veracioux.me" />
           <div class="flex gap-12">

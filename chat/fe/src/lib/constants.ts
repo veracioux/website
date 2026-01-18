@@ -1,0 +1,1 @@
+export const MESSAGE_ACK_TIMEOUT_MS = 2500;

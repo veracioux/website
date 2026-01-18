@@ -4,7 +4,7 @@ cd /home/haris/website
 
 cp /etc/nginx/nginx.conf{,.bak}
 
-cp host/nginx.conf /etc/nginx/nginx.conf
+cp infra/nginx.conf /etc/nginx/nginx.conf
 
 config_check_output="$(nginx -t 2>&1)"
 

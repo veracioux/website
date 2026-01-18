@@ -5,8 +5,14 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
-    ".": ["./src/index.ts", "./dist/index.js"],
-    "./utils": ["./src/utils.ts", "./dist/utils.js"]
+    ".": [
+      "./src/index.ts",
+      "./dist/index.js"
+    ],
+    "./utils": [
+      "./src/utils.ts",
+      "./dist/utils.js"
+    ]
   },
   "scripts": {
     "build": "tsc",

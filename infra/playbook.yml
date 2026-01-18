@@ -1,0 +1,397 @@
+---
+- hosts:
+    - veracioux.me
+    - stg.veracioux.me
+    - veracioux.local
+  gather_facts: false
+  become: true
+  vars:
+    ssl_cert: "{{ lookup('pipe', 'pass veracioux.me/server.crt') }}"
+    ssl_key: "{{ lookup('pipe', 'pass veracioux.me/server.key') }}"
+    docker_password: "{{ lookup('pipe', 'pass docker.veracioux.me') }}"
+    github_readme_stats_pat: "{{ lookup('pipe', 'pass github-readme-stats-pat') }}"
+    docker_images_version:
+      stg.veracioux.me: stg
+      veracioux.me: prod
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+    - name: Install fdisk
+      apt:
+        name:
+          - fdisk
+        state: present
+    - name: Gather disk facts
+      setup:
+        gather_subset: hardware
+    - name: Wait for secondary disk (/dev/sdb)
+      wait_for:
+        path: /dev/sdb
+        state: present
+    - name: Partition the disk with fdisk
+      shell: echo -e "o\nn\np\n1\n\n\nw" | /usr/sbin/fdisk /dev/sdb
+    - name: Format /dev/sdb1 as ext4
+      filesystem:
+        dev: /dev/sdb1
+        fstype: ext4
+    - name: Create mount point /media/data
+      file:
+        path: /media/data
+        state: directory
+        owner: root
+        group: root
+    - name: Mount /dev/sdb1 to /media/data
+      mount:
+        path: /media/data
+        src: /dev/sdb1
+        fstype: ext4
+        opts: defaults
+        state: mounted
+    # Move /var contents to /media/data/var and mount
+    - block:
+        - name: Check if move already done
+          stat:
+            path: /media/data/var
+          register: moved_flag
+        - name: Create /media/data/var
+          file:
+            path: /media/data/var
+            state: directory
+            owner: root
+            group: root
+            mode: "0755"
+          when: not moved_flag.stat.exists
+        - name: Copy /var/{chosen dirs} contents to /media/data/var
+          shell: cp -a /var/cache /var/log /var/backups /media/data/var/
+          when: not moved_flag.stat.exists
+        - name: Mount /media/data/var/cache to /var/cache
+          mount:
+            path: /var/cache
+            src: /media/data/var/cache
+            fstype: none
+            opts: bind
+            state: mounted
+        - name: Mount /media/data/var/log to /var/log
+          mount:
+            path: /var/log
+            src: /media/data/var/log
+            fstype: none
+            opts: bind
+            state: mounted
+        - name: Mount /media/data/var/backups to /var/backups
+          mount:
+            path: /var/backups
+            src: /media/data/var/backups
+            fstype: none
+            opts: bind
+            state: mounted
+    - name: Install required packages
+      apt:
+        name:
+          - docker.io
+          - docker-compose
+          - git
+          - fish
+          - nginx
+          - curl
+          - acl
+          - pass
+          - golang-docker-credential-helpers
+          - apache2-utils
+          - rsync
+          - python3-passlib # for community.general.htpasswd
+          - python3-bcrypt # for community.general.htpasswd
+        state: present
+    # Set up docker daemon config
+    - block:
+        - name: Create /etc/docker
+          file:
+            path: /etc/docker
+            state: directory
+            owner: root
+            group: root
+            mode: "0755"
+        - name: Set up docker daemon config
+          copy:
+            src: docker-daemon.json
+            dest: /etc/docker/daemon.json
+            mode: "0644"
+    - name: Create docker-registry on sdb1
+      file:
+        path: /media/data/docker-registry
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+    - name: Create npm-registry on sdb1
+      file:
+        path: /media/data/npm-registry
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+    - name: Create git on sdb1
+      file:
+        path: /media/data/git
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+    - name: Create eo-git on sdb1
+      file:
+        path: /media/data/eo-git
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+    # Configure nginx SSL
+    - block:
+        - name: Create /etc/nginx/ssl
+          file:
+            path: /etc/nginx/ssl
+            state: directory
+            owner: root
+            group: root
+            mode: "0700"
+        - name: Install SSL certificate
+          copy:
+            content: "{{ ssl_cert }}"
+            dest: /etc/nginx/ssl/server.crt
+            owner: root
+            group: root
+            mode: "0644"
+          notify: reload_nginx
+        - name: Install SSL private key
+          copy:
+            content: "{{ ssl_key }}"
+            dest: /etc/nginx/ssl/server.key
+            owner: root
+            group: root
+            mode: "0600"
+          notify: reload_nginx
+    # Set up ~haris
+    - block:
+        - name: Create user haris
+          user:
+            name: haris
+            state: present
+        - name: Generate GPG key
+          shell: |
+            cat > /tmp/gpg-key.conf <<EOF
+            Key-Type: RSA
+            Key-Length: 4096
+            Subkey-Type: RSA
+            Subkey-Length: 4096
+            Name-Real: Haris
+            Name-Email: haris@veracioux.me
+            Expire-Date: 0
+            %no-protection
+            %commit
+            EOF
+            gpg --batch --gen-key /tmp/gpg-key.conf
+          become_user: haris
+        - name: Initialize pass with GPG key
+          shell: |
+            KEY_ID=$(gpg --list-keys --with-colons | awk -F: '/^pub:/ { print $5 }' | head -1)
+            pass init $KEY_ID
+          become_user: haris
+        - name: Add haris to docker group
+          user:
+            name: haris
+            groups: docker
+            append: yes
+        - name: Create .docker directory
+          file:
+            path: /home/haris/.docker
+            state: directory
+            owner: haris
+            group: haris
+            mode: "0700"
+        - name: Configure Docker to use pass credential helper
+          copy:
+            content: '{"credsStore": "pass"}'
+            dest: /home/haris/.docker/config.json
+            owner: haris
+            group: haris
+            mode: "0600"
+        - name: Add docker-registry password to pass
+          shell: |
+            echo "$PASSWORD" | pass insert -m docker.veracioux.me
+          environment:
+            DOCKER_REGISTRY_PASSWORD: "{{ docker_password }}"
+          become_user: haris
+        - name: Add github-readme-stats-pat to pass
+          shell: |
+            echo "$PASSWORD" | pass insert -m github-readme-stats-pat
+          environment:
+            PASSWORD: "{{ github_readme_stats_pat }}"
+          become_user: haris
+    # Set up ~git
+    - name: Create user git
+      user:
+        name: git
+        state: present
+    # Set up ~eo-git
+    - name: Create user git
+      user:
+        name: git
+        state: present
+    # Set up ~sabina
+    - block:
+        - name: Create user sabina
+          user:
+            name: sabina
+            state: present
+        - name: Copy ~sabina home skeleton
+          copy:
+            src: ./home_sabina/
+            dest: /home/sabina
+            owner: sabina
+            group: sabina
+            mode: "0755"
+        - name: Create ~sabina/.ssh directory
+          file:
+            path: /home/sabina/.ssh
+            state: directory
+            owner: sabina
+            group: sabina
+            mode: "0700"
+        - name: Generate SSH key for sabina
+          openssh_keypair:
+            path: /home/sabina/.ssh/main
+            owner: sabina
+            group: sabina
+            mode: "0600"
+            state: present
+        - name: Enable linger for sabina
+          command: loginctl enable-linger sabina
+        - name: Enable and start SSH user service for sabina
+          systemd:
+            name: ssh
+            scope: user
+            state: started
+            enabled: yes
+          become_user: sabina
+    # Set up website
+    - block:
+        - name: Create ~/docker-registry directory
+          file:
+            path: /home/haris/docker-registry
+            state: directory
+            owner: haris
+            group: haris
+        - name: Create ~/auth directory
+          file:
+            path: /home/haris/auth
+            state: directory
+            owner: haris
+            group: haris
+        - name: Create ~/npm-registry directory
+          file:
+            path: /home/haris/npm-registry
+            state: directory
+            owner: haris
+            group: haris
+        - name: Mount /media/data/docker-registry /home/haris/docker-registry
+          mount:
+            path: /home/haris/docker-registry
+            src: /media/data/docker-registry
+            fstype: none
+            opts: bind
+            state: mounted
+        - name: Mount /media/data/npm-registry /home/haris/npm-registry
+          mount:
+            path: /home/haris/npm-registry
+            src: /media/data/npm-registry
+            fstype: none
+            opts: bind
+            state: mounted
+        - name: Clone or update website repo
+          git:
+            repo: https://github.com/veracioux/website
+            dest: /home/haris/website
+            update: yes
+          become_user: haris
+        - name: Revert local changes
+          shell: git restore --staged .; git restore .
+          args:
+            chdir: /home/haris/website
+          become_user: haris
+        - name: Allow pushes to website repo
+          command: git config receive.denyCurrentBranch warn
+          args:
+            chdir: /home/haris/website
+          become_user: haris
+        # Start nginx and registry before other services because a docker registry
+        - name: Set up docker registry password
+          community.general.htpasswd:
+            path: /home/haris/auth/htpasswd
+            name: docker-registry
+            password: "{{ docker_password }}"
+            crypt_scheme: bcrypt
+          become_user: haris
+          notify: restart_docker_registry
+        - name: Create .env file
+          copy:
+            content: |
+              # Environment variables for docker compose
+              DOCKER_REGISTRY_DIR=/home/haris/docker-registry
+              VERACIOUX_HOSTNAME={{ inventory_hostname }}
+              HTPASSWD_PATH=/home/haris/auth/htpasswd
+              NPM_STORAGE_PATH=/home/haris/npm-registry
+              GITHUB_README_STATS_PAT={{ github_readme_stats_pat }}
+              DOCKER_IMAGES_VERSION={{ docker_images_version[inventory_hostname] | default('latest') }}
+            dest: /home/haris/website/.env
+            owner: haris
+            group: haris
+            mode: "0600"
+          become_user: haris
+        - name: Start docker-registry
+          # FIXME: Sleep makes sure the registry is ready before docker login
+          shell: docker-compose up --pull always --detach docker-registry && sleep 3s
+          args:
+            chdir: /home/haris/website
+          become_user: haris
+        - name: Serve website
+          command: scripts/serve.sh
+          args:
+            chdir: /home/haris/website
+        - name: Log into Docker registry
+          docker_login:
+            registry: docker.veracioux.me
+            username: docker-registry
+            password: "{{ docker_password }}"
+          become_user: haris
+        - name: Start website services
+          command: docker-compose up --pull always --detach
+          args:
+            chdir: /home/haris/website
+          become_user: haris
+    # Set up utilities
+    - block:
+        - name: Pull docker.veracioux.me/dotfiles
+          docker_image:
+            name: docker.veracioux.me/dotfiles
+            source: pull
+          become_user: haris
+          register: dotfiles_pull_result
+        - name: Bootstrap dotfiles
+          shell: curl https://raw.githubusercontent.com/veracioux/dotfiles/master/bootstrap/bootstrap.sh | bash
+          become_user: haris
+          when: dotfiles_pull_result.changed
+
+  handlers:
+    - name: Reload nginx if running
+      listen: reload_nginx
+      service:
+        name: nginx
+        state: reloaded
+      failed_when: false
+    - name: Restart docker-registry
+      listen: restart_docker_registry
+      command: docker-compose restart docker-registry
+      args:
+        chdir: /home/haris/website
+      become_user: haris
+      failed_when: false

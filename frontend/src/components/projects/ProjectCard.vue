@@ -59,7 +59,9 @@ defineEmits<{
 @use "@/assets/project.module.scss" as p;
 .container {
   background: rgba(var(--color-background-0-rgb), 0.7);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .container:hover {
@@ -82,7 +84,10 @@ defineEmits<{
 
   transform: scale(0);
   transform-origin: center;
-  transition: transform 0.1s ease, opacity 0.1s ease, filter 0.2s ease;
+  transition:
+    transform 0.1s ease,
+    opacity 0.1s ease,
+    filter 0.2s ease;
   opacity: 0;
   filter: drop-shadow(0 0 1px transparent) drop-shadow(0 0 4px transparent);
 }
