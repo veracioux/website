@@ -39,15 +39,13 @@ jobs:
               - '.github/workflows/build.yml'
               - 'compose.yml'
               - 'apps/github-stats/**'
-            frontend:
+            web:
               - '.github/workflows/build.yml'
               - 'compose.yml'
               - 'frontend/**'
               - 'lib/**'
-              - 'docker/frontend.Dockerfile'
               - 'package.json'
               - 'bun.lock'
-            web:
               - '.github/workflows/build.yml'
               - 'compose.yml'
               - 'docker/web.Dockerfile'
@@ -75,7 +73,7 @@ jobs:
 
       - name: Build web image
         uses: docker/build-push-action@v6
-        if: steps.changes.outputs.web == 'true' || steps.changes.outputs.frontend == 'true'
+        if: steps.changes.outputs.web == 'true'
         with:
           context: .
           file: docker/web.Dockerfile
@@ -94,7 +92,7 @@ jobs:
             docker tag docker.veracioux.me/github-stats:$UNIQUE_TAG docker.veracioux.me/github-stats:${{ env.DOCKER_IMAGES_VERSION }}
             docker compose push github-stats
           fi
-          if [ "${{ steps.changes.outputs.frontend }}" = "true" ] || [ "${{ steps.changes.outputs.web }}" = "true" ]; then
+          if [ "${{ steps.changes.outputs.web }}" = "true" ]; then
             echo "Pushing web image..."
             docker tag docker.veracioux.me/web:$UNIQUE_TAG docker.veracioux.me/web:${{ env.DOCKER_IMAGES_VERSION }}
             docker compose push web
