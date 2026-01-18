@@ -75,7 +75,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y msmtp
 
       - name: Send plan via email
-        if: github.ref_name == 'staging' && env.PLAN_EXIT_CODE == '2'
+        if: github.ref_name == 'staging'
         run: |
           echo > email.txt <<EOF
           Subject: Terraform Plan for Prod
