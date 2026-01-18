@@ -3,6 +3,7 @@
     - veracioux.me
     - stg.veracioux.me
     - veracioux.local
+  gather_facts: false
   become: true
   vars:
     ssl_cert: "{{ lookup('pipe', 'pass veracioux.me/server.crt') }}"
