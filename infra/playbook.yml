@@ -9,6 +9,9 @@
     ssl_key: "{{ lookup('pipe', 'pass veracioux.me/server.key') }}"
     docker_password: "{{ lookup('pipe', 'pass docker.veracioux.me') }}"
     github_readme_stats_pat: "{{ lookup('pipe', 'pass github-readme-stats-pat') }}"
+    docker_images_version:
+      stg.veracioux.me: stg
+      veracioux.me: prod
   tasks:
     - name: Update apt cache
       apt:
@@ -337,6 +340,7 @@
               HTPASSWD_PATH=/home/haris/auth/htpasswd
               NPM_STORAGE_PATH=/home/haris/npm-registry
               GITHUB_README_STATS_PAT={{ github_readme_stats_pat }}
+              DOCKER_IMAGES_VERSION={{ docker_images_version[inventory_hostname] | default('latest') }}
             dest: /home/haris/website/.env
             owner: haris
             group: haris
