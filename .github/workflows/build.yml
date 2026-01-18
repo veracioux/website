@@ -78,8 +78,6 @@ jobs:
           context: .
           file: docker/web.Dockerfile
           tags: docker.veracioux.me/web:${{ env.UNIQUE_TAG }}
-          build-args: |
-            TAG=${{ env.UNIQUE_TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           load: true
