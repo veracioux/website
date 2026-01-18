@@ -31,6 +31,21 @@
       "args": ["run", "dev"],
       "cwd": "${workspaceFolder}/chat/api",
       "console": "integratedTerminal"
+    },
+    {
+      "name": "chat:fe | browser",
+      "type": "firefox",
+      "request": "launch",
+      "url": "http://localhost:3001",
+      "webRoot": "${workspaceFolder}/chat/fe",
+      "keepProfileChanges": true,
+      "profile": "debug",
+      "pathMappings": [
+        {
+          "url": "webpack://_N_E",
+          "path": "${workspaceFolder}/chat/fe"
+        }
+      ]
     }
   ]
 }
