@@ -27,8 +27,12 @@ COPY frontend/gimmicks/ascii-mugshot/package.json frontend/gimmicks/ascii-mugsho
 # Ensure all workspace projects can be resolved
 COPY cli/package.json cli/
 COPY lib/package.json lib/
+COPY chat/fe/package.json chat/fe/
+COPY chat/api/package.json chat/api/
+COPY chat/lib/package.json chat/lib/
 RUN --mount=type=cache,target=/root/.bun \
-    bun install --frozen-lockfile --prod --filter='!./cli'
+    bun install --frozen-lockfile --prod \
+    --filter='!./cli' --filter='!./chat/lib' --filter='!./chat/api' --filter='!./chat/fe'
 
 COPY frontend frontend
 
