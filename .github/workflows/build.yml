@@ -62,7 +62,7 @@ jobs:
           password: ${{ env.DOCKER_PASSWORD }}
 
       - name: Build and push github-stats image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         if: steps.changes.outputs.github_stats == 'true'
         with:
           context: apps/github-stats
