@@ -52,12 +52,22 @@ function PromptArea(props: { className?: string }) {
     }
   };
 
+  // Adjust suggestions position on text field resize or style change
   useLayoutEffect(() => {
-    // Translate suggestions left border to make it align with the text field
-    setSuggestionsTranslation({
-      x: isFocused ? 0 : (textFieldRef.current!.clientWidth * 0.15) / 2,
-      y: 0,
+    const updateSuggestionsTranslation = () => {
+      setSuggestionsTranslation({
+        x: isFocused ? 0 : (textFieldRef.current!.clientWidth * 0.15) / 2,
+        y: 0,
+      });
+    };
+
+    // Handle size changes
+    const resizeObserver = new ResizeObserver(() => {
+      updateSuggestionsTranslation();
     });
+    resizeObserver.observe(textFieldRef.current!);
+    updateSuggestionsTranslation();
+    return () => resizeObserver.disconnect();
   }, [isFocused]);
 
   const focusTextField = () =>
@@ -107,6 +117,10 @@ function PromptArea(props: { className?: string }) {
         placeholder="Start typing..."
         multiline
         onKeyDown={onKeyDown}
+        onMouseDown={(e) =>
+          // Prevents momentary blur of textarea
+          isFocused && e.preventDefault()
+        }
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         onChange={(e) => setPromptValue(e.target.value)}
