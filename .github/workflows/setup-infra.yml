@@ -15,8 +15,9 @@ env:
     ${{ secrets.GCP_SA_KEY }}
 
 jobs:
-  terraform-apply:
-    if: github.ref_name != 'main'
+  terraform-apply-or-plan:
+    name: Terraform Apply (Staging) or Plan and create PR (Prod)
+    if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'stg' || 'dev' }}
     env:
@@ -48,40 +49,12 @@ jobs:
         run: terraform init
 
       - name: Terraform Apply
+        if: github.ref_name == 'staging'
         working-directory: infra
         run: terraform apply -auto-approve
 
-  terraform-plan-prod:
-    if: github.ref_name == 'staging'
-    runs-on: ubuntu-latest
-    environment: stg
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v3
-
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: |-
-            ${{ env.GCP_SA_KEY }}
-
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Select prod workspace
-        working-directory: infra
-        run: |
-          mkdir -p .terraform
-          echo prod > .terraform/environment
-
-      - name: Terraform Init
-        working-directory: infra
-        run: terraform init
-
       - name: Terraform Plan
+        if: github.ref_name == 'staging'
         working-directory: infra
         run: |
           terraform plan -out prod.tfplan > plan_output.log 2>&1
@@ -90,8 +63,21 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
 
       - name: Upload plan to GCS
-        run: gcloud storage cp infra/prod.tfplan gs://veracioux-tfstate/plans/${{ github.sha }}.tfplan
+        if: github.ref_name == 'staging'
+        run: gcloud storage cp infra/prod.tfplan gs://veracioux-tfstate/${{ github.sha }}-prod.tfplan
 
       - name: Create PR with plan output
+        if: github.ref_name == 'staging'
         run: |
           gh pr create --base main --head staging --title "Terraform Plan for Prod" --body "${{ env.PLAN_OUTPUT }}"
+
+      # - name: Download plan from GCS
+      #   if: github.ref_name == 'main'
+      #   run:
+      #     SHA="$(git rev-parse HEAD^2)"
+      #     gcloud storage cp gs://veracioux-tfstate/plans/"$SHA".tfplan infra/prod.tfplan
+
+      # - name: Terraform Apply Plan
+      #   if: github.ref_name == 'main'
+      #   working-directory: infra
+      #   run: terraform apply -auto-approve prod.tfplan

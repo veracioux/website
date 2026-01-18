@@ -72,6 +72,7 @@ resource "google_project_iam_member" "cd_deployer" {
     title       = "Restrict operations to ${each.value} environment"
     description = "Allow compute operations only on ${each.value} resources, storage operations only on veracioux-${each.value}-tfstate bucket"
     expression  = <<EOF
+resource.name.endsWith("-prod.tfplan") ||
 resource.name.endsWith("/${each.value}.tfstate") ||
 resource.name.endsWith("/${each.value}.tflock") ||
 resource.name.endsWith("/${each.value}-vm") ||
